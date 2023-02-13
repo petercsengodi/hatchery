@@ -22,18 +22,21 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 	private static final boolean FORCE_GL2_GLU = false;
 
-	private OpenGLProfileAdapter openGLProfileAdapter = null;
+	private String shaderRoot;
+
+	public OpenGLGameAdapter(String shaderRoot) {
+		this.shaderRoot = shaderRoot;
+	}
 
 	@Override
 	public GameWindow createWindow(GameEngine engine) {
-		OpenGLFrame frame = new OpenGLFrame(engine);
-		return frame;
+		return new OpenGLFrame(engine);
 	}
 
 	@Override
 	public GameCanvas createCanvas(final GameEngine engine) {
+		OpenGLProfileAdapter openGLProfileAdapter;
 		GLProfile glProfile;
-
 
 		if(FORCE_GL2_GLU) {
 			try {
@@ -74,6 +77,7 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 		OpenGLModelStoreImpl store = (OpenGLModelStoreImpl)engine.getStore();
 		store.setAdapter(openGLProfileAdapter);
+		store.setShaderRoot(shaderRoot);
 
 		GLCapabilities glCapabilities = new GLCapabilities(glProfile);
 		OpenGLGraphics graphics = new OpenGLGraphics();

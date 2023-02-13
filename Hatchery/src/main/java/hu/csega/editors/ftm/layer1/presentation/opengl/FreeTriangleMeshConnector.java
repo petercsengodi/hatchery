@@ -35,9 +35,14 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 public class FreeTriangleMeshConnector implements Connector, GameWindow {
 
-	private GameWindow gameWindow;
 	private List<GameWindowListener> listeners = new ArrayList<>();
+	private GameWindow gameWindow;
+	private String shaderRoot;
 	private JTree tree;
+
+	public FreeTriangleMeshConnector(String shaderRoot) {
+		this.shaderRoot = shaderRoot;
+	}
 
 	@Override
 	public void initialize() {
@@ -100,7 +105,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		descriptor.setDescription("A tool for creating vertices and triangles based upon them.");
 		descriptor.setMouseCentered(false);
 
-		GameAdapter adapter = new OpenGLGameAdapter();
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 

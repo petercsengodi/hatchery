@@ -15,12 +15,13 @@ import hu.csega.games.library.util.FileUtil;
 
 public class TextureLibrary {
 
-	private FileUtil fileUtil;
+	private String root;
 
-	public TextureLibrary (FileUtil fileUtil) {
-		String textures = fileUtil.projectPath() + "textures";
+	public TextureLibrary(String root) {
+		this.root = root;
+
 		List<String> ret = new ArrayList<>();
-		FileUtil.collectFiles(textures, ret);
+		FileUtil.collectFiles(root, ret);
 
 		this.textures = new HashMap<>();
 		for(String fileName : ret) {

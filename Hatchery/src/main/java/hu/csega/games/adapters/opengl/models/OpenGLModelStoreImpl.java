@@ -29,6 +29,7 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	private OpenGLProfileAdapter adapter;
+	private String shaderRoot;
 
 	private long identifierCounter = 1;
 	private boolean disposeAllWhenPossible = false;
@@ -40,12 +41,14 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	private boolean programInitialized = false;
 
-	private static final String SHADERS_ROOT = "res/example";
-
 	private byte[] buffer = new byte[4096];
 
 	public void setAdapter(OpenGLProfileAdapter adapter) {
 		this.adapter = adapter;
+	}
+
+	public void setShaderRoot(String shaderRoot) {
+		this.shaderRoot = shaderRoot;
 	}
 
 	@Override
@@ -245,7 +248,7 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 		if(!programInitialized) {
 			logger.info("Initializing program.");
 
-			adapter.initializeProgram(glAutoDrawable, SHADERS_ROOT);
+			adapter.initializeProgram(glAutoDrawable, shaderRoot);
 
 			programInitialized = true;
 			logger.info("Initialized program.");

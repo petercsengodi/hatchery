@@ -9,6 +9,8 @@ import hu.csega.toolshed.logging.Level;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
+import java.io.File;
+
 /**
  * Responsible for running the Free Triangle Mesh tool.
  * A single instance in the JVM, accessible by any components, and
@@ -31,9 +33,22 @@ public class FreeTriangleMeshToolStarter {
 		logger.info("Starting tool.");
 
 		FILES = new FileUtil("Hatchery");
-		TEXTURES = new TextureLibrary(FILES);
 
-		Connector connector = new FreeTriangleMeshConnector();
+		String projectPath = FILES.projectPath();
+		logger.info("Project path: " + projectPath);
+		String workspacePath = FILES.workspacePath();
+		logger.info("Workspace path: " + workspacePath);
+		String resourcesPath = workspacePath + "GameResources" + File.separator;
+		logger.info("Resources path: " + resourcesPath);
+
+		String shaderRoot = resourcesPath + "shaders";
+		logger.info("Shader root (no separator at the end): " + shaderRoot);
+
+		String texturesRoot = resourcesPath + "textures";
+		logger.info("Textures root (no separator at the end): " + texturesRoot);
+		TEXTURES = new TextureLibrary(texturesRoot);
+
+		Connector connector = new FreeTriangleMeshConnector(shaderRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

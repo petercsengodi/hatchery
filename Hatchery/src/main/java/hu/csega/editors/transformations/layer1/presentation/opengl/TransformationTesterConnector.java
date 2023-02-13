@@ -29,8 +29,13 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 public class TransformationTesterConnector implements Connector, GameWindow {
 
-	private GameWindow gameWindow;
 	private List<GameWindowListener> listeners = new ArrayList<>();
+	private GameWindow gameWindow;
+	private String shaderRoot;
+
+	public TransformationTesterConnector(String shaderRoot) {
+		this.shaderRoot = shaderRoot;
+	}
 
 	@Override
 	public void initialize() {
@@ -93,7 +98,7 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 		descriptor.setDescription("An application for testing java and OpenGL transformations.");
 		descriptor.setMouseCentered(false);
 
-		GameAdapter adapter = new OpenGLGameAdapter();
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 

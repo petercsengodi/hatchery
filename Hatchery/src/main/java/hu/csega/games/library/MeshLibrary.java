@@ -17,12 +17,13 @@ import hu.csega.games.library.xml.v1.XmlReader;
 
 public class MeshLibrary {
 
-	private FileUtil fileUtil;
+	private String root;
 
-	public MeshLibrary(FileUtil fileUtil) {
-		String t3d_files = fileUtil.projectPath() + "t3d_files";
+	public MeshLibrary(String root) {
+		this.root = root;
+
 		List<String> ret = new ArrayList<>();
-		FileUtil.collectFiles(t3d_files, ret);
+		FileUtil.collectFiles(root, ret);
 
 		this.meshes = new HashMap<>();
 		for(String fileName : ret) {

@@ -9,6 +9,8 @@ import hu.csega.toolshed.logging.Level;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
+import java.io.File;
+
 public class TransformationTesterStarter {
 
 	private static final Level LOGGING_LEVEL = Level.TRACE;
@@ -23,9 +25,22 @@ public class TransformationTesterStarter {
 		logger.info("Starting translation tester.");
 
 		FILES = new FileUtil("Hatchery");
-		TEXTURES = new TextureLibrary(FILES);
 
-		Connector connector = new TransformationTesterConnector();
+		String projectPath = FILES.projectPath();
+		logger.info("Project path: " + projectPath);
+		String workspacePath = FILES.workspacePath();
+		logger.info("Workspace path: " + workspacePath);
+		String resourcesPath = workspacePath + "GameResources" + File.separator;
+		logger.info("Resources path: " + resourcesPath);
+
+		String shaderRoot = resourcesPath + "shaders";
+		logger.info("Shader root (no separator at the end): " + shaderRoot);
+
+		String texturesRoot = resourcesPath + "textures";
+		logger.info("Textures root (no separator at the end): " + texturesRoot);
+		TEXTURES = new TextureLibrary(texturesRoot);
+
+		Connector connector = new TransformationTesterConnector(shaderRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

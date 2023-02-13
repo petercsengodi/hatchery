@@ -61,14 +61,43 @@ public class AnimatorStarter {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
+		// 4. Checking current directory
+
+		AnimatorUIComponents ui = UnitStore.instance(AnimatorUIComponents.class);
+		FileUtil files = new FileUtil("Hatchery");
+
+		ui.userDirectory = System.getProperty("user.dir");
+		logger.info("User directory: " + ui.userDirectory);
+		logger.info("Project path: " + files.projectPath());
+		String workspacePath = files.workspacePath();
+		logger.info("Workspace path: " + workspacePath);
+		String resourcesPath = workspacePath + "GameResources" + File.separator;
+		logger.info("Resources path: " + resourcesPath);
+		ui.texturesDirectory = resourcesPath + "textures" + File.separator;
+		logger.info("Textures directory: " + ui.texturesDirectory);
+		ui.meshesDirectory = resourcesPath + "meshes" + File.separator;
+		logger.info("Meshes directory: " + ui.meshesDirectory);
+		ui.animationsDirectory = resourcesPath + "animations" + File.separator;
+		logger.info("Animations directory: " + ui.animationsDirectory);
+
+		String shaderRoot = resourcesPath + "shaders";
+		logger.info("Shader root (no separator at the end): " + shaderRoot);
+
+		String texturesRoot = resourcesPath + "textures";
+		logger.info("Textures root (no separator at the end): " + texturesRoot);
+
+		String meshesRoot = resourcesPath + "meshes";
+		logger.info("Meshes root (no separator at the end): " + meshesRoot);
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 2. Register components and providers:
 
-		FileUtil files = new FileUtil("Hatchery");
 		UnitStore.registerInstance(FileUtil.class, files);
-		UnitStore.registerInstance(TextureLibrary.class, new TextureLibrary(files));
-		UnitStore.registerInstance(MeshLibrary.class, new MeshLibrary(files));
+		UnitStore.registerInstance(TextureLibrary.class, new TextureLibrary(texturesRoot));
+		UnitStore.registerInstance(MeshLibrary.class, new MeshLibrary(meshesRoot));
 
-		Connector connector = new AnimatorConnector();
+		Connector connector = new AnimatorConnector(shaderRoot);
 		UnitStore.registerInstance(Connector.class, connector);
 
 		UnitStore.registerDefaultImplementation(AnimatorModel.class, AnimatorModel.class);
@@ -91,24 +120,6 @@ public class AnimatorStarter {
 		// UnitStore.registerInstance(ComponentOpenGLTransformer.class, new StubOpenGLTransformer());
 		// UnitStore.registerInstance(ComponentExtractPartList.class, new StubExtractPartList());
 		// UnitStore.registerInstance(Component3DView.class, new Stub3DView());
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 4. Checking current directory
-
-		AnimatorUIComponents ui = UnitStore.instance(AnimatorUIComponents.class);
-		ui.userDirectory = System.getProperty("user.dir");
-		logger.info("User directory: " + ui.userDirectory);
-		logger.info("Project path: " + files.projectPath());
-		String workspacePath = files.workspacePath();
-		logger.info("Workspace path: " + workspacePath);
-		String resourcesPath = workspacePath + "GameResources" + File.separator;
-		logger.info("Resources path: " + resourcesPath);
-		ui.texturesDirectory = resourcesPath + "textures" + File.separator;
-		logger.info("Textures directory: " + ui.texturesDirectory);
-		ui.meshesDirectory = resourcesPath + "meshes" + File.separator;
-		logger.info("Meshes directory: " + ui.meshesDirectory);
-		ui.animationsDirectory = resourcesPath + "animations" + File.separator;
-		logger.info("Animations directory: " + ui.animationsDirectory);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 5. Starting application:

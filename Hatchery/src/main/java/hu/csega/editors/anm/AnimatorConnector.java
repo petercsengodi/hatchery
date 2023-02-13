@@ -38,8 +38,14 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 public class AnimatorConnector implements Connector, GameWindow {
 
-	private ComponentRefreshViews refreshViews;
 	private List<GameWindowListener> listeners = new ArrayList<>();
+	private ComponentRefreshViews refreshViews;
+	private String shaderRoot;
+
+
+	public AnimatorConnector(String shaderRoot) {
+		this.shaderRoot = shaderRoot;
+	}
 
 	@Override
 	public void initialize() {
@@ -104,7 +110,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 		// Open GL View
 
-		GameAdapter adapter = new OpenGLGameAdapter();
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 
