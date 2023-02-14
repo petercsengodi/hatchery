@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.editors.ftm.util.FreeTriangleMeshExport;
 import hu.csega.games.engine.GameEngineFacade;
 

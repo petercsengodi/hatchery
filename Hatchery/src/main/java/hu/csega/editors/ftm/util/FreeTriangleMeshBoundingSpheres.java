@@ -5,7 +5,7 @@ import static hu.csega.editors.ftm.util.FreeTriangleMeshMathLibrary.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.csega.editors.ftm.model.FreeTriangleMeshPoint;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshPoint;
 
 public class FreeTriangleMeshBoundingSpheres {
 

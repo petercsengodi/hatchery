@@ -2,8 +2,8 @@ package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
 import java.util.List;
 
-import hu.csega.editors.ftm.model.FreeTriangleMeshGroup;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshGroup;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.engine.GameEngineFacade;
 
 public class FreeTriangleMeshGroupTreeNode {

@@ -2,7 +2,7 @@ package hu.csega.editors.transformations.layer4.data;
 
 import java.io.Serializable;
 
-import hu.csega.editors.ftm.model.FreeTriangleMeshPoint;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshPoint;
 
 public class TransformationTesterVertex implements Serializable {
 

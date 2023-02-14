@@ -3,13 +3,13 @@ package hu.csega.editors.anm.layer1.swing.wireframe;
 import java.util.Map;
 
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.layer4.data.animation.Animation;
-import hu.csega.editors.anm.layer4.data.animation.AnimationPart;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.library.MeshLibrary;
-import hu.csega.games.library.model.SMeshRef;
-import hu.csega.games.library.model.mesh.v1.SMesh;
+import hu.csega.games.library.reference.SMeshRef;
+import hu.csega.games.library.mesh.v1.xml.SMesh;
 import hu.csega.games.units.UnitStore;
 
 public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {

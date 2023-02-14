@@ -6,10 +6,10 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import hu.csega.editors.common.lens.EditorPoint;
-import hu.csega.editors.ftm.model.FreeTriangleMeshLine;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
-import hu.csega.editors.ftm.model.FreeTriangleMeshTriangle;
-import hu.csega.editors.ftm.model.FreeTriangleMeshVertex;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
 import hu.csega.games.engine.GameEngineFacade;
 

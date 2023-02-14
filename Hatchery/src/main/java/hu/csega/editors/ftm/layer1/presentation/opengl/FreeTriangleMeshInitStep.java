@@ -1,7 +1,7 @@
 package hu.csega.editors.ftm.layer1.presentation.opengl;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
 

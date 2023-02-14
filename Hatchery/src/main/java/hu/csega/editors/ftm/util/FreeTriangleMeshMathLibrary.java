@@ -1,6 +1,6 @@
 package hu.csega.editors.ftm.util;
 
-import hu.csega.editors.ftm.model.FreeTriangleMeshPoint;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshPoint;
 
 public class FreeTriangleMeshMathLibrary {
 

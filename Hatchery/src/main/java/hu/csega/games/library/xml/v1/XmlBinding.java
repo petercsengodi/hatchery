@@ -1,5 +1,21 @@
 package hu.csega.games.library.xml.v1;
 
+import hu.csega.games.library.animation.v1.xml.SAnimation;
+import hu.csega.games.library.animation.v1.xml.SBodyPart;
+import hu.csega.games.library.animation.v1.xml.SConnection;
+import hu.csega.games.library.reference.SAnimationRef;
+import hu.csega.games.library.reference.SMeshRef;
+import hu.csega.games.library.reference.STextureRef;
+import hu.csega.games.library.mesh.v1.xml.SEdge;
+import hu.csega.games.library.mesh.v1.xml.SMesh;
+import hu.csega.games.library.mesh.v1.xml.SShape;
+import hu.csega.games.library.mesh.v1.xml.STriangle;
+import hu.csega.games.library.mesh.v1.xml.SVertex;
+import hu.csega.games.library.story.v1.xml.SMap;
+import hu.csega.games.library.story.v1.xml.SRoom;
+import hu.csega.games.library.xml.XmlClass;
+import hu.csega.games.library.xml.XmlField;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,31 +24,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import hu.csega.games.libary.legacy.modeldata.CEdge;
-import hu.csega.games.libary.legacy.modeldata.CFigure;
-import hu.csega.games.libary.legacy.modeldata.CModel;
-import hu.csega.games.libary.legacy.modeldata.CTexID;
-import hu.csega.games.libary.legacy.modeldata.CTriangle;
-import hu.csega.games.libary.legacy.modeldata.CVertex;
-import hu.csega.games.library.animation.SAnimation;
-import hu.csega.games.library.animation.SBodyPart;
-import hu.csega.games.library.animation.SConnection;
-import hu.csega.games.library.legacy.animationdata.CConnection;
-import hu.csega.games.library.legacy.animationdata.CModelData;
-import hu.csega.games.library.legacy.animationdata.CPartData;
-import hu.csega.games.library.model.SAnimationRef;
-import hu.csega.games.library.model.SMeshRef;
-import hu.csega.games.library.model.STextureRef;
-import hu.csega.games.library.model.mesh.v1.SEdge;
-import hu.csega.games.library.model.mesh.v1.SMesh;
-import hu.csega.games.library.model.mesh.v1.SShape;
-import hu.csega.games.library.model.mesh.v1.STriangle;
-import hu.csega.games.library.model.mesh.v1.SVertex;
-import hu.csega.games.library.story.SMap;
-import hu.csega.games.library.story.SRoom;
-import hu.csega.games.library.xml.XmlClass;
-import hu.csega.games.library.xml.XmlField;
 
 public class XmlBinding {
 
@@ -175,19 +166,6 @@ public class XmlBinding {
 		ATTRIBUTES.add(Double.class);
 
 		/* Insert bound java classes here! */
-
-		// Legacy animation objects
-		registerClass(CModelData.class);
-		registerClass(CConnection.class);
-		registerClass(CPartData.class);
-
-		// Legacy T3DCreator model objects
-		registerClass(CModel.class);
-		registerClass(CFigure.class);
-		registerClass(CTriangle.class);
-		registerClass(CEdge.class);
-		registerClass(CVertex.class);
-		registerClass(CTexID.class);
 
 		// New model in game
 		registerClass(SAnimationRef.class);

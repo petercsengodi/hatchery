@@ -6,7 +6,7 @@ import java.util.List;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentPartListView;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListItem;
-import hu.csega.editors.anm.layer4.data.animation.Animation;
+import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.units.UnitStore;
 
 public class StubExtractPartList implements ComponentExtractPartList {

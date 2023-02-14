@@ -8,10 +8,8 @@ import java.util.Map;
 
 import org.xml.sax.SAXException;
 
-import hu.csega.games.library.migration.MigrationException;
-import hu.csega.games.library.migration.SMigration;
-import hu.csega.games.library.model.SMeshRef;
-import hu.csega.games.library.model.mesh.v1.SMesh;
+import hu.csega.games.library.reference.SMeshRef;
+import hu.csega.games.library.mesh.v1.xml.SMesh;
 import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.library.xml.v1.XmlReader;
 
@@ -41,8 +39,8 @@ public class MeshLibrary {
 	private static SMesh load(String fileName, String defaultName) {
 		SMesh mesh;
 		try {
-			mesh = (SMesh) SMigration.migrate(XmlReader.read(fileName), defaultName);
-		} catch (IOException | MigrationException | SAXException ex) {
+			mesh = (SMesh) XmlReader.read(fileName);
+		} catch (IOException | SAXException ex) {
 			throw new RuntimeException(ex);
 		}
 

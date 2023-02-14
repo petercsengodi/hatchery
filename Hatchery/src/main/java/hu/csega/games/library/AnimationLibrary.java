@@ -1,5 +1,10 @@
 package hu.csega.games.library;
 
+import hu.csega.games.library.animation.v1.xml.SAnimation;
+import hu.csega.games.library.reference.SAnimationRef;
+import hu.csega.games.library.util.FileUtil;
+import hu.csega.games.library.xml.v1.XmlReader;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,13 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.xml.sax.SAXException;
-
-import hu.csega.games.library.animation.SAnimation;
-import hu.csega.games.library.migration.MigrationException;
-import hu.csega.games.library.migration.SMigration;
-import hu.csega.games.library.model.SAnimationRef;
-import hu.csega.games.library.util.FileUtil;
-import hu.csega.games.library.xml.v1.XmlReader;
 
 public class AnimationLibrary {
 
@@ -42,8 +40,8 @@ public class AnimationLibrary {
 	private static SAnimation load(String fileName, String defaultName) {
 		SAnimation animation;
 		try {
-			animation = (SAnimation) SMigration.migrate(XmlReader.read(fileName), defaultName);
-		} catch (IOException | MigrationException | SAXException ex) {
+			animation = (SAnimation) XmlReader.read(fileName);
+		} catch (IOException | SAXException ex) {
 			throw new RuntimeException(ex);
 		}
 

@@ -8,9 +8,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.library.model.STextureRef;
+import hu.csega.games.library.reference.STextureRef;
 
 class TextureLoad implements ActionListener {
 

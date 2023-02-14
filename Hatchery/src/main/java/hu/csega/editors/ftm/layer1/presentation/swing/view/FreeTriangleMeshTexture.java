@@ -10,9 +10,9 @@ import javax.imageio.ImageIO;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.common.lens.EditorPoint;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
-import hu.csega.editors.ftm.model.FreeTriangleMeshTriangle;
-import hu.csega.editors.ftm.model.FreeTriangleMeshVertex;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.GameEngineFacade;
 
 public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {

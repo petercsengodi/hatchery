@@ -8,14 +8,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.editors.anm.components.ComponentRefreshViews;
-import hu.csega.editors.anm.layer4.data.animation.Animation;
-import hu.csega.editors.anm.layer4.data.migration.LegacyAnimationMigrator;
+import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer5.files.storage.LegacyAnimationParser;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
 import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.library.legacy.animationdata.CModelData;
+import hu.csega.games.library.animation.v1.xml.SAnimation;
 import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
@@ -48,13 +47,10 @@ class AnimatorMenuItemOpen implements ActionListener {
 				// Loading legacy animation (or exported animation?), XML
 
 				ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-				Object parsedAnimationFile = LegacyAnimationParser.parseAnimationFile(stream);
+				SAnimation parsedAnimationFile = (SAnimation) LegacyAnimationParser.parseAnimationFile(stream);
 				logger.info("Loaded object: " + parsedAnimationFile);
 
-				Animation migratedObject = null;
-				if(parsedAnimationFile instanceof CModelData) {
-					migratedObject = LegacyAnimationMigrator.migrate((CModelData)parsedAnimationFile);
-				}
+				Animation migratedObject = null; // FIXME
 
 				logger.info("Migrated object: " + migratedObject);
 				AnimatorModel model = (AnimatorModel) facade.model();

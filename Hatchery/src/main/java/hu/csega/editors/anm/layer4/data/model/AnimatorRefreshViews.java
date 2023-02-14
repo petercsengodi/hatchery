@@ -4,7 +4,7 @@ import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.layer4.data.animation.Animation;
+import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.units.UnitStore;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {

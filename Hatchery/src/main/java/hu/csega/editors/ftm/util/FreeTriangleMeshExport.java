@@ -9,9 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
-import hu.csega.editors.ftm.model.FreeTriangleMeshTriangle;
-import hu.csega.editors.ftm.model.FreeTriangleMeshVertex;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.ftm.GameMesh;
 import hu.csega.games.engine.ftm.GameTriangle;
 import hu.csega.games.engine.ftm.GameVertex;

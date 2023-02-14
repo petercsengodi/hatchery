@@ -1,9 +1,9 @@
 package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
 import hu.csega.editors.common.lens.EditorPoint;
-import hu.csega.editors.ftm.model.FreeTriangleMeshCube;
-import hu.csega.editors.ftm.model.FreeTriangleMeshModel;
-import hu.csega.editors.ftm.model.FreeTriangleMeshVertex;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.GameEngineFacade;
 
 public class FreeTriangleMeshXZSideView extends FreeTriangleMeshSideView {

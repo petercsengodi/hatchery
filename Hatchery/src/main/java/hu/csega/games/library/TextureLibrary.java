@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import hu.csega.games.library.model.STextureRef;
+import hu.csega.games.library.reference.STextureRef;
 import hu.csega.games.library.util.FileUtil;
 
 public class TextureLibrary {

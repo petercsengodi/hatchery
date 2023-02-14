@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.csega.editors.anm.layer4.data.animation.Animation;
-import hu.csega.editors.anm.layer4.data.animation.AnimationMisc;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationMisc;
 
 public class AnimatorModel {
 
