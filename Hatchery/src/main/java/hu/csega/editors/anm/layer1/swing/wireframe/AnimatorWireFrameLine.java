@@ -8,6 +8,15 @@ public class AnimatorWireFrameLine {
 	private AnimatorWireFramePoint destination;
 	private Color color;
 
+	public AnimatorWireFrameLine() {
+	}
+
+	public AnimatorWireFrameLine(AnimatorWireFramePoint source, AnimatorWireFramePoint destination, Color color) {
+		this.source = source;
+		this.destination = destination;
+		this.color = color;
+	}
+
 	public AnimatorWireFramePoint getSource() {
 		return source;
 	}

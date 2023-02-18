@@ -9,6 +9,16 @@ public class AnimatorWireFramePoint {
 	private double z;
 	private Color color;
 
+	public AnimatorWireFramePoint() {
+	}
+
+	public AnimatorWireFramePoint(double cx, double y, double z, Color color) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.color = color;
+	}
+
 	public double getX() {
 		return x;
 	}
