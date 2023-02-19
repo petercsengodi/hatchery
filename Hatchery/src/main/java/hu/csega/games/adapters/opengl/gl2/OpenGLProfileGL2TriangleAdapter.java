@@ -8,6 +8,7 @@ import org.joml.Vector4f;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -87,6 +88,10 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shadersRoot) {
 		// Nothing to do currently
 		GL2 gl2 = glAutoDrawable.getGL().getGL2();
+
+		gl2.glEnable(GL2.GL_CULL_FACE);
+		gl2.glFrontFace(GL2.GL_CCW);
+
 		OpenGLErrorUtil.checkError(gl2, "init");
 	}
 

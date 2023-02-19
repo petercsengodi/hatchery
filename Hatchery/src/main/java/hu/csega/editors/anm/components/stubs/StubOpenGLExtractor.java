@@ -56,7 +56,7 @@ public class StubOpenGLExtractor implements ComponentOpenGLExtractor {
 			vertices.add(new GameObjectVertex(100, 0, 0, 0, 0, 0, 1, 0));
 			vertices.add(new GameObjectVertex(0, 100, 0, 0, 0, 0, 0, 1));
 
-			List<Integer> indices = new ArrayList<Integer>();
+			List<Integer> indices = new ArrayList<>();
 			indices.add(0);
 			indices.add(1);
 			indices.add(2);

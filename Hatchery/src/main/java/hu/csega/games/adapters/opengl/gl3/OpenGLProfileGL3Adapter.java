@@ -124,6 +124,8 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		fragShader.destroy(gl3);
 
 		gl3.glEnable(GL3.GL_DEPTH_TEST);
+		gl3.glEnable(GL3.GL_CULL_FACE);
+		gl3.glFrontFace(GL3.GL_CCW);
 
 		OpenGLErrorUtil.checkError(gl3, "ensureOpenGLProgramIsInitialized");
 	}
