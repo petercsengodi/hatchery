@@ -11,8 +11,6 @@ import hu.csega.games.library.mesh.v1.xml.SMesh;
 import hu.csega.games.library.mesh.v1.xml.SShape;
 import hu.csega.games.library.mesh.v1.xml.STriangle;
 import hu.csega.games.library.mesh.v1.xml.SVertex;
-import hu.csega.games.library.story.v1.xml.SMap;
-import hu.csega.games.library.story.v1.xml.SRoom;
 import hu.csega.games.library.xml.XmlClass;
 import hu.csega.games.library.xml.XmlField;
 
@@ -181,9 +179,6 @@ public class XmlBinding {
 		registerClass(SVertex.class);
 		registerClass(SEdge.class);
 		registerClass(SShape.class);
-
-		registerClass(SMap.class);
-		registerClass(SRoom.class);
 
 	}
 
