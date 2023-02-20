@@ -12,7 +12,7 @@ public class AnimatorWireFramePoint {
 	public AnimatorWireFramePoint() {
 	}
 
-	public AnimatorWireFramePoint(double cx, double y, double z, Color color) {
+	public AnimatorWireFramePoint(double x, double y, double z, Color color) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
