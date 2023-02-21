@@ -1,7 +1,6 @@
 package hu.csega.editors.anm;
 
-import java.awt.Container;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import javax.swing.JTabbedPane;
 
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
+import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
@@ -21,6 +21,7 @@ import hu.csega.editors.anm.ui.AnimatorCommonSettingsPanel;
 import hu.csega.editors.anm.ui.AnimatorScenesPanel;
 import hu.csega.editors.anm.ui.AnimatorUIComponents;
 import hu.csega.editors.anm.ui.layout.root.AnimatorRootLayoutManager;
+import hu.csega.games.adapters.opengl.OpenGLCanvas;
 import hu.csega.games.adapters.opengl.OpenGLGameAdapter;
 import hu.csega.games.common.Connector;
 import hu.csega.games.engine.GameEngineFacade;
@@ -180,6 +181,17 @@ public class AnimatorConnector implements Connector, GameWindow {
 		layout.updateAfterAllComponentsAreAdded();
 
 		refreshViews = UnitStore.instance(ComponentRefreshViews.class);
+
+
+		// Mouse control.
+
+		GameCanvas canvas = engine.getCanvas();
+		AnimatorMouseController mouseController = new AnimatorMouseController(canvas, facade);
+
+		Component component = ((OpenGLCanvas) canvas).getRealCanvas();
+		component.addMouseListener(mouseController);
+		component.addMouseMotionListener(mouseController);
+		component.addMouseWheelListener(mouseController);
 
 		return engine;
 	}

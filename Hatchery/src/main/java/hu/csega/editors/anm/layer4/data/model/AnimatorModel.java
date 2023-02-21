@@ -9,8 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationMisc;
+import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
+import hu.csega.games.library.animation.v1.anm.AnimationVector;
 
 public class AnimatorModel {
 
@@ -92,6 +95,49 @@ public class AnimatorModel {
 		}
 
 		return ret;
+	}
+
+	public void refreshCamera(AnimatorMouseController mouseController) {
+		if(persistent == null) {
+			return;
+		}
+
+		AnimationMisc misc = persistent.getMisc();
+		if(misc == null) {
+			misc = new AnimationMisc();
+			persistent.setMisc(misc);
+		}
+
+		AnimationPlacement camera = misc.getCamera();
+		if(camera == null) {
+			return;
+		}
+
+		AnimationVector position = camera.getPosition();
+		if(position == null) {
+			return;
+		}
+
+		double alfa = 0.0;
+		double beta = 0.0;
+		double distance = 100.0;
+
+		if(mouseController != null) {
+			double scaling = mouseController.getScaling();
+			distance *= scaling;
+			alfa = mouseController.getAlfa();
+			beta = mouseController.getBeta();
+		}
+
+		double y = distance * Math.sin(beta);
+		double distanceReduced = distance * Math.cos(beta);
+
+		float[] p = position.getV();
+
+		p[0] = (float)(Math.cos(alfa) * distanceReduced);
+		p[1] = (float) y;
+		p[2] = (float)(Math.sin(alfa) * distanceReduced);
+		p[3] = 1f;
 	}
 
 }

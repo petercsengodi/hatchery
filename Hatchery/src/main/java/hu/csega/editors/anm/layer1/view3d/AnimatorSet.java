@@ -6,7 +6,7 @@ import hu.csega.games.engine.g3d.GameObjectPlacement;
 
 public class AnimatorSet {
 
-	private GameObjectPlacement camera;
+	private GameObjectPlacement camera; // FIXME to be deleted?
 	private List<AnimatorSetPart> parts;
 
 	public GameObjectPlacement getCamera() {

@@ -73,6 +73,11 @@ public class AnimationMisc implements Serializable {
 	public AnimationMisc() {
 		this.gridEnabled = true;
 		this.saved = true;
+		this.currentScene = 0;
+		this.camera = new AnimationPlacement();
+		this.camera.setPosition(new AnimationVector(0f, 0f, 30f));
+		this.camera.setTarget(new AnimationVector(0f, 0f, 0f));
+		this.camera.setUp(new AnimationVector(0f, 1f, 0f));
 	}
 
 	private static final long serialVersionUID = 1L;

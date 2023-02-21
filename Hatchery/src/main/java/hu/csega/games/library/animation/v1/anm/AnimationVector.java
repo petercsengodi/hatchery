@@ -12,6 +12,14 @@ public class AnimationVector implements Serializable {
 		this.v[3] = 1f;
 	}
 
+	public AnimationVector(float x, float y, float z) {
+		this.v = new float[4];
+		this.v[0] = x;
+		this.v[1] = y;
+		this.v[2] = z;
+		this.v[3] = 1f;
+	}
+
 	public float[] getV() {
 		return v;
 	}

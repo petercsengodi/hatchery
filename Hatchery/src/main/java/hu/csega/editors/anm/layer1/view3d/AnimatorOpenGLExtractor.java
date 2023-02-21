@@ -8,6 +8,7 @@ import org.joml.Matrix4f;
 
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentOpenGLTransformer;
+import hu.csega.games.engine.intf.GameGraphics;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationMisc;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
