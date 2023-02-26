@@ -160,7 +160,7 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 			Texture texture = TextureIO.newTexture(new File(filename), true);
 			container.setTexture(texture);
 		} catch (IOException ex) {
-			throw new RuntimeException("Exception occurred while loading texture!", ex);
+			throw new RuntimeException("Exception occurred while loading texture: " + filename, ex);
 		}
 
 		GL2 gl2 = glAutoDrawable.getGL().getGL2();

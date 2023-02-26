@@ -27,7 +27,7 @@ public class TextureLibrary {
 		for(String fileName : ret) {
 			STextureRef key = new STextureRef();
 			key.setName(FileUtil.cleanUpName(fileName));
-			BufferedImage value = load(fileName);
+			BufferedImage value = load(root, fileName);
 			this.textures.put(key, value);
 		}
 	}
@@ -36,12 +36,19 @@ public class TextureLibrary {
 		return textures.get(ref);
 	}
 
-	private static BufferedImage load(String fileName) {
+	private static BufferedImage load(String root, String filename) {
+		String fn;
+		if(filename.charAt(0) == '/') {
+			fn = filename;
+		} else {
+			fn = root + '/' + filename;
+		}
+
 		BufferedImage bufferedImage;
 		try {
-			bufferedImage = ImageIO.read(new File(fileName));
+			bufferedImage = ImageIO.read(new File(fn));
 		} catch (IOException ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("Could not read: " + fn, ex);
 		}
 
 		return bufferedImage;
