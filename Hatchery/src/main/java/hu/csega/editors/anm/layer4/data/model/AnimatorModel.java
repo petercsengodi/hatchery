@@ -1,5 +1,13 @@
 package hu.csega.editors.anm.layer4.data.model;
 
+import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
+import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorFileManipulator;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationMisc;
+import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
+import hu.csega.games.library.animation.v1.anm.AnimationVector;
+import hu.csega.games.units.Dependency;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,17 +17,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
-import hu.csega.games.library.animation.v1.anm.Animation;
-import hu.csega.games.library.animation.v1.anm.AnimationMisc;
-import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
-import hu.csega.games.library.animation.v1.anm.AnimationVector;
-
 public class AnimatorModel {
 
 	private AnimationPersistent persistent;
 	private List<AnimationSnapshot> previousStates;
 	private List<AnimationSnapshot> nextStates;
+
+	private AnimatorFileManipulator files;
 
 	public AnimatorModel() {
 		this.previousStates = new ArrayList<>();
@@ -138,6 +142,11 @@ public class AnimatorModel {
 		p[1] = (float) y;
 		p[2] = (float)(Math.sin(alfa) * distanceReduced);
 		p[3] = 1f;
+	}
+
+	@Dependency
+	public void setAnimatorFileManipulator(AnimatorFileManipulator animatorFileManipulator) {
+		this.files = animatorFileManipulator;
 	}
 
 }
