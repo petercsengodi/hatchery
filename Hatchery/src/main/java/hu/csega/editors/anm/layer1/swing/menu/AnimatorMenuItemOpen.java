@@ -8,6 +8,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.editors.anm.components.ComponentRefreshViews;
+import hu.csega.editors.common.SerializationUtil;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
@@ -57,7 +58,7 @@ class AnimatorMenuItemOpen implements ActionListener {
 				model.loadAnimation(file.getAbsolutePath(), migratedObject);
 			} else {
 				// Loading serialized, binary data
-				AnimationPersistent persistent = (AnimationPersistent) AnimatorModel.deserialize(bytes);
+				AnimationPersistent persistent = SerializationUtil.deserialize(bytes, AnimationPersistent.class);
 			}
 
 			ComponentRefreshViews refreshViews = UnitStore.instance(ComponentRefreshViews.class);
