@@ -5,6 +5,7 @@ import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {
@@ -16,13 +17,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 	@Override
 	public void refreshAll() {
-		if(model == null) {
-			model = UnitStore.instance(AnimatorModel.class);
-			if(model == null) {
-				return;
-			}
-		}
-
 		if(partListExtractor == null) {
 			partListExtractor = UnitStore.instance(ComponentExtractPartList.class);
 		}
@@ -57,5 +51,10 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 		}
 
 	} // end of refreshAll
+
+	@Dependency
+	public void setAnimatorModel(AnimatorModel animatorModel) {
+		this.model = animatorModel;
+	}
 
 }

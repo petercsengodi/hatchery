@@ -8,10 +8,8 @@ import javax.swing.*;
 
 public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 
-	private double aroundXAxis;
-	private double aroundYAxis;
-	private double aroundZAxis;
-
+	private AnimatorRotatorBinding binding = null;
+	private AnimatorRotatorBinding dummy = new AnimatorRotatorDummyBinding();
 	private List<AnimatorRotationListener> listeners = null;
 
 	private JScrollBar controlXAxis;
@@ -19,11 +17,15 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 	private JScrollBar controlZAxis;
 	private JPanel canvas;
 
+	private final BoundedRangeModel xRange;
+	private final BoundedRangeModel yRange;
+	private final BoundedRangeModel zRange;
+
 	public AnimatorRotatorComponent() {
 		this.controlXAxis = new JScrollBar(JScrollBar.VERTICAL);
 		this.controlYAxis = new JScrollBar(JScrollBar.HORIZONTAL);
 		this.controlZAxis = new JScrollBar(JScrollBar.VERTICAL);
-		this.canvas = new AnimatorRotatorCanvas();
+		this.canvas = new AnimatorRotatorCanvas(this);
 
 		this.setLayout(this);
 
@@ -33,14 +35,30 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 		this.add("controlZAxis", controlZAxis);
 		this.add("canvas", canvas);
 
-		this.controlXAxis.setModel(new AnimatorRotatorAngleModel());
-		this.controlYAxis.setModel(new AnimatorRotatorAngleModel());
-		this.controlZAxis.setModel(new AnimatorRotatorAngleModel());
+		this.xRange = new DefaultBoundedRangeModel(0, 10, -179, 190);
+		this.xRange.addChangeListener(new AnimatorRotatorXAngleChanged(this, this.xRange));
+		this.controlXAxis.setModel(this.xRange);
+
+		this.yRange = new DefaultBoundedRangeModel(0, 10, -179, 190);
+		this.yRange.addChangeListener(new AnimatorRotatorYAngleChanged(this, this.yRange));
+		this.controlYAxis.setModel(this.yRange);
+
+		this.zRange = new DefaultBoundedRangeModel(0, 10, -179, 190);
+		this.zRange.addChangeListener(new AnimatorRotatorZAngleChanged(this, this.zRange));
+		this.controlZAxis.setModel(this.zRange);
 
 		AnimatorRotatorMouseListener mouseListener = new AnimatorRotatorMouseListener();
 		this.canvas.addMouseListener(mouseListener);
 		this.canvas.addMouseMotionListener(mouseListener);
 		this.canvas.addMouseWheelListener(mouseListener);
+	}
+
+	public AnimatorRotatorBinding getBinding() {
+		return (binding != null ?  binding : dummy);
+	}
+
+	public void repaintCanvas() {
+		canvas.repaint();
 	}
 
 	@Override
@@ -95,13 +113,6 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 			listeners = new ArrayList<>();
 
 		listeners.add(listener);
-	}
-
-	private void notifyListeners() {
-		if(listeners != null) {
-			for(AnimatorRotationListener listener : listeners)
-				listener.changed(aroundXAxis, aroundYAxis, aroundZAxis);
-		}
 	}
 
 	private static final int SCROLL_BAR_MIN_SIZE = 20;
