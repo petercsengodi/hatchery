@@ -1,16 +1,10 @@
 package hu.csega.editors.anm.layer1.swing.components.rotator;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoundedRangeModel;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.event.ChangeListener;
+import javax.swing.*;
 
 public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 
@@ -29,7 +23,7 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 		this.controlXAxis = new JScrollBar(JScrollBar.VERTICAL);
 		this.controlYAxis = new JScrollBar(JScrollBar.HORIZONTAL);
 		this.controlZAxis = new JScrollBar(JScrollBar.VERTICAL);
-		this.canvas = new JPanel();
+		this.canvas = new AnimatorRotatorCanvas();
 
 		this.setLayout(this);
 
@@ -39,86 +33,14 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 		this.add("controlZAxis", controlZAxis);
 		this.add("canvas", canvas);
 
-		this.controlXAxis.setModel(new BoundedRangeModel() {
+		this.controlXAxis.setModel(new AnimatorRotatorAngleModel());
+		this.controlYAxis.setModel(new AnimatorRotatorAngleModel());
+		this.controlZAxis.setModel(new AnimatorRotatorAngleModel());
 
-			@Override
-			public void setValueIsAdjusting(boolean b) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void setValue(int newValue) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void setRangeProperties(int value, int extent, int min, int max, boolean adjusting) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void setMinimum(int newMinimum) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void setMaximum(int newMaximum) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void setExtent(int newExtent) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void removeChangeListener(ChangeListener x) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public boolean getValueIsAdjusting() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public int getValue() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public int getMinimum() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public int getMaximum() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public int getExtent() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public void addChangeListener(ChangeListener x) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		AnimatorRotatorMouseListener mouseListener = new AnimatorRotatorMouseListener();
+		this.canvas.addMouseListener(mouseListener);
+		this.canvas.addMouseMotionListener(mouseListener);
+		this.canvas.addMouseWheelListener(mouseListener);
 	}
 
 	@Override
