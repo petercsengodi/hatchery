@@ -6,7 +6,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import hu.csega.editors.anm.components.ComponentPartManipulator;
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.ui.AnimatorUIComponents;
 import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.UnitStore;
@@ -17,7 +17,6 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 
 	private AnimatorUIComponents ui;
 	private FileUtil files;
-	private ComponentPartManipulator manipulator;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -33,14 +32,6 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 			files = UnitStore.instance(FileUtil.class);
 			if(files == null) {
 				logger.error("Missing component: " + FileUtil.class.getSimpleName());
-				return;
-			}
-		}
-
-		if(manipulator == null) {
-			manipulator = UnitStore.instance(ComponentPartManipulator.class);
-			if(manipulator == null) {
-				logger.error("Missing component: " + ComponentPartManipulator.class.getSimpleName());
 				return;
 			}
 		}
@@ -62,7 +53,8 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 			}
 
 			logger.info("Selected file: " + filename);
-			manipulator.addNewPart(filename);
+			AnimatorModel model = UnitStore.instance(AnimatorModel.class);
+			model.addNewPart(filename);
 
 			break;
 

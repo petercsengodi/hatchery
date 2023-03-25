@@ -1,16 +1,13 @@
 package hu.csega.editors.anm.layer1.swing.components.rotator;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.*;
 
 public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 
 	private AnimatorRotatorBinding binding = null;
-	private AnimatorRotatorBinding dummy = new AnimatorRotatorDummyBinding();
-	private List<AnimatorRotationListener> listeners = null;
+	private AnimatorRotatorBinding dummy = new AnimatorRotatorDummyBinding(this);
 
 	private JScrollBar controlXAxis;
 	private JScrollBar controlYAxis;
@@ -61,6 +58,14 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 		canvas.repaint();
 	}
 
+	public void refresh() {
+		AnimatorRotatorBinding currentBinding = getBinding();
+		xRange.setValue(convertDoubleAngle(currentBinding.currentXRotation()));
+		yRange.setValue(convertDoubleAngle(currentBinding.currentYRotation()));
+		zRange.setValue(convertDoubleAngle(currentBinding.currentZRotation()));
+		repaintCanvas();
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(AnimatorRotatorCanvas.CANVAS_MIN_SIZE + 2 * SCROLL_BAR_MIN_SIZE,
@@ -108,11 +113,15 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 	public void layoutContainer(Container parent) {
 	}
 
-	public void addListener(AnimatorRotationListener listener) {
-		if(listeners == null)
-			listeners = new ArrayList<>();
-
-		listeners.add(listener);
+	private int convertDoubleAngle(double value) {
+		int v = ((int) value) % 360;
+		if(v > 180) {
+			v -= 360;
+		}
+		if(v < 179) {
+			v += 360;
+		}
+		return v;
 	}
 
 	private static final int SCROLL_BAR_MIN_SIZE = 20;

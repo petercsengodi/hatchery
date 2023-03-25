@@ -3,6 +3,7 @@ package hu.csega.editors.anm.layer4.data.model;
 import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorCameraManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorFileManipulator;
+import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorPartManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorSnapshotManipulator;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.units.Dependency;
@@ -14,6 +15,7 @@ public class AnimatorModel {
 	private AnimatorFileManipulator files;
 	private AnimatorSnapshotManipulator snapshots;
 	private AnimatorCameraManipulator camera;
+	private AnimatorPartManipulator parts;
 
 	public AnimationPersistent getPersistent() {
 		return persistent;
@@ -44,6 +46,10 @@ public class AnimatorModel {
 		camera.refreshCamera(mouseController);
 	}
 
+	public void addNewPart(String filename) {
+		parts.addNewPart(filename);
+	}
+
 	@Dependency
 	public void setAnimatorFileManipulator(AnimatorFileManipulator animatorFileManipulator) {
 		this.files = animatorFileManipulator;
@@ -57,6 +63,11 @@ public class AnimatorModel {
 	@Dependency
 	public void setAnimatorCameraManipulator(AnimatorCameraManipulator animatorCameraManipulator) {
 		this.camera = animatorCameraManipulator;
+	}
+
+	@Dependency
+	public void setAnimatorPartManipulator(AnimatorPartManipulator animatorPartManipulator) {
+		this.parts = animatorPartManipulator;
 	}
 
 }
