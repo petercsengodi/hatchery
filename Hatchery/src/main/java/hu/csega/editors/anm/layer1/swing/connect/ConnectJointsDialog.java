@@ -1,38 +1,40 @@
 package hu.csega.editors.anm.layer1.swing.connect;
 
-import hu.csega.toolshed.logging.Logger;
-import hu.csega.toolshed.logging.LoggerFactory;
-
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
-public class ConnectJointsDialog extends JFrame implements ComponentListener {
+public class ConnectJointsDialog extends JDialog implements ComponentListener {
 
     private ConnectionTreeModel model;
-    private JScrollPane scroller;
     private JTree tree;
 
-    public ConnectJointsDialog() {
-        super("Select a joint to connect selected part!");
+    public ConnectJointsDialog(JFrame parent) {
+        super(parent, "Select a joint to connect selected part!");
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.addComponentListener(this);
+        this.setModal(true);
 
-        model = new ConnectionTreeModel();
+        this.model = new ConnectionTreeModel();
 
-        tree = new JTree(model);
-        scroller = new JScrollPane(tree);
+        this.tree = new JTree(model);
+        this.tree.setEditable(false);
+        this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+        JScrollPane scroller = new JScrollPane(tree);
         Container contentPane = this.getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(scroller, BorderLayout.CENTER);
 
         JButton ok = new JButton("OK");
-        ok.addActionListener(event -> setVisible(false));
+        ok.addActionListener(event -> okAction());
 
         JButton cancel = new JButton("Cancel");
-        cancel.addActionListener(event -> setVisible(false));
+        cancel.addActionListener(event -> cancelAction());
 
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout());
@@ -43,6 +45,26 @@ public class ConnectJointsDialog extends JFrame implements ComponentListener {
         this.pack();
     }
 
+    private void okAction() {
+        TreePath path = tree.getSelectionPath();
+        if(path == null) {
+            return;
+        }
+
+        Object selected = path.getLastPathComponent();
+        if(!(selected instanceof ConnectionTreeJoint)) {
+            return;
+        }
+
+        setVisible(false);
+        componentHidden(null);
+    }
+
+    private void cancelAction() {
+        setVisible(false);
+        componentHidden(null);
+    }
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(600, 800);
@@ -51,7 +73,6 @@ public class ConnectJointsDialog extends JFrame implements ComponentListener {
     public void showConnectJointsDialog() {
         model.update();
         tree.updateUI();
-        scroller.updateUI();
         setVisible(true);
     }
 
@@ -67,15 +88,12 @@ public class ConnectJointsDialog extends JFrame implements ComponentListener {
 
     @Override
     public void componentShown(ComponentEvent e) {
-        logger.info("Shown.");
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
         model.clear();
     }
-
-    private static final Logger logger = LoggerFactory.createLogger(ConnectJointsDialog.class);
 
     private static final long serialVersionUID = 1L;
 }
