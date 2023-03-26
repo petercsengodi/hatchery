@@ -38,11 +38,11 @@ public class AnimatorRootLayoutManager implements LayoutManager, LayoutManager2 
 
 	@Override
 	public void addLayoutComponent(String name, Component component) {
-		logger.info("Adding component: " + component.getClass().getSimpleName() + " With name: " + name);
-
 		if(name == null || component == null) {
 			throw new RuntimeException("Neither of the arguments should be null!");
 		}
+
+		logger.debug("Adding component: " + component.getClass().getSimpleName() + " With name: " + name);
 
 		if(nameToComponent.containsKey(name)) {
 			throw new IllegalStateException("Name already used: " + name);
@@ -54,7 +54,7 @@ public class AnimatorRootLayoutManager implements LayoutManager, LayoutManager2 
 
 		nameToComponent.put(name, component);
 		componentToName.put(component, name);
-		logger.info("Added component: " + component + " With name: " + name);
+		logger.debug("Added component: " + component + " With name: " + name);
 		invalid = true;
 	}
 
@@ -102,9 +102,9 @@ public class AnimatorRootLayoutManager implements LayoutManager, LayoutManager2 
 
 	@Override
 	public void layoutContainer(Container parent) {
-		logger.info("Parent: " + (parent != null ? parent.getClass().getName() : "–"));
+		logger.debug("Parent: " + (parent != null ? parent.getClass().getName() : "–"));
 
-		if(invalid) {
+		if(invalid && parent != null) {
 			int width = parent.getWidth();
 			int height = parent.getHeight();
 			recalculatePositions(width, height);
@@ -115,7 +115,7 @@ public class AnimatorRootLayoutManager implements LayoutManager, LayoutManager2 
 		this.width = width;
 		this.height = height;
 
-		logger.info("Recalculating positions for a box " + width + 'x' + height + '.');
+		logger.debug("Recalculating positions for a box " + width + 'x' + height + '.');
 		Component component;
 
 		int w20 = (int)(width * 0.2);

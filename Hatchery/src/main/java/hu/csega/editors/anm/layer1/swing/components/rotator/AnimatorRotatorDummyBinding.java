@@ -15,21 +15,21 @@ class AnimatorRotatorDummyBinding implements AnimatorRotatorBinding {
     @Override
     public void changeXRotation(double change) {
         x += change;
-        logger.info("Dummy X angle set to: " + x);
+        logger.debug("Dummy X angle set to: " + x);
         parent.repaintCanvas();
     }
 
     @Override
     public void changeYRotation(double change) {
         y += change;
-        logger.info("Dummy Y angle set to: " + y);
+        logger.debug("Dummy Y angle set to: " + y);
         parent.repaintCanvas();
     }
 
     @Override
     public void changeZRotation(double change) {
         z += change;
-        logger.info("Dummy Z angle set to: " + z);
+        logger.debug("Dummy Z angle set to: " + z);
         parent.repaintCanvas();
     }
 

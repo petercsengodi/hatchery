@@ -44,7 +44,7 @@ public class AnimatorStarter {
 
 	public static final String DEFAULT_TEXTURE_FILE = "res/textures/ship2.jpg";
 
-	private static final Level LOGGING_LEVEL = Level.TRACE;
+	private static final Level LOGGING_LEVEL = Level.INFO;
 	private static Logger logger;
 
 

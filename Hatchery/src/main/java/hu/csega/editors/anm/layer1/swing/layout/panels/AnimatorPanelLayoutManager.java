@@ -95,9 +95,9 @@ public class AnimatorPanelLayoutManager implements LayoutManager, LayoutManager2
 
 	@Override
 	public void layoutContainer(Container parent) {
-		logger.info("Parent: " + (parent != null ? parent.getClass().getName() : "–"));
+		logger.debug("Parent: " + (parent != null ? parent.getClass().getName() : "–"));
 
-		if(invalid) {
+		if(invalid && parent != null) {
 			width = parent.getWidth();
 			height = parent.getHeight();
 			recalculatePositions(width, height);
@@ -105,7 +105,7 @@ public class AnimatorPanelLayoutManager implements LayoutManager, LayoutManager2
 	}
 
 	private void recalculatePositions(int width, int height) {
-		logger.info("Recalculating positions for a box " + width + 'x' + height + '.');
+		logger.debug("Recalculating positions for a box " + width + 'x' + height + '.');
 		for(int i = 0; i < numberOfComponents; i++) {
 			Component component = components[i];
 			AnimatorPanelLayoutChangeListener listener = listeners[i];
