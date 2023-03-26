@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.ui;
+package hu.csega.editors.anm.layer1.swing;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;

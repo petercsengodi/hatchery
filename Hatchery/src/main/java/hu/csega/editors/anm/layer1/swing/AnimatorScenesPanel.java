@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.ui;
+package hu.csega.editors.anm.layer1.swing;
 
 import java.awt.Color;
 import java.awt.Graphics;

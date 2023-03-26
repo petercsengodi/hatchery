@@ -13,9 +13,9 @@ import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorP
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
-import hu.csega.editors.anm.ui.AnimatorCommonSettingsPanel;
-import hu.csega.editors.anm.ui.AnimatorScenesPanel;
-import hu.csega.editors.anm.ui.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.swing.AnimatorCommonSettingsPanel;
+import hu.csega.editors.anm.layer1.swing.AnimatorScenesPanel;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.ui.layout.root.AnimatorRootLayoutManager;
 import hu.csega.games.adapters.opengl.OpenGLCanvas;
 import hu.csega.games.adapters.opengl.OpenGLGameAdapter;

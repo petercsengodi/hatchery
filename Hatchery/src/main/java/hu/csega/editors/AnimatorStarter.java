@@ -23,7 +23,7 @@ import hu.csega.editors.anm.layer1.view3d.AnimatorOpenGLTransformer;
 import hu.csega.editors.anm.layer2.transformation.AnimatorExtractPartList;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
-import hu.csega.editors.anm.ui.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.games.common.ApplicationStarter;
 import hu.csega.games.common.Connector;
 import hu.csega.games.library.MeshLibrary;

@@ -6,11 +6,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import hu.csega.editors.anm.components.ComponentPartListView;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.ui.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;

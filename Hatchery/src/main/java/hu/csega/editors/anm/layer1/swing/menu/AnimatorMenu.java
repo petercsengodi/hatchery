@@ -7,7 +7,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import hu.csega.editors.anm.ui.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.units.UnitStore;
 

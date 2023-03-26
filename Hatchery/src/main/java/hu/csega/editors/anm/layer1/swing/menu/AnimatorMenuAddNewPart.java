@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
-import hu.csega.editors.anm.ui.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
