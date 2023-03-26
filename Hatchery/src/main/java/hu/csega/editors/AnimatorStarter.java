@@ -2,7 +2,7 @@ package hu.csega.editors;
 
 import java.io.File;
 
-import hu.csega.editors.anm.AnimatorConnector;
+import hu.csega.editors.anm.layer1.opengl.AnimatorConnector;
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;

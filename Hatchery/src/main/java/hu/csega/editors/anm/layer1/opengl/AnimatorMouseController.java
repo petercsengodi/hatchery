@@ -1,6 +1,5 @@
 package hu.csega.editors.anm.layer1.opengl;
 
-import hu.csega.editors.anm.AnimatorRenderStep;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.intf.GameCanvas;

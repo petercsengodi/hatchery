@@ -1,4 +1,4 @@
-package hu.csega.editors.anm;
+package hu.csega.editors.anm.layer1.opengl;
 
 import java.util.List;
 

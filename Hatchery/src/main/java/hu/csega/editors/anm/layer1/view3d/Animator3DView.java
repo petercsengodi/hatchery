@@ -1,6 +1,6 @@
 package hu.csega.editors.anm.layer1.view3d;
 
-import hu.csega.editors.anm.AnimatorRenderStep;
+import hu.csega.editors.anm.layer1.opengl.AnimatorRenderStep;
 import hu.csega.editors.anm.components.Component3DView;
 
 public class Animator3DView implements Component3DView {

@@ -1,4 +1,4 @@
-package hu.csega.editors.anm;
+package hu.csega.editors.anm.layer1.opengl;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -8,7 +8,6 @@ import javax.swing.*;
 
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
-import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
