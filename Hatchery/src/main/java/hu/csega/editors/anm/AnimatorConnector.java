@@ -4,11 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
@@ -166,7 +162,10 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 		components.partListModel = new AnimatorPartListModel();
 		components.partList = new JList<>(components.partListModel);
+		components.partList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		components.partListScrollPane = new JScrollPane(components.partList);
+		components.partList.addListSelectionListener(components.partListModel);
+		components.partListModel.setJList(components.partList);
 
 		components.partEditorPanel = new AnimatorPartEditorPanel();
 		components.commonSettingsPanel = new AnimatorCommonSettingsPanel();
