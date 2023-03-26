@@ -72,6 +72,10 @@ public class AnimatorMenu {
 		addNewPart.addActionListener(new AnimatorMenuAddNewPart());
 		menu.add(addNewPart);
 
+		JMenuItem connectPart = new JMenuItem("Connect Part");
+		connectPart.addActionListener(new AnimatorMenuConnectPart());
+		menu.add(connectPart);
+
 		return menu;
 	}
 
