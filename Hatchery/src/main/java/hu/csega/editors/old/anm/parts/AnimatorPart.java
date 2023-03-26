@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.model.parts;
+package hu.csega.editors.old.anm.parts;
 
 import java.util.List;
 

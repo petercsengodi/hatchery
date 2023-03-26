@@ -1,4 +1,4 @@
-package hu.csega.editors.swing.transformations;
+package hu.csega.editors.old.swing.transformations;
 
 import hu.csega.games.engine.g2d.GamePoint;
 
