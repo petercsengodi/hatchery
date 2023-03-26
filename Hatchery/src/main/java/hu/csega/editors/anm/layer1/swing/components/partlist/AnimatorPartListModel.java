@@ -1,5 +1,7 @@
 package hu.csega.editors.anm.layer1.swing.components.partlist;
 
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
+import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
@@ -14,6 +16,7 @@ public class AnimatorPartListModel implements ListModel<AnimatorPartListItem>, L
 
 	private JList<AnimatorPartListItem> partList = null;
 	private List<AnimatorPartListItem> items = null;
+	private AnimatorModel model;
 
 	public void setJList(JList<AnimatorPartListItem> partList) {
 		this.partList = partList;
@@ -49,7 +52,17 @@ public class AnimatorPartListModel implements ListModel<AnimatorPartListItem>, L
 	public void valueChanged(ListSelectionEvent e) {
 		if(partList != null) {
 			int selectedIndex = partList.getSelectedIndex();
-			logger.info("Selected index: " + selectedIndex);
+			logger.debug("Selected index: " + selectedIndex);
+
+			if(selectedIndex < items.size()) {
+				AnimatorPartListItem partItem = items.get(selectedIndex);
+
+				if(model == null) {
+					model = UnitStore.instance(AnimatorModel.class);
+				}
+
+				model.setSelectedAnimationPart(partItem.getIndex());
+			}
 		}
 	}
 

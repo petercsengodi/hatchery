@@ -4,7 +4,7 @@ import java.util.List;
 
 import hu.csega.editors.anm.layer1.view3d.AnimatorSet;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
-import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;

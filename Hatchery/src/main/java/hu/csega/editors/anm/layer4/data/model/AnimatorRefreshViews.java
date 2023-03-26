@@ -5,6 +5,7 @@ import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 

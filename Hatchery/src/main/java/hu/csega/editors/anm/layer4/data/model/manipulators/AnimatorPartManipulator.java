@@ -1,11 +1,10 @@
 package hu.csega.editors.anm.layer4.data.model.manipulators;
 
-import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
-import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
 import hu.csega.games.library.animation.v1.anm.AnimationTransformation;
 import hu.csega.games.units.Dependency;
 

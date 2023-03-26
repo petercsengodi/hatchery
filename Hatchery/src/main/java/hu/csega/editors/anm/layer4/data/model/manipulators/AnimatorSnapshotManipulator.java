@@ -1,6 +1,6 @@
 package hu.csega.editors.anm.layer4.data.model.manipulators;
 
-import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimationSnapshot;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;

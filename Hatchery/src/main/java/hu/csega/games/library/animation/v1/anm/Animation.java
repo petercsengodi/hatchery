@@ -41,7 +41,7 @@ public class Animation implements Serializable {
 
 	public void cleanUpScenes() {
 		if(scenes == null) {
-			scenes = new ArrayList<AnimationScene>();
+			scenes = new ArrayList<>();
 		}
 
 		if(scenes.size() == 0) {
@@ -51,7 +51,7 @@ public class Animation implements Serializable {
 		for(AnimationScene scene : scenes) {
 			Map<Integer, AnimationScenePart> map = scene.getSceneParts();
 			if(map == null) {
-				map = new TreeMap<Integer, AnimationScenePart>();
+				map = new TreeMap<>();
 				scene.setSceneParts(map);
 			}
 

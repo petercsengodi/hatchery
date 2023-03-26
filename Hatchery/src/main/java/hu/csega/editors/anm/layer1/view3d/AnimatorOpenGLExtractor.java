@@ -8,7 +8,6 @@ import org.joml.Matrix4f;
 
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentOpenGLTransformer;
-import hu.csega.games.engine.intf.GameGraphics;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationMisc;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
@@ -16,7 +15,7 @@ import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
 import hu.csega.games.library.animation.v1.anm.AnimationScene;
 import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
 import hu.csega.games.library.animation.v1.anm.AnimationVector;
-import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.g3d.GameModelStore;

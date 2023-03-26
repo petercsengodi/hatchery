@@ -6,6 +6,7 @@ import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorFileManipulat
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorPartManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorSnapshotManipulator;
 import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.Dependency;
 
 public class AnimatorModel {
@@ -16,6 +17,34 @@ public class AnimatorModel {
 	private AnimatorSnapshotManipulator snapshots;
 	private AnimatorCameraManipulator camera;
 	private AnimatorPartManipulator parts;
+
+	private int selectedAnimationPart;
+	private int selectedAnimationJoint;
+	private int selectedAnimationScene;
+
+	public int getSelectedAnimationPart() {
+		return selectedAnimationPart;
+	}
+
+	public void setSelectedAnimationPart(int selectedAnimationPart) {
+		this.selectedAnimationPart = selectedAnimationPart;
+	}
+
+	public int getSelectedAnimationJoint() {
+		return selectedAnimationJoint;
+	}
+
+	public void setSelectedAnimationJoint(int selectedAnimationJoint) {
+		this.selectedAnimationJoint = selectedAnimationJoint;
+	}
+
+	public int getSelectedAnimationScene() {
+		return selectedAnimationScene;
+	}
+
+	public void setSelectedAnimationScene(int selectedAnimationScene) {
+		this.selectedAnimationScene = selectedAnimationScene;
+	}
 
 	public AnimationPersistent getPersistent() {
 		return persistent;

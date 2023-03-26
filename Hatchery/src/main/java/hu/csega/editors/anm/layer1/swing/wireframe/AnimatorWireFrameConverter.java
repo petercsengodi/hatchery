@@ -11,7 +11,7 @@ import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
-import hu.csega.editors.anm.layer4.data.model.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.library.MeshLibrary;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
