@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.List;
 
+@Deprecated
 public class FileUtil {
 
 	private String projectName;

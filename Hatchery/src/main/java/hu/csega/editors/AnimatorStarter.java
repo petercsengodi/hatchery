@@ -24,6 +24,8 @@ import hu.csega.editors.anm.layer2.transformation.AnimatorExtractPartList;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
+import hu.csega.editors.common.resources.FileResourceAdapter;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.common.ApplicationStarter;
 import hu.csega.games.common.Connector;
 import hu.csega.games.library.MeshLibrary;
@@ -60,6 +62,9 @@ public class AnimatorStarter {
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 4. Checking current directory
+
+		ResourceAdapter resourceAdapter = new FileResourceAdapter("Hatchery");
+		UnitStore.registerInstance(ResourceAdapter.class, resourceAdapter);
 
 		AnimatorUIComponents ui = UnitStore.instance(AnimatorUIComponents.class);
 		FileUtil files = new FileUtil("Hatchery");

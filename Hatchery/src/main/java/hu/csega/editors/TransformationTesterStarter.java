@@ -1,10 +1,13 @@
 package hu.csega.editors;
 
+import hu.csega.editors.common.resources.FileResourceAdapter;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.editors.transformations.layer1.presentation.opengl.TransformationTesterConnector;
 import hu.csega.games.common.ApplicationStarter;
 import hu.csega.games.common.Connector;
 import hu.csega.games.library.TextureLibrary;
 import hu.csega.games.library.util.FileUtil;
+import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Level;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
@@ -23,6 +26,9 @@ public class TransformationTesterStarter {
 		LoggerFactory.setDefaultLevel(LOGGING_LEVEL);
 		logger = LoggerFactory.createLogger(TransformationTesterStarter.class);
 		logger.info("Starting translation tester.");
+
+		ResourceAdapter resourceAdapter = new FileResourceAdapter("Hatchery");
+		UnitStore.registerInstance(ResourceAdapter.class, resourceAdapter);
 
 		FILES = new FileUtil("Hatchery");
 
