@@ -12,33 +12,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.List;
 
-@Deprecated
 public class FileUtil {
-
-	private String projectName;
-	private String projectPath;
-	private String workspacePath;
-
-	public FileUtil(String projectName) {
-		this.projectName = projectName;
-
-		String path = System.getProperty("user.dir");
-		String search = File.separatorChar + this.projectName;
-		int index = path.indexOf(search);
-		if(index < 0)
-			throw new RuntimeException("Could not initialize path variables for project: " + this.projectName);
-
-		this.workspacePath = path.substring(0, index) + File.separator;
-		this.projectPath = this.workspacePath + this.projectName + File.separator;
-	}
-
-	public String workspacePath() {
-		return workspacePath;
-	}
-
-	public String projectPath() {
-		return projectPath;
-	}
 
 	public static OutputStreamWriter openWriter(String fileName) throws IOException {
 		return new OutputStreamWriter(new FileOutputStream(fileName), CHARSET);

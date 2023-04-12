@@ -27,7 +27,6 @@ public class FreeTriangleMeshToolStarter {
 	private static final Level LOGGING_LEVEL = Level.TRACE;
 	private static Logger logger;
 
-	public static FileUtil FILES;
 	public static TextureLibrary TEXTURES;
 
 	public static void main(String[] args) {
@@ -38,23 +37,9 @@ public class FreeTriangleMeshToolStarter {
 		ResourceAdapter resourceAdapter = new FileResourceAdapter("Hatchery");
 		UnitStore.registerInstance(ResourceAdapter.class, resourceAdapter);
 
-		FILES = new FileUtil("Hatchery");
+		TEXTURES = new TextureLibrary(resourceAdapter.textureFolder());
 
-		String projectPath = FILES.projectPath();
-		logger.info("Project path: " + projectPath);
-		String workspacePath = FILES.workspacePath();
-		logger.info("Workspace path: " + workspacePath);
-		String resourcesPath = workspacePath + "GameResources" + File.separator;
-		logger.info("Resources path: " + resourcesPath);
-
-		String shaderRoot = resourcesPath + "shaders";
-		logger.info("Shader root (no separator at the end): " + shaderRoot);
-
-		String texturesRoot = resourcesPath + "textures";
-		logger.info("Textures root (no separator at the end): " + texturesRoot);
-		TEXTURES = new TextureLibrary(texturesRoot);
-
-		Connector connector = new FreeTriangleMeshConnector(shaderRoot);
+		Connector connector = new FreeTriangleMeshConnector(resourceAdapter.shaderFolder());
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

@@ -8,6 +8,7 @@ import javax.swing.JFileChooser;
 
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
@@ -37,8 +38,9 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 		}
 
 		if(ui.addNewPartFile == null) {
+			ResourceAdapter resourceAdapter = UnitStore.instance(ResourceAdapter.class);
 			ui.addNewPartFile = new JFileChooser();
-			ui.addNewPartFile.setCurrentDirectory(new File(ui.meshesDirectory));
+			ui.addNewPartFile.setCurrentDirectory(new File(resourceAdapter.meshFolder()));
 		}
 
 		int result = ui.addNewPartFile.showDialog(ui.frame, "Select Mesh");

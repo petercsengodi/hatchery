@@ -1,15 +1,11 @@
 package hu.csega.editors.anm.layer1.swing.menu;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.units.UnitStore;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AnimatorMenu {
 
@@ -24,16 +20,16 @@ public class AnimatorMenu {
 	}
 
 	private static JMenu createFileMenu(JFrame frame, GameEngineFacade facade) {
-		AnimatorUIComponents ui = UnitStore.instance(AnimatorUIComponents.class);
+		ResourceAdapter resourceAdapter = UnitStore.instance(ResourceAdapter.class);
 
-		JFileChooser saveDialog = new JFileChooser(ui.animationsDirectory);
+		JFileChooser saveDialog = new JFileChooser(resourceAdapter.animationFolder());
 		saveDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		saveDialog.setDialogTitle("Select file to save.");
 		saveDialog.setMultiSelectionEnabled(false);
 		saveDialog.setFileFilter(new FileNameExtensionFilter("Animator file", "anm"));
 		saveDialog.setApproveButtonText("Save");
 
-		JFileChooser openDialog = new JFileChooser(ui.animationsDirectory);
+		JFileChooser openDialog = new JFileChooser(resourceAdapter.animationFolder());
 		openDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		openDialog.setDialogTitle("Select file to open.");
 		openDialog.setMultiSelectionEnabled(false);

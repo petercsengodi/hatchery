@@ -25,10 +25,6 @@ public class AnimatorUIComponents {
 
 	public JFrame frame;
 	public JFileChooser addNewPartFile;
-	public String userDirectory;
-	public String texturesDirectory;
-	public String meshesDirectory;
-	public String animationsDirectory;
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Part list
