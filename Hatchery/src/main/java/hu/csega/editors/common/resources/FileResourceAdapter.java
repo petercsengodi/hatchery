@@ -7,6 +7,7 @@ import java.io.File;
 
 public class FileResourceAdapter implements ResourceAdapter {
 
+    private final String projectName;
     private final String userRoot;
     private final String projectRoot;
     private final String workspaceRoot;
@@ -21,6 +22,8 @@ public class FileResourceAdapter implements ResourceAdapter {
     private final String animationFolder;
 
     public FileResourceAdapter(String projectName) {
+        this.projectName = projectName;
+
         this.userRoot = System.getProperty("user.dir");
         logger.info("User root: " + this.userRoot);
 
@@ -61,6 +64,11 @@ public class FileResourceAdapter implements ResourceAdapter {
 
         this.animationRoot = this.animationFolder + File.separator;
         logger.info("Animation root: " + animationRoot);
+    }
+
+    @Override
+    public String projectName() {
+        return projectName;
     }
 
     @Override

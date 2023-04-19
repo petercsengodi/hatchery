@@ -2,6 +2,8 @@ package hu.csega.editors.common.resources;
 
 public interface ResourceAdapter {
 
+    String projectName();
+
     String userRoot();
 
     String projectRoot();

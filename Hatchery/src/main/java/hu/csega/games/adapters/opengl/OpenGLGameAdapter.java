@@ -39,6 +39,7 @@ public class OpenGLGameAdapter implements GameAdapter {
 		GLProfile glProfile;
 
 		if(FORCE_GL2_GLU) {
+			
 			try {
 				logger.info("Trying to acquire GL2 profile...");
 				glProfile = GLProfile.get(GLProfile.GL2);

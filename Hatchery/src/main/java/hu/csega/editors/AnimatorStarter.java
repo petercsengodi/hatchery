@@ -66,8 +66,6 @@ public class AnimatorStarter {
 		ResourceAdapter resourceAdapter = new FileResourceAdapter("Hatchery");
 		UnitStore.registerInstance(ResourceAdapter.class, resourceAdapter);
 
-		AnimatorUIComponents ui = UnitStore.instance(AnimatorUIComponents.class);
-
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 2. Register components and providers:
 

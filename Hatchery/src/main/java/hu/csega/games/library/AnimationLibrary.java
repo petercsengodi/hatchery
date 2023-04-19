@@ -1,5 +1,6 @@
 package hu.csega.games.library;
 
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.library.animation.v1.xml.SAnimation;
 import hu.csega.games.library.reference.SAnimationRef;
 import hu.csega.games.library.util.FileUtil;
@@ -15,12 +16,12 @@ import org.xml.sax.SAXException;
 
 public class AnimationLibrary {
 
-	private FileUtil fileUtil;
+	private ResourceAdapter resourceAdapter;
 
-	public AnimationLibrary(FileUtil fileUtil) {
-		this.fileUtil = fileUtil;
+	public AnimationLibrary(ResourceAdapter resourceAdapter) {
+		this.resourceAdapter = resourceAdapter;
 
-		String animsPath = fileUtil.projectPath() + "anims";
+		String animsPath = resourceAdapter.animationFolder();
 		List<String> ret = new ArrayList<>();
 		FileUtil.collectFiles(animsPath, ret);
 

@@ -1,29 +1,29 @@
 package hu.csega.editors.anm.layer1.view3d;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.joml.Matrix4f;
-
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentOpenGLTransformer;
-import hu.csega.games.library.animation.v1.anm.Animation;
-import hu.csega.games.library.animation.v1.anm.AnimationMisc;
-import hu.csega.games.library.animation.v1.anm.AnimationPart;
-import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
-import hu.csega.games.library.animation.v1.anm.AnimationScene;
-import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
-import hu.csega.games.library.animation.v1.anm.AnimationVector;
-import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.g3d.GameModelStore;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameTransformation;
-import hu.csega.games.library.util.FileUtil;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationMisc;
+import hu.csega.games.library.animation.v1.anm.AnimationPart;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
+import hu.csega.games.library.animation.v1.anm.AnimationScene;
+import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
+import hu.csega.games.library.animation.v1.anm.AnimationVector;
 import hu.csega.games.units.UnitStore;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.joml.Matrix4f;
 
 public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 
@@ -31,7 +31,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 	private ComponentOpenGLTransformer transformer;
 	private GameEngineFacade facade;
 	private GameModelStore store;
-	private FileUtil files;
+	private ResourceAdapter resourceAdapter;
 
 	private Matrix4f m1 = new Matrix4f();
 	private Matrix4f m2 = new Matrix4f();
@@ -54,8 +54,8 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			store = facade.store();
 		}
 
-		if(files == null) {
-			files = UnitStore.instance(FileUtil.class);
+		if(resourceAdapter == null) {
+			resourceAdapter = UnitStore.instance(ResourceAdapter.class);
 		}
 
 		synchronized (model) {
@@ -63,7 +63,6 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 		}
 
 		transformer.accept(set);
-		return;
 	}
 
 	private void generateSet(AnimationPersistent persistent) {
@@ -164,7 +163,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 				}
 
 				if(filename.charAt(0) != '/') {
-					filename = files.projectPath() + filename;
+					filename = resourceAdapter.projectRoot() + filename;
 				}
 
 				GameObjectHandler model = store.loadModel(filename);

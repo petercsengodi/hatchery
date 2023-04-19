@@ -17,7 +17,7 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class AnimatorMenuAddNewPart implements ActionListener {
 
 	private AnimatorUIComponents ui;
-	private FileUtil files;
+	private ResourceAdapter resourceAdapter;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -29,10 +29,10 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 			}
 		}
 
-		if(files == null) {
-			files = UnitStore.instance(FileUtil.class);
-			if(files == null) {
-				logger.error("Missing component: " + FileUtil.class.getSimpleName());
+		if(resourceAdapter == null) {
+			resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+			if(resourceAdapter == null) {
+				logger.error("Missing component: " + ResourceAdapter.class.getSimpleName());
 				return;
 			}
 		}
@@ -49,7 +49,7 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 		case JFileChooser.APPROVE_OPTION:
 			File file = ui.addNewPartFile.getSelectedFile();
 			String filename = file.getAbsolutePath();
-			String projectPath = files.projectPath();
+			String projectPath = resourceAdapter.projectRoot();
 			if(filename.startsWith(projectPath)) {
 				filename = filename.substring(projectPath.length());
 			}
