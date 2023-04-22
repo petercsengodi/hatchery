@@ -1,13 +1,8 @@
 package hu.csega.editors.anm.layer1.swing.components.partlist;
 
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import hu.csega.editors.anm.layer1.swing.components.rotator.AnimatorRotatorComponent;
 import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelFixedSizeLayoutListener;
@@ -30,13 +25,52 @@ public class AnimatorPartEditorPanel extends JPanel {
 	public JButton rotateLeft;
 	public JButton rotateRight;
 
+	public JLabel xLabel;
+	public JTextField xField;
+	public JLabel yLabel;
+	public JTextField yField;
+	public JLabel zLabel;
+	public JTextField zField;
+	public JPanel xyzPanel;
+
+	public JButton addButton;
+	public JButton setButton;
+	public JButton delButton;
+	public JPanel buttonsPanel;
+
 	public AnimatorRotatorComponent rotator;
 
 	public AnimatorPartEditorPanel() {
+		this.xLabel = new JLabel("X:");
+		this.xField = new JTextField(5);
+		this.yLabel = new JLabel("Y:");
+		this.yField = new JTextField(5);
+		this.zLabel = new JLabel("Z:");
+		this.zField = new JTextField(5);
+
+		this.xyzPanel = new JPanel();
+		this.xyzPanel.setLayout(new FlowLayout());
+		this.xyzPanel.add(this.xLabel);
+		this.xyzPanel.add(this.xField);
+		this.xyzPanel.add(this.yLabel);
+		this.xyzPanel.add(this.yField);
+		this.xyzPanel.add(this.zLabel);
+		this.xyzPanel.add(this.zField);
+
+		this.addButton = new JButton("Add!");
+		this.setButton = new JButton("Set!");
+		this.delButton = new JButton("Delete!");
+
+		this.buttonsPanel = new JPanel();
+		this.buttonsPanel.setLayout(new FlowLayout());
+		this.buttonsPanel.add(addButton);
+		this.buttonsPanel.add(setButton);
+		this.buttonsPanel.add(delButton);
+
 		this.layout = new AnimatorPanelLayoutManager(200, 300);
 		this.setLayout(layout);
 
-		int offset = 0;
+		int lineOffset = 0;
 
 		this.labelJoints = new JLabel("Joints:");
 		this.add(this.labelJoints, new AnimatorPanelLayoutChangeListener() {
@@ -55,11 +89,31 @@ public class AnimatorPartEditorPanel extends JPanel {
 			}
 		});
 
+		lineOffset = 190;
+		final int xyzPanelOffset = lineOffset;
+		this.add(this.xyzPanel, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(0, xyzPanelOffset, width, 30);
+			}
+		});
+
+		lineOffset += 30;
+		final int buttonsPanelOffset = lineOffset;
+		this.add(this.buttonsPanel, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(0, buttonsPanelOffset, width, 30);
+			}
+		});
+
+		lineOffset += 40;
+		final int flipButtonsOffset = lineOffset;
 		this.horizontalFlip = new JButton("Horiz. Flip");
 		this.add(this.horizontalFlip, new AnimatorPanelLayoutChangeListener() {
 			@Override
 			public void arrange(Component component, int width, int height) {
-				component.setBounds(5, 190, width / 2 - 10, 20);
+				component.setBounds(5, flipButtonsOffset, width / 2 - 10, 20);
 			}
 		});
 
@@ -67,15 +121,13 @@ public class AnimatorPartEditorPanel extends JPanel {
 		this.add(this.verticalFlip, new AnimatorPanelLayoutChangeListener() {
 			@Override
 			public void arrange(Component component, int width, int height) {
-				component.setBounds(width / 2 + 5, 190, width / 2 - 10, 20);
+				component.setBounds(width / 2 + 5, flipButtonsOffset, width / 2 - 10, 20);
 			}
 		});
 
-		offset += 220;
-
-
+		lineOffset += 20;
 		this.rotateUp = new JButton("▲");
-		this.add(this.rotateUp, new AnimatorPanelFixedSizeLayoutListener(0, offset) {
+		this.add(this.rotateUp, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
 			@Override
 			protected void resize(Component component, int offsetX, int offsetY, int width, int height) {
 				component.setBounds(width / 2 - 25, offsetY + 10, 50, 20);
@@ -83,7 +135,7 @@ public class AnimatorPartEditorPanel extends JPanel {
 		});
 
 		this.rotateDown = new JButton("▼");
-		this.add(this.rotateDown, new AnimatorPanelFixedSizeLayoutListener(0, offset) {
+		this.add(this.rotateDown, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
 			@Override
 			protected void resize(Component component, int offsetX, int offsetY, int width, int height) {
 				component.setBounds(width / 2 - 25, offsetY + 40, 50, 20);
@@ -91,7 +143,7 @@ public class AnimatorPartEditorPanel extends JPanel {
 		});
 
 		this.rotateLeft = new JButton("◄");
-		this.add(this.rotateLeft, new AnimatorPanelFixedSizeLayoutListener(0, offset) {
+		this.add(this.rotateLeft, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
 			@Override
 			protected void resize(Component component, int offsetX, int offsetY, int width, int height) {
 				component.setBounds(width / 2 - 90, offsetY + 25, 50, 20);
@@ -99,17 +151,17 @@ public class AnimatorPartEditorPanel extends JPanel {
 		});
 
 		this.rotateRight = new JButton("►");
-		this.add(this.rotateRight, new AnimatorPanelFixedSizeLayoutListener(0, offset) {
+		this.add(this.rotateRight, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
 			@Override
 			protected void resize(Component component, int offsetX, int offsetY, int width, int height) {
 				component.setBounds(width / 2 + 40, offsetY + 25, 50, 20);
 			}
 		});
 
-		offset += 180;
+		lineOffset += 80;
 
 		this.rotator = new AnimatorRotatorComponent();
-		this.add(this.rotator, new AnimatorPanelFixedSizeLayoutListener(0, offset) {
+		this.add(this.rotator, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
 			@Override
 			protected void resize(Component component, int offsetX, int offsetY, int width, int height) {
 				Dimension preferredSize = component.getPreferredSize();
@@ -117,7 +169,7 @@ public class AnimatorPartEditorPanel extends JPanel {
 			}
 		});
 
-		offset += this.rotator.getPreferredSize().height + 10;
+		lineOffset += this.rotator.getPreferredSize().height + 10;
 	}
 
 	private static final long serialVersionUID = 1L;

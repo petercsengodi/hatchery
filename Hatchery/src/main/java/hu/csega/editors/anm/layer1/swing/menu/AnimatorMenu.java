@@ -38,24 +38,20 @@ public class AnimatorMenu {
 
 		JMenu menu = new JMenu("File");
 
-		/*
 		JMenuItem fileNew = new JMenuItem("New");
-		fileNew.addActionListener(new FileNew(frame, saveDialog, facade));
-		fileMenu.add(fileNew);
-		 */
+		fileNew.addActionListener(new AnimatorMenuNewFile(frame, facade));
+		menu.add(fileNew);
 
 		JMenuItem fileOpen = new JMenuItem("Open");
-		fileOpen.addActionListener(new AnimatorMenuItemOpen(frame, openDialog, facade));
+		fileOpen.addActionListener(new AnimatorMenuIOpenFile(frame, openDialog, facade));
 		menu.add(fileOpen);
 
-		/*
 		JMenuItem fileSave = new JMenuItem("Save");
-		fileSave.addActionListener(new FileSave(frame, saveDialog, facade));
-		fileMenu.add(fileSave);
-		 */
+		fileSave.addActionListener(new AnimatorMenuIOpenFile(frame, saveDialog, facade));
+		menu.add(fileSave);
 
 		JMenuItem fileExit = new JMenuItem("Exit");
-		fileExit.addActionListener(new AnimatorMenuItemExit(frame, saveDialog, facade));
+		fileExit.addActionListener(new AnimatorMenuExit(frame, saveDialog, facade));
 		menu.add(fileExit);
 
 		return menu;
@@ -78,9 +74,13 @@ public class AnimatorMenu {
 	private static JMenu createViewMenu(JFrame frame, GameEngineFacade facade) {
 		JMenu menu = new JMenu("View");
 
-		JMenuItem refreshViews = new JMenuItem("Refresh All");
-		refreshViews.addActionListener(new AnimatorMenuRefreshAll());
+		JMenuItem refreshViews = new JMenuItem("Refresh All Views");
+		refreshViews.addActionListener(new AnimatorMenuRefreshAllViews());
 		menu.add(refreshViews);
+
+		JMenuItem refreshWindow = new JMenuItem("Refresh Window");
+		refreshWindow.addActionListener(new AnimatorMenuRefreshWindow(frame));
+		menu.add(refreshWindow);
 
 		return menu;
 	}

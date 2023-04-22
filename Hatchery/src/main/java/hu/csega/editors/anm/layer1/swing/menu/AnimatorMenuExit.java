@@ -8,13 +8,13 @@ import javax.swing.JFrame;
 import hu.csega.games.engine.GameEngineFacade;
 
 @SuppressWarnings("unused")
-class AnimatorMenuItemExit implements ActionListener {
+class AnimatorMenuExit implements ActionListener {
 
 	private JFrame frame;
 	private JFileChooser saveDialog;
 	private GameEngineFacade facade;
 
-	public AnimatorMenuItemExit(JFrame frame, JFileChooser saveDialog, GameEngineFacade facade) {
+	public AnimatorMenuExit(JFrame frame, JFileChooser saveDialog, GameEngineFacade facade) {
 		this.frame = frame;
 		this.saveDialog = saveDialog;
 		this.facade = facade;

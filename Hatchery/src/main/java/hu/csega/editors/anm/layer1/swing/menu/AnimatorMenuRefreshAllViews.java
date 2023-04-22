@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.games.units.UnitStore;
 
-public class AnimatorMenuRefreshAll implements ActionListener {
+class AnimatorMenuRefreshAllViews implements ActionListener {
 
 	private ComponentRefreshViews refreshViews;
 

@@ -12,8 +12,8 @@ import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorP
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
-import hu.csega.editors.anm.layer1.swing.AnimatorCommonSettingsPanel;
-import hu.csega.editors.anm.layer1.swing.AnimatorScenesPanel;
+import hu.csega.editors.anm.layer1.swing.AnimatorSceneSelectorPanel;
+import hu.csega.editors.anm.layer1.swing.AnimatorSceneLerpPanel;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.ui.layout.root.AnimatorRootLayoutManager;
 import hu.csega.games.adapters.opengl.OpenGLCanvas;
@@ -167,14 +167,14 @@ public class AnimatorConnector implements Connector, GameWindow {
 		components.partListModel.setJList(components.partList);
 
 		components.partEditorPanel = new AnimatorPartEditorPanel();
-		components.commonSettingsPanel = new AnimatorCommonSettingsPanel();
-		components.scenesPanel = new AnimatorScenesPanel();
+		components.sceneSelectorPanel = new AnimatorSceneSelectorPanel();
+		components.sceneLerpPanel = new AnimatorSceneLerpPanel();
 
 		// Now the model exists.
 		contentPane.add(AnimatorRootLayoutManager.PARTS_LIST, components.partListScrollPane);
 		contentPane.add(AnimatorRootLayoutManager.PARTS_SETTINGS, components.partEditorPanel);
-		contentPane.add(AnimatorRootLayoutManager.CORNER_CONTROLLER, components.commonSettingsPanel);
-		contentPane.add(AnimatorRootLayoutManager.SCENE_EDITOR, components.scenesPanel);
+		contentPane.add(AnimatorRootLayoutManager.SCENE_SELECTOR, components.sceneSelectorPanel);
+		contentPane.add(AnimatorRootLayoutManager.SCENE_LERP, components.sceneLerpPanel);
 
 		layout.updateAfterAllComponentsAreAdded();
 

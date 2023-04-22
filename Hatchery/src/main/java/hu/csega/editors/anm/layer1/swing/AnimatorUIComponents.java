@@ -43,7 +43,7 @@ public class AnimatorUIComponents {
 	public AnimatorWireFrameView panelWireFrame;
 	public JPanel panel3D;
 	public AnimatorPartEditorPanel partEditorPanel;
-	public AnimatorCommonSettingsPanel commonSettingsPanel;
-	public AnimatorScenesPanel scenesPanel;
+	public AnimatorSceneSelectorPanel sceneSelectorPanel;
+	public AnimatorSceneLerpPanel sceneLerpPanel;
 
 }

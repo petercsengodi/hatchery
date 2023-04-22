@@ -21,13 +21,13 @@ import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
 @SuppressWarnings("unused")
-class AnimatorMenuItemOpen implements ActionListener {
+class AnimatorMenuIOpenFile implements ActionListener {
 
 	private JFrame frame;
 	private JFileChooser openDialog;
 	private GameEngineFacade facade;
 
-	public AnimatorMenuItemOpen(JFrame frame, JFileChooser openDialog, GameEngineFacade facade) {
+	public AnimatorMenuIOpenFile(JFrame frame, JFileChooser openDialog, GameEngineFacade facade) {
 		this.frame = frame;
 		this.openDialog = openDialog;
 		this.facade = facade;
@@ -70,5 +70,5 @@ class AnimatorMenuItemOpen implements ActionListener {
 		}
 	}
 
-	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuItemOpen.class);
+	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuIOpenFile.class);
 }

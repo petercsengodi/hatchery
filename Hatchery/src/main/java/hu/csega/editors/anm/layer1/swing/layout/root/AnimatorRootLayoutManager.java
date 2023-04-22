@@ -16,8 +16,8 @@ public class AnimatorRootLayoutManager implements LayoutManager, LayoutManager2 
 	public static final String MULTI_TAB = "multiTab";
 	public static final String PARTS_LIST = "partsList";
 	public static final String PARTS_SETTINGS = "partsSettings";
-	public static final String CORNER_CONTROLLER = "cornerController";
-	public static final String SCENE_EDITOR = "sceneEditor";
+	public static final String SCENE_SELECTOR = "cornerController";
+	public static final String SCENE_LERP = "sceneEditor";
 
 	private Map<Component, String> componentToName = new Hashtable<>();
 	private Map<String, Component> nameToComponent = new Hashtable<>();
@@ -140,12 +140,12 @@ public class AnimatorRootLayoutManager implements LayoutManager, LayoutManager2 
 			component.setBounds(w20, 0, w20, h80);
 		}
 
-		component = nameToComponent.get(CORNER_CONTROLLER);
+		component = nameToComponent.get(SCENE_SELECTOR);
 		if(component != null) {
 			component.setBounds(0, h80, w40, h20);
 		}
 
-		component = nameToComponent.get(SCENE_EDITOR);
+		component = nameToComponent.get(SCENE_LERP);
 		if(component != null) {
 			component.setBounds(w40, h80, w60, h20);
 		}

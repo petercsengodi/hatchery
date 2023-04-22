@@ -19,16 +19,15 @@ public class SerializationUtil {
         return baos.toByteArray();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> T deserialize(byte[] array, Class<T> resultClass) {
         ByteArrayInputStream bais = new ByteArrayInputStream(array);
         try (ObjectInputStream in = new ObjectInputStream(bais)) {
-            T ret = (T) in.readObject();
-            if(!resultClass.isInstance(ret)) {
-                throw new RuntimeException("Expected class: " + resultClass.getName() + " Deserialized object: " + ret.getClass().getName());
+            Object obj = in.readObject();
+            if(!resultClass.isInstance(obj)) {
+                throw new RuntimeException("Expected class: " + resultClass.getName() + " Deserialized object: " + obj.getClass().getName());
             }
 
-            return ret;
+            return resultClass.cast(obj);
         } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException("Error occurred when trying to deserialize object!", ex);
         }

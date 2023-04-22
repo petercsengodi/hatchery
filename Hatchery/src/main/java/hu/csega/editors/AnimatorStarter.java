@@ -1,7 +1,5 @@
 package hu.csega.editors;
 
-import java.io.File;
-
 import hu.csega.editors.anm.layer1.opengl.AnimatorConnector;
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
@@ -30,7 +28,6 @@ import hu.csega.games.common.ApplicationStarter;
 import hu.csega.games.common.Connector;
 import hu.csega.games.library.MeshLibrary;
 import hu.csega.games.library.TextureLibrary;
-import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Level;
 import hu.csega.toolshed.logging.Logger;
@@ -43,8 +40,6 @@ import hu.csega.toolshed.logging.LoggerFactory;
  * However, not static methods are used, as writing a testable code is prio 1!
  */
 public class AnimatorStarter {
-
-	public static final String DEFAULT_TEXTURE_FILE = "res/textures/ship2.jpg";
 
 	private static final Level LOGGING_LEVEL = Level.INFO;
 	private static Logger logger;
