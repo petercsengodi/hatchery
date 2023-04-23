@@ -2,7 +2,9 @@ package hu.csega.games.library.animation.v1.anm;
 
 import java.io.Serializable;
 
-public class AnimationTransformation implements Serializable {
+import org.json.JSONString;
+
+public class AnimationTransformation implements Serializable, JSONString {
 
 	/** Matrix, float, 4x4. */
 	private float[] m;
@@ -23,6 +25,10 @@ public class AnimationTransformation implements Serializable {
 		this.m = m;
 	}
 
-	private static final long serialVersionUID = 1L;
+	@Override
+	public String toJSONString() {
+		return "[\"Matrix\"]"; // FIXME
+	}
 
+	private static final long serialVersionUID = 1L;
 }

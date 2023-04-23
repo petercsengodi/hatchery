@@ -70,8 +70,7 @@ public class Animation implements Serializable {
 				String partIdentifier = indexes.next();
 				if(!map.containsKey(partIdentifier)) {
 					AnimationScenePart value = new AnimationScenePart();
-					value.setModelTransformation(new AnimationTransformation());
-					value.setPartTransformation(new AnimationTransformation());
+					value.setTransformation(new AnimationDetailedTransformation());
 					value.setVisible(true);
 					map.put(partIdentifier, value);
 				}

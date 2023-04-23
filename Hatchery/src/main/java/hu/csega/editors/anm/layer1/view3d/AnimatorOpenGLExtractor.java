@@ -172,8 +172,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 				}
 
 				m1.set(animationPart.getBasicTransformation().getM());
-				m2.set(modifiers.getModelTransformation().getM());
-				m3.set(modifiers.getPartTransformation().getM());
+				m2.set(modifiers.getTransformation().createMatrix());
 				m1.mul(m2, m4);
 				m4.mul(m3, m5);
 

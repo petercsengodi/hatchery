@@ -4,24 +4,15 @@ import java.io.Serializable;
 
 public class AnimationScenePart implements Serializable {
 
-	private AnimationTransformation modelTransformation;
-	private AnimationTransformation partTransformation;
+	private AnimationDetailedTransformation transformation;
 	private boolean visible;
 
-	public AnimationTransformation getModelTransformation() {
-		return modelTransformation;
+	public AnimationDetailedTransformation getTransformation() {
+		return transformation;
 	}
 
-	public void setModelTransformation(AnimationTransformation modelTransformation) {
-		this.modelTransformation = modelTransformation;
-	}
-
-	public AnimationTransformation getPartTransformation() {
-		return partTransformation;
-	}
-
-	public void setPartTransformation(AnimationTransformation partTransformation) {
-		this.partTransformation = partTransformation;
+	public void setTransformation(AnimationDetailedTransformation transformation) {
+		this.transformation = transformation;
 	}
 
 	public boolean isVisible() {
