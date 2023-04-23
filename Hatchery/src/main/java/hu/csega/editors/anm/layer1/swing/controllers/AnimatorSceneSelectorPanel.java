@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.layer1.swing;
+package hu.csega.editors.anm.layer1.swing.controllers;
 
 import java.awt.*;
 

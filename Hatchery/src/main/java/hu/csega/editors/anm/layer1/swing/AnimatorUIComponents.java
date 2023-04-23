@@ -7,9 +7,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorPanel;
+import hu.csega.editors.anm.layer1.swing.controllers.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListItem;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
+import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneLerpPanel;
+import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneSelectorPanel;
 import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.games.engine.intf.GameWindow;

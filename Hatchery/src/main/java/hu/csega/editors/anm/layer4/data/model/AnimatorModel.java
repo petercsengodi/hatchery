@@ -22,6 +22,23 @@ public class AnimatorModel {
 	private int selectedAnimationJoint;
 	private int selectedAnimationScene;
 
+	public AnimationPersistent getPersistent() {
+		return persistent;
+	}
+
+	public void setPersistent(AnimationPersistent persistent) {
+		this.persistent = persistent;
+		snapshots.clear();
+	}
+
+	public void loadAnimation(String filename, Animation animation) {
+		files.loadAnimation(filename, animation);
+	}
+
+	public void finalizeMoves() {
+		snapshots.createNewSnapshot();
+	}
+
 	public int getSelectedAnimationPart() {
 		return selectedAnimationPart;
 	}
@@ -46,23 +63,6 @@ public class AnimatorModel {
 		this.selectedAnimationScene = selectedAnimationScene;
 	}
 
-	public AnimationPersistent getPersistent() {
-		return persistent;
-	}
-
-	public void setPersistent(AnimationPersistent persistent) {
-		this.persistent = persistent;
-		snapshots.clear();
-	}
-
-	public void loadAnimation(String filename, Animation animation) {
-		files.loadAnimation(filename, animation);
-	}
-
-	public void finalizeMoves() {
-		snapshots.createNewSnapshot();
-	}
-
 	public void undo() {
 		snapshots.undo();
 	}
@@ -82,6 +82,21 @@ public class AnimatorModel {
 	public void addNewPart(String filename) {
 		parts.addNewPart(filename);
 	}
+
+	public void addJointToSelectedPart(double x, double y, double z) {
+
+	}
+
+	public void modifySelectedJoint(double x, double y, double z) {
+
+	}
+
+	public void deleteSelectedJoint(double x, double y, double z) {
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// DEPENDENCIES
 
 	@Dependency
 	public void setAnimatorFileManipulator(AnimatorFileManipulator animatorFileManipulator) {

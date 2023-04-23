@@ -46,8 +46,8 @@ public class AnimatorSnapshotManipulator {
         if(animation == null)
             return;
 
-        AnimationSnapshot snaphost = new AnimationSnapshot(SerializationUtil.serialize(animation));
-        previousStates.add(snaphost);
+        AnimationSnapshot snapshot = new AnimationSnapshot(SerializationUtil.serialize(animation));
+        previousStates.add(snapshot);
         nextStates.clear();
     }
 

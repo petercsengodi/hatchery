@@ -8,13 +8,13 @@ import javax.swing.*;
 
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
-import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorPanel;
+import hu.csega.editors.anm.layer1.swing.controllers.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
-import hu.csega.editors.anm.layer1.swing.AnimatorSceneSelectorPanel;
-import hu.csega.editors.anm.layer1.swing.AnimatorSceneLerpPanel;
+import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneSelectorPanel;
+import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneLerpPanel;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.ui.layout.root.AnimatorRootLayoutManager;
 import hu.csega.games.adapters.opengl.OpenGLCanvas;
