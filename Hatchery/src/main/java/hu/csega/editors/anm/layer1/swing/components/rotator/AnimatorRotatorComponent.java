@@ -7,7 +7,7 @@ import javax.swing.*;
 public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 
 	private AnimatorRotatorBinding binding = null;
-	private AnimatorRotatorBinding dummy = new AnimatorRotatorDummyBinding(this);
+	// private AnimatorRotatorBinding dummy = new AnimatorRotatorDummyBinding(this);
 
 	private JScrollBar controlXAxis;
 	private JScrollBar controlYAxis;
@@ -51,7 +51,11 @@ public class AnimatorRotatorComponent extends JPanel implements LayoutManager {
 	}
 
 	public AnimatorRotatorBinding getBinding() {
-		return (binding != null ?  binding : dummy);
+		if(binding == null) {
+			binding = new AnimatorModelBinding();
+		}
+
+		return binding;
 	}
 
 	public void repaintCanvas() {

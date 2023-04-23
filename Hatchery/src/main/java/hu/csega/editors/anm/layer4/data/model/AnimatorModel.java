@@ -4,6 +4,7 @@ import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorCameraManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorFileManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorPartManipulator;
+import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorSceneManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorSnapshotManipulator;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
@@ -17,6 +18,7 @@ public class AnimatorModel {
 	private AnimatorSnapshotManipulator snapshots;
 	private AnimatorCameraManipulator camera;
 	private AnimatorPartManipulator parts;
+	private AnimatorSceneManipulator scenes;
 
 	public AnimationPersistent getPersistent() {
 		return persistent;
@@ -55,12 +57,24 @@ public class AnimatorModel {
 		parts.addNewPart(filename);
 	}
 
+	public void editPartName(String displayName) {
+
+	}
+
+	public void deleteSelectedPart(String displayName) {
+
+	}
+
 	public void selectPart(String identifier) {
 		parts.selectPart(identifier);
 	}
 
 	public void flipSelectedPart(double x, double y, double z) {
 		parts.flipSelectedPart(x, y, z);
+	}
+
+	public void rotateSelectedPart(double x, double y, double z) {
+		parts.rotateSelectedPart(x, y, z);
 	}
 
 	public void addJointToSelectedPart(String name, double x, double y, double z) {
@@ -72,6 +86,22 @@ public class AnimatorModel {
 	}
 
 	public void deleteSelectedJoint() {
+
+	}
+
+	public void changeNumberOfScenes(int numberOfScenes) {
+
+	}
+
+	public void selectScene(int sceneIndex) {
+
+	}
+
+	public void copySelectedSceneFrom(int otherSceneIndex) {
+
+	}
+
+	public void lerp(int start, int end, int writeStart, int writeEnd) {
 
 	}
 
