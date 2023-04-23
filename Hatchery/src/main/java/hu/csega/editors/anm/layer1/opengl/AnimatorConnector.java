@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
+import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListModel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
@@ -169,6 +170,13 @@ public class AnimatorConnector implements Connector, GameWindow {
 		components.partListScrollPane = new JScrollPane(components.partList);
 		components.partList.addListSelectionListener(components.partListModel);
 		components.partListModel.setJList(components.partList);
+
+		components.jointListModel = new AnimatorJointListModel();
+		components.jointList = new JList<>(components.jointListModel);
+		components.jointList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		components.jointListScrollPane = new JScrollPane(components.jointList);
+		components.jointList.addListSelectionListener(components.jointListModel);
+		components.jointListModel.setJList(components.jointList);
 
 		components.partEditorPanel = new AnimatorPartEditorPanel();
 		components.sceneSelectorPanel = new AnimatorSceneSelectorPanel();

@@ -11,15 +11,15 @@ import java.util.TreeMap;
 
 public class Animation implements Serializable {
 
-	private Map<Integer, AnimationPart> parts;
+	private Map<String, AnimationPart> parts;
 	private List<AnimationScene> scenes;
 	private int maxPartIndex;
 
-	public Map<Integer, AnimationPart> getParts() {
+	public Map<String, AnimationPart> getParts() {
 		return parts;
 	}
 
-	public void setParts(Map<Integer, AnimationPart> parts) {
+	public void setParts(Map<String, AnimationPart> parts) {
 		this.parts = parts;
 	}
 
@@ -49,31 +49,31 @@ public class Animation implements Serializable {
 		}
 
 		for(AnimationScene scene : scenes) {
-			Map<Integer, AnimationScenePart> map = scene.getSceneParts();
+			Map<String, AnimationScenePart> map = scene.getSceneParts();
 			if(map == null) {
 				map = new TreeMap<>();
 				scene.setSceneParts(map);
 			}
 
 			// Clear info for indexes that don't exist anymore.
-			Iterator<Entry<Integer, AnimationScenePart>> entries = map.entrySet().iterator();
+			Iterator<Entry<String, AnimationScenePart>> entries = map.entrySet().iterator();
 			while(entries.hasNext()) {
-				Entry<Integer, AnimationScenePart> entry = entries.next();
+				Entry<String, AnimationScenePart> entry = entries.next();
 				if(!parts.containsKey(entry.getKey())) {
 					entries.remove();
 				}
 			}
 
 			// Add info object for indexes that now exist, but not contained by the scenes.
-			Iterator<Integer> indexes = parts.keySet().iterator();
+			Iterator<String> indexes = parts.keySet().iterator();
 			while(indexes.hasNext()) {
-				Integer key = indexes.next();
-				if(!map.containsKey(key)) {
+				String partIdentifier = indexes.next();
+				if(!map.containsKey(partIdentifier)) {
 					AnimationScenePart value = new AnimationScenePart();
 					value.setModelTransformation(new AnimationTransformation());
 					value.setPartTransformation(new AnimationTransformation());
 					value.setVisible(true);
-					map.put(key, value);
+					map.put(partIdentifier, value);
 				}
 			}
 

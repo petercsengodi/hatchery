@@ -1,5 +1,7 @@
 package hu.csega.editors;
 
+import hu.csega.editors.anm.components.ComponentExtractJointList;
+import hu.csega.editors.anm.components.ComponentJointListView;
 import hu.csega.editors.anm.layer1.opengl.AnimatorConnector;
 import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
@@ -11,6 +13,7 @@ import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
 import hu.csega.editors.anm.components.ComponentWireFrameTransformer;
 import hu.csega.editors.anm.components.stubs.StubWireFrameTransformer;
+import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListView;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListView;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameConverter;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameTransformer;
@@ -18,6 +21,7 @@ import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.editors.anm.layer1.view3d.Animator3DView;
 import hu.csega.editors.anm.layer1.view3d.AnimatorOpenGLExtractor;
 import hu.csega.editors.anm.layer1.view3d.AnimatorOpenGLTransformer;
+import hu.csega.editors.anm.layer2.transformation.AnimatorExtractJointList;
 import hu.csega.editors.anm.layer2.transformation.AnimatorExtractPartList;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
@@ -74,9 +78,11 @@ public class AnimatorStarter {
 		UnitStore.registerDefaultImplementation(AnimatorUIComponents.class, AnimatorUIComponents.class);
 		UnitStore.registerDefaultImplementation(ComponentRefreshViews.class, AnimatorRefreshViews.class);
 		UnitStore.registerDefaultImplementation(ComponentPartListView.class, AnimatorPartListView.class);
+		UnitStore.registerDefaultImplementation(ComponentJointListView.class, AnimatorJointListView.class);
 		UnitStore.registerDefaultImplementation(ComponentOpenGLTransformer.class, AnimatorOpenGLTransformer.class);
 		UnitStore.registerDefaultImplementation(ComponentOpenGLExtractor.class, AnimatorOpenGLExtractor.class);
 		UnitStore.registerDefaultImplementation(ComponentExtractPartList.class, AnimatorExtractPartList.class);
+		UnitStore.registerDefaultImplementation(ComponentExtractJointList.class, AnimatorExtractJointList.class);
 		UnitStore.registerDefaultImplementation(Component3DView.class, Animator3DView.class);
 		UnitStore.registerDefaultImplementation(ComponentWireFrameConverter.class, AnimatorWireFrameConverter.class);
 		UnitStore.registerDefaultImplementation(ComponentWireFrameTransformer.class, AnimatorWireFrameTransformer.class);

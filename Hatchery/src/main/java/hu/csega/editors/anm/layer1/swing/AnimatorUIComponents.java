@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListItem;
+import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListModel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListItem;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
@@ -35,6 +37,13 @@ public class AnimatorUIComponents {
 	public AnimatorPartListModel partListModel;
 	public JList<AnimatorPartListItem> partList;
 	public JScrollPane partListScrollPane;
+
+	//////////////////////////////////////////////////////////////////////////////
+	// Joint list
+
+	public AnimatorJointListModel jointListModel;
+	public JList<AnimatorJointListItem> jointList;
+	public JScrollPane jointListScrollPane;
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Tabs / Views

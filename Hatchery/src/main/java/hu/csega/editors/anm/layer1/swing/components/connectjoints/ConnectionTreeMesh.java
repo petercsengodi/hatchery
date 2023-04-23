@@ -10,10 +10,14 @@ import javax.swing.tree.TreeNode;
 class ConnectionTreeMesh implements TreeNode {
 
     private TreeNode parent;
+    private String identifier;
+    private String label;
     private List<ConnectionTreeJoint> joints;
 
-    ConnectionTreeMesh(TreeNode parent) {
+    ConnectionTreeMesh(TreeNode parent, String identifier, String label) {
         this.parent = parent;
+        this.identifier = identifier;
+        this.label = label;
     }
 
     void setJoints(Collection<ConnectionTreeJoint> joints) {
@@ -56,5 +60,10 @@ class ConnectionTreeMesh implements TreeNode {
     @Override
     public Enumeration children() {
         return new ConnectionTreeEnumeration(joints);
+    }
+
+    @Override
+    public String toString() {
+        return label + ' ' + '[' + identifier + ']';
     }
 }

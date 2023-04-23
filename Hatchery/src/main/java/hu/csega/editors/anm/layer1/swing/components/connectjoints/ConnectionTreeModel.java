@@ -1,10 +1,15 @@
 package hu.csega.editors.anm.layer1.swing.components.connectjoints;
 
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPart;
+import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.UnitStore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -28,16 +33,15 @@ public class ConnectionTreeModel implements TreeModel {
         clear();
 
         List<ConnectionTreeMesh> meshes = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
-            ConnectionTreeMesh mesh = new ConnectionTreeMesh(root);
-            List<ConnectionTreeJoint> joints = new ArrayList<>();
 
-            for(int j = 0; j < 10; j++) {
-                joints.add(new ConnectionTreeJoint(mesh));
+        AnimationPersistent persistent = animatorModel.getPersistent();
+        if(persistent != null) {
+            Animation animation = persistent.getAnimation();
+            if(animation != null) {
+
+                collectMeshes(animation, meshes);
+
             }
-
-            mesh.setJoints(joints);
-            meshes.add(mesh);
         }
 
         root.setMeshes(meshes);
@@ -85,4 +89,30 @@ public class ConnectionTreeModel implements TreeModel {
             root.clearChildren();
         }
     }
+
+    private void collectMeshes(Animation animation, List<ConnectionTreeMesh> meshes) {
+        Map<String, AnimationPart> parts = animation.getParts();
+        if(parts == null || parts.isEmpty()) {
+            return;
+        }
+
+        for(Map.Entry<String, AnimationPart> entry : parts.entrySet()) {
+            String identifier = String.valueOf(entry.getKey());
+            AnimationPart part = entry.getValue();
+            String label = part.getDisplayName();
+            ConnectionTreeMesh mesh = new ConnectionTreeMesh(root, identifier, label);
+
+            List<ConnectionTreeJoint> joints = new ArrayList<>();
+            List<AnimationPartJoint> partJoints = part.getJoints();
+            for(AnimationPartJoint joint : partJoints) {
+                String id = String.valueOf(joint.getIdentifier());
+                String dn = joint.getDisplayName();
+                joints.add(new ConnectionTreeJoint(mesh, id, dn));
+            }
+
+            mesh.setJoints(joints);
+            meshes.add(mesh);
+        }
+    }
+
 }

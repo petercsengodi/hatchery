@@ -48,7 +48,7 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		if(persistent != null) {
 			Animation animation = persistent.getAnimation();
 			if(animation != null) {
-				Map<Integer, AnimationPart> allParts = animation.getParts();
+				Map<String, AnimationPart> allParts = animation.getParts();
 				if(allParts != null) {
 					collectWireFrame(result, allParts);
 				}
@@ -81,8 +81,8 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		return wireFrame;
 	}
 
-	private void collectWireFrame(AnimatorWireFrame result, Map<Integer, AnimationPart> allParts) {
-		for(Map.Entry<Integer, AnimationPart> entry : allParts.entrySet()) {
+	private void collectWireFrame(AnimatorWireFrame result, Map<String, AnimationPart> allParts) {
+		for(Map.Entry<String, AnimationPart> entry : allParts.entrySet()) {
 			AnimationPart part = entry.getValue();
 			collectWireframe(result, part);
 		}

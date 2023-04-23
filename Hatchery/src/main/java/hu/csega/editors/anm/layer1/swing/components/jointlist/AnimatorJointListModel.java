@@ -1,5 +1,6 @@
-package hu.csega.editors.anm.layer1.swing.components.partlist;
+package hu.csega.editors.anm.layer1.swing.components.jointlist;
 
+import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListItem;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.UnitStore;
@@ -13,17 +14,17 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class AnimatorPartListModel implements ListModel<AnimatorPartListItem>, ListSelectionListener {
+public class AnimatorJointListModel implements ListModel<AnimatorJointListItem>, ListSelectionListener {
 
-	private JList<AnimatorPartListItem> partList = null;
-	private List<AnimatorPartListItem> items = null;
+	private JList<AnimatorJointListItem> jointList = null;
+	private List<AnimatorJointListItem> items = null;
 	private AnimatorModel model;
 
-	public void setJList(JList<AnimatorPartListItem> partList) {
-		this.partList = partList;
+	public void setJList(JList<AnimatorJointListItem> jointList) {
+		this.jointList = jointList;
 	}
 
-	public void setItems(List<AnimatorPartListItem> items) {
+	public void setItems(List<AnimatorJointListItem> items) {
 		this.items = items;
 	}
 
@@ -35,7 +36,7 @@ public class AnimatorPartListModel implements ListModel<AnimatorPartListItem>, L
 	}
 
 	@Override
-	public AnimatorPartListItem getElementAt(int index) {
+	public AnimatorJointListItem getElementAt(int index) {
 		if(items == null)
 			return null;
 		return items.get(index);
@@ -51,21 +52,24 @@ public class AnimatorPartListModel implements ListModel<AnimatorPartListItem>, L
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if(partList != null) {
-			int selectedIndex = partList.getSelectedIndex();
+		if(jointList != null) {
+			int selectedIndex = jointList.getSelectedIndex();
 			logger.debug("Selected index: " + selectedIndex);
 
 			if(selectedIndex < items.size()) {
-				AnimatorPartListItem partItem = items.get(selectedIndex);
+				AnimatorJointListItem partItem = items.get(selectedIndex);
 
 				if(model == null) {
 					model = UnitStore.instance(AnimatorModel.class);
 				}
 
-				model.selectPart(partItem.getIdentifier());
+				AnimationPersistent persistent = model.getPersistent();
+				if(persistent != null) {
+					persistent.setSelectedPart(partItem.getIdentifier());
+				}
 			}
 		}
 	}
 
-	private static final Logger logger = LoggerFactory.createLogger(AnimatorPartListModel.class);
+	private static final Logger logger = LoggerFactory.createLogger(AnimatorJointListModel.class);
 }

@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer4.data.model;
 
+import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
@@ -14,6 +15,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 	private AnimatorModel model;
 	private ComponentExtractPartList partListExtractor;
+	private ComponentExtractJointList jointListExtractor;
 	private ComponentWireFrameConverter wireFrameConverter;
 	private ComponentOpenGLExtractor openGLExtractor;
 	private AnimatorUIComponents components;
@@ -22,6 +24,10 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 	public void refreshAll() {
 		if(partListExtractor == null) {
 			partListExtractor = UnitStore.instance(ComponentExtractPartList.class);
+		}
+
+		if(jointListExtractor == null) {
+			jointListExtractor = UnitStore.instance(ComponentExtractJointList.class);
 		}
 
 		if(wireFrameConverter == null) {
@@ -46,6 +52,13 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 		if(partListExtractor != null) {
 			synchronized (model) {
 				partListExtractor.accept(animation);
+			}
+		}
+
+		if(persistent != null && animation != null) {
+			String selectedPart = persistent.getSelectedPart();
+			if(selectedPart != null && !selectedPart.isEmpty()) {
+				jointListExtractor.accept(animation.getParts().get(selectedPart));
 			}
 		}
 

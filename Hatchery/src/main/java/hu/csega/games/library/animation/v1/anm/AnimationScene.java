@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class AnimationScene implements Serializable {
 
-	private Map<Integer, AnimationScenePart> sceneParts;
+	private Map<String, AnimationScenePart> sceneParts;
 
-	public Map<Integer, AnimationScenePart> getSceneParts() {
+	public Map<String, AnimationScenePart> getSceneParts() {
 		return sceneParts;
 	}
 
-	public void setSceneParts(Map<Integer, AnimationScenePart> sceneParts) {
+	public void setSceneParts(Map<String, AnimationScenePart> sceneParts) {
 		this.sceneParts = sceneParts;
 	}
 

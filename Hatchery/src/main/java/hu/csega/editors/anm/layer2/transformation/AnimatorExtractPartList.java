@@ -21,20 +21,20 @@ public class AnimatorExtractPartList implements ComponentExtractPartList {
 		if(animation == null)
 			return null;
 
-		Map<Integer, AnimationPart> parts = animation.getParts();
+		Map<String, AnimationPart> parts = animation.getParts();
 		if(parts == null || parts.size() == 0)
 			return null;
 
 		items = new ArrayList<>();
-		for(Map.Entry<Integer, AnimationPart> entry : parts.entrySet()) {
-			int index = entry.getKey();
+		for(Map.Entry<String, AnimationPart> entry : parts.entrySet()) {
+			String partIdentifier = entry.getKey();
 			AnimationPart value = entry.getValue();
-			String name = value.getName();
+			String displayName = value.getDisplayName();
 			String mesh = value.getMesh();
 
 			AnimatorPartListItem item = new AnimatorPartListItem();
-			item.setIndex(index);
-			item.setName(name);
+			item.setIdentifier(partIdentifier);
+			item.setLabel(displayName);
 			item.setMesh(mesh);
 
 			items.add(item);

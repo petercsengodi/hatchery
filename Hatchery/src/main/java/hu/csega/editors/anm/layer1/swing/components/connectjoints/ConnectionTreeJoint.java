@@ -7,9 +7,13 @@ import javax.swing.tree.TreeNode;
 class ConnectionTreeJoint implements TreeNode {
 
     private ConnectionTreeMesh parent;
+    private String identifier;
+    private String label;
 
-    ConnectionTreeJoint(ConnectionTreeMesh parent) {
+    ConnectionTreeJoint(ConnectionTreeMesh parent, String identifier, String label) {
         this.parent = parent;
+        this.identifier = identifier;
+        this.label = label;
     }
 
     @Override
@@ -45,5 +49,10 @@ class ConnectionTreeJoint implements TreeNode {
     @Override
     public Enumeration children() {
         return new ConnectionTreeEnumeration();
+    }
+
+    @Override
+    public String toString() {
+        return label + ' ' + '[' + identifier + ']';
     }
 }

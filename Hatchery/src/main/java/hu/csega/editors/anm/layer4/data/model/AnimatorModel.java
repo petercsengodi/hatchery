@@ -18,10 +18,6 @@ public class AnimatorModel {
 	private AnimatorCameraManipulator camera;
 	private AnimatorPartManipulator parts;
 
-	private int selectedAnimationPart;
-	private int selectedAnimationJoint;
-	private int selectedAnimationScene;
-
 	public AnimationPersistent getPersistent() {
 		return persistent;
 	}
@@ -37,30 +33,6 @@ public class AnimatorModel {
 
 	public void finalizeMoves() {
 		snapshots.createNewSnapshot();
-	}
-
-	public int getSelectedAnimationPart() {
-		return selectedAnimationPart;
-	}
-
-	public void setSelectedAnimationPart(int selectedAnimationPart) {
-		this.selectedAnimationPart = selectedAnimationPart;
-	}
-
-	public int getSelectedAnimationJoint() {
-		return selectedAnimationJoint;
-	}
-
-	public void setSelectedAnimationJoint(int selectedAnimationJoint) {
-		this.selectedAnimationJoint = selectedAnimationJoint;
-	}
-
-	public int getSelectedAnimationScene() {
-		return selectedAnimationScene;
-	}
-
-	public void setSelectedAnimationScene(int selectedAnimationScene) {
-		this.selectedAnimationScene = selectedAnimationScene;
 	}
 
 	public void undo() {
@@ -83,11 +55,15 @@ public class AnimatorModel {
 		parts.addNewPart(filename);
 	}
 
-	public void addJointToSelectedPart(double x, double y, double z) {
-
+	public void selectPart(String identifier) {
+		parts.selectPart(identifier);
 	}
 
-	public void modifySelectedJoint(double x, double y, double z) {
+	public void addJointToSelectedPart(String name, double x, double y, double z) {
+		parts.addNewJoint(name, x, y, z);
+	}
+
+	public void modifySelectedJoint(String name, double x, double y, double z) {
 
 	}
 
@@ -117,4 +93,5 @@ public class AnimatorModel {
 	public void setAnimatorPartManipulator(AnimatorPartManipulator animatorPartManipulator) {
 		this.parts = animatorPartManipulator;
 	}
+
 }

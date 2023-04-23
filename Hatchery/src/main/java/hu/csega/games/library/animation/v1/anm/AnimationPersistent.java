@@ -8,6 +8,10 @@ public class AnimationPersistent implements Serializable {
 	private Animation animation;
 	private AnimationMisc misc;
 
+	private String selectedPart;
+	private String selectedJoint;
+	private int selectedScene;
+
 	public String getName() {
 		return name;
 	}
@@ -22,6 +26,30 @@ public class AnimationPersistent implements Serializable {
 
 	public void setAnimation(Animation animation) {
 		this.animation = animation;
+	}
+
+	public String getSelectedPart() {
+		return selectedPart;
+	}
+
+	public void setSelectedPart(String selectedPart) {
+		this.selectedPart = selectedPart;
+	}
+
+	public String getSelectedJoint() {
+		return selectedJoint;
+	}
+
+	public void setSelectedJoint(String selectedJoint) {
+		this.selectedJoint = selectedJoint;
+	}
+
+	public int getSelectedScene() {
+		return selectedScene;
+	}
+
+	public void setSelectedScene(int selectedScene) {
+		this.selectedScene = selectedScene;
 	}
 
 	public AnimationMisc getMisc() {

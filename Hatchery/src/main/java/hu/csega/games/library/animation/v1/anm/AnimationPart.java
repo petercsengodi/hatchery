@@ -5,17 +5,30 @@ import java.util.List;
 
 public class AnimationPart implements Serializable {
 
-	private String name;
+	private String identifier;
+	private String displayName;
 	private String mesh;
 	private AnimationTransformation basicTransformation;
 	private List<AnimationPartJoint> joints;
 
-	public String getName() {
-		return name;
+	public AnimationPart(String identifier) {
+		this.identifier = identifier;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public String getMesh() {

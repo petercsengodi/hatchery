@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1.swing.components.rotator.AnimatorRotatorComponent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelFixedSizeLayoutListener;
@@ -14,12 +15,11 @@ import hu.csega.games.units.UnitStore;
 public class AnimatorPartEditorPanel extends JPanel {
 
 	private final AnimatorModel model;
+	private final AnimatorUIComponents components;
 
 	public AnimatorPanelLayoutManager layout;
 
 	public JLabel labelJoints;
-	public JScrollPane scrollJoints;
-	public JList<String> joints;
 
 	public JButton horizontalFlip;
 	public JButton verticalFlip;
@@ -37,6 +37,10 @@ public class AnimatorPartEditorPanel extends JPanel {
 	public JTextField zField;
 	public JPanel xyzPanel;
 
+	public JLabel nameEditLabel;
+	public JTextField nameEditField;
+	public JPanel nameEditPanel;
+
 	public JButton addButton;
 	public JButton setButton;
 	public JButton delButton;
@@ -46,6 +50,7 @@ public class AnimatorPartEditorPanel extends JPanel {
 
 	public AnimatorPartEditorPanel() {
 		this.model = UnitStore.instance(AnimatorModel.class);
+		this.components = UnitStore.instance(AnimatorUIComponents.class);
 
 		this.xLabel = new JLabel("X:");
 		this.xField = new JTextField(5);
@@ -62,6 +67,13 @@ public class AnimatorPartEditorPanel extends JPanel {
 		this.xyzPanel.add(this.yField);
 		this.xyzPanel.add(this.zLabel);
 		this.xyzPanel.add(this.zField);
+
+		this.nameEditLabel = new JLabel("Name:");
+		this.nameEditField = new JTextField(15);
+		this.nameEditPanel = new JPanel();
+		this.nameEditPanel.setLayout(new FlowLayout());
+		this.nameEditPanel.add(this.nameEditLabel);
+		this.nameEditPanel.add(this.nameEditField);
 
 		this.addButton = new JButton("Add!");
 		this.setButton = new JButton("Set!");
@@ -86,9 +98,7 @@ public class AnimatorPartEditorPanel extends JPanel {
 			}
 		});
 
-		this.joints = new JList<>();
-		this.scrollJoints = new JScrollPane(this.joints);
-		this.add(this.scrollJoints, new AnimatorPanelLayoutChangeListener() {
+		this.add(components.jointListScrollPane, new AnimatorPanelLayoutChangeListener() {
 			@Override
 			public void arrange(Component component, int width, int height) {
 				component.setBounds(5, 27, width - 10, 160);
@@ -101,6 +111,15 @@ public class AnimatorPartEditorPanel extends JPanel {
 			@Override
 			public void arrange(Component component, int width, int height) {
 				component.setBounds(0, xyzPanelOffset, width, 30);
+			}
+		});
+
+		lineOffset += 30;
+		final int nameEditOffset = lineOffset;
+		this.add(this.nameEditPanel, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(0, nameEditOffset, width, 30);
 			}
 		});
 
@@ -182,21 +201,26 @@ public class AnimatorPartEditorPanel extends JPanel {
 
 	private void applyEventMethods() {
 		addButton.addActionListener(event -> {
+			String name = checkAndGetNameField(nameEditField);
 			double x = checkAndGetDoubleField(xField);
 			double y = checkAndGetDoubleField(yField);
 			double z = checkAndGetDoubleField(zField);
-			model.addJointToSelectedPart(x, y, z);
+			model.addJointToSelectedPart(name, x, y, z);
 		});
 
 		setButton.addActionListener(event -> {
+			String name = checkAndGetNameField(nameEditField);
 			double x = checkAndGetDoubleField(xField);
 			double y = checkAndGetDoubleField(yField);
 			double z = checkAndGetDoubleField(zField);
-			model.modifySelectedJoint(x, y, z);
+			model.modifySelectedJoint(name, x, y, z);
 		});
 
 		delButton.addActionListener(event -> {
 			model.deleteSelectedJoint();
+			xField.setText("");
+			yField.setText("");
+			zField.setText("");
 		});
 	}
 
@@ -207,6 +231,25 @@ public class AnimatorPartEditorPanel extends JPanel {
 			field.setText("0.0");
 			return 0.0;
 		}
+	}
+
+	private static String checkAndGetNameField(JTextField field) {
+		String originalValue = field.getText();
+		String value = originalValue;
+		if(value == null) {
+			value = "";
+		}
+
+		value = value.trim();
+		if(value.isEmpty()) {
+			value = "Unnamed";
+		}
+
+		if(!value.equals(originalValue)) {
+			field.setText(value);
+		}
+
+		return value;
 	}
 
 	private static final long serialVersionUID = 1L;

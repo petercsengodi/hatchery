@@ -118,7 +118,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			Animation animation = persistent.getAnimation();
 			if(animation != null) {
 
-				Map<Integer, AnimationPart> map = animation.getParts();
+				Map<String, AnimationPart> map = animation.getParts();
 				if(map != null && map.size() > 0) {
 
 					List<AnimationScene> scenes = animation.getScenes();
@@ -128,7 +128,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 						}
 
 						AnimationScene scene = scenes.get(currentScene);
-						Map<Integer, AnimationScenePart> sceneParts = scene.getSceneParts();
+						Map<String, AnimationScenePart> sceneParts = scene.getSceneParts();
 						if(sceneParts != null && sceneParts.size() > 0) {
 							generateParts(parts, sceneParts, map);
 						}
@@ -144,11 +144,11 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 	}
 
 	private void generateParts(List<AnimatorSetPart> parts,
-			Map<Integer, AnimationScenePart> sceneParts, Map<Integer, AnimationPart> map) {
+			Map<String, AnimationScenePart> sceneParts, Map<String, AnimationPart> map) {
 
 
-		for(Map.Entry<Integer, AnimationScenePart> entry : sceneParts.entrySet()) {
-			Integer partKey = entry.getKey();
+		for(Map.Entry<String, AnimationScenePart> entry : sceneParts.entrySet()) {
+			String partKey = entry.getKey();
 			AnimationScenePart modifiers = entry.getValue();
 			if(!modifiers.isVisible()) {
 				continue;
