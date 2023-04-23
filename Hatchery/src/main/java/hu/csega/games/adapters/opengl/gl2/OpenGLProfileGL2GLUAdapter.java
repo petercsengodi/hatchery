@@ -79,7 +79,7 @@ public class OpenGLProfileGL2GLUAdapter implements OpenGLProfileAdapter {
 		// Nothing to do currently
 		gl2 = glAutoDrawable.getGL().getGL2();
 		gl2.glEnable(GL2.GL_CULL_FACE);
-		gl2.glFrontFace(GL2.GL_CCW);
+		gl2.glFrontFace(GL2.GL_CCW);  // FIXME this should dependant on if the current model is flipped or not
 	}
 
 	@Override

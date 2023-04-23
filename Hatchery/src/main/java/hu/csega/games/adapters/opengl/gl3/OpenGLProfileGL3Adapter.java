@@ -125,7 +125,7 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 
 		gl3.glEnable(GL3.GL_DEPTH_TEST);
 		gl3.glEnable(GL3.GL_CULL_FACE);
-		gl3.glFrontFace(GL3.GL_CCW);
+		gl3.glFrontFace(GL3.GL_CCW); // FIXME this should dependant on if the current model is flipped or not
 
 		OpenGLErrorUtil.checkError(gl3, "ensureOpenGLProgramIsInitialized");
 	}

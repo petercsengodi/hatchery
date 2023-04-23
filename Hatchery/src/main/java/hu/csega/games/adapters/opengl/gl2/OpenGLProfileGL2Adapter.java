@@ -98,7 +98,7 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 
 		gl2.glEnable(GL2.GL_DEPTH_TEST);
 		gl2.glEnable(GL2.GL_CULL_FACE);
-		gl2.glFrontFace(GL2.GL_CCW);
+		gl2.glFrontFace(GL2.GL_CCW); // FIXME this should dependant on if the current model is flipped or not
 
 		OpenGLErrorUtil.checkError(gl2, "ensureOpenGLProgramIsInitialized");
 	}
