@@ -71,6 +71,10 @@ public class AnimatorModel {
 		snapshots.redo();
 	}
 
+	public void changeJSON(String text) {
+		snapshots.changeJSON(text);
+	}
+
 	public void refreshCamera(AnimatorMouseController mouseController) {
 		camera.refreshCamera(mouseController);
 	}
@@ -98,5 +102,4 @@ public class AnimatorModel {
 	public void setAnimatorPartManipulator(AnimatorPartManipulator animatorPartManipulator) {
 		this.parts = animatorPartManipulator;
 	}
-
 }

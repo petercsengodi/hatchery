@@ -7,6 +7,8 @@ import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
 import hu.csega.editors.common.SerializationUtil;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.units.Dependency;
+import hu.csega.toolshed.logging.Logger;
+import hu.csega.toolshed.logging.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,5 +80,28 @@ public class AnimatorSnapshotManipulator {
 
         refreshViews.refreshAll();
     }
+
+    public void changeJSON(String text) {
+        // FIXME create new objects from JSON representation
+        // Animation animation = new Animation(text);
+        logger.error("Implementation is not done, yet!");
+
+        AnimationPersistent persistent = model.getPersistent();
+        if(persistent == null)
+            return;
+
+        // Animation animation = persistent.setAnimation(animation);
+        Animation animation = persistent.getAnimation();
+        if(animation == null)
+            return;
+
+        AnimationSnapshot snaphost = new AnimationSnapshot(SerializationUtil.serialize(animation));
+        previousStates.add(snaphost);
+        nextStates.clear();
+
+        refreshViews.refreshAll();
+    }
+
+    private static final Logger logger = LoggerFactory.createLogger(AnimatorSnapshotManipulator.class);
 
 }
