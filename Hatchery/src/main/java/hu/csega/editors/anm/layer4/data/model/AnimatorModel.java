@@ -59,6 +59,10 @@ public class AnimatorModel {
 		parts.selectPart(identifier);
 	}
 
+	public void flipSelectedPart(double x, double y, double z) {
+		parts.flipSelectedPart(x, y, z);
+	}
+
 	public void addJointToSelectedPart(String name, double x, double y, double z) {
 		parts.addNewJoint(name, x, y, z);
 	}
@@ -93,5 +97,4 @@ public class AnimatorModel {
 	public void setAnimatorPartManipulator(AnimatorPartManipulator animatorPartManipulator) {
 		this.parts = animatorPartManipulator;
 	}
-
 }

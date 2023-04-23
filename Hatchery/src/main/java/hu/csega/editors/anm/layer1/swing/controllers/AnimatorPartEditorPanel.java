@@ -21,8 +21,9 @@ public class AnimatorPartEditorPanel extends JPanel {
 
 	public JLabel labelJoints;
 
-	public JButton horizontalFlip;
-	public JButton verticalFlip;
+	public JButton xFlip;
+	public JButton yFlip;
+	public JButton zFlip;
 
 	public JButton rotateUp;
 	public JButton rotateDown;
@@ -134,19 +135,30 @@ public class AnimatorPartEditorPanel extends JPanel {
 
 		lineOffset += 40;
 		final int flipButtonsOffset = lineOffset;
-		this.horizontalFlip = new JButton("Horiz. Flip");
-		this.add(this.horizontalFlip, new AnimatorPanelLayoutChangeListener() {
+		this.xFlip = new JButton("X Flip");
+		this.xFlip.addActionListener(event -> { model.flipSelectedPart(-1, 1, 1); });
+		this.add(this.xFlip, new AnimatorPanelLayoutChangeListener() {
 			@Override
 			public void arrange(Component component, int width, int height) {
-				component.setBounds(5, flipButtonsOffset, width / 2 - 10, 20);
+				component.setBounds(5, flipButtonsOffset, 80, 20);
 			}
 		});
 
-		this.verticalFlip = new JButton("Vert. Flip");
-		this.add(this.verticalFlip, new AnimatorPanelLayoutChangeListener() {
+		this.yFlip = new JButton("Y Flip");
+		this.yFlip.addActionListener(event -> { model.flipSelectedPart(1, -1, 1); });
+		this.add(this.yFlip, new AnimatorPanelLayoutChangeListener() {
 			@Override
 			public void arrange(Component component, int width, int height) {
-				component.setBounds(width / 2 + 5, flipButtonsOffset, width / 2 - 10, 20);
+				component.setBounds(90, flipButtonsOffset, 80, 20);
+			}
+		});
+
+		this.zFlip = new JButton("Z Flip");
+		this.zFlip.addActionListener(event -> { model.flipSelectedPart(1, 1, -1); });
+		this.add(this.zFlip, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(175, flipButtonsOffset, 80, 20);
 			}
 		});
 

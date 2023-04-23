@@ -1,16 +1,20 @@
 package hu.csega.editors.anm.layer4.data.model.manipulators;
 
+import hu.csega.games.library.animation.v1.anm.AnimationDetailedTransformation;
 import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
+import hu.csega.games.library.animation.v1.anm.AnimationScene;
+import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
 import hu.csega.games.library.animation.v1.anm.AnimationTransformation;
 import hu.csega.games.library.animation.v1.anm.AnimationVector;
 import hu.csega.games.units.Dependency;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -71,6 +75,62 @@ public class AnimatorPartManipulator {
             }
 
             persistent.setSelectedPart(identifier);
+        }
+
+        refreshViews.refreshAll();
+    }
+
+    public void flipSelectedPart(double x, double y, double z) {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            if(persistent == null) {
+                return;
+            }
+
+            String partIdentifier = persistent.getSelectedPart();
+            if(partIdentifier == null) {
+                return;
+            }
+
+            Animation animation = persistent.getAnimation();
+            if(animation == null) {
+                animation = new Animation();
+                persistent.setAnimation(animation);
+            }
+
+            int selectedScene = persistent.getSelectedScene();
+            List<AnimationScene> scenes = animation.getScenes();
+            if(scenes == null || scenes.size() <= selectedScene) {
+                return;
+            }
+
+            AnimationScene scene = scenes.get(selectedScene);
+            Map<String, AnimationScenePart> sceneParts = scene.getSceneParts();
+            if(sceneParts == null) {
+                sceneParts = new HashMap<>();
+                scene.setSceneParts(sceneParts);
+            }
+
+            AnimationScenePart scenePart = sceneParts.get(partIdentifier);
+            if(scenePart == null) {
+                scenePart = new AnimationScenePart();
+                sceneParts.put(partIdentifier, scenePart);
+            }
+
+            AnimationDetailedTransformation transformation = scenePart.getTransformation();
+            float[] flip = transformation.getFlip().getV();
+
+            if(x < 0) {
+                flip[0] = (flip[0] > 0f ? -1f : 1f);
+            }
+
+            if(y < 0) {
+                flip[1] = (flip[1] > 0f ? -1f : 1f);
+            }
+
+            if(z < 0) {
+                flip[2] = (flip[2] > 0f ? -1f : 1f);
+            }
         }
 
         refreshViews.refreshAll();
