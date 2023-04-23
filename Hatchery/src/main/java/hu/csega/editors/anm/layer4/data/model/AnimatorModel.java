@@ -91,7 +91,7 @@ public class AnimatorModel {
 
 	}
 
-	public void deleteSelectedJoint(double x, double y, double z) {
+	public void deleteSelectedJoint() {
 
 	}
 

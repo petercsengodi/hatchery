@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.layer1.swing.connect;
+package hu.csega.editors.anm.layer1.swing.components.connectjoints;
 
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.units.UnitStore;

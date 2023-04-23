@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.layer1.swing.connect;
+package hu.csega.editors.anm.layer1.swing.components.connectjoints;
 
 import java.util.Enumeration;
 

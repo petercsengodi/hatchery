@@ -1,6 +1,6 @@
 package hu.csega.editors.anm.layer1.swing.menu;
 
-import hu.csega.editors.anm.layer1.swing.connect.ConnectJointsDialog;
+import hu.csega.editors.anm.layer1.swing.components.connectjoints.ConnectJointsDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -5,11 +5,15 @@ import java.awt.*;
 import javax.swing.*;
 
 import hu.csega.editors.anm.layer1.swing.components.rotator.AnimatorRotatorComponent;
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelFixedSizeLayoutListener;
 import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelLayoutChangeListener;
 import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelLayoutManager;
+import hu.csega.games.units.UnitStore;
 
 public class AnimatorPartEditorPanel extends JPanel {
+
+	private final AnimatorModel model;
 
 	public AnimatorPanelLayoutManager layout;
 
@@ -41,6 +45,8 @@ public class AnimatorPartEditorPanel extends JPanel {
 	public AnimatorRotatorComponent rotator;
 
 	public AnimatorPartEditorPanel() {
+		this.model = UnitStore.instance(AnimatorModel.class);
+
 		this.xLabel = new JLabel("X:");
 		this.xField = new JTextField(5);
 		this.yLabel = new JLabel("Y:");
@@ -170,6 +176,37 @@ public class AnimatorPartEditorPanel extends JPanel {
 		});
 
 		lineOffset += this.rotator.getPreferredSize().height + 10;
+
+		applyEventMethods();
+	}
+
+	private void applyEventMethods() {
+		addButton.addActionListener(event -> {
+			double x = checkAndGetDoubleField(xField);
+			double y = checkAndGetDoubleField(yField);
+			double z = checkAndGetDoubleField(zField);
+			model.addJointToSelectedPart(x, y, z);
+		});
+
+		setButton.addActionListener(event -> {
+			double x = checkAndGetDoubleField(xField);
+			double y = checkAndGetDoubleField(yField);
+			double z = checkAndGetDoubleField(zField);
+			model.modifySelectedJoint(x, y, z);
+		});
+
+		delButton.addActionListener(event -> {
+			model.deleteSelectedJoint();
+		});
+	}
+
+	private static double checkAndGetDoubleField(JTextField field) {
+		try {
+			return Double.parseDouble(field.getText());
+		} catch(NumberFormatException ex) {
+			field.setText("0.0");
+			return 0.0;
+		}
 	}
 
 	private static final long serialVersionUID = 1L;

@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.layer1.swing.connect;
+package hu.csega.editors.anm.layer1.swing.components.connectjoints;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -14,7 +14,7 @@ public class ConnectJointsDialog extends JDialog implements ComponentListener {
     private JTree tree;
 
     public ConnectJointsDialog(JFrame parent) {
-        super(parent, "Select a joint to connect selected part!");
+        super(parent, "Select a joint to connectjoints selected part!");
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.addComponentListener(this);
         this.setModal(true);
