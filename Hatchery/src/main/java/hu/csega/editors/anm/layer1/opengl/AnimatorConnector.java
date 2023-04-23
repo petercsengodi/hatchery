@@ -10,6 +10,7 @@ import hu.csega.editors.anm.components.Component3DView;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
+import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.editors.anm.layer1.swing.AnimatorSceneSelectorPanel;
@@ -153,6 +154,9 @@ public class AnimatorConnector implements Connector, GameWindow {
 		components.panel3D = new JPanel();
 		components.panel3D.setLayout(new GridLayout(1, 1));
 		components.tabbedPane.addTab("3D Canvas", components.panel3D);
+
+		components.jsonView = new AnimatorJSONView();
+		components.tabbedPane.addTab("JSON", components.jsonView);
 
 		contentPane.add(AnimatorRootLayoutManager.MULTI_TAB, components.tabbedPane);
 

@@ -10,6 +10,7 @@ import javax.swing.JTabbedPane;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListItem;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
+import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.games.engine.intf.GameWindow;
 
@@ -42,6 +43,7 @@ public class AnimatorUIComponents {
 	public AnimatorWireFrameView panelSide;
 	public AnimatorWireFrameView panelWireFrame;
 	public JPanel panel3D;
+	public AnimatorJSONView jsonView;
 	public AnimatorPartEditorPanel partEditorPanel;
 	public AnimatorSceneSelectorPanel sceneSelectorPanel;
 	public AnimatorSceneLerpPanel sceneLerpPanel;

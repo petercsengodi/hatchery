@@ -4,6 +4,7 @@ import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.Dependency;
@@ -15,6 +16,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 	private ComponentExtractPartList partListExtractor;
 	private ComponentWireFrameConverter wireFrameConverter;
 	private ComponentOpenGLExtractor openGLExtractor;
+	private AnimatorUIComponents components;
 
 	@Override
 	public void refreshAll() {
@@ -28,6 +30,10 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 		if(openGLExtractor == null) {
 			openGLExtractor = UnitStore.instance(ComponentOpenGLExtractor.class);
+		}
+
+		if(components == null) {
+			components = UnitStore.instance(AnimatorUIComponents.class);
 		}
 
 		AnimationPersistent persistent = model.getPersistent();
@@ -50,6 +56,8 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 		if(wireFrameConverter != null) {
 			wireFrameConverter.accept(model);
 		}
+
+		components.jsonView.setJSON(animation);
 
 	} // end of refreshAll
 
