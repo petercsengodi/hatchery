@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class AnimationPersistent implements Serializable {
 
-	private String name;
+	private String name = "Unnamed";
 	private Animation animation;
 	private AnimationMisc misc;
 
@@ -21,6 +21,10 @@ public class AnimationPersistent implements Serializable {
 	}
 
 	public Animation getAnimation() {
+		if(animation == null) {
+			animation = new Animation();
+		}
+
 		return animation;
 	}
 
@@ -53,6 +57,10 @@ public class AnimationPersistent implements Serializable {
 	}
 
 	public AnimationMisc getMisc() {
+		if(misc == null) {
+			misc = new AnimationMisc();
+		}
+
 		return misc;
 	}
 

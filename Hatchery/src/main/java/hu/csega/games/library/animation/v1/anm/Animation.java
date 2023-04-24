@@ -3,6 +3,7 @@ package hu.csega.games.library.animation.v1.anm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -11,8 +12,8 @@ import java.util.TreeMap;
 
 public class Animation implements Serializable {
 
-	private Map<String, AnimationPart> parts;
-	private List<AnimationScene> scenes;
+	private Map<String, AnimationPart> parts = new LinkedHashMap<>();
+	private List<AnimationScene> scenes = new ArrayList<>();
 	private int maxPartIndex;
 
 	public Map<String, AnimationPart> getParts() {
@@ -29,6 +30,30 @@ public class Animation implements Serializable {
 
 	public void setScenes(List<AnimationScene> scenes) {
 		this.scenes = scenes;
+	}
+
+	public AnimationScene createOrGetScene(int index) {
+		if(index < 0) {
+			return null;
+		}
+
+		if(index >= scenes.size()) {
+			for(int i = scenes.size(); i <= index; i++) {
+				scenes.set(i, null);
+			}
+		}
+
+		AnimationScene scene = scenes.get(index);
+		if(scene == null) {
+			scene = new AnimationScene();
+			scenes.set(index, scene);
+		}
+
+		return scene;
+	}
+
+	public AnimationScenePart createOrGetScenePart(int index, String partIdentifier) {
+		return createOrGetScene(index).createOrGetScenePart(partIdentifier);
 	}
 
 	public int getMaxPartIndex() {

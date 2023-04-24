@@ -21,6 +21,10 @@ public class AnimatorModel {
 	private AnimatorSceneManipulator scenes;
 
 	public AnimationPersistent getPersistent() {
+		if(persistent != null) {
+			persistent = new AnimationPersistent();
+		}
+
 		return persistent;
 	}
 

@@ -1,6 +1,7 @@
 package hu.csega.games.library.animation.v1.anm;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnimationPart implements Serializable {
@@ -8,8 +9,8 @@ public class AnimationPart implements Serializable {
 	private String identifier;
 	private String displayName;
 	private String mesh;
-	private AnimationTransformation basicTransformation;
-	private List<AnimationPartJoint> joints;
+	private AnimationTransformation basicTransformation = new AnimationTransformation();
+	private List<AnimationPartJoint> joints = new ArrayList<>();
 
 	public AnimationPart(String identifier) {
 		this.identifier = identifier;

@@ -12,7 +12,6 @@ import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
 import hu.csega.editors.anm.components.ComponentWireFrameTransformer;
-import hu.csega.editors.anm.components.stubs.StubWireFrameTransformer;
 import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListView;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListView;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameConverter;
@@ -46,8 +45,6 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class AnimatorStarter {
 
 	private static final Level LOGGING_LEVEL = Level.INFO;
-	private static Logger logger;
-
 
 	public static void main(String[] args) {
 
@@ -55,7 +52,7 @@ public class AnimatorStarter {
 		// 1. Initialize logging:
 
 		LoggerFactory.setDefaultLevel(LOGGING_LEVEL);
-		logger = LoggerFactory.createLogger(AnimatorStarter.class);
+		Logger logger = LoggerFactory.createLogger(AnimatorStarter.class);
 		logger.info("Starting tool.");
 
 
@@ -88,16 +85,9 @@ public class AnimatorStarter {
 		UnitStore.registerDefaultImplementation(ComponentWireFrameTransformer.class, AnimatorWireFrameTransformer.class);
 		UnitStore.registerDefaultImplementation(ComponentWireFrameRenderer.class, AnimatorWireFrameView.class);
 
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 3. Register test instances if needed:
-
-		UnitStore.registerInstance(ComponentWireFrameTransformer.class, new StubWireFrameTransformer());
-		// UnitStore.registerInstance(ComponentOpenGLTransformer.class, new StubOpenGLTransformer());
-		// UnitStore.registerInstance(ComponentExtractPartList.class, new StubExtractPartList());
-		// UnitStore.registerInstance(Component3DView.class, new Stub3DView());
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 5. Starting application:
+		// 4. Starting application:
 
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);

@@ -8,6 +8,12 @@ public class AnimationPlacement implements Serializable {
 	private AnimationVector target;
 	private AnimationVector up;
 
+	public AnimationPlacement() {
+		this.position = new AnimationVector(0f, 0f, 30f);
+		this.target = new AnimationVector(0f, 0f, 0f);
+		this.up = new AnimationVector(0f, 1f, 0f);
+	}
+
 	public AnimationVector getPosition() {
 		return position;
 	}
