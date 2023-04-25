@@ -43,11 +43,11 @@ public class AnimatorMenu {
 		menu.add(fileNew);
 
 		JMenuItem fileOpen = new JMenuItem("Open");
-		fileOpen.addActionListener(new AnimatorMenuIOpenFile(frame, openDialog, facade));
+		fileOpen.addActionListener(new AnimatorMenuOpenFile(frame, openDialog, facade));
 		menu.add(fileOpen);
 
 		JMenuItem fileSave = new JMenuItem("Save");
-		fileSave.addActionListener(new AnimatorMenuIOpenFile(frame, saveDialog, facade));
+		fileSave.addActionListener(new AnimatorMenuSaveFile(frame, saveDialog, facade));
 		menu.add(fileSave);
 
 		JMenuItem fileExit = new JMenuItem("Exit");

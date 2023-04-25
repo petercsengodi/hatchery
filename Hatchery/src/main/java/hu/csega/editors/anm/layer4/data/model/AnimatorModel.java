@@ -21,7 +21,7 @@ public class AnimatorModel {
 	private AnimatorSceneManipulator scenes;
 
 	public AnimationPersistent getPersistent() {
-		if(persistent != null) {
+		if(persistent == null) {
 			persistent = new AnimationPersistent();
 		}
 
@@ -47,6 +47,10 @@ public class AnimatorModel {
 
 	public void redo() {
 		snapshots.redo();
+	}
+
+	public void clearSnapshots() {
+		snapshots.clear();
 	}
 
 	public void changeJSON(String text) {

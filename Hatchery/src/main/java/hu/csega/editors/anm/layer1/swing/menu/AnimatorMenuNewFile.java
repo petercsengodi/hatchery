@@ -1,6 +1,9 @@
 package hu.csega.editors.anm.layer1.swing.menu;
 
+import hu.csega.editors.anm.components.ComponentRefreshViews;
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
@@ -22,6 +25,11 @@ class AnimatorMenuNewFile implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		AnimatorModel model = (AnimatorModel) facade.model();
+		model.setPersistent(null);
+		model.clearSnapshots();
+		ComponentRefreshViews refreshViews = UnitStore.instance(ComponentRefreshViews.class);
+		refreshViews.refreshAll();
 	}
 
 	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuNewFile.class);

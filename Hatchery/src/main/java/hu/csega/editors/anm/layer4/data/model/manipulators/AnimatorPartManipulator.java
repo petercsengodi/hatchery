@@ -33,26 +33,11 @@ public class AnimatorPartManipulator {
     public void addNewPart(String filename) {
         synchronized (model) {
             AnimationPersistent persistent = model.getPersistent();
-            if(persistent == null) {
-                persistent = new AnimationPersistent();
-                model.setPersistent(persistent);
-            }
-
             Animation animation = persistent.getAnimation();
-            if(animation == null) {
-                animation = new Animation();
-                persistent.setAnimation(animation);
-            }
 
             int lastIndex = animation.getMaxPartIndex();
             int newIndex = lastIndex + 1;
             animation.setMaxPartIndex(newIndex);
-
-            Map<String, AnimationPart> parts = animation.getParts();
-            if(parts == null) {
-                parts = new TreeMap<>();
-                animation.setParts(parts);
-            }
 
             String partIdentifier = "part:" + newIndex;
             AnimationPart part = new AnimationPart(partIdentifier);
@@ -60,7 +45,7 @@ public class AnimatorPartManipulator {
             part.setBasicTransformation(new AnimationTransformation());
             part.setJoints(new ArrayList<>());
 
-            parts.put(partIdentifier, part);
+            animation.getParts().put(partIdentifier, part);
             animation.cleanUpScenes();
         }
 

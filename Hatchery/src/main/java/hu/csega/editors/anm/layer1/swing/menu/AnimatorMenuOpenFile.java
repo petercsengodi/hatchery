@@ -21,13 +21,13 @@ import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
 @SuppressWarnings("unused")
-class AnimatorMenuIOpenFile implements ActionListener {
+class AnimatorMenuOpenFile implements ActionListener {
 
 	private JFrame frame;
 	private JFileChooser openDialog;
 	private GameEngineFacade facade;
 
-	public AnimatorMenuIOpenFile(JFrame frame, JFileChooser openDialog, GameEngineFacade facade) {
+	public AnimatorMenuOpenFile(JFrame frame, JFileChooser openDialog, GameEngineFacade facade) {
 		this.frame = frame;
 		this.openDialog = openDialog;
 		this.facade = facade;
@@ -40,10 +40,10 @@ class AnimatorMenuIOpenFile implements ActionListener {
 		switch(result) {
 		case JFileChooser.APPROVE_OPTION:
 			File file = openDialog.getSelectedFile();
+			AnimatorModel model = (AnimatorModel) facade.model();
 			byte[] bytes = FreeTriangleMeshSnapshots.readAllBytes(file);
 			if(bytes == null || bytes.length == 0) {
-				// FIXME handle this case
-
+				model.setPersistent(null);
 			} else if(bytes[0] == (byte)'<') {
 				// Loading legacy animation (or exported animation?), XML
 
@@ -54,11 +54,12 @@ class AnimatorMenuIOpenFile implements ActionListener {
 				Animation migratedObject = null; // FIXME
 
 				logger.info("Migrated object: " + migratedObject);
-				AnimatorModel model = (AnimatorModel) facade.model();
 				model.loadAnimation(file.getAbsolutePath(), migratedObject);
 			} else {
 				// Loading serialized, binary data
 				AnimationPersistent persistent = SerializationUtil.deserialize(bytes, AnimationPersistent.class);
+				model.setPersistent(persistent);
+				model.clearSnapshots();
 			}
 
 			ComponentRefreshViews refreshViews = UnitStore.instance(ComponentRefreshViews.class);
@@ -70,5 +71,5 @@ class AnimatorMenuIOpenFile implements ActionListener {
 		}
 	}
 
-	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuIOpenFile.class);
+	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuOpenFile.class);
 }
