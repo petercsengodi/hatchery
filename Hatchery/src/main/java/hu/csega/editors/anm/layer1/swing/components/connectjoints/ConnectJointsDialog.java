@@ -1,5 +1,8 @@
 package hu.csega.editors.anm.layer1.swing.components.connectjoints;
 
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
+import hu.csega.games.units.UnitStore;
+
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -9,6 +12,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 public class ConnectJointsDialog extends JDialog implements ComponentListener {
+
+    private AnimatorModel animatorModel;
 
     private ConnectionTreeModel model;
     private JTree tree;
@@ -58,6 +63,13 @@ public class ConnectJointsDialog extends JDialog implements ComponentListener {
 
         setVisible(false);
         componentHidden(null);
+
+        if(animatorModel == null) {
+            animatorModel = UnitStore.instance(AnimatorModel.class);
+        }
+
+        String identifier = ((ConnectionTreeJoint) selected).getIdentifier();
+        animatorModel.connectSelectedPart(identifier);
     }
 
     private void cancelAction() {

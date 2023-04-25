@@ -12,6 +12,7 @@ import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationMisc;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
+import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
 import hu.csega.games.library.animation.v1.anm.AnimationScene;
@@ -121,6 +122,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 				Map<String, AnimationPart> map = animation.getParts();
 				if(map != null && map.size() > 0) {
 
+					Map<String, String> connections = animation.getConnections();
 					List<AnimationScene> scenes = animation.getScenes();
 					if(scenes != null && scenes.size() > 0) {
 						if(currentScene < 0 || currentScene >= scenes.size()) {
@@ -130,7 +132,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 						AnimationScene scene = scenes.get(currentScene);
 						Map<String, AnimationScenePart> sceneParts = scene.getSceneParts();
 						if(sceneParts != null && sceneParts.size() > 0) {
-							generateParts(parts, sceneParts, map);
+							generateParts(parts, connections, sceneParts, map);
 						}
 					}
 
@@ -143,48 +145,83 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 		set.setParts(parts);
 	}
 
-	private void generateParts(List<AnimatorSetPart> parts,
+	private void generateParts(List<AnimatorSetPart> parts, Map<String, String> connections,
 			Map<String, AnimationScenePart> sceneParts, Map<String, AnimationPart> map) {
 
 		for(Map.Entry<String, AnimationScenePart> entry : sceneParts.entrySet()) {
 			String partKey = entry.getKey();
-			AnimationScenePart modifiers = entry.getValue();
-			if(!modifiers.isVisible()) {
+			if(connections.containsKey(partKey)) {
 				continue;
 			}
 
-			AnimationPart animationPart = map.get(partKey);
-			if(animationPart != null) {
+			AnimationScenePart scenePart = entry.getValue();
+			transformPart(parts, null, partKey, scenePart, connections, map, sceneParts);
+		}
 
-				String filename = animationPart.getMesh();
-				if(filename == null || filename.length() == 0) {
-					continue;
-				}
+	}
 
-				if(filename.charAt(0) != '/') {
-					filename = resourceAdapter.projectRoot() + filename;
-				}
+	private void generateParts(List<AnimatorSetPart> parts, Matrix4f m, String jointKey, Map<String, String> connections,
+							   Map<String, AnimationScenePart> sceneParts, Map<String, AnimationPart> map) {
 
-				GameObjectHandler model = store.loadModel(filename);
-				if(model == null) {
-					throw new RuntimeException("Couldn't load game model: " + filename);
-				}
-
-				m1.set(animationPart.getBasicTransformation().getM());
-				m2.set(modifiers.getTransformation().createMatrix());
-				m1.mul(m2, m4);
-				m4.mul(m3, m5);
-
-				GameTransformation transformation = new GameTransformation();
-				transformation.importFrom(m5);
-
-				AnimatorSetPart setPart = new AnimatorSetPart();
-				setPart.setTransformation(transformation);
-				setPart.setModel(model);
-				parts.add(setPart);
+		for(Map.Entry<String, AnimationScenePart> entry : sceneParts.entrySet()) {
+			String partKey = entry.getKey();
+			if(jointKey.equals(connections.get(partKey))) {
+				AnimationScenePart scenePart = entry.getValue();
+				transformPart(parts, m, partKey, scenePart, connections, map, sceneParts);
 			}
 		}
 
+	}
+
+	private void transformPart(List<AnimatorSetPart> parts, Matrix4f m, String partKey, AnimationScenePart scenePart,
+			Map<String, String> connections, Map<String, AnimationPart> map, Map<String, AnimationScenePart> sceneParts) {
+		if(!scenePart.isVisible()) {
+			return;
+		}
+
+		AnimationPart animationPart = map.get(partKey);
+		if(animationPart != null) {
+
+			String filename = animationPart.getMesh();
+			if(filename == null || filename.length() == 0) {
+				return;
+			}
+
+			if(filename.charAt(0) != '/') {
+				filename = resourceAdapter.projectRoot() + filename;
+			}
+
+			GameObjectHandler model = store.loadModel(filename);
+			if(model == null) {
+				throw new RuntimeException("Couldn't load game model: " + filename);
+			}
+
+			if(m == null) {
+				m2.set(animationPart.getBasicTransformation().getM());
+			} else {
+				m1.set(animationPart.getBasicTransformation().getM());
+				m.mul(m1, m2);
+			}
+
+			m3.set(scenePart.getTransformation().createMatrix());
+			m2.mul(m3, m4);
+
+			GameTransformation transformation = new GameTransformation();
+			transformation.importFrom(m4);
+
+			AnimatorSetPart setPart = new AnimatorSetPart();
+			setPart.setTransformation(transformation);
+			setPart.setModel(model);
+			parts.add(setPart);
+
+			for(AnimationPartJoint joint : animationPart.getJoints()) {
+				Matrix4f _m = new Matrix4f();
+				float[] v = joint.getRelativePosition().getV();
+				m4.translateLocal(v[0], v[1], v[2], m5);
+				m5.invert(_m); // ???
+				generateParts(parts, _m, joint.getIdentifier(), connections, sceneParts, map);
+			}
+		}
 	}
 
 }

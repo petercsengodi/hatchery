@@ -16,6 +16,10 @@ class ConnectionTreeJoint implements TreeNode {
         this.label = label;
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
     @Override
     public TreeNode getChildAt(int childIndex) {
         return null;

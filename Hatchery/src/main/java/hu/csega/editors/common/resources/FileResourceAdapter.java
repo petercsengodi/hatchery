@@ -50,7 +50,7 @@ public class FileResourceAdapter implements ResourceAdapter {
         this.meshFolder = this.resourcesRoot + "meshes";
         logger.info("Meshes folder (no separator at the end): " + this.meshFolder);
 
-        this.animationFolder = this.resourcesRoot + "meshes";
+        this.animationFolder = this.resourcesRoot + "animations";
         logger.info("Meshes folder (no separator at the end): " + this.animationFolder);
 
         this.shaderRoot = this.shaderFolder + File.separator;

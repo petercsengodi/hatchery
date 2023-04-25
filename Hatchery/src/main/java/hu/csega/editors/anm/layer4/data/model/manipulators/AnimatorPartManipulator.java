@@ -211,4 +211,16 @@ public class AnimatorPartManipulator {
 
         refreshViews.refreshAll();
     }
+
+    public void connectSelectedPart(String jointIdentifier) {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            String partIdentifier = persistent.getSelectedPart();
+            Animation animation = persistent.getAnimation();
+            animation.getConnections().put(partIdentifier, jointIdentifier);
+        }
+
+        refreshViews.refreshAll();
+    }
+
 }

@@ -97,6 +97,10 @@ public class AnimatorModel {
 
 	}
 
+	public void connectSelectedPart(String jointIdentifier) {
+		parts.connectSelectedPart(jointIdentifier);
+	}
+
 	public void changeNumberOfScenes(int numberOfScenes) {
 
 	}
