@@ -146,7 +146,6 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 	private void generateParts(List<AnimatorSetPart> parts,
 			Map<String, AnimationScenePart> sceneParts, Map<String, AnimationPart> map) {
 
-
 		for(Map.Entry<String, AnimationScenePart> entry : sceneParts.entrySet()) {
 			String partKey = entry.getKey();
 			AnimationScenePart modifiers = entry.getValue();
