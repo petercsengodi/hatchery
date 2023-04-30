@@ -35,14 +35,8 @@ public class ConnectionTreeModel implements TreeModel {
         List<ConnectionTreeMesh> meshes = new ArrayList<>();
 
         AnimationPersistent persistent = animatorModel.getPersistent();
-        if(persistent != null) {
-            Animation animation = persistent.getAnimation();
-            if(animation != null) {
-
-                collectMeshes(animation, meshes);
-
-            }
-        }
+        Animation animation = persistent.getAnimation();
+        collectMeshes(animation, meshes);
 
         root.setMeshes(meshes);
     }

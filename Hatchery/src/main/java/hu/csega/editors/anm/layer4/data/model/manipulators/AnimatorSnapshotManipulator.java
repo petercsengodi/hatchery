@@ -39,13 +39,7 @@ public class AnimatorSnapshotManipulator {
 
     public void createNewSnapshot() {
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null)
-            return;
-
         Animation animation = persistent.getAnimation();
-        if(animation == null)
-            return;
-
         AnimationSnapshot snapshot = new AnimationSnapshot(SerializationUtil.serialize(animation));
         previousStates.add(snapshot);
         nextStates.clear();
@@ -56,9 +50,6 @@ public class AnimatorSnapshotManipulator {
             return;
 
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null)
-            return;
-
         AnimationSnapshot snapshot = previousStates.remove(previousStates.size() - 1);
         nextStates.add(snapshot);
         persistent.setAnimation(SerializationUtil.deserialize(snapshot.getBytes(), Animation.class));
@@ -71,9 +62,6 @@ public class AnimatorSnapshotManipulator {
             return;
 
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null)
-            return;
-
         AnimationSnapshot snapshot = nextStates.remove(nextStates.size() - 1);
         previousStates.add(snapshot);
         persistent.setAnimation(SerializationUtil.deserialize(snapshot.getBytes(), Animation.class));
@@ -87,16 +75,9 @@ public class AnimatorSnapshotManipulator {
         logger.error("Implementation is not done, yet!");
 
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null)
-            return;
-
-        // Animation animation = persistent.setAnimation(animation);
         Animation animation = persistent.getAnimation();
-        if(animation == null)
-            return;
-
-        AnimationSnapshot snaphost = new AnimationSnapshot(SerializationUtil.serialize(animation));
-        previousStates.add(snaphost);
+        AnimationSnapshot snapshot = new AnimationSnapshot(SerializationUtil.serialize(animation));
+        previousStates.add(snapshot);
         nextStates.clear();
 
         refreshViews.refreshAll();

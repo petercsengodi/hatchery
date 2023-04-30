@@ -42,20 +42,8 @@ public class AnimatorRenderStep implements GameEngineCallback {
 		}
 
 		AnimationPersistent persistent = model.getPersistent();
-		if(persistent == null) {
-			return facade;
-		}
-
 		AnimationMisc misc = persistent.getMisc();
-		if(misc == null) {
-			misc = new AnimationMisc();
-			persistent.setMisc(misc);
-		}
-
 		AnimationPlacement camera = misc.getCamera();
-		if(camera == null) {
-			return facade;
-		}
 
 		if(set != null) {
 			GameObjectPlacement cameraPlacement = new GameObjectPlacement();

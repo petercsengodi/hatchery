@@ -1,6 +1,5 @@
 package hu.csega.editors.anm.layer1.swing.components.jointlist;
 
-import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListItem;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.UnitStore;
@@ -64,9 +63,7 @@ public class AnimatorJointListModel implements ListModel<AnimatorJointListItem>,
 				}
 
 				AnimationPersistent persistent = model.getPersistent();
-				if(persistent != null) {
-					persistent.setSelectedPart(partItem.getIdentifier());
-				}
+				persistent.setSelectedPart(partItem.getIdentifier());
 			}
 		}
 	}

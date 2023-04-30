@@ -32,10 +32,6 @@ public class AnimatorModelBinding implements AnimatorRotatorBinding {
     @Override
     public double currentXRotation() {
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null) {
-            return 0;
-        }
-
         String selectedPart = persistent.getSelectedPart();
         if(selectedPart == null) {
             return 0;
@@ -50,10 +46,6 @@ public class AnimatorModelBinding implements AnimatorRotatorBinding {
     @Override
     public double currentYRotation() {
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null) {
-            return 0;
-        }
-
         String selectedPart = persistent.getSelectedPart();
         if(selectedPart == null) {
             return 0;
@@ -68,10 +60,6 @@ public class AnimatorModelBinding implements AnimatorRotatorBinding {
     @Override
     public double currentZRotation() {
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null) {
-            return 0;
-        }
-
         String selectedPart = persistent.getSelectedPart();
         if(selectedPart == null) {
             return 0;

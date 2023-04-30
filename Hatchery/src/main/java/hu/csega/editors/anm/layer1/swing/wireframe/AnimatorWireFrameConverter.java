@@ -45,17 +45,12 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		AnimatorWireFrame result = new AnimatorWireFrame();
 
 		AnimationPersistent persistent = model.getPersistent();
-		if(persistent != null) {
-			Animation animation = persistent.getAnimation();
-			if(animation != null) {
-				Map<String, AnimationPart> allParts = animation.getParts();
-				if(allParts != null) {
-					collectWireFrame(result, allParts);
-				}
-			}
+		Animation animation = persistent.getAnimation();
+		Map<String, AnimationPart> allParts = animation.getParts();
+		if(allParts != null) {
+			collectWireFrame(result, allParts);
 		}
 
-		// TODO Auto-generated method stub
 		return result;
 	}
 

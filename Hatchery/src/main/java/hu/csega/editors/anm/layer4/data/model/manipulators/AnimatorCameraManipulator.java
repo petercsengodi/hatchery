@@ -22,25 +22,9 @@ public class AnimatorCameraManipulator {
 
     public void refreshCamera(AnimatorMouseController mouseController) {
         AnimationPersistent persistent = model.getPersistent();
-        if(persistent == null) {
-            return;
-        }
-
         AnimationMisc misc = persistent.getMisc();
-        if(misc == null) {
-            misc = new AnimationMisc();
-            persistent.setMisc(misc);
-        }
-
         AnimationPlacement camera = misc.getCamera();
-        if(camera == null) {
-            return;
-        }
-
         AnimationVector position = camera.getPosition();
-        if(position == null) {
-            return;
-        }
 
         double alfa = 0.0;
         double beta = 0.0;

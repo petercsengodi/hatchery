@@ -43,11 +43,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 		}
 
 		AnimationPersistent persistent = model.getPersistent();
-		Animation animation = null;
-
-		if(persistent != null) {
-			animation = persistent.getAnimation();
-		}
+		Animation animation = persistent.getAnimation();
 
 		if(partListExtractor != null) {
 			synchronized (model) {
