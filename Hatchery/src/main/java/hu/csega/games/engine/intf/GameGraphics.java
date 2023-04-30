@@ -29,7 +29,7 @@ public interface GameGraphics {
 	void startFrame();
 	void placeCamera(GameObjectPlacement cameraLocation);
 	void drawModel(GameObjectHandler modelReference, GameObjectPlacement modelLocation);
-	void drawModel(GameObjectHandler modelReference, GameTransformation transformation);
+	void drawModel(GameObjectHandler modelReference, GameTransformation transformation, boolean flipped);
 	void drawAnimation(GameObjectHandler animationReference, int state, GameObjectPlacement modelLocation);
 	void endFrame();
 

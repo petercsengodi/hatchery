@@ -135,6 +135,12 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
+	public void flippedFrontFace(GLAutoDrawable glAutoDrawable, boolean flipped) {
+		GL2 gl2 = glAutoDrawable.getGL().getGL2();
+		gl2.glFrontFace(flipped ? GL2.GL_CW : GL2.GL_CCW);
+	}
+
+	@Override
 	public void endFrame(GLAutoDrawable glAutoDrawable) {
 		gl2 = glAutoDrawable.getGL().getGL2();
 

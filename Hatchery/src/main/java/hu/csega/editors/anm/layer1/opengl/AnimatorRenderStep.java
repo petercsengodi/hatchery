@@ -52,6 +52,7 @@ public class AnimatorRenderStep implements GameEngineCallback {
 					convertPosition(camera.getTarget()),
 					convertDirection(camera.getUp())
 			);
+
 			g.placeCamera(cameraPlacement);
 
 			List<AnimatorSetPart> parts = set.getParts();
@@ -59,7 +60,8 @@ public class AnimatorRenderStep implements GameEngineCallback {
 				for(AnimatorSetPart part : parts) {
 					GameObjectHandler modelObject = part.getModel();
 					GameTransformation modelTransformation = part.getTransformation();
-					g.drawModel(modelObject, modelTransformation);
+					boolean flipped = part.isFlipped();
+					g.drawModel(modelObject, modelTransformation, flipped);
 				}
 			}
 		}

@@ -51,11 +51,11 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			}
 		}
 
-		if(persistent != null && animation != null) {
-			String selectedPart = persistent.getSelectedPart();
-			if(selectedPart != null && !selectedPart.isEmpty()) {
-				jointListExtractor.accept(animation.getParts().get(selectedPart));
-			}
+		String selectedPart = persistent.getSelectedPart();
+		if(selectedPart != null && !selectedPart.isEmpty()) {
+			jointListExtractor.accept(animation.getParts().get(selectedPart));
+		} else {
+			jointListExtractor.accept(null);
 		}
 
 		if(openGLExtractor != null) {

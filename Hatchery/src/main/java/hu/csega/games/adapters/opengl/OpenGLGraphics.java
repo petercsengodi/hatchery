@@ -105,13 +105,13 @@ public class OpenGLGraphics implements GameGraphics {
 	}
 
 	@Override
-	public void drawModel(GameObjectHandler modelReference, GameTransformation transformation) {
+	public void drawModel(GameObjectHandler modelReference, GameTransformation transformation, boolean flipped) {
 		if(modelReference == null || transformation == null) {
 			return;
 		}
 
 		OpenGLModelContainer resolvedModel = store.resolveModel(modelReference);
-		resolvedModel.draw(glAutodrawable, transformation);
+		resolvedModel.draw(glAutodrawable, transformation, flipped);
 	}
 
 	@Override

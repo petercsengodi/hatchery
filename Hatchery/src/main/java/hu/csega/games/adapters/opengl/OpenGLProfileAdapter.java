@@ -19,6 +19,8 @@ public interface OpenGLProfileAdapter {
 
 	void startFrame(GLAutoDrawable glAutoDrawable);
 
+	void flippedFrontFace(GLAutoDrawable glAutoDrawable, boolean flipped);
+
 	void endFrame(GLAutoDrawable glAutoDrawable);
 
 	int getModelToClipMatrixUL();
@@ -44,5 +46,4 @@ public interface OpenGLProfileAdapter {
 	void placeCamera(GLAutoDrawable glAutodrawable, GameObjectPlacement cameraPlacement);
 
 	void setBaseMatricesAndViewPort(GameSelectionLine selectionLine);
-
 }

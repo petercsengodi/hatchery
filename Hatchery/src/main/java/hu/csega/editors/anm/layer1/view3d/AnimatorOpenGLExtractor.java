@@ -203,24 +203,34 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 				m.mul(m1, m2);
 			}
 
-			m3.set(scenePart.getTransformation().createMatrix());
+			scenePart.getTransformation().createModelMatrix(m3);
 			m2.mul(m3, m4);
 
 			GameTransformation transformation = new GameTransformation();
 			transformation.importFrom(m4);
 
+			float[] flip = scenePart.getTransformation().getFlip().getV();
+			boolean flipped = (flip[0] < 0f) ^ (flip[1] < 0f) ^ (flip[2] < 0f);
+
 			AnimatorSetPart setPart = new AnimatorSetPart();
 			setPart.setTransformation(transformation);
 			setPart.setModel(model);
+			setPart.setFlipped(flipped);
 			parts.add(setPart);
 
-			for(AnimationPartJoint joint : animationPart.getJoints()) {
-				Matrix4f _m = new Matrix4f();
-				float[] v = joint.getRelativePosition().getV();
-				m4.translateLocal(v[0], v[1], v[2], m5);
-				m5.invert(_m); // ???
-				generateParts(parts, _m, joint.getIdentifier(), connections, sceneParts, map);
-			}
+			List<AnimationPartJoint> joints = animationPart.getJoints();
+			if(joints.size() > 0) {
+				scenePart.getTransformation().createJointMatrix(m3);
+				m2.mul(m3, m4);
+
+				for (AnimationPartJoint joint : animationPart.getJoints()) {
+					Matrix4f _m = new Matrix4f();
+					float[] v = joint.getRelativePosition().getV();
+					m4.translateLocal(v[0], v[1], v[2], m5);
+					m5.invert(_m); // ???
+					generateParts(parts, _m, joint.getIdentifier(), connections, sceneParts, map);
+				}
+			} // end for each joint
 		}
 	}
 

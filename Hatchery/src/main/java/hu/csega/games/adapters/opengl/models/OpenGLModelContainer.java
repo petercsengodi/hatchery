@@ -77,7 +77,8 @@ public abstract class OpenGLModelContainer implements OpenGLObjectContainer {
 		adapter.drawModel(glAutoDrawable, this, placement, store);
 	}
 
-	public void draw(GLAutoDrawable glAutoDrawable, GameTransformation transformation) {
+	public void draw(GLAutoDrawable glAutoDrawable, GameTransformation transformation, boolean flipped) {
+		adapter.flippedFrontFace(glAutoDrawable, flipped);
 		adapter.drawModel(glAutoDrawable, this, transformation, store);
 	}
 

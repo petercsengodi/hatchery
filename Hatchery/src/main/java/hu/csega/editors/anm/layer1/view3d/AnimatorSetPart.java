@@ -7,6 +7,7 @@ public class AnimatorSetPart {
 
 	private GameObjectHandler model;
 	private GameTransformation transformation;
+	private boolean flipped;
 
 	public GameObjectHandler getModel() {
 		return model;
@@ -24,4 +25,11 @@ public class AnimatorSetPart {
 		this.transformation = transformation;
 	}
 
+	public boolean isFlipped() {
+		return flipped;
+	}
+
+	public void setFlipped(boolean flipped) {
+		this.flipped = flipped;
+	}
 }

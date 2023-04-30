@@ -43,25 +43,44 @@ public class AnimationDetailedTransformation implements Serializable {
 		this.translation = translation;
 	}
 
-	private static final long serialVersionUID = 1L;
-
-	public Matrix4f createMatrix() {
-		Matrix4f result = new Matrix4f().identity();
+	public Matrix4f createModelMatrix(Matrix4f destination) {
+		destination.identity();
 
 		float[] f = flip.getV();
 		float[] s = scaling.getV();
-		result.m00(f[0] * s[0]);
-		result.m11(f[1] * s[1]);
-		result.m22(f[2] * s[2]);
-		result.m33(f[3] * s[3]);
+		destination.m00(f[0] * s[0]);
+		destination.m11(f[1] * s[1]);
+		destination.m22(f[2] * s[2]);
+		destination.m33(f[3] * s[3]);
 
-		Matrix4f rotated = new Matrix4f().identity();
+		Matrix4f rotated = new Matrix4f().identity(); // TODO remove somehow
 
 		float[] r = rotation.getV();
-		result = result.mul(rotated.rotateZ(r[2]).rotateY(r[1]).rotateX(r[0]));
+		destination.mul(rotated.rotateZ(r[2]).rotateY(r[1]).rotateX(r[0]));
 
 		float[] t = translation.getV();
 		Matrix4f translated = rotated.m30(t[0]).m31(t[1]).m32(t[2]);
-		return result.mul(rotated).mul(translated);
+		return destination.mul(rotated).mul(translated);
 	}
+
+	public Matrix4f createJointMatrix(Matrix4f destination) {
+		destination.identity();
+
+		float[] s = scaling.getV();
+		destination.m00(s[0]);
+		destination.m11(s[1]);
+		destination.m22(s[2]);
+		destination.m33(s[3]);
+
+		Matrix4f rotated = new Matrix4f().identity(); // TODO remove somehow
+
+		float[] r = rotation.getV();
+		destination.mul(rotated.rotateZ(r[2]).rotateY(r[1]).rotateX(r[0]));
+
+		float[] t = translation.getV();
+		Matrix4f translated = rotated.m30(t[0]).m31(t[1]).m32(t[2]);
+		return destination.mul(rotated).mul(translated);
+	}
+
+	private static final long serialVersionUID = 1L;
 }

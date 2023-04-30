@@ -98,7 +98,7 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 
 		gl2.glEnable(GL2.GL_DEPTH_TEST);
 		gl2.glEnable(GL2.GL_CULL_FACE);
-		gl2.glFrontFace(GL2.GL_CCW); // FIXME this should dependant on if the current model is flipped or not
+		gl2.glFrontFace(GL2.GL_CCW);
 
 		OpenGLErrorUtil.checkError(gl2, "ensureOpenGLProgramIsInitialized");
 	}
@@ -114,6 +114,12 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 	public void startFrame(GLAutoDrawable glAutoDrawable) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void flippedFrontFace(GLAutoDrawable glAutoDrawable, boolean flipped) {
+		GL2 gl2 = glAutoDrawable.getGL().getGL2();
+		gl2.glFrontFace(flipped ? GL2.GL_CW : GL2.GL_CCW);
 	}
 
 	@Override

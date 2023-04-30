@@ -125,7 +125,7 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 
 		gl3.glEnable(GL3.GL_DEPTH_TEST);
 		gl3.glEnable(GL3.GL_CULL_FACE);
-		gl3.glFrontFace(GL3.GL_CCW); // FIXME this should dependant on if the current model is flipped or not
+		gl3.glFrontFace(GL3.GL_CCW);
 
 		OpenGLErrorUtil.checkError(gl3, "ensureOpenGLProgramIsInitialized");
 	}
@@ -152,6 +152,11 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 		gl3.glUseProgram(programHandlers[PROGRAM_INDEX]);
 
 		OpenGLErrorUtil.checkError(gl3, "startFrame");
+	}
+
+	@Override
+	public void flippedFrontFace(GLAutoDrawable glAutoDrawable, boolean flipped) {
+		gl3.glFrontFace(flipped ? GL3.GL_CW : GL3.GL_CCW);
 	}
 
 	@Override
