@@ -8,7 +8,7 @@ public class AnimationDetailedTransformation implements Serializable {
 
 	private AnimationVector flip = new AnimationVector(1f, 1f, 1f);
 	private AnimationVector scaling = new AnimationVector(1f, 1f, 1f);
-	private AnimationVector rotation = new AnimationVector(1f, 1f, 1f);
+	private AnimationVector rotation = new AnimationVector(0f, 0f, 0f);
 	private AnimationVector translation = new AnimationVector(0f, 0f, 0f);
 
 	public AnimationVector getFlip() {

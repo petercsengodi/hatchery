@@ -90,7 +90,15 @@ public class Animation implements Serializable {
 	}
 
     public void putScene(int index, AnimationScene scene) {
-	    scenes.set(index, scene);
+		if(index < 0 || index >= numberOfScenes) {
+			throw new IllegalArgumentException("index: " + index + " numberOfScenes: " + numberOfScenes);
+		}
+
+		while(index >= scenes.size()) {
+			scenes.add(null);
+		}
+
+		scenes.set(index, scene);
     }
 
 	public AnimationScenePart createOrGetScenePart(int index, String partIdentifier) {

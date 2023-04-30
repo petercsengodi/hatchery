@@ -1,10 +1,15 @@
 package hu.csega.editors.anm.layer1.swing.controllers;
 
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
+import hu.csega.games.units.UnitStore;
+
 import java.awt.*;
 
 import javax.swing.*;
 
 public class AnimatorSceneLerpPanel extends JPanel {
+
+	private AnimatorModel animatorModel;
 
 	private JLabel startSceneLabel;
 	private JLabel endSceneLabel;
@@ -22,12 +27,15 @@ public class AnimatorSceneLerpPanel extends JPanel {
 	private JPanel lowerPanel;
 
 	public AnimatorSceneLerpPanel() {
+		animatorModel = UnitStore.instance(AnimatorModel.class);
+
 		this.startSceneLabel = new JLabel("Starting scene:");
 		this.endSceneLabel = new JLabel("Ending scene:");
 		this.writeFromLabel = new JLabel("Write from:");
 		this.writeUntilLabel = new JLabel("Until:");
 
 		this.lerpButton = new JButton("Do the LERP!");
+		this.lerpButton.addActionListener(event -> doTheLerp());
 
 		this.startScene = new JTextField(4);
 		this.endScene = new JTextField(4);
@@ -53,6 +61,54 @@ public class AnimatorSceneLerpPanel extends JPanel {
 		this.add(new JSeparator(JSeparator.HORIZONTAL));
 		this.add(upperPanel);
 		this.add(lowerPanel);
+	}
+
+	public void doTheLerp() {
+		int startSceneIndex;
+		try {
+			startSceneIndex = Integer.parseInt(startScene.getText());
+			if(startSceneIndex < 0) {
+				startScene.setText("0");
+			}
+		} catch (NumberFormatException ex) {
+			startScene.setText("invalid");
+			return;
+		}
+
+		int endSceneIndex;
+		try {
+			endSceneIndex = Integer.parseInt(endScene.getText());
+			if(endSceneIndex < 0) {
+				endScene.setText("0");
+			}
+		} catch (NumberFormatException ex) {
+			endScene.setText("invalid");
+			return;
+		}
+
+		int writeFromIndex;
+		try {
+			writeFromIndex = Integer.parseInt(writeFrom.getText());
+			if(writeFromIndex < 0) {
+				writeFrom.setText("0");
+			}
+		} catch (NumberFormatException ex) {
+			writeFrom.setText("invalid");
+			return;
+		}
+
+		int writeUntilIndex;
+		try {
+			writeUntilIndex = Integer.parseInt(writeUntil.getText());
+			if(writeUntilIndex < 0) {
+				writeUntil.setText("0");
+			}
+		} catch (NumberFormatException ex) {
+			writeUntil.setText("invalid");
+			return;
+		}
+
+		animatorModel.lerp(startSceneIndex, endSceneIndex, writeFromIndex, writeUntilIndex);
 	}
 
 	private static final long serialVersionUID = 1L;

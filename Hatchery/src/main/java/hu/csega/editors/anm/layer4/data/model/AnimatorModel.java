@@ -127,7 +127,7 @@ public class AnimatorModel {
 	}
 
 	public void lerp(int start, int end, int writeStart, int writeEnd) {
-
+		scenes.lerp(start, end, writeStart, writeEnd);
 	}
 
 	public void justRefreshViews() {
