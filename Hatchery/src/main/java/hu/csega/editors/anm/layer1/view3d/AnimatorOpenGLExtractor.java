@@ -221,13 +221,13 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			List<AnimationPartJoint> joints = animationPart.getJoints();
 			if(joints.size() > 0) {
 				scenePart.getTransformation().createJointMatrix(m3);
-				m2.mul(m3, m4);
 
 				for (AnimationPartJoint joint : animationPart.getJoints()) {
 					Matrix4f _m = new Matrix4f();
 					float[] v = joint.getRelativePosition().getV();
-					m4.translateLocal(v[0], v[1], v[2], m5);
-					m5.invert(_m); // ???
+					m2.translateLocal(v[0], v[1], v[2], m4);
+					m3.mul(m4, _m);
+					// m5.invert(_m); // ???
 					generateParts(parts, _m, joint.getIdentifier(), connections, sceneParts, map);
 				}
 			} // end for each joint

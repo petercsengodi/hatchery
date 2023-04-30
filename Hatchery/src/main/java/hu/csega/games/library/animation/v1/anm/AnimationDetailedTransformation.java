@@ -56,7 +56,10 @@ public class AnimationDetailedTransformation implements Serializable {
 		Matrix4f rotated = new Matrix4f().identity(); // TODO remove somehow
 
 		float[] r = rotation.getV();
-		destination.mul(rotated.rotateZ(r[2]).rotateY(r[1]).rotateX(r[0]));
+		float rz = (float)(r[2] * Math.PI / 180.0);
+		float ry = (float)(r[1] * Math.PI / 180.0);
+		float rx = (float)(r[0] * Math.PI / 180.0);
+		destination.mul(rotated.rotateZ(rz).rotateY(ry).rotateX(rx));
 
 		float[] t = translation.getV();
 		Matrix4f translated = rotated.m30(t[0]).m31(t[1]).m32(t[2]);
@@ -75,7 +78,10 @@ public class AnimationDetailedTransformation implements Serializable {
 		Matrix4f rotated = new Matrix4f().identity(); // TODO remove somehow
 
 		float[] r = rotation.getV();
-		destination.mul(rotated.rotateZ(r[2]).rotateY(r[1]).rotateX(r[0]));
+		float rz = (float)(r[2] * Math.PI / 180.0);
+		float ry = (float)(r[1] * Math.PI / 180.0);
+		float rx = (float)(r[0] * Math.PI / 180.0);
+		destination.mul(rotated.rotateZ(rz).rotateY(ry).rotateX(rx));
 
 		float[] t = translation.getV();
 		Matrix4f translated = rotated.m30(t[0]).m31(t[1]).m32(t[2]);
