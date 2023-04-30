@@ -71,118 +71,90 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			this.set = new AnimatorSet();
 		}
 
-		int currentScene = 0;
 		GameObjectPlacement camera = new GameObjectPlacement();
 		List<AnimatorSetPart> parts = new ArrayList<>();
 
-		if(persistent != null) {
-			AnimationMisc misc = persistent.getMisc();
-			if(misc != null) {
-				currentScene = misc.getCurrentScene();
-
-				AnimationPlacement cam = misc.getCamera();
-				if(cam != null) {
-					AnimationVector pos = cam.getPosition();
-					if(pos != null && pos.getV() != null) {
-						float[] v = pos.getV();
-						camera.position.set(v[0], v[1], v[2]);
-					} else {
-						camera.position.set(0f, 0f, -100f);
-					}
-
-					AnimationVector tar = cam.getTarget();
-					if(tar != null && tar.getV() != null) {
-						float[] v = tar.getV();
-						camera.target.set(v[0], v[1], v[2]);
-					} else {
-						camera.target.set(0f, 0f, 0f);
-					}
-
-					AnimationVector up = cam.getTarget();
-					if(up != null && up.getV() != null) {
-						float[] v = up.getV();
-						camera.up.set(v[0], v[1], v[2]);
-					} else {
-						camera.up.set(0f, 1f, 0f);
-					}
-				} else {
-					camera.position.set(0f, 400f, -400f);
-					camera.target.set(0f, 0f, 0f);
-					camera.up.set(0f, 1f, 0f);
-				}
+		int currentScene = persistent.getSelectedScene();
+		AnimationMisc misc = persistent.getMisc();
+		AnimationPlacement cam = misc.getCamera();
+		if(cam != null) {
+			AnimationVector pos = cam.getPosition();
+			if(pos != null && pos.getV() != null) {
+				float[] v = pos.getV();
+				camera.position.set(v[0], v[1], v[2]);
 			} else {
-				camera.position.set(0f, 400f, -400f);
+				camera.position.set(0f, 0f, -100f);
+			}
+
+			AnimationVector tar = cam.getTarget();
+			if(tar != null && tar.getV() != null) {
+				float[] v = tar.getV();
+				camera.target.set(v[0], v[1], v[2]);
+			} else {
 				camera.target.set(0f, 0f, 0f);
+			}
+
+			AnimationVector up = cam.getTarget();
+			if(up != null && up.getV() != null) {
+				float[] v = up.getV();
+				camera.up.set(v[0], v[1], v[2]);
+			} else {
 				camera.up.set(0f, 1f, 0f);
 			}
+		} else {
+			camera.position.set(0f, 400f, -400f);
+			camera.target.set(0f, 0f, 0f);
+			camera.up.set(0f, 1f, 0f);
+		}
 
-			Animation animation = persistent.getAnimation();
-			if(animation != null) {
+		Animation animation = persistent.getAnimation();
 
-				Map<String, AnimationPart> map = animation.getParts();
-				if(map != null && map.size() > 0) {
-
-					Map<String, String> connections = animation.getConnections();
-					List<AnimationScene> scenes = animation.getScenes();
-					if(scenes != null && scenes.size() > 0) {
-						if(currentScene < 0 || currentScene >= scenes.size()) {
-							currentScene = 0;
-						}
-
-						AnimationScene scene = scenes.get(currentScene);
-						Map<String, AnimationScenePart> sceneParts = scene.getSceneParts();
-						if(sceneParts != null && sceneParts.size() > 0) {
-							generateParts(parts, connections, sceneParts, map);
-						}
-					}
-
-				} // end map check
+		Map<String, AnimationPart> map = animation.getParts();
+		if(map != null && map.size() > 0) {
+			int numberOfScenes = animation.getNumberOfScenes();
+			if(currentScene < 0 || currentScene >= numberOfScenes) {
+				currentScene = 0;
 			}
 
+			generateParts(animation, currentScene, parts);
 		}
 
 		set.setCamera(camera);
 		set.setParts(parts);
 	}
 
-	private void generateParts(List<AnimatorSetPart> parts, Map<String, String> connections,
-			Map<String, AnimationScenePart> sceneParts, Map<String, AnimationPart> map) {
-
-		for(Map.Entry<String, AnimationScenePart> entry : sceneParts.entrySet()) {
-			String partKey = entry.getKey();
-			if(connections.containsKey(partKey)) {
+	private void generateParts(Animation animation, int currentScene, List<AnimatorSetPart> parts) {
+		Map<String, String> connections = animation.getConnections();
+		for(Map.Entry<String, AnimationPart> entry : animation.getParts().entrySet()) {
+			String partIdentifier = entry.getKey();
+			if(connections.containsKey(partIdentifier)) {
 				continue;
 			}
 
-			AnimationScenePart scenePart = entry.getValue();
-			transformPart(parts, null, partKey, scenePart, connections, map, sceneParts);
+			AnimationPart part = entry.getValue();
+			transformPart(animation, currentScene, part, null, parts);
 		}
 
 	}
 
-	private void generateParts(List<AnimatorSetPart> parts, Matrix4f m, String jointKey, Map<String, String> connections,
-							   Map<String, AnimationScenePart> sceneParts, Map<String, AnimationPart> map) {
-
-		for(Map.Entry<String, AnimationScenePart> entry : sceneParts.entrySet()) {
-			String partKey = entry.getKey();
-			if(jointKey.equals(connections.get(partKey))) {
-				AnimationScenePart scenePart = entry.getValue();
-				transformPart(parts, m, partKey, scenePart, connections, map, sceneParts);
+	private void generateParts(Animation animation, int currentScene, String jointKey, Matrix4f m, List<AnimatorSetPart> parts) {
+		Map<String, String> connections = animation.getConnections();
+		for(Map.Entry<String, String> entry : connections.entrySet()) {
+			if(jointKey.equals(entry.getValue())) {
+				AnimationPart part = animation.getParts().get(entry.getKey());
+				transformPart(animation, currentScene, part, m, parts);
 			}
 		}
-
 	}
 
-	private void transformPart(List<AnimatorSetPart> parts, Matrix4f m, String partKey, AnimationScenePart scenePart,
-			Map<String, String> connections, Map<String, AnimationPart> map, Map<String, AnimationScenePart> sceneParts) {
-		if(!scenePart.isVisible()) {
-			return;
-		}
+	private void transformPart(Animation animation, int currentScene, AnimationPart part, Matrix4f m, List<AnimatorSetPart> parts) {
+		if(part != null) {
+			AnimationScenePart scenePart = animation.createOrGetScenePart(currentScene, part.getIdentifier());
+			if(!scenePart.isVisible()) {
+				return;
+			}
 
-		AnimationPart animationPart = map.get(partKey);
-		if(animationPart != null) {
-
-			String filename = animationPart.getMesh();
+			String filename = part.getMesh();
 			if(filename == null || filename.length() == 0) {
 				return;
 			}
@@ -197,9 +169,9 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			}
 
 			if(m == null) {
-				m2.set(animationPart.getBasicTransformation().getM());
+				m2.set(part.getBasicTransformation().getM());
 			} else {
-				m1.set(animationPart.getBasicTransformation().getM());
+				m1.set(part.getBasicTransformation().getM());
 				m.mul(m1, m2);
 			}
 
@@ -218,17 +190,17 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			setPart.setFlipped(flipped);
 			parts.add(setPart);
 
-			List<AnimationPartJoint> joints = animationPart.getJoints();
+			List<AnimationPartJoint> joints = part.getJoints();
 			if(joints.size() > 0) {
 				scenePart.getTransformation().createJointMatrix(m3);
 
-				for (AnimationPartJoint joint : animationPart.getJoints()) {
+				for (AnimationPartJoint joint : part.getJoints()) {
 					Matrix4f _m = new Matrix4f();
 					float[] v = joint.getRelativePosition().getV();
 					m2.translateLocal(v[0], v[1], v[2], m4);
 					m3.mul(m4, _m);
 					// m5.invert(_m); // ???
-					generateParts(parts, _m, joint.getIdentifier(), connections, sceneParts, map);
+					generateParts(animation, currentScene, joint.getIdentifier(), _m, parts);
 				}
 			} // end for each joint
 		}

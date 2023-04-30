@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class AnimationScenePart implements Serializable {
 
 	private AnimationDetailedTransformation transformation = new AnimationDetailedTransformation();
-	private boolean visible;
+	private boolean visible = true;
 
 	public AnimationDetailedTransformation getTransformation() {
 		return transformation;

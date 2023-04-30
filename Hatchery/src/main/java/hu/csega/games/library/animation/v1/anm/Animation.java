@@ -16,6 +16,7 @@ public class Animation implements Serializable {
 	private Map<String, AnimationPart> parts = new LinkedHashMap<>();
 	private Map<String, String> connections = new HashMap<>();
 	private List<AnimationScene> scenes = new ArrayList<>();
+	private int numberOfScenes;
 	private int maxPartIndex;
 
 	public Map<String, AnimationPart> getParts() {
@@ -46,15 +47,37 @@ public class Animation implements Serializable {
 		this.scenes = scenes;
 	}
 
+	public int getNumberOfScenes() {
+		return numberOfScenes;
+	}
+
+	public void setNumberOfScenes(int numberOfScenes) {
+		if(numberOfScenes < 1 || numberOfScenes > MAX_SCENES) {
+			return;
+		}
+
+		if(numberOfScenes < this.numberOfScenes) {
+			List<AnimationScene> old = scenes;
+			scenes = new ArrayList<>(numberOfScenes);
+
+			for (int i = 0; i < Math.min(numberOfScenes, old.size()); i++) {
+				AnimationScene scene = old.get(i);
+				if (scene != null) {
+					scenes.set(i, scene);
+				}
+			}
+		}
+
+		this.numberOfScenes = numberOfScenes;
+	}
+
 	public AnimationScene createOrGetScene(int index) {
 		if(index < 0) {
 			return null;
 		}
 
-		if(index >= scenes.size()) {
-			for(int i = scenes.size(); i <= index; i++) {
-				scenes.set(i, null);
-			}
+		while(index >= scenes.size()) {
+            scenes.add(null);
 		}
 
 		AnimationScene scene = scenes.get(index);
@@ -65,6 +88,10 @@ public class Animation implements Serializable {
 
 		return scene;
 	}
+
+    public void putScene(int index, AnimationScene scene) {
+	    scenes.set(index, scene);
+    }
 
 	public AnimationScenePart createOrGetScenePart(int index, String partIdentifier) {
 		return createOrGetScene(index).createOrGetScenePart(partIdentifier);
@@ -119,6 +146,7 @@ public class Animation implements Serializable {
 
 	}
 
-	private static final long serialVersionUID = 1L;
+	private static final long MAX_SCENES = 100_000L;
 
+	private static final long serialVersionUID = 1L;
 }

@@ -19,6 +19,7 @@ public class AnimatorModel {
 	private AnimatorCameraManipulator camera;
 	private AnimatorPartManipulator parts;
 	private AnimatorSceneManipulator scenes;
+	private AnimatorRefreshViews refreshViews;
 
 	public AnimationPersistent getPersistent() {
 		if(persistent == null) {
@@ -102,19 +103,35 @@ public class AnimatorModel {
 	}
 
 	public void changeNumberOfScenes(int numberOfScenes) {
-
+		scenes.changeNumberOfScenes(numberOfScenes);
 	}
 
 	public void selectScene(int sceneIndex) {
+		scenes.selectScene(sceneIndex);
+	}
 
+	public void previouseScene() {
+		scenes.previousScene();
+	}
+
+	public void nextScene() {
+		scenes.nextScene();
 	}
 
 	public void copySelectedSceneFrom(int otherSceneIndex) {
+		scenes.copySelectedSceneFrom(otherSceneIndex);
+	}
 
+	public void copyFromThePrevious() {
+		scenes.copyFromThePrevious();
 	}
 
 	public void lerp(int start, int end, int writeStart, int writeEnd) {
 
+	}
+
+	public void justRefreshViews() {
+		refreshViews.refreshAll();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,5 +155,15 @@ public class AnimatorModel {
 	@Dependency
 	public void setAnimatorPartManipulator(AnimatorPartManipulator animatorPartManipulator) {
 		this.parts = animatorPartManipulator;
+	}
+
+	@Dependency
+	public void setAnimatorSceneManipulator(AnimatorSceneManipulator animatorSceneManipulator) {
+		this.scenes = animatorSceneManipulator;
+	}
+
+	@Dependency
+	public void setAnimatorRefreshViews(AnimatorRefreshViews animatorRefreshViews) {
+		this.refreshViews = animatorRefreshViews;
 	}
 }

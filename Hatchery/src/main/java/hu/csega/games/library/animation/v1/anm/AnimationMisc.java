@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class AnimationMisc implements Serializable {
 
-	private int currentScene;
 	private AnimationPlacement camera;
 
 	private boolean gridEnabled;
@@ -13,14 +12,6 @@ public class AnimationMisc implements Serializable {
 
 	private double[] zooming;
 	private double[] grid;
-
-	public int getCurrentScene() {
-		return currentScene;
-	}
-
-	public void setCurrentScene(int currentScene) {
-		this.currentScene = currentScene;
-	}
 
 	public AnimationPlacement getCamera() {
 		return camera;
@@ -73,7 +64,6 @@ public class AnimationMisc implements Serializable {
 	public AnimationMisc() {
 		this.gridEnabled = false;
 		this.saved = true;
-		this.currentScene = 0;
 		this.camera = new AnimationPlacement();
 	}
 
