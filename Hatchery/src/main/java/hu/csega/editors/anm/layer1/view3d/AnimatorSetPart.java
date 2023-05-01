@@ -5,16 +5,25 @@ import hu.csega.games.engine.g3d.GameTransformation;
 
 public class AnimatorSetPart {
 
-	private GameObjectHandler model;
+	private String mesh;
+	private GameObjectHandler handler;
 	private GameTransformation transformation;
 	private boolean flipped;
 
-	public GameObjectHandler getModel() {
-		return model;
+	public String getMesh() {
+		return mesh;
 	}
 
-	public void setModel(GameObjectHandler model) {
-		this.model = model;
+	public void setMesh(String mesh) {
+		this.mesh = mesh;
+	}
+
+	public GameObjectHandler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(GameObjectHandler handler) {
+		this.handler = handler;
 	}
 
 	public GameTransformation getTransformation() {

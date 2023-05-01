@@ -1,30 +1,28 @@
 package hu.csega.editors.anm.layer1.swing.wireframe;
 
+import hu.csega.editors.anm.components.ComponentWireFrameConverter;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
+import hu.csega.games.engine.g3d.GameTransformation;
+import hu.csega.games.library.MeshLibrary;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
+import hu.csega.games.library.mesh.v1.xml.SEdge;
+import hu.csega.games.library.mesh.v1.xml.SMesh;
+import hu.csega.games.library.mesh.v1.xml.SShape;
+import hu.csega.games.library.mesh.v1.xml.STriangle;
+import hu.csega.games.library.mesh.v1.xml.SVertex;
+import hu.csega.games.library.reference.SMeshRef;
+import hu.csega.games.library.util.FileUtil;
+import hu.csega.games.units.UnitStore;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
-import hu.csega.games.library.animation.v1.anm.Animation;
-import hu.csega.games.library.animation.v1.anm.AnimationPart;
-import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
-import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
-import hu.csega.games.library.MeshLibrary;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
-import hu.csega.games.library.mesh.v1.xml.SEdge;
-import hu.csega.games.library.mesh.v1.xml.SShape;
-import hu.csega.games.library.mesh.v1.xml.STriangle;
-import hu.csega.games.library.mesh.v1.xml.SVertex;
-import hu.csega.games.library.reference.SMeshRef;
-import hu.csega.games.library.mesh.v1.xml.SMesh;
-import hu.csega.games.library.util.FileUtil;
-import hu.csega.games.units.UnitStore;
 
 import org.joml.Vector4f;
 
@@ -36,26 +34,22 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	private AnimatorUIComponents components;
 
 	@Override
-	public AnimatorWireFrame transform(AnimatorModel model) {
+	public AnimatorWireFrame transform(List<AnimatorSetPart> parts) {
 		if(meshLibrary == null) {
 			meshLibrary = UnitStore.instance(MeshLibrary.class);
 		}
 
 		// FIXME: some lightweight pattern not to always create new objects or something
 		AnimatorWireFrame result = new AnimatorWireFrame();
-
-		AnimationPersistent persistent = model.getPersistent();
-		Animation animation = persistent.getAnimation();
-		Map<String, AnimationPart> allParts = animation.getParts();
-		if(allParts != null) {
-			collectWireFrame(result, allParts);
+		if(parts != null) {
+			collectWireFrame(parts, result);
 		}
 
 		return result;
 	}
 
 	@Override
-	public void accept(AnimatorModel model) {
+	public void accept(List<AnimatorSetPart> parts) {
 		components = UnitStore.instance(AnimatorUIComponents.class);
 		if(components == null) {
 			components = UnitStore.instance(AnimatorUIComponents.class);
@@ -64,7 +58,7 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 			}
 		}
 
-		wireFrame = transform(model);
+		wireFrame = transform(parts);
 		components.panelFront.accept(wireFrame);
 		components.panelSide.accept(wireFrame);
 		components.panelTop.accept(wireFrame);
@@ -76,16 +70,14 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		return wireFrame;
 	}
 
-	private void collectWireFrame(AnimatorWireFrame result, Map<String, AnimationPart> allParts) {
-		for(Map.Entry<String, AnimationPart> entry : allParts.entrySet()) {
-			AnimationPart part = entry.getValue();
-			collectWireframe(result, part);
+	private void collectWireFrame(List<AnimatorSetPart> parts, AnimatorWireFrame result) {
+		for(AnimatorSetPart part : parts) {
+			collectWireframe(part, result);
 		}
 	}
 
-	private void collectWireframe(AnimatorWireFrame result, AnimationPart part) {
+	private void collectWireframe(AnimatorSetPart part, AnimatorWireFrame result) {
 		Collection<AnimatorWireFrameLine> lines = new ArrayList<>();
-		result.setLines(lines);
 
 		String mesh1 = part.getMesh();
 		String fn = FileUtil.cleanUpName(mesh1);
@@ -95,16 +87,19 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 			return;
 		}
 
+        GameTransformation transformation = part.getTransformation();
 		if(mesh instanceof SMesh) {
-			convert((SMesh) mesh, lines);
+			convert((SMesh) mesh, transformation, lines);
 		} else if(mesh instanceof FreeTriangleMeshModel) {
-			convert((FreeTriangleMeshModel) mesh, lines);
+			convert((FreeTriangleMeshModel) mesh, transformation, lines);
 		} else {
 			throw new ClassCastException("Unknown format for mesh: " + mesh.getClass().getName());
 		}
+
+		result.addLines(lines);
 	}
 
-	private void convert(SMesh mesh, Collection<AnimatorWireFrameLine> lines) {
+	private void convert(SMesh mesh, GameTransformation transformation, Collection<AnimatorWireFrameLine> lines) {
 		Color color = Color.BLACK;
 
 		List<SShape> figures = mesh.getFigures();
@@ -120,13 +115,19 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 					Vector4f v2 = to.getPosition();
 					AnimatorWireFramePoint p1 = new AnimatorWireFramePoint(v1.get(0), v1.get(1), v1.get(2), color);
 					AnimatorWireFramePoint p2 = new AnimatorWireFramePoint(v2.get(0), v2.get(1), v2.get(2), color);
-					lines.add(new AnimatorWireFrameLine(p1, p2, color));
+
+                    if(transformation != null) {
+                        p1.transform(transformation);
+                        p2.transform(transformation);
+                    }
+
+                    lines.add(new AnimatorWireFrameLine(p1, p2, color));
 				}
 			}
 		}
 	}
 
-	private void convert(FreeTriangleMeshModel mesh, Collection<AnimatorWireFrameLine> lines) {
+	private void convert(FreeTriangleMeshModel mesh, GameTransformation transformation, Collection<AnimatorWireFrameLine> lines) {
 		Map<Integer, FreeTriangleMeshVertex> map = new HashMap<>();
 		Integer index = 0;
 
@@ -147,6 +148,13 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 			AnimatorWireFramePoint p1 = new AnimatorWireFramePoint(v1.getPX(), v1.getPY(), v1.getPZ(), color);
 			AnimatorWireFramePoint p2 = new AnimatorWireFramePoint(v2.getPX(), v2.getPY(), v2.getPZ(), color);
 			AnimatorWireFramePoint p3 = new AnimatorWireFramePoint(v3.getPX(), v3.getPY(), v3.getPZ(), color);
+
+            if(transformation != null) {
+                p1.transform(transformation);
+                p2.transform(transformation);
+                p3.transform(transformation);
+            }
+
 			lines.add(new AnimatorWireFrameLine(p1, p2, color));
 			lines.add(new AnimatorWireFrameLine(p2, p3, color));
 			lines.add(new AnimatorWireFrameLine(p3, p1, color));

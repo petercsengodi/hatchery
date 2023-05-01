@@ -58,7 +58,7 @@ public class AnimatorRenderStep implements GameEngineCallback {
 			List<AnimatorSetPart> parts = set.getParts();
 			if(parts != null && parts.size() > 0) {
 				for(AnimatorSetPart part : parts) {
-					GameObjectHandler modelObject = part.getModel();
+					GameObjectHandler modelObject = part.getHandler();
 					GameTransformation modelTransformation = part.getTransformation();
 					boolean flipped = part.isFlipped();
 					g.drawModel(modelObject, modelTransformation, flipped);

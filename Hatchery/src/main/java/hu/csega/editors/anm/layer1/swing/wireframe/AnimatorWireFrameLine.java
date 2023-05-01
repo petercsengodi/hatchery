@@ -1,5 +1,7 @@
 package hu.csega.editors.anm.layer1.swing.wireframe;
 
+import hu.csega.games.engine.g3d.GameTransformation;
+
 import java.awt.Color;
 
 public class AnimatorWireFrameLine {
@@ -8,13 +10,15 @@ public class AnimatorWireFrameLine {
 	private AnimatorWireFramePoint destination;
 	private Color color;
 
-	public AnimatorWireFrameLine() {
-	}
-
 	public AnimatorWireFrameLine(AnimatorWireFramePoint source, AnimatorWireFramePoint destination, Color color) {
 		this.source = source;
 		this.destination = destination;
 		this.color = color;
+	}
+
+	public void transform(GameTransformation transformation) {
+		source.transform(transformation);
+		destination.transform(transformation);
 	}
 
 	public AnimatorWireFramePoint getSource() {
