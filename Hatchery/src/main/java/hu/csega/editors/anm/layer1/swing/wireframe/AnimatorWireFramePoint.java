@@ -21,6 +21,21 @@ public class AnimatorWireFramePoint {
 		this.color = color;
 	}
 
+	public double valueOfIndex(int index) {
+		switch (index) {
+			case 0:
+				return x;
+			case 1:
+				return y;
+			case 2:
+				return z;
+			case 3:
+				return 1.0;
+			default:
+				return 0;
+		}
+	}
+
 	public void transform(GameTransformation transformation) {
 		float[] m = transformation.getFloats();
 

@@ -12,11 +12,14 @@ import hu.csega.games.units.UnitStore;
 
 public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameRenderer {
 
+	private final int indexOfX, indexOfY;
 	private ComponentWireFrameTransformer source;
 	private AnimatorWireFrame wireFrame;
 
-	public AnimatorWireFrameView() {
+	public AnimatorWireFrameView(int indexOfX, int indexOfY) {
 		this.source = UnitStore.instance(ComponentWireFrameTransformer.class);
+		this.indexOfX = indexOfX;
+		this.indexOfY = indexOfY;
 	}
 
 	@Override
@@ -37,12 +40,12 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 				g.translate(width / 2, height / 2);
 				for(AnimatorWireFrameLine line : lines) {
 					AnimatorWireFramePoint source = line.getSource();
-					int x1 = (int)source.getX();
-					int y1 = (int)source.getY();
+					int x1 = (int)source.valueOfIndex(indexOfX);
+					int y1 = (int)source.valueOfIndex(indexOfY);
 
 					AnimatorWireFramePoint destination = line.getDestination();
-					int x2 = (int)destination.getX();
-					int y2 = (int)destination.getY();
+					int x2 = (int)destination.valueOfIndex(indexOfX);
+					int y2 = (int)destination.valueOfIndex(indexOfY);
 
 					g.setColor(line.getColor());
 					g.drawLine(x1, y1, x2, y2);
