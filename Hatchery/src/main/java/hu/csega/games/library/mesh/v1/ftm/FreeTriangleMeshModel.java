@@ -3,10 +3,12 @@ package hu.csega.games.library.mesh.v1.ftm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
@@ -300,6 +302,35 @@ public class FreeTriangleMeshModel implements Serializable {
 
 		if(!newTriangles.isEmpty()) {
 			mesh.getTriangles().addAll(newTriangles);
+		}
+
+		invalidate();
+	}
+
+	public void reverseCurrentSelection() {
+		if(selectedObjects.isEmpty())
+			return;
+
+		snapshots().addState(mesh);
+
+		List<Object> toCopy = new ArrayList<>(selectedObjects);
+		selectedObjects.clear();
+
+		Set<Integer> selectedIndices = new HashSet<>();
+
+		List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
+
+		for(Object object : toCopy) {
+			if(object instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
+				selectedIndices.add(vertices.indexOf(v));
+			}
+		}
+
+		for(FreeTriangleMeshTriangle t : mesh.getTriangles()) {
+			if(selectedIndices.contains(t.getVertex1()) && selectedIndices.contains(t.getVertex2()) && selectedIndices.contains(t.getVertex3())) {
+				t.reverse();
+			}
 		}
 
 		invalidate();

@@ -1,0 +1,68 @@
+{
+  "name": "/home/csega/Documents/Projects/hatchery/GameResources/meshes/cape1.json",
+  "texture": "/home/csega/Documents/Projects/hatchery/GameResources/textures/bunny-texture.jpg",
+  "triangles": [
+    {
+      "v1": 0,
+      "v2": 2,
+      "v3": 1
+    },
+    {
+      "v1": 2,
+      "v2": 3,
+      "v3": 1
+    },
+    {
+      "v1": 1,
+      "v2": 3,
+      "v3": 2
+    },
+    {
+      "v1": 1,
+      "v2": 2,
+      "v3": 0
+    }
+  ],
+  "vertices": [
+    {
+      "nx": 0,
+      "ny": 0,
+      "nz": 0,
+      "px": -60,
+      "py": 80,
+      "pz": 0,
+      "tx": 0.8813656568527222,
+      "ty": 0.069125235080719
+    },
+    {
+      "nx": 0,
+      "ny": 0,
+      "nz": 0,
+      "px": 20,
+      "py": 80,
+      "pz": 0,
+      "tx": 0.22636456787586212,
+      "ty": 0.1391495168209076
+    },
+    {
+      "nx": 0,
+      "ny": 0,
+      "nz": 0,
+      "px": -80,
+      "py": 40,
+      "pz": 20,
+      "tx": 0.5689396858215332,
+      "ty": 0.9627488851547241
+    },
+    {
+      "nx": 0,
+      "ny": 0,
+      "nz": 0,
+      "px": 40,
+      "py": 40,
+      "pz": 20,
+      "tx": 0.0589112788438797,
+      "ty": 0.9309950470924377
+    }
+  ]
+}

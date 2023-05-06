@@ -14,6 +14,12 @@ public class FreeTriangleMeshTriangle implements Serializable {
 		this.vertex3 = i3;
 	}
 
+	public void reverse() {
+		int tmp = vertex1;
+		vertex1 = vertex2;
+		vertex2 = tmp;
+	}
+
 	public int getVertex1() {
 		return vertex1;
 	}
