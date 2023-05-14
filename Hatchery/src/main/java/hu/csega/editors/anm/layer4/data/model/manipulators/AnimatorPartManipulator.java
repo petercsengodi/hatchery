@@ -145,12 +145,68 @@ public class AnimatorPartManipulator {
         refreshViews.refreshAll();
     }
 
+    public void modifySelectedJoint(String name, double x, double y, double z) {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            String partIdentifier = persistent.getSelectedPart();
+            if(partIdentifier == null) {
+                return;
+            }
+
+            Animation animation = persistent.getAnimation();
+            AnimationPart animationPart = animation.getParts().get(partIdentifier);
+            if(animationPart == null) {
+                throw new RuntimeException("Missing part: " + partIdentifier);
+            }
+
+            String selectedJointIdentifier = persistent.getSelectedJoint();
+            if(selectedJointIdentifier == null) {
+                return;
+            }
+
+            List<AnimationPartJoint> joints = animationPart.getJoints();
+            if(joints != null) {
+                for(AnimationPartJoint joint : joints) {
+                    if(selectedJointIdentifier.equals(joint.getIdentifier())) {
+                        joint.setDisplayName(name);
+                        joint.setRelativePosition(new AnimationVector((float)x, (float)y, (float)z));
+                    }
+                }
+            }
+        }
+
+        refreshViews.refreshAll();
+    }
+
+    public void deleteSelectedJoint() {
+    }
+
     public void connectSelectedPart(String jointIdentifier) {
         synchronized (model) {
             AnimationPersistent persistent = model.getPersistent();
             String partIdentifier = persistent.getSelectedPart();
             Animation animation = persistent.getAnimation();
             animation.getConnections().put(partIdentifier, jointIdentifier);
+        }
+
+        refreshViews.refreshAll();
+    }
+
+    public void changeSelectedPartName(String name) {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            String partIdentifier = persistent.getSelectedPart();
+            if(partIdentifier == null) {
+                return;
+            }
+
+            Animation animation = persistent.getAnimation();
+            AnimationPart animationPart = animation.getParts().get(partIdentifier);
+            if(animationPart == null) {
+                throw new RuntimeException("Missing part: " + partIdentifier);
+            }
+
+            animationPart.setDisplayName(name);
         }
 
         refreshViews.refreshAll();

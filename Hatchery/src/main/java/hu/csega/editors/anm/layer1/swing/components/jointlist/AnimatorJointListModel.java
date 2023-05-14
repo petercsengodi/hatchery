@@ -63,7 +63,7 @@ public class AnimatorJointListModel implements ListModel<AnimatorJointListItem>,
 				}
 
 				AnimationPersistent persistent = model.getPersistent();
-				persistent.setSelectedPart(partItem.getIdentifier());
+				persistent.setSelectedJoint(partItem.getIdentifier());
 			}
 		}
 	}

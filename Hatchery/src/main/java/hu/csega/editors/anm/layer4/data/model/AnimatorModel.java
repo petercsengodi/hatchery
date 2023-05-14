@@ -91,15 +91,19 @@ public class AnimatorModel {
 	}
 
 	public void modifySelectedJoint(String name, double x, double y, double z) {
-
+		parts.modifySelectedJoint(name, x, y, z);
 	}
 
 	public void deleteSelectedJoint() {
-
+		parts.deleteSelectedJoint();
 	}
 
 	public void connectSelectedPart(String jointIdentifier) {
 		parts.connectSelectedPart(jointIdentifier);
+	}
+
+	public void changeSelectedPartName(String name) {
+		parts.changeSelectedPartName(name);
 	}
 
 	public void changeNumberOfScenes(int numberOfScenes) {

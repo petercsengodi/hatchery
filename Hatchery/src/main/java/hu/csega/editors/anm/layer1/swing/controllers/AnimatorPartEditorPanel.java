@@ -49,6 +49,11 @@ public class AnimatorPartEditorPanel extends JPanel {
 
 	public AnimatorRotatorComponent rotator;
 
+	public JPanel partNameChangePanel;
+	public JLabel partNameChangeLabel;
+	public JTextField partNameChangeField;
+	public JButton partNameChangeButton;
+
 	public AnimatorPartEditorPanel() {
 		this.model = UnitStore.instance(AnimatorModel.class);
 		this.components = UnitStore.instance(AnimatorUIComponents.class);
@@ -85,6 +90,11 @@ public class AnimatorPartEditorPanel extends JPanel {
 		this.buttonsPanel.add(addButton);
 		this.buttonsPanel.add(setButton);
 		this.buttonsPanel.add(delButton);
+
+		this.partNameChangePanel = new JPanel();
+		this.partNameChangeLabel = new JLabel("Name:");
+		this.partNameChangeField = new JTextField(10);
+		this.partNameChangeButton = new JButton("Change!");
 
 		this.layout = new AnimatorPanelLayoutManager(200, 300);
 		this.setLayout(layout);
@@ -206,7 +216,19 @@ public class AnimatorPartEditorPanel extends JPanel {
 			}
 		});
 
-		lineOffset += this.rotator.getPreferredSize().height + 10;
+		lineOffset += this.rotator.getPreferredSize().height + 20;
+
+		this.partNameChangePanel.setLayout(new FlowLayout());
+		this.partNameChangePanel.add(this.partNameChangeLabel);
+		this.partNameChangePanel.add(this.partNameChangeField);
+		this.partNameChangePanel.add(this.partNameChangeButton);
+
+		this.add(this.partNameChangePanel, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
+			@Override
+			protected void resize(Component component, int offsetX, int offsetY, int width, int height) {
+				component.setBounds(0, offsetY, width, 30);
+			}
+		});
 
 		applyEventMethods();
 	}
@@ -234,6 +256,8 @@ public class AnimatorPartEditorPanel extends JPanel {
 			yField.setText("");
 			zField.setText("");
 		});
+
+		partNameChangeButton.addActionListener(event -> model.changeSelectedPartName(partNameChangeField.getText()));
 	}
 
 	private static double checkAndGetDoubleField(JTextField field) {
