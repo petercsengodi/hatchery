@@ -7,7 +7,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.units.UnitStore;
 
 public class FreeTriangleMeshMenu {
 
@@ -27,14 +29,16 @@ public class FreeTriangleMeshMenu {
 	}
 
 	private static JMenu createFileMenu(JFrame frame, GameEngineFacade facade) {
-		JFileChooser saveDialog = new JFileChooser(".");
+		ResourceAdapter resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+
+		JFileChooser saveDialog = new JFileChooser(resourceAdapter.meshFolder());
 		saveDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		saveDialog.setDialogTitle("Select file to save.");
 		saveDialog.setMultiSelectionEnabled(false);
 		saveDialog.setFileFilter(new FileNameExtensionFilter("FreeTriangleMesh file", "ftm"));
 		saveDialog.setApproveButtonText("Save");
 
-		JFileChooser openDialog = new JFileChooser(".");
+		JFileChooser openDialog = new JFileChooser(resourceAdapter.meshFolder());
 		openDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		openDialog.setDialogTitle("Select file to open.");
 		openDialog.setMultiSelectionEnabled(false);
@@ -63,7 +67,9 @@ public class FreeTriangleMeshMenu {
 	}
 
 	private static JMenu createTextureMenu(JFrame frame, GameEngineFacade facade) {
-		JFileChooser loadTextureDialog = new JFileChooser(".");
+		ResourceAdapter resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+
+		JFileChooser loadTextureDialog = new JFileChooser(resourceAdapter.textureFolder());
 		loadTextureDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		loadTextureDialog.setDialogTitle("Select texture to load.");
 		loadTextureDialog.setMultiSelectionEnabled(false);
@@ -80,7 +86,9 @@ public class FreeTriangleMeshMenu {
 	}
 
 	private static JMenu createExportMenu(JFrame frame, GameEngineFacade facade) {
-		JFileChooser meshExportDialog = new JFileChooser(".");
+		ResourceAdapter resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+
+		JFileChooser meshExportDialog = new JFileChooser(resourceAdapter.meshFolder());
 		meshExportDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		meshExportDialog.setDialogTitle("Select file to export to.");
 		meshExportDialog.setMultiSelectionEnabled(false);
@@ -90,7 +98,7 @@ public class FreeTriangleMeshMenu {
 		JMenuItem meshExportItem = new JMenuItem("To Mesh");
 		meshExportItem.addActionListener(new ExportMesh(frame, meshExportDialog, facade));
 
-		JFileChooser mwcExportDialog = new JFileChooser(".");
+		JFileChooser mwcExportDialog = new JFileChooser(resourceAdapter.meshFolder());
 		mwcExportDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		mwcExportDialog.setDialogTitle("Select file to export to.");
 		mwcExportDialog.setMultiSelectionEnabled(false);

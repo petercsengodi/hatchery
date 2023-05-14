@@ -1,8 +1,6 @@
 package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
 
 import hu.csega.editors.common.lens.EditorPoint;
@@ -83,6 +81,13 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 			}
 		}
 
+
+		Stroke stroke = g.getStroke();
+		g.setStroke(new BasicStroke(3));
+		g.setColor(Color.PINK);
+		g.drawLine(-10, -10, 10, 10);
+		g.drawLine(-10, 10, 10, -10);
+		g.setStroke(stroke);
 
 		g.translate(-widthDiv2, -heightDiv2);
 
