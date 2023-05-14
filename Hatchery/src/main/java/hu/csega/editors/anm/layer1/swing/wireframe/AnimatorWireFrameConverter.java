@@ -18,8 +18,6 @@ import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.UnitStore;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,17 +31,21 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
 	private AnimatorUIComponents components;
 
+
 	@Override
 	public AnimatorWireFrame transform(List<AnimatorSetPart> parts) {
 		if(meshLibrary == null) {
 			meshLibrary = UnitStore.instance(MeshLibrary.class);
 		}
 
-		// FIXME: some lightweight pattern not to always create new objects or something
 		AnimatorWireFrame result = new AnimatorWireFrame();
+
+		// FIXME: some lightweight pattern not to always create new objects or something
 		if(parts != null) {
 			collectWireFrame(parts, result);
 		}
+
+		result.addPoint(new AnimatorWireFramePoint(0.0, 0.0, 0.0, Color.PINK, true));
 
 		return result;
 	}
@@ -59,6 +61,7 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		}
 
 		wireFrame = transform(parts);
+
 		components.panelFront.accept(wireFrame);
 		components.panelSide.accept(wireFrame);
 		components.panelTop.accept(wireFrame);
@@ -77,8 +80,6 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	}
 
 	private void collectWireframe(AnimatorSetPart part, AnimatorWireFrame result) {
-		Collection<AnimatorWireFrameLine> lines = new ArrayList<>();
-
 		String mesh1 = part.getMesh();
 		String fn = FileUtil.cleanUpName(mesh1);
 		SMeshRef ref = new SMeshRef(fn);
@@ -89,17 +90,25 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
         GameTransformation transformation = part.getTransformation();
 		if(mesh instanceof SMesh) {
-			convert((SMesh) mesh, transformation, lines);
+			convert((SMesh) mesh, transformation, result);
 		} else if(mesh instanceof FreeTriangleMeshModel) {
-			convert((FreeTriangleMeshModel) mesh, transformation, lines);
+			convert((FreeTriangleMeshModel) mesh, transformation, result);
 		} else {
 			throw new ClassCastException("Unknown format for mesh: " + mesh.getClass().getName());
 		}
 
-		result.addLines(lines);
+		List<AnimatorWireFramePoint> jointPoints = part.getJointPoints();
+		if(jointPoints != null && !jointPoints.isEmpty()) {
+			// WARNING: I modify the original objects here.
+			for(AnimatorWireFramePoint jointPoint: jointPoints) {
+				jointPoint.transform(transformation);
+			}
+
+			result.addPoints(jointPoints);
+		}
 	}
 
-	private void convert(SMesh mesh, GameTransformation transformation, Collection<AnimatorWireFrameLine> lines) {
+	private void convert(SMesh mesh, GameTransformation transformation, AnimatorWireFrame result) {
 		Color color = Color.BLACK;
 
 		List<SShape> figures = mesh.getFigures();
@@ -113,21 +122,24 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
 					Vector4f v1 = from.getPosition();
 					Vector4f v2 = to.getPosition();
-					AnimatorWireFramePoint p1 = new AnimatorWireFramePoint(v1.get(0), v1.get(1), v1.get(2), color);
-					AnimatorWireFramePoint p2 = new AnimatorWireFramePoint(v2.get(0), v2.get(1), v2.get(2), color);
+					AnimatorWireFramePoint p1 = new AnimatorWireFramePoint(v1.get(0), v1.get(1), v1.get(2), color, false);
+					AnimatorWireFramePoint p2 = new AnimatorWireFramePoint(v2.get(0), v2.get(1), v2.get(2), color, false);
+					AnimatorWireFramePoint center = new AnimatorWireFramePoint(0.0, 0.0, 0.0, Color.LIGHT_GRAY, true);
 
                     if(transformation != null) {
                         p1.transform(transformation);
                         p2.transform(transformation);
+                        center.transform(transformation);
                     }
 
-                    lines.add(new AnimatorWireFrameLine(p1, p2, color));
+					result.addLine(new AnimatorWireFrameLine(p1, p2, color));
+					result.addPoint(center);
 				}
 			}
 		}
 	}
 
-	private void convert(FreeTriangleMeshModel mesh, GameTransformation transformation, Collection<AnimatorWireFrameLine> lines) {
+	private void convert(FreeTriangleMeshModel mesh, GameTransformation transformation, AnimatorWireFrame result) {
 		Map<Integer, FreeTriangleMeshVertex> map = new HashMap<>();
 		Integer index = 0;
 
@@ -145,21 +157,23 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 			FreeTriangleMeshVertex v2 = map.get(triangle.getVertex2());
 			FreeTriangleMeshVertex v3 = map.get(triangle.getVertex3());
 
-			AnimatorWireFramePoint p1 = new AnimatorWireFramePoint(v1.getPX(), v1.getPY(), v1.getPZ(), color);
-			AnimatorWireFramePoint p2 = new AnimatorWireFramePoint(v2.getPX(), v2.getPY(), v2.getPZ(), color);
-			AnimatorWireFramePoint p3 = new AnimatorWireFramePoint(v3.getPX(), v3.getPY(), v3.getPZ(), color);
+			AnimatorWireFramePoint p1 = new AnimatorWireFramePoint(v1.getPX(), v1.getPY(), v1.getPZ(), color, false);
+			AnimatorWireFramePoint p2 = new AnimatorWireFramePoint(v2.getPX(), v2.getPY(), v2.getPZ(), color, false);
+			AnimatorWireFramePoint p3 = new AnimatorWireFramePoint(v3.getPX(), v3.getPY(), v3.getPZ(), color, false);
+			AnimatorWireFramePoint center = new AnimatorWireFramePoint(0.0, 0.0, 0.0, Color.LIGHT_GRAY, true);
 
             if(transformation != null) {
                 p1.transform(transformation);
                 p2.transform(transformation);
                 p3.transform(transformation);
+                center.transform(transformation);
             }
 
-			lines.add(new AnimatorWireFrameLine(p1, p2, color));
-			lines.add(new AnimatorWireFrameLine(p2, p3, color));
-			lines.add(new AnimatorWireFrameLine(p3, p1, color));
+			result.addLine(new AnimatorWireFrameLine(p1, p2, color));
+			result.addLine(new AnimatorWireFrameLine(p2, p3, color));
+			result.addLine(new AnimatorWireFrameLine(p3, p1, color));
+			result.addPoint(center);
 		}
 	}
-
 
 }

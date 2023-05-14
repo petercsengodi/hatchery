@@ -10,15 +10,17 @@ public class AnimatorWireFramePoint {
 	private double y;
 	private double z;
 	private Color color;
+	private boolean cross;
 
 	public AnimatorWireFramePoint() {
 	}
 
-	public AnimatorWireFramePoint(double x, double y, double z, Color color) {
+	public AnimatorWireFramePoint(double x, double y, double z, Color color, boolean cross) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.color = color;
+		this.cross = cross;
 	}
 
 	public double valueOfIndex(int index) {
@@ -26,7 +28,7 @@ public class AnimatorWireFramePoint {
 			case 0:
 				return x;
 			case 1:
-				return y;
+				return -y;
 			case 2:
 				return z;
 			case 3:
@@ -79,6 +81,14 @@ public class AnimatorWireFramePoint {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	public boolean isCross() {
+		return cross;
+	}
+
+	public void setCross(boolean cross) {
+		this.cross = cross;
 	}
 
 }

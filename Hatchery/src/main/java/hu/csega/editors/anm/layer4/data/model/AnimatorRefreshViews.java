@@ -6,6 +6,7 @@ import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFramePoint;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.g3d.GameTransformation;
@@ -14,9 +15,11 @@ import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
+import hu.csega.games.library.animation.v1.anm.AnimationVector;
 import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -152,10 +155,26 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			setPart.setMesh(part.getMesh());
 			setPart.setTransformation(transformation);
 			setPart.setFlipped(flipped);
-			parts.add(setPart);
 
 			List<AnimationPartJoint> joints = part.getJoints();
-			if(joints.size() > 0) {
+			if(joints != null && !joints.isEmpty()) {
+				List<AnimatorWireFramePoint> jointPoints = new ArrayList<>(joints.size());
+				for(AnimationPartJoint joint : joints) {
+					AnimationVector pos = joint.getRelativePosition();
+					float[] v = pos.getV();
+					double x = v[0] / v[3];
+					double y = v[1] / v[3];
+					double z = v[2] / v[3];
+					AnimatorWireFramePoint p = new AnimatorWireFramePoint(x, y, z, Color.GREEN, false);
+					jointPoints.add(p);
+				}
+
+				setPart.setJointPoints(jointPoints);
+			}
+
+			parts.add(setPart);
+
+			if(joints != null && joints.size() > 0) {
 				scenePart.getTransformation().createJointMatrix(m3);
 
 				for (AnimationPartJoint joint : part.getJoints()) {

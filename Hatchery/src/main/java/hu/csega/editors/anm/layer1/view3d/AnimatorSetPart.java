@@ -1,7 +1,10 @@
 package hu.csega.editors.anm.layer1.view3d;
 
+import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFramePoint;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameTransformation;
+
+import java.util.List;
 
 public class AnimatorSetPart {
 
@@ -9,6 +12,7 @@ public class AnimatorSetPart {
 	private GameObjectHandler handler;
 	private GameTransformation transformation;
 	private boolean flipped;
+	private List<AnimatorWireFramePoint> jointPoints;
 
 	public String getMesh() {
 		return mesh;
@@ -40,5 +44,13 @@ public class AnimatorSetPart {
 
 	public void setFlipped(boolean flipped) {
 		this.flipped = flipped;
+	}
+
+	public List<AnimatorWireFramePoint> getJointPoints() {
+		return jointPoints;
+	}
+
+	public void setJointPoints(List<AnimatorWireFramePoint> jointPoints) {
+		this.jointPoints = jointPoints;
 	}
 }
