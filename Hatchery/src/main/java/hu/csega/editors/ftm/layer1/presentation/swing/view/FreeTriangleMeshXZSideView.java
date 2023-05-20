@@ -16,6 +16,11 @@ public class FreeTriangleMeshXZSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
+	public String label() {
+		return "Top";
+	}
+
+	@Override
 	protected void translate(double x, double y) {
 		FreeTriangleMeshModel model = getModel();
 		model.setCanvasXZTranslateX(x);

@@ -47,6 +47,12 @@ public class FreeTriangleMeshVertex implements Serializable {
 		return new FreeTriangleMeshPoint(pX, pY, pZ);
 	}
 
+	public FreeTriangleMeshVertex texture(double tx, double ty) {
+		this.tX = tx;
+		this.tY = ty;
+		return this;
+	}
+
 	public void move(double x, double y, double z) {
 		pX += x;
 		pY += y;

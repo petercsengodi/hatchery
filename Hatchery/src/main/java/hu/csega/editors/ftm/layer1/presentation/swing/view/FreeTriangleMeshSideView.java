@@ -20,6 +20,8 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		super(facade);
 	}
 
+	public abstract String label();
+
 	@Override
 	protected void paint2d(Graphics2D g) {
 		int widthDiv2 = lastSize.width / 2;
@@ -90,6 +92,10 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		g.setStroke(stroke);
 
 		g.translate(-widthDiv2, -heightDiv2);
+
+		g.setColor(Color.BLACK);
+		g.drawLine(0, 0, 300, 0);
+		g.drawString(label(), 10, 20);
 
 		Rectangle selectionBox = calculateSelectionBox();
 		if(selectionBox != null) {

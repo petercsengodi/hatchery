@@ -25,5 +25,24 @@ public class FreeTriangleMeshMesh implements Serializable {
 		this.triangles = triangles;
 	}
 
+	public void addStrip(FreeTriangleMeshVertex... vertices) {
+		int last2Index = -1, last1Index = -1, last0Index;
+		for(FreeTriangleMeshVertex vertex : vertices) {
+			last0Index = this.vertices.size();
+			this.vertices.add(vertex);
+
+			if(last2Index > -1) {
+				if(last2Index % 2 == 0) {
+					this.triangles.add(new FreeTriangleMeshTriangle(last2Index, last1Index, last0Index));
+				} else {
+					this.triangles.add(new FreeTriangleMeshTriangle(last1Index, last2Index, last0Index));
+				}
+			}
+
+			last2Index = last1Index;
+			last1Index = last0Index;
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 }

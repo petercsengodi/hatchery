@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.UnitStore;
 
 public class FreeTriangleMeshMenu {
@@ -22,8 +23,14 @@ public class FreeTriangleMeshMenu {
 		JMenu textureMenu = createTextureMenu(frame, facade);
 		menuBar.add(textureMenu);
 
+		JMenu shapesMenu = createShapesMenu(frame, facade);
+		menuBar.add(shapesMenu);
+
 		JMenu exportMenu = createExportMenu(frame, facade);
 		menuBar.add(exportMenu);
+
+		JMenu viewsMenu = createViewsMenu(frame, facade);
+		menuBar.add(viewsMenu);
 
 		frame.setJMenuBar(menuBar);
 	}
@@ -85,6 +92,27 @@ public class FreeTriangleMeshMenu {
 		return textureMenu;
 	}
 
+	private static JMenu createShapesMenu(JFrame frame, final GameEngineFacade facade) {
+		JMenuItem cubeItem = new JMenuItem("Cube");
+		cubeItem.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.createBasicCube();
+			facade.window().repaintEverything();
+		});
+
+		JMenuItem sphereItem = new JMenuItem("Sphere");
+		sphereItem.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.createBasicSphere();
+			facade.window().repaintEverything();
+		});
+
+		JMenu shapesMenu = new JMenu("Basic Shapes");
+		shapesMenu.add(cubeItem);
+		shapesMenu.add(sphereItem);
+		return shapesMenu;
+	}
+
 	private static JMenu createExportMenu(JFrame frame, GameEngineFacade facade) {
 		ResourceAdapter resourceAdapter = UnitStore.instance(ResourceAdapter.class);
 
@@ -113,6 +141,19 @@ public class FreeTriangleMeshMenu {
 		exportMenu.add(mwcExportItem);
 
 		return exportMenu;
+	}
+
+	private static JMenu createViewsMenu(final JFrame frame, GameEngineFacade facade) {
+		JMenuItem refreshWindowItem = new JMenuItem("Refresh Window");
+		refreshWindowItem.addActionListener(event -> {
+			frame.invalidate();
+			frame.validate();
+			frame.repaint();
+		});
+
+		JMenu viewsMenu = new JMenu("Views");
+		viewsMenu.add(refreshWindowItem);
+		return viewsMenu;
 	}
 
 }

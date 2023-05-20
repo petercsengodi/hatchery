@@ -438,6 +438,57 @@ public class FreeTriangleMeshModel implements Serializable {
 		}
 	}
 
+	public void createBasicCube() {
+		snapshots().addState(mesh);
+
+		mesh.addStrip(
+				new FreeTriangleMeshVertex(-100, -100, -100).texture(0, 0),
+				new FreeTriangleMeshVertex(-100, 100, -100).texture(0, 1),
+				new FreeTriangleMeshVertex(100, -100, -100).texture(1, 0),
+				new FreeTriangleMeshVertex(100, 100, -100).texture(1, 1)
+		);
+
+		mesh.addStrip(
+				new FreeTriangleMeshVertex(100, 100, 100).texture(1, 1),
+				new FreeTriangleMeshVertex(-100, 100, 100).texture(0, 1),
+				new FreeTriangleMeshVertex(100, -100, 100).texture(1, 0),
+				new FreeTriangleMeshVertex(-100, -100, 100).texture(0, 0)
+		);
+
+		mesh.addStrip(
+				new FreeTriangleMeshVertex(-100, -100, -100).texture(0, 0),
+				new FreeTriangleMeshVertex(100, -100, -100).texture(1, 0),
+				new FreeTriangleMeshVertex(-100, -100, 100).texture(0, 1),
+				new FreeTriangleMeshVertex(100, -100, 100).texture(1, 1)
+		);
+
+		mesh.addStrip(
+				new FreeTriangleMeshVertex(100, 100, 100).texture(1, 1),
+				new FreeTriangleMeshVertex(100, 100, -100).texture(1, 0),
+				new FreeTriangleMeshVertex(-100, 100, 100).texture(0, 1),
+				new FreeTriangleMeshVertex(-100, 100, -100).texture(0, 0)
+		);
+
+		mesh.addStrip(
+				new FreeTriangleMeshVertex(-100, -100, -100).texture(0, 0),
+				new FreeTriangleMeshVertex(-100, -100, 100).texture(1, 0),
+				new FreeTriangleMeshVertex(-100, 100, -100).texture(0, 1),
+				new FreeTriangleMeshVertex(-100, 100, 100).texture(1, 1)
+		);
+
+		mesh.addStrip(
+				new FreeTriangleMeshVertex(100, 100, 100).texture(1, 1),
+				new FreeTriangleMeshVertex(100, -100, 100).texture(1, 0),
+				new FreeTriangleMeshVertex(100, 100, -100).texture(0, 1),
+				new FreeTriangleMeshVertex(100, -100, -100).texture(0, 0)
+		);
+
+		invalidate();
+	}
+
+	public void createBasicSphere() {
+	}
+
 	public List<FreeTriangleMeshGroup> getGroups() {
 		initGroupsIfNeeded();
 		return groups;
@@ -603,5 +654,4 @@ public class FreeTriangleMeshModel implements Serializable {
 	private static final Random RND = new Random(System.currentTimeMillis());
 
 	private static final long serialVersionUID = 1L;
-
 }
