@@ -1,19 +1,19 @@
 package hu.csega.editors.anm.layer1.swing.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-
-import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
-public class AnimatorMenuAddNewPart implements ActionListener {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.*;
+
+public class AnimatorMenuChangePart implements ActionListener {
 
 	private AnimatorUIComponents ui;
 	private ResourceAdapter resourceAdapter;
@@ -55,7 +55,7 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 
 			logger.info("Selected file: " + filename);
 			AnimatorModel model = UnitStore.instance(AnimatorModel.class);
-			model.addNewPart(filename);
+			model.changePart(filename);
 
 			break;
 
@@ -64,5 +64,5 @@ public class AnimatorMenuAddNewPart implements ActionListener {
 		}
 	}
 
-	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuAddNewPart.class);
+	private static final Logger logger = LoggerFactory.createLogger(AnimatorMenuChangePart.class);
 }

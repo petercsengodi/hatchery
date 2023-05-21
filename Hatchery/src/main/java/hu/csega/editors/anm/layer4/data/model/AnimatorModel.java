@@ -66,6 +66,10 @@ public class AnimatorModel {
 		parts.addNewPart(filename);
 	}
 
+	public void changePart(String filename) {
+		parts.changePart(filename);
+	}
+
 	public void editPartName(String displayName) {
 
 	}

@@ -49,6 +49,22 @@ public class AnimatorPartManipulator {
         refreshViews.refreshAll();
     }
 
+    public void changePart(String filename) {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            String partIdentifier = persistent.getSelectedPart();
+            if(partIdentifier == null) {
+                return;
+            }
+
+            Animation animation = persistent.getAnimation();
+            AnimationPart part = animation.getParts().get(partIdentifier);
+            part.setMesh(filename);
+        }
+
+        refreshViews.refreshAll();
+    }
+
     public void selectPart(String identifier) {
         synchronized (model) {
             AnimationPersistent persistent = model.getPersistent();
