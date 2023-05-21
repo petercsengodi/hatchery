@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {
 
@@ -38,10 +40,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 	private AnimatorUIComponents components;
 
 	private Matrix4f baseTransformation = new Matrix4f();
-	private Matrix4f commulativeAndBaseTransformation = new Matrix4f();
-	private Matrix4f modelTransformation = new Matrix4f();
-	private Matrix4f setPartTransformation = new Matrix4f();
-	private Matrix4f jointTransformation = new Matrix4f();
 
 	@Override
 	public void refreshAll() {
@@ -135,6 +133,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				return;
 			}
 
+			Matrix4f commulativeAndBaseTransformation = new Matrix4f();
 			if(commulativeTransformation == null) {
 				commulativeAndBaseTransformation.set(part.getBasicTransformation().getM());
 			} else {
@@ -142,18 +141,21 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				commulativeTransformation.mul(baseTransformation, commulativeAndBaseTransformation);
 			}
 
+			Matrix4f modelTransformation = new Matrix4f();
 			scenePart.getTransformation().createModelMatrix(modelTransformation);
+
+			Matrix4f setPartTransformation = new Matrix4f();
 			commulativeAndBaseTransformation.mul(modelTransformation, setPartTransformation);
 
-			GameTransformation transformation = new GameTransformation();
-			transformation.importFrom(setPartTransformation);
+			GameTransformation convertedTransformation = new GameTransformation();
+			convertedTransformation.importFrom(setPartTransformation);
 
 			float[] flip = scenePart.getTransformation().getFlip().getV();
 			boolean flipped = (flip[0] < 0f) ^ (flip[1] < 0f) ^ (flip[2] < 0f);
 
 			AnimatorSetPart setPart = new AnimatorSetPart();
 			setPart.setMesh(part.getMesh());
-			setPart.setTransformation(transformation);
+			setPart.setTransformation(convertedTransformation);
 			setPart.setFlipped(flipped);
 
 			List<AnimationPartJoint> joints = part.getJoints();
@@ -176,14 +178,21 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 			if(joints != null && joints.size() > 0) {
 				// scenePart.getTransformation().createJointMatrix(modelTransformation);
-				Matrix4f base = new Matrix4f(setPartTransformation);
+				Matrix4f base = new Matrix4f();
+				Vector4f tv = new Vector4f();
 
 				for (AnimationPartJoint joint : part.getJoints()) {
+					tv.set(0f, 0f, 0f, 1f);
+					tv.mul(setPartTransformation);
+					setPartTransformation.translateLocal(-tv.x / tv.w, -tv.y / tv.w, -tv.z / tv.w, base);
+
 					float[] v = joint.getRelativePosition().getV();
-					base.translateLocal(v[0], v[1], v[2], jointTransformation);
+					tv.set(v[0], v[1], v[2], v[3]);
+					tv.mul(setPartTransformation);
+					base.translateLocal(tv.x / tv.w, tv.y / tv.w, tv.z / tv.w, base);
 
 					// jointTransformation.invert(_m); // ???
-					generateParts(animation, currentScene, joint.getIdentifier(), jointTransformation, parts);
+					generateParts(animation, currentScene, joint.getIdentifier(), base, parts);
 				}
 			} // end for each joint
 		} // end if part not null
