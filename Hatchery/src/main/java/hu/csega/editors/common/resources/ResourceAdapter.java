@@ -28,4 +28,6 @@ public interface ResourceAdapter {
 
     String animationFolder();
 
+    String cleanUpResourceFilename(String filename);
+
 }

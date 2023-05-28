@@ -7,6 +7,10 @@ import java.io.File;
 
 public class FileResourceAdapter implements ResourceAdapter {
 
+    private static final String GAME_RESOURCES_FOLDER = "GameResources";
+    private static final String GAME_RESOURCES_MARKER = File.separator + GAME_RESOURCES_FOLDER + File.separator;
+    private static final int GAME_RESOURCES_MARKER_LENGTH = GAME_RESOURCES_MARKER.length();
+
     private final String projectName;
     private final String userRoot;
     private final String projectRoot;
@@ -38,7 +42,7 @@ public class FileResourceAdapter implements ResourceAdapter {
         this.projectRoot = this.workspaceRoot + projectName + File.separator;
         logger.info("Project root: " + this.projectRoot);
 
-        this.resourcesRoot = this.workspaceRoot + "GameResources" + File.separator;
+        this.resourcesRoot = this.workspaceRoot + GAME_RESOURCES_FOLDER + File.separator;
         logger.info("Resources root: " + this.resourcesRoot);
 
         this.shaderFolder = this.resourcesRoot + "shaders";
@@ -129,6 +133,20 @@ public class FileResourceAdapter implements ResourceAdapter {
     @Override
     public String animationFolder() {
         return animationFolder;
+    }
+
+    @Override
+    public String cleanUpResourceFilename(String filename) {
+        if(filename == null) {
+            return null;
+        }
+
+        int index = filename.indexOf(GAME_RESOURCES_MARKER);
+        if(index > -1 && filename.length() > GAME_RESOURCES_MARKER_LENGTH) {
+            return GAME_RESOURCES_FOLDER + File.separator + filename.substring(index + GAME_RESOURCES_MARKER_LENGTH);
+        }
+
+        return filename;
     }
 
     private static final Logger logger = LoggerFactory.createLogger(FileResourceAdapter.class);

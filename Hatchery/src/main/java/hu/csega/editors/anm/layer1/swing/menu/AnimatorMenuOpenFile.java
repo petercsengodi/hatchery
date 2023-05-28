@@ -4,12 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.common.SerializationUtil;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer5.files.storage.LegacyAnimationParser;
@@ -26,6 +29,7 @@ class AnimatorMenuOpenFile implements ActionListener {
 	private JFrame frame;
 	private JFileChooser openDialog;
 	private GameEngineFacade facade;
+	private ResourceAdapter resourceAdapter;
 
 	public AnimatorMenuOpenFile(JFrame frame, JFileChooser openDialog, GameEngineFacade facade) {
 		this.frame = frame;
@@ -58,6 +62,9 @@ class AnimatorMenuOpenFile implements ActionListener {
 			} else {
 				// Loading serialized, binary data
 				AnimationPersistent persistent = SerializationUtil.deserialize(bytes, AnimationPersistent.class);
+
+				cleanUpMeshFilenames(persistent.getAnimation().getParts());
+
 				model.setPersistent(persistent);
 				model.clearSnapshots();
 			}
@@ -68,6 +75,18 @@ class AnimatorMenuOpenFile implements ActionListener {
 
 		default:
 			break;
+		}
+	}
+
+	private void cleanUpMeshFilenames(Map<String, AnimationPart> parts) {
+		if(parts != null && !parts.isEmpty()) {
+			if(resourceAdapter == null) {
+				resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+			}
+
+			for(AnimationPart part : parts.values()) {
+				part.setMesh(resourceAdapter.cleanUpResourceFilename(part.getMesh()));
+			}
 		}
 	}
 

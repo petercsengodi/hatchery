@@ -97,7 +97,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			}
 
 			if(filename.charAt(0) != '/') {
-				filename = resourceAdapter.projectRoot() + filename;
+				filename = resourceAdapter.resourcesRoot() + filename;
 			}
 
 			GameObjectHandler handler = store.loadModel(filename);
