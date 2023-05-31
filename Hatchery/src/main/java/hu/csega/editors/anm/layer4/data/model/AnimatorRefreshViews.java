@@ -8,7 +8,6 @@ import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFramePoint;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
-import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
@@ -25,13 +24,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 	private AnimatorModel model;
-	private ResourceAdapter resourceAdapter;
 
 	private ComponentExtractPartList partListExtractor;
 	private ComponentExtractJointList jointListExtractor;
@@ -191,7 +188,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 					tv.mul(setPartTransformation);
 					base.translateLocal(tv.x / tv.w, tv.y / tv.w, tv.z / tv.w, base);
 
-					// jointTransformation.invert(_m); // ???
 					generateParts(animation, currentScene, joint.getIdentifier(), base, parts);
 				}
 			} // end for each joint
@@ -201,11 +197,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 	@Dependency
 	public void setAnimatorModel(AnimatorModel animatorModel) {
 		this.model = animatorModel;
-	}
-
-	@Dependency
-	public void setResourceAdapter(ResourceAdapter resourceAdapter) {
-		this.resourceAdapter = resourceAdapter;
 	}
 
 }
