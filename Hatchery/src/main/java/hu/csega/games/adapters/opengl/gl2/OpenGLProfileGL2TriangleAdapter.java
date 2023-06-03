@@ -8,7 +8,6 @@ import org.joml.Vector4f;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -16,7 +15,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 import hu.csega.games.adapters.opengl.OpenGLProfileAdapter;
-import hu.csega.games.adapters.opengl.models.OpenGLModelBuilder;
+import hu.csega.games.adapters.opengl.models.OpenGLMeshBuilder;
 import hu.csega.games.adapters.opengl.models.OpenGLModelContainer;
 import hu.csega.games.adapters.opengl.models.OpenGLModelStoreImpl;
 import hu.csega.games.adapters.opengl.models.OpenGLTextureContainer;
@@ -214,6 +213,22 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
+	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store) {
+		gl2.glPushMatrix();
+
+		gl2.glMultMatrixf(transformation.getFloats(), 0);
+
+		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
+		inverseLookAt.get(tmpMatrix);
+		gl2.glMultMatrixf(tmpMatrix, 0);
+
+		gl2.glScalef(placement.scale.x, placement.scale.y, placement.scale.z);
+
+		drawModel(glAutoDrawable, model, store);
+	}
+
+	@Override
 	public void disposeModel(GLAutoDrawable glAutodrawable, OpenGLModelContainer model) {
 		// nothing to do in this implementation
 	}
@@ -276,7 +291,7 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		float vx, vy, vz, nx, ny, nz, tx, ty;
 		int offset;
 
-		OpenGLModelBuilder builder = model.builder();
+		OpenGLMeshBuilder builder = model.builder();
 		int numberOfShapes = builder.numberOfShapes();
 
 		for(int part = 0; part < numberOfShapes; part++) {

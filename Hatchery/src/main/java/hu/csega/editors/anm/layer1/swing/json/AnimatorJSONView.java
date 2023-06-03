@@ -32,14 +32,8 @@ public class AnimatorJSONView extends JPanel {
         this.saveButton.addActionListener(event -> { this.model.changeJSON(this.jsonText.getText()); });
     }
 
-    public void setJSON(Object object) {
-        try {
-            JSONObject json = new JSONObject(object);
-            String text = json.toString(2);
-            jsonText.setText(text);
-        } catch(JSONException ex) {
-            jsonText.setText("Exception should not have occurred at this point, but it had.");
-        }
+    public void setJSON(String json) {
+        jsonText.setText(json);
     }
 
     private static final long serialVersionUID = 1L;

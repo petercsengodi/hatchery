@@ -25,7 +25,7 @@ import hu.csega.games.adapters.opengl.OpenGLProfileAdapter;
 import hu.csega.games.adapters.opengl.consts.OpenGLAttribute;
 import hu.csega.games.adapters.opengl.consts.OpenGLFragment;
 import hu.csega.games.adapters.opengl.consts.OpenGLSampler;
-import hu.csega.games.adapters.opengl.models.OpenGLModelBuilder;
+import hu.csega.games.adapters.opengl.models.OpenGLMeshBuilder;
 import hu.csega.games.adapters.opengl.models.OpenGLModelContainer;
 import hu.csega.games.adapters.opengl.models.OpenGLModelStoreImpl;
 import hu.csega.games.adapters.opengl.models.OpenGLTextureContainer;
@@ -259,7 +259,7 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 				gl3.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0); // may be closed after attributes are added according to example code
 			}
 
-			OpenGLErrorUtil.checkError(gl3, "loadModel");
+			OpenGLErrorUtil.checkError(gl3, "loadMesh");
 		} catch (Exception ex) {
 			logger.error("Exception in model initialization: " + filename, ex);
 		} catch (Throwable t) {
@@ -291,6 +291,26 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 
 		transformation.exportTo(modelTransformation);
 		calculatedMatrix.mul(modelTransformation);
+
+		calculatedMatrix.get(matrixBuffer);
+
+		drawModel(glAutoDrawable, model, store);
+	}
+
+	@Override
+	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store) {
+		calculatedMatrix.set(perspectiveMatrix);
+		calculatedMatrix.mul(cameraMatrix);
+
+		transformation.exportTo(modelTransformation);
+		calculatedMatrix.mul(modelTransformation);
+
+		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
+		calculatedMatrix.mul(inverseLookAt);
+
+		placement.calculateBasicScaleMatrix(basicScale);
+		calculatedMatrix.mul(basicScale);
 
 		calculatedMatrix.get(matrixBuffer);
 
@@ -348,7 +368,7 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 			int offsetVerticesInHandleArray = model.getOffsetOfVertexBuffers();
 			int offsetOfIndicesInHandlerArray = model.getOffsetOfIndexBuffers();
 
-			OpenGLModelBuilder builder = model.builder();
+			OpenGLMeshBuilder builder = model.builder();
 
 			for(int i = 0; i < numberOfShapes; i++) {
 				OpenGLTextureContainer textureContainer = builder.textureContainer(i);

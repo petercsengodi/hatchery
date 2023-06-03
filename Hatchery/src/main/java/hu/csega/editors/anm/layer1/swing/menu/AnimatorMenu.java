@@ -82,6 +82,10 @@ public class AnimatorMenu {
 		refreshViews.addActionListener(new AnimatorMenuRefreshAllViews());
 		menu.add(refreshViews);
 
+		JMenuItem generateJSON = new JMenuItem("Generate JSON");
+		generateJSON.addActionListener(new AnimatorMenuGenerateJSON());
+		menu.add(generateJSON);
+
 		JMenuItem refreshWindow = new JMenuItem("Refresh Window");
 		refreshWindow.addActionListener(new AnimatorMenuRefreshWindow(frame));
 		menu.add(refreshWindow);

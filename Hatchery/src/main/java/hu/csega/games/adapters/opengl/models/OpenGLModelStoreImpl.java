@@ -16,22 +16,28 @@ import org.json.JSONObject;
 
 import com.jogamp.opengl.GLAutoDrawable;
 
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.adapters.opengl.OpenGLProfileAdapter;
+import hu.csega.games.engine.anm.GameAnimation;
 import hu.csega.games.engine.ftm.GameMesh;
 import hu.csega.games.engine.g3d.GameModelBuilder;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameObjectType;
 import hu.csega.games.engine.g3d.GameSelectionLine;
+import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
 public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	private OpenGLProfileAdapter adapter;
+	private ResourceAdapter resourceAdapter;
 
 	private String shaderRoot;
 	private String textureRoot;
+	private String meshRoot;
+	private String animationRoot;
 
 	private long identifierCounter = 1;
 	private boolean disposeAllWhenPossible = false;
@@ -40,6 +46,7 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 	private Map<String, GameObjectHandler> toDispose = new HashMap<>();
 	private Set<GameObjectHandler> toInitialize = new HashSet<>();
 	private Map<GameObjectHandler, OpenGLObjectContainer> containers = new HashMap<>();
+    private Map<GameObjectHandler, GameAnimation> animations = new HashMap<>(); // FIXME: should be in containers map
 
 	private boolean programInitialized = false;
 
@@ -55,6 +62,14 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	public void setTextureRoot(String textureRoot) {
 		this.textureRoot = textureRoot;
+	}
+
+	public void setMeshRoot(String meshRoot) {
+		this.meshRoot = meshRoot;
+	}
+
+	public void setAnimationRoot(String animationRoot) {
+		this.animationRoot = animationRoot;
 	}
 
 	@Override
@@ -119,17 +134,17 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	@Override
 	public GameObjectHandler loadTexture(String filename) {
-		String key = textureRoot + filename;
-		GameObjectHandler handler = handlers.get(key);
+		String absolutePath = textureRoot + filename;
+		GameObjectHandler handler = handlers.get(absolutePath);
 
 		if(handler == null) {
 			handler = nextHandler(GameObjectType.TEXTURE);
-			handlers.put(key, handler);
+			handlers.put(absolutePath, handler);
 		}
 
 		OpenGLObjectContainer container = containers.get(handler);
 		if(container == null) {
-			container = new OpenGLTextureContainer(adapter, key);
+			container = new OpenGLTextureContainer(adapter, absolutePath);
 			containers.put(handler, container);
 			toInitialize.add(handler);
 		}
@@ -138,14 +153,14 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 	}
 
 	@Override
-	public GameObjectHandler buildModel(GameModelBuilder builder) {
-		String filename = "__id:" + identifierCounter;
-		GameObjectHandler handler = nextHandler(GameObjectType.MODEL);
-		handlers.put(filename, handler);
+	public GameObjectHandler buildMesh(GameModelBuilder builder) {
+		String absolutePath = "__id:" + identifierCounter;
+		GameObjectHandler handler = nextHandler(GameObjectType.MESH);
+		handlers.put(absolutePath, handler);
 
-		OpenGLModelBuilder modelBuilder = new OpenGLModelBuilder(builder, this);
+		OpenGLMeshBuilder modelBuilder = new OpenGLMeshBuilder(builder, this);
 
-		OpenGLObjectContainer container = new OpenGLCustomModelContainer(filename, this, adapter, modelBuilder);
+		OpenGLObjectContainer container = new OpenGLCustomMeshContainer(absolutePath, this, adapter, modelBuilder);
 		containers.put(handler, container);
 
 		toInitialize.add(handler);
@@ -153,32 +168,38 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 	}
 
 	@Override
-	public GameObjectHandler loadModel(String filename) {
-		GameObjectHandler handler = handlers.get(filename);
+	public GameObjectHandler loadMesh(String filename) {
+		if(resourceAdapter == null) { // FIXME: Get this out of here!
+			resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+		}
+
+		String absolutePath = meshRoot + resourceAdapter.cleanUpResourceFilename(filename);
+		GameObjectHandler handler = handlers.get(absolutePath);
 
 		if(handler == null) {
-			handler = nextHandler(GameObjectType.MODEL);
-			handlers.put(filename, handler);
+			handler = nextHandler(GameObjectType.MESH);
+			handlers.put(absolutePath, handler);
 		}
 
 		OpenGLObjectContainer container = containers.get(handler);
 		if(container == null) {
 
-			File file = new File(filename);
+			File file = new File(absolutePath);
 			byte[] bytes = load(file);
 			String string = new String(bytes, UTF_8);
 
-			OpenGLModelBuilder modelBuilder;
+			OpenGLMeshBuilder modelBuilder;
 			try {
-				JSONObject json = new JSONObject(string);
+                JSONObject json = new JSONObject(string);
 				GameMesh mesh = new GameMesh();
 				mesh.fromJSONObject(json);
-				modelBuilder = new OpenGLModelBuilder(mesh, this);
+                mesh.setTexture(resourceAdapter.cleanUpResourceFilename(mesh.getTexture()));
+				modelBuilder = new OpenGLMeshBuilder(mesh, this);
 			} catch(JSONException ex) {
-				throw new RuntimeException("Couldn't parse file: " + filename);
+				throw new RuntimeException("Couldn't parse file: " + absolutePath);
 			}
 
-			container = new OpenGLCustomModelContainer(filename, this, adapter, modelBuilder);
+			container = new OpenGLCustomMeshContainer(absolutePath, this, adapter, modelBuilder);
 			containers.put(handler, container);
 			toInitialize.add(handler);
 		}
@@ -188,8 +209,38 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	@Override
 	public GameObjectHandler loadAnimation(String filename) {
-		// TODO Auto-generated method stub
-		return null;
+		String absolutePath = animationRoot + filename;
+		GameObjectHandler handler = handlers.get(absolutePath);
+
+		if(handler == null) {
+			handler = nextHandler(GameObjectType.ANIMATION);
+			handlers.put(absolutePath, handler);
+		}
+
+		GameAnimation gameAnimation = animations.get(handler);
+		if(gameAnimation == null) {
+
+            File file = new File(absolutePath);
+            byte[] bytes = load(file);
+            String string = new String(bytes, UTF_8);
+
+            try {
+                JSONObject json = new JSONObject(string);
+                gameAnimation = new GameAnimation();
+                gameAnimation.fromJSONObject(json);
+            } catch(JSONException ex) {
+                throw new RuntimeException("Couldn't parse file: " + absolutePath);
+            }
+
+            String[] meshes = gameAnimation.getMeshes();
+            for(String mesh : meshes) {
+                loadMesh(mesh);
+            }
+
+			animations.put(handler, gameAnimation);
+        }
+
+		return handler;
 	}
 
 	@Override
@@ -216,6 +267,10 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 	public OpenGLModelContainer resolveModel(GameObjectHandler modelReference) {
 		OpenGLModelContainer model = (OpenGLModelContainer)containers.get(modelReference);
 		return model;
+	}
+
+	public GameAnimation resolveAnimation(GameObjectHandler animationReference) {
+		return animations.get(animationReference);
 	}
 
 	private boolean disposeEnqueued() {

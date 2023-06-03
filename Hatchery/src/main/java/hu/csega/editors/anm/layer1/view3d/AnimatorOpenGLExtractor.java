@@ -100,7 +100,7 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 				filename = resourceAdapter.resourcesRoot() + filename;
 			}
 
-			GameObjectHandler handler = store.loadModel(filename);
+			GameObjectHandler handler = store.loadMesh(filename);
 			if(handler == null) {
 				throw new RuntimeException("Couldn't load game model: " + filename);
 			}

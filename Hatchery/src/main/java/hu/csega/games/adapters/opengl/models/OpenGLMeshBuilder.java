@@ -9,7 +9,7 @@ import hu.csega.games.engine.g3d.GameModelBuilder;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectVertex;
 
-public class OpenGLModelBuilder {
+public class OpenGLMeshBuilder {
 
 	private OpenGLModelStoreImpl store;
 	private GameObjectHandler textureReference;
@@ -19,7 +19,7 @@ public class OpenGLModelBuilder {
 	private int[] numberOfVertices;
 	private int[] numberOfIndices;
 
-	public OpenGLModelBuilder(GameModelBuilder builder, OpenGLModelStoreImpl store) {
+	public OpenGLMeshBuilder(GameModelBuilder builder, OpenGLModelStoreImpl store) {
 		this.textureReference = builder.getTextureHandler(); // "res/example/texture.png"
 		this.builder = builder;
 		this.store = store;
@@ -33,7 +33,7 @@ public class OpenGLModelBuilder {
 		this.numberOfIndices[indexIndex] = builder.getIndices().size();
 	}
 
-	public OpenGLModelBuilder(GameMesh mesh, OpenGLModelStoreImpl store) {
+	public OpenGLMeshBuilder(GameMesh mesh, OpenGLModelStoreImpl store) {
 		this.textureReference = store.loadTexture(mesh.getTexture());
 		this.store = store;
 		this.mesh = mesh;

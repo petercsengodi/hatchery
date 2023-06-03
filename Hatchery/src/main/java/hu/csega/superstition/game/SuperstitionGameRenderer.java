@@ -46,7 +46,9 @@ public class SuperstitionGameRenderer {
 
 		g.drawModel(elements.boxModel, universe.boxPlacement4);
 
-		g.drawAnimation(null, 0, null);
+		GameObjectPlacement center = new GameObjectPlacement();
+		int sceneIndex = (int)((System.currentTimeMillis() / 100L) % 50);
+		g.drawAnimation(elements.testAnimationHandler, sceneIndex, center);
 	}
 
 }

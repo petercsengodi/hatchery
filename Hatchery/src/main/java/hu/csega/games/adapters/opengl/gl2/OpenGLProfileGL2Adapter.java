@@ -164,6 +164,12 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
+	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void disposeModel(GLAutoDrawable glAutodrawable, OpenGLModelContainer model) {
 		// TODO Auto-generated method stub
 

@@ -23,10 +23,14 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 
 	private String shaderRoot;
 	private String textureRoot;
+	private String meshRoot;
+	private String animationRoot;
 
-	public SuperstitionOpenGLConnector(String shaderRoot, String textureRoot) {
+	public SuperstitionOpenGLConnector(String shaderRoot, String textureRoot, String meshRoot, String animationRoot) {
 		this.shaderRoot = shaderRoot;
 		this.textureRoot = textureRoot;
+		this.meshRoot = meshRoot;
+		this.animationRoot = animationRoot;
 	}
 
 	@Override
@@ -93,7 +97,7 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 		descriptor.setVersion("v00.00.0001");
 		descriptor.setDescription("My work from the university severely changed and ported to Java/OpenGL.");
 
-		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot);
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot, meshRoot, animationRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 
 		engine.step(GameEngineStep.INIT, new SuperstitionInitStep());

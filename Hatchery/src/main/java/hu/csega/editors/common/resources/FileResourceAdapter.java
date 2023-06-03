@@ -143,7 +143,17 @@ public class FileResourceAdapter implements ResourceAdapter {
 
         int index = filename.indexOf(GAME_RESOURCES_MARKER);
         if(index > -1 && filename.length() > GAME_RESOURCES_MARKER_LENGTH) {
-            return GAME_RESOURCES_FOLDER + File.separator + filename.substring(index + GAME_RESOURCES_MARKER_LENGTH);
+            filename = filename.substring(index + GAME_RESOURCES_MARKER_LENGTH);
+        }
+
+        if(filename.startsWith("meshes/")) {
+            filename = filename.substring("meshes/".length());
+        } else if(filename.startsWith("textures/")) {
+            filename = filename.substring("textures/".length());
+        } else if(filename.startsWith("animations/")) {
+            filename = filename.substring("animations/".length());
+        } else if(filename.startsWith("shaders/")) {
+            filename = filename.substring("shaders/".length());
         }
 
         return filename;

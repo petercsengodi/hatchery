@@ -44,7 +44,7 @@ public abstract class OpenGLModelContainer implements OpenGLObjectContainer {
 	public void initialize(GLAutoDrawable glAutoDrawable) {
 		logger.trace("Initialing model: " + filename);
 
-		OpenGLModelBuilder model = builder();
+		OpenGLMeshBuilder model = builder();
 
 		if(openGLHandlers == null) {
 			numberOfShapes = model.numberOfShapes();
@@ -82,7 +82,12 @@ public abstract class OpenGLModelContainer implements OpenGLObjectContainer {
 		adapter.drawModel(glAutoDrawable, this, transformation, store);
 	}
 
-	public abstract OpenGLModelBuilder builder();
+	public void draw(GLAutoDrawable glAutoDrawable, GameObjectPlacement placement, GameTransformation transformation, boolean flipped) {
+		adapter.flippedFrontFace(glAutoDrawable, flipped);
+		adapter.drawModel(glAutoDrawable, this, placement, transformation, store);
+	}
+
+	public abstract OpenGLMeshBuilder builder();
 
 	public int[] getOpenGLHandlers() {
 		return openGLHandlers;

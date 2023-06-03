@@ -56,7 +56,7 @@ public class TransformationTesterRenderStep implements GameEngineCallback {
 				builder.getIndices().add(i);
 			}
 
-			convertedModel = store.buildModel(builder);
+			convertedModel = store.buildMesh(builder);
 		}
 
 

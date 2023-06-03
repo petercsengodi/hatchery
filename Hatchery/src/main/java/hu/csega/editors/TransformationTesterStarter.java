@@ -30,8 +30,10 @@ public class TransformationTesterStarter {
 
 		String shaderRoot = resourceAdapter.shaderRoot();
 		String textureRoot = resourceAdapter.textureRoot();
+		String meshRoot = resourceAdapter.meshRoot();
+		String animationRoot = resourceAdapter.animationRoot();
 
-		Connector connector = new TransformationTesterConnector(shaderRoot, textureRoot);
+		Connector connector = new TransformationTesterConnector(shaderRoot, textureRoot, meshRoot, animationRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

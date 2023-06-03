@@ -6,6 +6,8 @@ import com.jogamp.opengl.GLAutoDrawable;
 
 import hu.csega.games.adapters.opengl.models.OpenGLModelContainer;
 import hu.csega.games.adapters.opengl.models.OpenGLModelStoreImpl;
+import hu.csega.games.engine.anm.GameAnimation;
+import hu.csega.games.engine.anm.GameAnimationScene;
 import hu.csega.games.engine.g2d.GameColor;
 import hu.csega.games.engine.g2d.GameHitShape;
 import hu.csega.games.engine.g2d.GamePoint;
@@ -120,7 +122,22 @@ public class OpenGLGraphics implements GameGraphics {
 			return;
 		}
 
-		// store.res
+		GameAnimation gameAnimation = store.resolveAnimation(animationReference);
+		String[] meshes = gameAnimation.getMeshes();
+		int numberOfMeshes = meshes.length;
+
+		GameAnimationScene scene = gameAnimation.getScenes()[state];
+		if(scene != null) {
+            for (int i = 0; i < numberOfMeshes; i++) {
+                if (scene.getVisible()[i]) {
+                    GameObjectHandler mesh = store.loadMesh(meshes[i]); // FIXME at this point we should have a reference
+                    boolean flipped = scene.getFlipped()[i];
+                    GameTransformation transformation = scene.getTransformations()[i];
+                    OpenGLModelContainer resolvedModel = store.resolveModel(mesh);
+                    resolvedModel.draw(glAutodrawable, modelPlacement, transformation, flipped);
+                }
+            }
+        }
 	}
 
 	@Override

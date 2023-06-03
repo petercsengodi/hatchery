@@ -33,8 +33,10 @@ public class SuperstitionGameStarter {
 
 		String shaderRoot = resourceAdapter.shaderRoot();
 		String textureRoot = resourceAdapter.textureRoot();
+		String meshRoot = resourceAdapter.meshRoot();
+		String animationRoot = resourceAdapter.animationRoot();
 
-		Connector connector = new SuperstitionOpenGLConnector(shaderRoot, textureRoot);
+		Connector connector = new SuperstitionOpenGLConnector(shaderRoot, textureRoot, meshRoot, animationRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

@@ -34,7 +34,7 @@ public class SuperstitionMainMenuBuilder implements GameEngineCallback {
 		builder.getIndices().add(2);
 		builder.getIndices().add(3);
 
-		GameObjectHandler splash = store.buildModel(builder);
+		GameObjectHandler splash = store.buildMesh(builder);
 		SuperstitionMainMenuModel mainMenu = (SuperstitionMainMenuModel) model.getMainMenu().getModel();
 		mainMenu.setSplash(splash);
 

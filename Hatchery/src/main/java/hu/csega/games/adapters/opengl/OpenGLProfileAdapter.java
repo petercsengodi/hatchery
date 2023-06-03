@@ -35,6 +35,8 @@ public interface OpenGLProfileAdapter {
 
 	void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameTransformation transformation, OpenGLModelStoreImpl store);
 
+	void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store);
+
 	void disposeModel(GLAutoDrawable glAutodrawable, OpenGLModelContainer model);
 
 	void loadAnimation(GLAutoDrawable glAutoDrawable, String filename, OpenGLModelContainer model);

@@ -76,7 +76,7 @@ public class FreeTriangleMeshRenderStep implements GameEngineCallback {
 					}
 				}
 
-				convertedModel = store.buildModel(builder);
+				convertedModel = store.buildMesh(builder);
 			}
 
 			model.setInvalid(false);

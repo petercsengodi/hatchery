@@ -4,9 +4,9 @@ public interface GameModelStore {
 
 	GameObjectHandler loadTexture(String filename);
 
-	GameObjectHandler buildModel(GameModelBuilder builder);
+	GameObjectHandler buildMesh(GameModelBuilder builder);
 
-	GameObjectHandler loadModel(String filename);
+	GameObjectHandler loadMesh(String filename);
 
 	GameObjectHandler loadAnimation(String filename);
 

@@ -8,11 +8,20 @@ import java.util.List;
 
 public class AnimatorSetPart {
 
+	private String identifier;
 	private String mesh;
 	private GameObjectHandler handler;
 	private GameTransformation transformation;
 	private boolean flipped;
 	private List<AnimatorWireFramePoint> jointPoints;
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
 	public String getMesh() {
 		return mesh;

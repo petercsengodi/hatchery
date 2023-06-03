@@ -24,10 +24,14 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 	private String shaderRoot;
 	private String textureRoot;
+	private String meshRoot;
+	private String animationRoot;
 
-	public OpenGLGameAdapter(String shaderRoot, String textureRoot) {
+	public OpenGLGameAdapter(String shaderRoot, String textureRoot, String meshRoot, String animationRoot) {
 		this.shaderRoot = shaderRoot;
 		this.textureRoot = textureRoot;
+		this.meshRoot = meshRoot;
+		this.animationRoot = animationRoot;
 	}
 
 	@Override
@@ -80,8 +84,10 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 		OpenGLModelStoreImpl store = (OpenGLModelStoreImpl)engine.getStore();
 		store.setAdapter(openGLProfileAdapter);
-		store.setTextureRoot(textureRoot);
 		store.setShaderRoot(shaderRoot);
+		store.setTextureRoot(textureRoot);
+		store.setMeshRoot(meshRoot);
+		store.setAnimationRoot(animationRoot);
 
 		GLCapabilities glCapabilities = new GLCapabilities(glProfile);
 		OpenGLGraphics graphics = new OpenGLGraphics();

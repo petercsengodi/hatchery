@@ -17,13 +17,20 @@ public class SuperstitionGameElements {
 	GameObjectHandler groundTexture;
 	GameObjectHandler groundHandler;
 	GameObjectHandler boxModel;
+	GameObjectHandler testAnimationHandler;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
 
 		groundHandler = buildGround(store, "grass-texture.png");
 
-		boxModel = buildBox(store, -30f, -30f, -30f, 30f, 30f, 30f, "wood-texture.jpg");
+		boxModel = buildBox(store, -130f, -30f, -30f, -70f, 30f, 30f, "wood-texture.jpg");
+
+		testAnimationHandler = loadAnimation(store, "run.json");
+	}
+
+	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {
+		return store.loadAnimation(filename);
 	}
 
 	private GameObjectHandler buildGround(GameModelStore store, String texture) {
@@ -70,7 +77,7 @@ public class SuperstitionGameElements {
 			}
 		}
 
-		return store.buildModel(groundBuilder);
+		return store.buildMesh(groundBuilder);
 	}
 
 	private GameObjectHandler buildBox(GameModelStore store, float x1, float y1, float z1, float x2, float y2, float z2, String texture) {
@@ -87,7 +94,7 @@ public class SuperstitionGameElements {
 		offset = buildRectangle(builder, offset, x1, y1, z1, x2, y1, z1, x2, y1, z2, x1, y1, z2, 0f, -1f, 0f);
 		offset = buildRectangle(builder, offset, x1, y2, z1, x2, y2, z1, x2, y2, z2, x1, y2, z2, 0f, 1f, 0f);
 
-		return store.buildModel(builder);
+		return store.buildMesh(builder);
 	}
 
 	private int buildRectangle(GameModelBuilder builder, int offset, float x1, float y1, float z1, float x2, float y2, float z2,
