@@ -31,9 +31,11 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 
 	private List<GameWindowListener> listeners = new ArrayList<>();
 	private GameWindow gameWindow;
+	private String textureRoot;
 	private String shaderRoot;
 
-	public TransformationTesterConnector(String shaderRoot) {
+	public TransformationTesterConnector(String textureRoot, String shaderRoot) {
+		this.textureRoot = textureRoot;
 		this.shaderRoot = shaderRoot;
 	}
 
@@ -98,7 +100,7 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 		descriptor.setDescription("An application for testing java and OpenGL transformations.");
 		descriptor.setMouseCentered(false);
 
-		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot);
+		GameAdapter adapter = new OpenGLGameAdapter(textureRoot, shaderRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 

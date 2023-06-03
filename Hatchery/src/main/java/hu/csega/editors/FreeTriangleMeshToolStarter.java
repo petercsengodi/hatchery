@@ -22,7 +22,7 @@ import java.io.File;
  */
 public class FreeTriangleMeshToolStarter {
 
-	public static final String DEFAULT_TEXTURE_FILE = "res/textures/ship2.jpg";
+	public static final String DEFAULT_TEXTURE_FILE = "ship2.jpg";
 
 	private static final Level LOGGING_LEVEL = Level.TRACE;
 	private static Logger logger;
@@ -39,7 +39,10 @@ public class FreeTriangleMeshToolStarter {
 
 		TEXTURES = new TextureLibrary(resourceAdapter.textureFolder());
 
-		Connector connector = new FreeTriangleMeshConnector(resourceAdapter.shaderFolder());
+		String shaderRoot = resourceAdapter.shaderFolder();
+		String textureRoot = resourceAdapter.textureRoot();
+
+		Connector connector = new FreeTriangleMeshConnector(textureRoot, shaderRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

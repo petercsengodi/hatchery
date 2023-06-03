@@ -38,10 +38,11 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 	private List<GameWindowListener> listeners = new ArrayList<>();
 	private ComponentRefreshViews refreshViews;
+	private String textureRoot;
 	private String shaderRoot;
 
-
-	public AnimatorConnector(String shaderRoot) {
+	public AnimatorConnector(String textureRoot, String shaderRoot) {
+		this.textureRoot = textureRoot;
 		this.shaderRoot = shaderRoot;
 	}
 
@@ -108,7 +109,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 		// Open GL View
 
-		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot);
+		GameAdapter adapter = new OpenGLGameAdapter(textureRoot, shaderRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 

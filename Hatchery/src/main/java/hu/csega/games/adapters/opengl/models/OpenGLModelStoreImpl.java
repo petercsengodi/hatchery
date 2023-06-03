@@ -29,6 +29,7 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	private OpenGLProfileAdapter adapter;
+	private String textureRoot;
 	private String shaderRoot;
 
 	private long identifierCounter = 1;
@@ -45,6 +46,10 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	public void setAdapter(OpenGLProfileAdapter adapter) {
 		this.adapter = adapter;
+	}
+
+	public void setTextureRoot(String textureRoot) {
+		this.textureRoot = textureRoot;
 	}
 
 	public void setShaderRoot(String shaderRoot) {
@@ -113,16 +118,17 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	@Override
 	public GameObjectHandler loadTexture(String filename) {
-		GameObjectHandler handler = handlers.get(filename);
+		String key = textureRoot + filename;
+		GameObjectHandler handler = handlers.get(key);
 
 		if(handler == null) {
 			handler = nextHandler(GameObjectType.TEXTURE);
-			handlers.put(filename, handler);
+			handlers.put(key, handler);
 		}
 
 		OpenGLObjectContainer container = containers.get(handler);
 		if(container == null) {
-			container = new OpenGLTextureContainer(adapter, filename);
+			container = new OpenGLTextureContainer(adapter, key);
 			containers.put(handler, container);
 			toInitialize.add(handler);
 		}

@@ -22,9 +22,11 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 	private static final boolean FORCE_GL2_GLU = false;
 
+	private String textureRoot;
 	private String shaderRoot;
 
-	public OpenGLGameAdapter(String shaderRoot) {
+	public OpenGLGameAdapter(String textureRoot, String shaderRoot) {
+		this.textureRoot = textureRoot;
 		this.shaderRoot = shaderRoot;
 	}
 
@@ -78,6 +80,7 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 		OpenGLModelStoreImpl store = (OpenGLModelStoreImpl)engine.getStore();
 		store.setAdapter(openGLProfileAdapter);
+		store.setTextureRoot(textureRoot);
 		store.setShaderRoot(shaderRoot);
 
 		GLCapabilities glCapabilities = new GLCapabilities(glProfile);
