@@ -58,13 +58,13 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
-	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shadersRoot) {
+	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shaderRoot) {
 		GL2 gl2 = glAutoDrawable.getGL().getGL2();
 
 		ShaderCode vertShader = ShaderCode.create(gl2, GL_VERTEX_SHADER, this.getClass(),
-				shadersRoot + "/gl2", null, "vs", "glsl", null, true);
+				shaderRoot + "gl2", null, "vs", "glsl", null, true);
 		ShaderCode fragShader = ShaderCode.create(gl2, GL_FRAGMENT_SHADER, this.getClass(),
-				shadersRoot + "/gl2", null, "fs", "glsl", null, true);
+				shaderRoot + "gl2", null, "fs", "glsl", null, true);
 
 		ShaderProgram shaderProgram = new ShaderProgram();
 		shaderProgram.add(vertShader);

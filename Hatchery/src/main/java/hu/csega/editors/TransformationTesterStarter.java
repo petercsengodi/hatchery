@@ -28,10 +28,10 @@ public class TransformationTesterStarter {
 
 		TEXTURES = new TextureLibrary(resourceAdapter.textureFolder());
 
-		String textureRoot = resourceAdapter.textureRoot();
 		String shaderRoot = resourceAdapter.shaderRoot();
+		String textureRoot = resourceAdapter.textureRoot();
 
-		Connector connector = new TransformationTesterConnector(textureRoot, shaderRoot);
+		Connector connector = new TransformationTesterConnector(shaderRoot, textureRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

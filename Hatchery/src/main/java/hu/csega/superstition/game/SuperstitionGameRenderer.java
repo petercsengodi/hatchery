@@ -45,6 +45,8 @@ public class SuperstitionGameRenderer {
 		g.drawModel(elements.groundHandler, universe.groundPlacement);
 
 		g.drawModel(elements.boxModel, universe.boxPlacement4);
+
+		g.drawAnimation(null, 0, null);
 	}
 
 }

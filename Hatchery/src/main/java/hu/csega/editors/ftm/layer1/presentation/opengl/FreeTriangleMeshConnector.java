@@ -37,13 +37,14 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 
 	private List<GameWindowListener> listeners = new ArrayList<>();
 	private GameWindow gameWindow;
-	private String textureRoot;
-	private String shaderRoot;
 	private JTree tree;
 
-	public FreeTriangleMeshConnector(String textureRoot, String shaderRoot) {
-		this.textureRoot = textureRoot;
+	private String shaderRoot;
+	private String textureRoot;
+
+	public FreeTriangleMeshConnector(String shaderRoot, String textureRoot) {
 		this.shaderRoot = shaderRoot;
+		this.textureRoot = textureRoot;
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		descriptor.setDescription("A tool for creating vertices and triangles based upon them.");
 		descriptor.setMouseCentered(false);
 
-		GameAdapter adapter = new OpenGLGameAdapter(textureRoot, shaderRoot);
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 

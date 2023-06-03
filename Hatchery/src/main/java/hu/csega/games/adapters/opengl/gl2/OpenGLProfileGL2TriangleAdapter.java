@@ -85,7 +85,7 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
-	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shadersRoot) {
+	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shaderRoot) {
 		// Nothing to do currently
 		GL2 gl2 = glAutoDrawable.getGL().getGL2();
 

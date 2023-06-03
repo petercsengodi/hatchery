@@ -119,6 +119,8 @@ public class OpenGLGraphics implements GameGraphics {
 		if(animationReference == null || modelPlacement == null) {
 			return;
 		}
+
+		// store.res
 	}
 
 	@Override

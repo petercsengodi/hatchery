@@ -75,7 +75,7 @@ public class OpenGLProfileGL2GLUAdapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
-	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shadersRoot) {
+	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shaderRoot) {
 		// Nothing to do currently
 		gl2 = glAutoDrawable.getGL().getGL2();
 		gl2.glEnable(GL2.GL_CULL_FACE);

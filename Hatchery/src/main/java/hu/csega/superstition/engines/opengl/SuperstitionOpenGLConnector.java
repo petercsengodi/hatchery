@@ -20,12 +20,13 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 
 	private List<GameWindowListener> listeners = new ArrayList<>();
-	private String textureRoot;
-	private String shaderRoot;
 
-	public SuperstitionOpenGLConnector(String textureRoot, String shaderRoot) {
-		this.textureRoot = textureRoot;
+	private String shaderRoot;
+	private String textureRoot;
+
+	public SuperstitionOpenGLConnector(String shaderRoot, String textureRoot) {
 		this.shaderRoot = shaderRoot;
+		this.textureRoot = textureRoot;
 	}
 
 	@Override
@@ -90,9 +91,9 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 		descriptor.setId("superstition");
 		descriptor.setTitle("Superstition – ported game seed from the university");
 		descriptor.setVersion("v00.00.0001");
-		descriptor.setDescription("My work from the university severly changed and ported to Java/OpenGL.");
+		descriptor.setDescription("My work from the university severely changed and ported to Java/OpenGL.");
 
-		GameAdapter adapter = new OpenGLGameAdapter(textureRoot, shaderRoot);
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 
 		engine.step(GameEngineStep.INIT, new SuperstitionInitStep());

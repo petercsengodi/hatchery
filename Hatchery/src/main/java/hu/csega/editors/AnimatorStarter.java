@@ -68,10 +68,10 @@ public class AnimatorStarter {
 		UnitStore.registerInstance(TextureLibrary.class, new TextureLibrary(resourceAdapter.textureFolder()));
 		UnitStore.registerInstance(MeshLibrary.class, new MeshLibrary(resourceAdapter.meshFolder()));
 
-		String shaderFolder = resourceAdapter.shaderFolder();
+		String shaderRoot = resourceAdapter.shaderRoot();
 		String textureRoot = resourceAdapter.textureRoot();
 
-		Connector connector = new AnimatorConnector(textureRoot, shaderFolder);
+		Connector connector = new AnimatorConnector(shaderRoot, textureRoot);
 		UnitStore.registerInstance(Connector.class, connector);
 
 		UnitStore.registerDefaultImplementation(AnimatorModel.class, AnimatorModel.class);

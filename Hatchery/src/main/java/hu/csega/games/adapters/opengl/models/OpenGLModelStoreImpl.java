@@ -29,8 +29,9 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class OpenGLModelStoreImpl implements OpenGLModelStore {
 
 	private OpenGLProfileAdapter adapter;
-	private String textureRoot;
+
 	private String shaderRoot;
+	private String textureRoot;
 
 	private long identifierCounter = 1;
 	private boolean disposeAllWhenPossible = false;
@@ -48,12 +49,12 @@ public class OpenGLModelStoreImpl implements OpenGLModelStore {
 		this.adapter = adapter;
 	}
 
-	public void setTextureRoot(String textureRoot) {
-		this.textureRoot = textureRoot;
-	}
-
 	public void setShaderRoot(String shaderRoot) {
 		this.shaderRoot = shaderRoot;
+	}
+
+	public void setTextureRoot(String textureRoot) {
+		this.textureRoot = textureRoot;
 	}
 
 	@Override

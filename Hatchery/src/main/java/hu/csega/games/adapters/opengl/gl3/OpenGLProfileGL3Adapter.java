@@ -87,7 +87,7 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
-	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shadersRoot) {
+	public void initializeProgram(GLAutoDrawable glAutoDrawable, String shaderRoot) {
 		if(gl3 == null)
 			gl3 = glAutoDrawable.getGL().getGL3();
 
@@ -99,9 +99,9 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		gl3.glSamplerParameteri(samplerHandler, GL3.GL_TEXTURE_WRAP_T, GL3.GL_CLAMP_TO_EDGE);
 
 		ShaderCode vertShader = ShaderCode.create(gl3, GL_VERTEX_SHADER, this.getClass(),
-				shadersRoot + "/gl3", null, "vs", "glsl", null, true);
+				shaderRoot + "gl3", null, "vs", "glsl", null, true);
 		ShaderCode fragShader = ShaderCode.create(gl3, GL_FRAGMENT_SHADER, this.getClass(),
-				shadersRoot + "/gl3", null, "fs", "glsl", null, true);
+				shaderRoot + "gl3", null, "fs", "glsl", null, true);
 
 		ShaderProgram shaderProgram = new ShaderProgram();
 		shaderProgram.add(vertShader);

@@ -39,10 +39,10 @@ public class FreeTriangleMeshToolStarter {
 
 		TEXTURES = new TextureLibrary(resourceAdapter.textureFolder());
 
-		String shaderRoot = resourceAdapter.shaderFolder();
+		String shaderRoot = resourceAdapter.shaderRoot();
 		String textureRoot = resourceAdapter.textureRoot();
 
-		Connector connector = new FreeTriangleMeshConnector(textureRoot, shaderRoot);
+		Connector connector = new FreeTriangleMeshConnector(shaderRoot, textureRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
 	}

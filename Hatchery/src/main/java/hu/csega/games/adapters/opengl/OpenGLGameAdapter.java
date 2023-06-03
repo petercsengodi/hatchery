@@ -22,12 +22,12 @@ public class OpenGLGameAdapter implements GameAdapter {
 
 	private static final boolean FORCE_GL2_GLU = false;
 
-	private String textureRoot;
 	private String shaderRoot;
+	private String textureRoot;
 
-	public OpenGLGameAdapter(String textureRoot, String shaderRoot) {
-		this.textureRoot = textureRoot;
+	public OpenGLGameAdapter(String shaderRoot, String textureRoot) {
 		this.shaderRoot = shaderRoot;
+		this.textureRoot = textureRoot;
 	}
 
 	@Override
