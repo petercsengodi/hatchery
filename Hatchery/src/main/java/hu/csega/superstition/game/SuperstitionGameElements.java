@@ -26,7 +26,7 @@ public class SuperstitionGameElements {
 
 		boxModel = buildBox(store, -130f, -30f, -30f, -70f, 30f, 30f, "wood-texture.jpg");
 
-		testAnimationHandler = loadAnimation(store, "wizard1.json");
+		testAnimationHandler = loadAnimation(store, "wizard2.json");
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {
