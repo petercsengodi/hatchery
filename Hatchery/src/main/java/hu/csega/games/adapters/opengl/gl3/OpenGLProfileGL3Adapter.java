@@ -302,15 +302,15 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);
 
-		transformation.exportTo(modelTransformation);
-		calculatedMatrix.mul(modelTransformation);
-
 		placement.calculateBasicLookAt(basicLookAt);
 		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
 		calculatedMatrix.mul(inverseLookAt);
 
 		placement.calculateBasicScaleMatrix(basicScale);
 		calculatedMatrix.mul(basicScale);
+
+		transformation.exportTo(modelTransformation);
+		calculatedMatrix.mul(modelTransformation);
 
 		calculatedMatrix.get(matrixBuffer);
 

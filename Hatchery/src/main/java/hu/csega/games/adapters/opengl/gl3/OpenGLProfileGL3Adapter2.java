@@ -320,6 +320,13 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);
 
+		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
+		calculatedMatrix.mul(inverseLookAt);
+
+		placement.calculateBasicScaleMatrix(basicScale);
+		calculatedMatrix.mul(basicScale);
+
 		float[] m = transformation.getFloats();
 		modelTransformation.set(m[0], m[1], m[2], m[3],
 				m[4], m[5], m[6], m[7],
@@ -327,13 +334,6 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 				m[12], m[13], m[14], m[15]);
 
 		calculatedMatrix.mul(modelTransformation);
-
-		placement.calculateBasicLookAt(basicLookAt);
-		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
-		calculatedMatrix.mul(inverseLookAt);
-
-		placement.calculateBasicScaleMatrix(basicScale);
-		calculatedMatrix.mul(basicScale);
 
 		calculatedMatrix.get(matrixBuffer);
 

@@ -216,14 +216,14 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store) {
 		gl2.glPushMatrix();
 
-		gl2.glMultMatrixf(transformation.getFloats(), 0);
-
 		placement.calculateBasicLookAt(basicLookAt);
 		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
 		inverseLookAt.get(tmpMatrix);
 		gl2.glMultMatrixf(tmpMatrix, 0);
 
 		gl2.glScalef(placement.scale.x, placement.scale.y, placement.scale.z);
+
+		gl2.glMultMatrixf(transformation.getFloats(), 0);
 
 		drawModel(glAutoDrawable, model, store);
 	}
