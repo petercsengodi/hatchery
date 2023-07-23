@@ -91,7 +91,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 					selectedScene = 0;
 				}
 
-				generateParts(animation, selectedScene, parts);
+				generateParts(animation, selectedScene, baseTransformation, parts);
 			}
 
 			if(openGLExtractor != null) {
@@ -129,7 +129,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 			for(int sceneIndex = 0; sceneIndex < numberOfScenes; sceneIndex++) {
 				List<AnimatorSetPart> parts = new ArrayList<>();
-				generateParts(animation, sceneIndex, parts);
+				generateParts(animation, sceneIndex, baseTransformation, parts);
 				GameAnimationScene scene = gameAnimation.getScenes()[sceneIndex];
 				fill(scene, parts, indexes);
 			}
@@ -148,7 +148,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 		}
 	}
 
-	private void generateParts(Animation animation, int currentScene, List<AnimatorSetPart> parts) {
+	public static void generateParts(Animation animation, int currentScene, Matrix4f baseTransformation, List<AnimatorSetPart> parts) {
 		Map<String, String> connections = animation.getConnections();
 		for(Map.Entry<String, AnimationPart> entry : animation.getParts().entrySet()) {
 			String partIdentifier = entry.getKey();
@@ -157,21 +157,21 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			}
 
 			AnimationPart part = entry.getValue();
-			transformPart(animation, currentScene, part, null, parts);
+			transformPart(animation, currentScene, baseTransformation, part, null, parts);
 		} // end for entry
 	}
 
-	private void generateParts(Animation animation, int currentScene, String jointKey, Matrix4f m, List<AnimatorSetPart> parts) {
+	private static void generateParts(Animation animation, int currentScene, Matrix4f baseTransformation, String jointKey, Matrix4f m, List<AnimatorSetPart> parts) {
 		Map<String, String> connections = animation.getConnections();
 		for(Map.Entry<String, String> entry : connections.entrySet()) {
 			if(jointKey.equals(entry.getValue())) {
 				AnimationPart part = animation.getParts().get(entry.getKey());
-				transformPart(animation, currentScene, part, m, parts);
+				transformPart(animation, currentScene, baseTransformation, part, m, parts);
 			}
 		} // end for entry
 	}
 
-	private void transformPart(Animation animation, int currentScene, AnimationPart part, Matrix4f commulativeTransformation, List<AnimatorSetPart> parts) {
+	private static void transformPart(Animation animation, int currentScene, Matrix4f baseTransformation, AnimationPart part, Matrix4f commulativeTransformation, List<AnimatorSetPart> parts) {
 		if(part != null) {
 			AnimationScenePart scenePart = animation.createOrGetScenePart(currentScene, part.getIdentifier());
 			if(!scenePart.isVisible()) {
@@ -237,7 +237,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 					tv.mul(setPartTransformation);
 					base.translateLocal(tv.x / tv.w, tv.y / tv.w, tv.z / tv.w, base);
 
-					generateParts(animation, currentScene, joint.getIdentifier(), base, parts);
+					generateParts(animation, currentScene, baseTransformation, joint.getIdentifier(), base, parts);
 				}
 			} // end for each joint
 		} // end if part not null
