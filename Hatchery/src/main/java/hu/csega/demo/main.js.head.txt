@@ -11,6 +11,33 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+var i, j, k;
+var colors = [ 0, 128, 255 ];
+
+var materials = [];
+for(i = 0; i < 3; i++) {
+    for(j = 0; j < 3; j++) {
+        for(k = 0; k < 3; k++) {
+            materials.push(new THREE.MeshBasicMaterial({color: (colors[i] * 256 * 256 + colors[j] * 256 + colors[k] )}));
+        }
+    }
+}
+
+var triangles = [];
+var numberOfTriangles = 1000;
+for(i = 0; i < numberOfTriangles; i++) {
+    var geometry = new THREE.BufferGeometry();
+    var vertices = new Float32Array([ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]);
+    var indices = [ 0, 1, 2 ];
+    geometry.setIndex(indices);
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    var mesh = new THREE.Mesh(geometry, materials[0]);
+    mesh.matrixAutoUpdate = false;
+}
+
+var currentTriangleIndex = 0;
+
+
 var parts = [];
 
 
