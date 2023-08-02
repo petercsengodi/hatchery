@@ -79,7 +79,9 @@ public class GenerateDemo {
 
             write(writer, head);
 
-            generateFromAnm(writer, "Run", runAnm);
+            generateFromFtm2(writer, "Hat", new File(resourceAdapter.meshRoot() + "hat.ftm"));
+
+            // generateFromAnm(writer, "Run", runAnm);
 
             for(Map.Entry<String, File> entry : meshNameToFile.entrySet()) {
                 generateFromFtm(writer, entry.getKey(), entry.getValue());
@@ -156,6 +158,45 @@ public class GenerateDemo {
         writer.write("const material" + name + " = new THREE.MeshBasicMaterial({color: 0xff0000});\n");
         writer.write("const mesh" + name + " = new THREE.Mesh(geometry" + name + ", material" + name + ");\n");
         writer.write("mesh" + name + ".matrixAutoUpdate = false;\n\n");
+        writer.flush();
+    }
+
+    private static void generateFromFtm2(OutputStreamWriter writer, String name, File ftm) throws IOException {
+        byte[] bytes = FreeTriangleMeshSnapshots.readAllBytes(ftm);
+        FreeTriangleMeshModel deserialized = SerializationUtil.deserialize(bytes, FreeTriangleMeshModel.class);
+        logger.info(ftm.getAbsolutePath() + ": " + deserialized.getClass().getName());
+
+        writer.write("const geometry" + name + " = new THREE.BufferGeometry();\n\n");
+        writer.write("const vertices" + name + " = new Float32Array([\n");
+
+        List<FreeTriangleMeshVertex> vertices = deserialized.getVertices();
+        for(FreeTriangleMeshVertex vertex : vertices) {
+            writer.write("\t" + vertex.getPX() + ", " + vertex.getPY() + ",  " + vertex.getPZ()+ ",\n");
+        }
+
+        writer.write("]);\n\n");
+        writer.write("const indices" + name + " = [\n");
+
+        List<FreeTriangleMeshTriangle> triangles = deserialized.getTriangles();
+        for(FreeTriangleMeshTriangle triangle : triangles) {
+            writer.write("\t" + triangle.getVertex1() + ", " + triangle.getVertex2() + ", " + triangle.getVertex3() + ",\n");
+        }
+
+        writer.write("];\n\n");
+        writer.write("const colors" + name + " = [\n");
+
+        for(FreeTriangleMeshTriangle triangle : triangles) {
+            FreeTriangleMeshVertex v1 = vertices.get(triangle.getVertex1());
+            FreeTriangleMeshVertex v2 = vertices.get(triangle.getVertex2());
+            FreeTriangleMeshVertex v3 = vertices.get(triangle.getVertex3());
+
+            double x = (v1.getTX() + v2.getTX() + v3.getTX()) / 3.0;
+            double y = (v1.getTY() + v2.getTY() + v3.getTY()) / 3.0;
+            int colorIndex = (int)(Math.floor(9.0 * x) + Math.floor(9.0 * y) * 3);
+            writer.write("\t" + colorIndex + ",\n");
+        }
+
+        writer.write("];\n\n");
         writer.flush();
     }
 
