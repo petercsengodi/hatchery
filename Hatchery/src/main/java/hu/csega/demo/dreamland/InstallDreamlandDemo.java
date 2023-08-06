@@ -1,6 +1,6 @@
-package hu.csega.demo;
+package hu.csega.demo.dreamland;
 
-import static hu.csega.demo.GenerateDemo.DEMO_PROJECT;
+import static hu.csega.demo.dreamland.GenerateDreamlandDemo.DEMO_PROJECT;
 
 import hu.csega.editors.AnimatorStarter;
 import hu.csega.editors.common.resources.FileResourceAdapter;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class InstallDemo {
+public class InstallDreamlandDemo {
 
     private static final Level LOGGING_LEVEL = Level.INFO;
     private static Logger logger;

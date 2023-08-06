@@ -1,6 +1,6 @@
 {
-  "name": "test2.json",
-  "texture": "ship1.jpg",
+  "name": "/home/csega/Documents/Projects/hatchery/GameResources/meshes/test2.json",
+  "texture": "/home/csega/Documents/Projects/hatchery/GameResources/textures/ship1.jpg",
   "triangles": [
     {
       "v1": 0,

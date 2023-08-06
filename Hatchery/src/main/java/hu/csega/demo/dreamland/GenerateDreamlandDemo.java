@@ -1,4 +1,4 @@
-package hu.csega.demo;
+package hu.csega.demo.dreamland;
 
 import hu.csega.editors.AnimatorStarter;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
@@ -34,12 +34,12 @@ import java.util.TreeMap;
 
 import org.joml.Matrix4f;
 
-public class GenerateDemo {
+public class GenerateDreamlandDemo {
 
     private static final Level LOGGING_LEVEL = Level.INFO;
     private static Logger logger;
 
-    public static final String DEMO_PROJECT = "rat";
+    public static final String DEMO_PROJECT = "dreamland";
 
     private static ResourceAdapter resourceAdapter;
 
@@ -77,21 +77,25 @@ public class GenerateDemo {
                 File.separator + "hu" + File.separator + "csega" + File.separator + "demo" + File.separator + DEMO_PROJECT +
                 File.separator + "main.js.tail.txt");
 
-        File runAnm = new File(resourceAdapter.animationFolder() + File.separator + "run_2.anm");
+        File dragonAnm = new File(resourceAdapter.animationFolder() + File.separator + "dragon.anm");
 
         try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(mainJS))) {
 
             write(writer, head);
 
-            generateFromAnm(writer, "Run", runAnm);
+            generateFromFtm2(writer, "Hat", new File(resourceAdapter.meshRoot() + "hat.ftm"));
+
+            generateFromAnm(writer, "Dragon", dragonAnm);
 
             for(Map.Entry<String, File> entry : meshNameToFile.entrySet()) {
                 generateFromFtm(writer, entry.getKey(), entry.getValue());
             }
 
+            /* Dragon should not be added to the scene, only the triangles are in the scene.
             for(Map.Entry<String, File> entry : meshNameToFile.entrySet()) {
                 addToScene(writer, entry.getKey());
             }
+            */
 
             write(writer, tail);
         }
