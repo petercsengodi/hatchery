@@ -142,7 +142,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		JTabbedPane bottomRightTab = new JTabbedPane();
 		bottomRightTab.addKeyListener(keyListener);
 		bottomRightTab.addTab("ZY Wireframe", new FreeTriangleMeshZYSideView(facade));
-		bottomRightTab.addTab("Texture Window", new FreeTriangleMeshTexture(facade));
+		bottomRightTab.addTab("Texture Window", new FreeTriangleMeshTexture(facade, textureRoot));
 
 		FreeTriangleMeshTreeMapping treeModel = new FreeTriangleMeshTreeMapping(facade);
 		tree = new JTree(treeModel);

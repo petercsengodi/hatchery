@@ -8,16 +8,20 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
 import hu.csega.editors.ftm.layer5.integration.FileSystemIntegration;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.units.UnitStore;
 
 class FileOpen implements ActionListener {
 
 	private JFrame frame;
 	private JFileChooser openDialog;
 	private GameEngineFacade facade;
+
+	private ResourceAdapter resourceAdapter;
 
 	public FileOpen(JFrame frame, JFileChooser openDialog, GameEngineFacade facade) {
 		this.frame = frame;
@@ -38,6 +42,23 @@ class FileOpen implements ActionListener {
 				model = new FreeTriangleMeshModel();
 				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
 			}
+
+			String texture = model.getTextureFilename();
+			if(texture == null || texture.length() == 0) {
+				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
+			} else if(texture.contains(File.separator)){
+				
+				if(resourceAdapter == null)
+					resourceAdapter = UnitStore.instance(ResourceAdapter.class);
+
+				String prefix = resourceAdapter.textureRoot();
+				if(texture.startsWith(prefix)) {
+					texture = texture.substring(prefix.length());
+					model.setTextureFilename(texture);
+				}
+
+			}
+
 			facade.setModel(model);
 			facade.window().repaintEverything();
 			break;

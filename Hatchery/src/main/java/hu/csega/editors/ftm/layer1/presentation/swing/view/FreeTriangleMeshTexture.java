@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.common.lens.EditorPoint;
+import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
@@ -24,8 +25,11 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 	private BufferedImage textureImage = null;
 	private boolean triedToLoadImage = false;
 
-	public FreeTriangleMeshTexture(GameEngineFacade facade) {
+	private String textureRoot;
+
+	public FreeTriangleMeshTexture(GameEngineFacade facade, String textureRoot) {
 		super(facade);
+		this.textureRoot = textureRoot;
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 			} else {
 				triedToLoadImage = true;
 				try {
-					textureImage = ImageIO.read(new File(textureFilename));
+					textureImage = ImageIO.read(new File(textureRoot + textureFilename));
 				} catch(Exception ex) {
 					textureImage = null;
 				}

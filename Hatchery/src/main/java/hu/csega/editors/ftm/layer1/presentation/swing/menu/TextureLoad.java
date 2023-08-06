@@ -34,9 +34,10 @@ class TextureLoad implements ActionListener {
 			String absolutePath = file.getAbsolutePath();
 
 			String path = absolutePath;
-			int index = path.indexOf(File.separator + "res" + File.separator);
+			String MARKER = File.separator + "textures" + File.separator;
+			int index = path.indexOf(MARKER);
 			if(index > -1)
-				path = path.substring(index + 1);
+				path = path.substring(index + MARKER.length());
 
 			STextureRef ref = new STextureRef(path);
 			FreeTriangleMeshToolStarter.TEXTURES.resolve(ref);
