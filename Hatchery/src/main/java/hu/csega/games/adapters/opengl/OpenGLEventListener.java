@@ -79,10 +79,19 @@ public class OpenGLEventListener implements GLEventListener {
 			graphics.clean();
 		} catch(GameEngineException ex) {
 			handleError(glAutodrawable, ex);
+		} catch(RuntimeException ex) {
+			handleGenericError(glAutodrawable, ex);
+		} catch(Throwable t) {
+			handleGenericError(glAutodrawable, new RuntimeException(t));
 		}
 	}
 
 	private void handleError(GLAutoDrawable glAutodrawable, GameEngineException ex) {
+		disabled = true;
+		logger.error("Error during display!", ex);
+	}
+
+	private void handleGenericError(GLAutoDrawable glAutodrawable, RuntimeException ex) {
 		disabled = true;
 		logger.error("Error during display!", ex);
 	}
