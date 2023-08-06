@@ -1,6 +1,6 @@
-package hu.csega.demo;
+package hu.csega.demo.rat;
 
-import static hu.csega.demo.GenerateDemo.DEMO_PROJECT;
+import static hu.csega.demo.rat.GenerateRatDemo.DEMO_PROJECT;
 
 import hu.csega.editors.AnimatorStarter;
 import hu.csega.editors.common.resources.FileResourceAdapter;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class InstallDemo {
+public class InstallRatDemo {
 
     private static final Level LOGGING_LEVEL = Level.INFO;
     private static Logger logger;
@@ -53,7 +53,7 @@ public class InstallDemo {
             return;
 
         for(String name : list) {
-            if(name.equals(".") || name.equals(".."))
+            if(name.equals(".") || name.equals("src/main"))
                 continue;
 
             File fileToDelete = new File(webFolder.getAbsolutePath() + File.separator + name);
@@ -81,7 +81,7 @@ public class InstallDemo {
             return;
 
         for(String name : list) {
-            if(name.equals(".") || name.equals(".."))
+            if(name.equals(".") || name.equals("src/main"))
                 continue;
 
             File fileToCopy = new File(demoFolder.getAbsolutePath() + File.separator + name);

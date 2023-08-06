@@ -72,10 +72,10 @@ public class GenerateDreamlandDemo {
 
         File head = new File(resourceAdapter.projectRoot() + "src" + File.separator + "main" + File.separator + "java" +
                 File.separator + "hu" + File.separator + "csega" + File.separator + "demo" + File.separator + DEMO_PROJECT +
-                File.separator + "main.js.head.txt");
+                File.separator + "dreamland.head.js");
         File tail = new File(resourceAdapter.projectRoot() + "src" + File.separator + "main" + File.separator + "java" +
                 File.separator + "hu" + File.separator + "csega" + File.separator + "demo" + File.separator + DEMO_PROJECT +
-                File.separator + "main.js.tail.txt");
+                File.separator + "dreamland.tail.js");
 
         File dragonAnm = new File(resourceAdapter.animationFolder() + File.separator + "dragon.anm");
 
