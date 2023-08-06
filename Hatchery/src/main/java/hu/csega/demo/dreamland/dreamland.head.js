@@ -7,6 +7,45 @@ camera.position.y = 0;
 camera.position.z = -50;
 camera.lookAt(0, 0, 0);
 
+var startTime = Date.now();
+var cameraMovement = [];
+
+cameraMovement.push({
+    t: 0,
+    position: { x: 250, y: 0, z: -50},
+    lookAt : { x: 0, y: 0, z: 0}
+});
+
+cameraMovement.push({
+    t: 5000,
+    position: { x: -250, y: 0, z: -100},
+    lookAt : { x: 0, y: 0, z: 0}
+});
+
+cameraMovement.push({
+    t: 10000,
+    position: { x: -50, y: 100, z: -100},
+    lookAt : { x: 0, y: 0, z: 0}
+});
+
+cameraMovement.push({
+    t: 15000,
+    position: { x: 250, y: 0, z: -50},
+    lookAt : { x: 0, y: 0, z: 0}
+});
+
+cameraMovement.push({
+    t: 20000,
+    position: { x: 0, y: 0, z: 200},
+    lookAt : { x: 0, y: 0, z: 0}
+});
+
+cameraMovement.push({
+    t: 25000,
+    position: { x: -250, y: 0, z: -50},
+    lookAt : { x: 0, y: 0, z: 0}
+});
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -36,6 +75,7 @@ for(i = 0; i < 9; i++) {
 var triangles = [];
 var triangleAnimations = [];
 var numberOfTriangles = 1000;
+var usedTriangleIndex = 0;
 
 for(i = 0; i < numberOfTriangles; i++) {
     var geometry = new THREE.BufferGeometry();
@@ -79,3 +119,6 @@ spotLight.shadow.camera.fov = 30;
 
 scene.add( spotLight );
 
+var parts = [];
+var verticesArray = [];
+var indicesArray = [];

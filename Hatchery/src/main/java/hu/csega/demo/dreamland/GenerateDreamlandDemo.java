@@ -77,7 +77,7 @@ public class GenerateDreamlandDemo {
                 File.separator + "hu" + File.separator + "csega" + File.separator + "demo" + File.separator + DEMO_PROJECT +
                 File.separator + "dreamland.tail.js");
 
-        File dragonAnm = new File(resourceAdapter.animationFolder() + File.separator + "dragon.anm");
+        File dragonAnm = new File(resourceAdapter.animationFolder() + File.separator + /* "dragon.anm" */ "run_2.anm");
 
         try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(mainJS))) {
 
@@ -91,11 +91,9 @@ public class GenerateDreamlandDemo {
                 generateFromFtm(writer, entry.getKey(), entry.getValue());
             }
 
-            /* Dragon should not be added to the scene, only the triangles are in the scene.
             for(Map.Entry<String, File> entry : meshNameToFile.entrySet()) {
-                addToScene(writer, entry.getKey());
+                addToParts(writer, entry.getKey());
             }
-            */
 
             write(writer, tail);
         }
@@ -276,6 +274,17 @@ public class GenerateDreamlandDemo {
         }
 
         writer.write("]; // end of animation" + name + "\n");
+        writer.flush();
+    }
+
+    private static void addToParts(OutputStreamWriter writer, String... names) throws IOException {
+        for(String name : names) {
+            writer.write("parts.push(mesh" + name + ");\n");
+            writer.write("verticesArray.push(vertices" + name + ");\n");
+            writer.write("indicesArray.push(indices" + name + ");\n");
+        }
+
+        writer.write("\n");
         writer.flush();
     }
 

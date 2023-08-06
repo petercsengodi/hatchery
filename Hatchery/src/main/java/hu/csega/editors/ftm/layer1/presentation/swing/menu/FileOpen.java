@@ -47,7 +47,7 @@ class FileOpen implements ActionListener {
 			if(texture == null || texture.length() == 0) {
 				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
 			} else if(texture.contains(File.separator)){
-				
+
 				if(resourceAdapter == null)
 					resourceAdapter = UnitStore.instance(ResourceAdapter.class);
 
