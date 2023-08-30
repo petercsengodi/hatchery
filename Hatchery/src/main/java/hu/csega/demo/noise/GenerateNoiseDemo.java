@@ -1,4 +1,4 @@
-package hu.csega.demo.dreamland;
+package hu.csega.demo.noise;
 
 import hu.csega.editors.AnimatorStarter;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
@@ -34,12 +34,12 @@ import java.util.TreeMap;
 
 import org.joml.Matrix4f;
 
-public class GenerateDreamlandDemo {
+public class GenerateNoiseDemo {
 
     private static final Level LOGGING_LEVEL = Level.INFO;
     private static Logger logger;
 
-    public static final String DEMO_PROJECT = "dreamland";
+    public static final String DEMO_PROJECT = "noise";
 
     private static ResourceAdapter resourceAdapter;
 
