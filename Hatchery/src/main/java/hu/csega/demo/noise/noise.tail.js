@@ -5,21 +5,6 @@ scene.background = new THREE.Color(0x000000);
 const update = function(frame, frameMax) {
     let a = frame / frameMax;
     mesh.rotation.y = Math.PI * 2 * a;
-
-    if(canvasObject.state.reduce) {
-        canvasObject.state.rPer -= 0.01;
-        if(canvasObject.state.rPer <= 0) {
-            canvasObject.state.rPer = 0;
-            canvasObject.state.reduce = false;
-        }
-    } else {
-        canvasObject.state.rPer += 0.01;
-        if(canvasObject.state.rPer >= 1) {
-            canvasObject.state.rPer = 1;
-            canvasObject.state.reduce = true;
-        }
-    }
-
     canvasMod.update(canvasObject);
 };
 
