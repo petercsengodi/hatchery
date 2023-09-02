@@ -45,7 +45,7 @@ var PerlinNoise = {
 
     fade: function (t) {
               var result = t*t*t*(t*(t*6-15)+10);
-              if(result < 0.4) { result = 0; }
+              // if(result < 0.4) { result = 0; }
               return result;
           },
 
@@ -113,7 +113,6 @@ var PerlinNoise = {
 
 };
 
-
 PerlinNoise.seed(Math.random());
 const PI2 = Math.PI * 2;
 const FF = PI2 / 8;
@@ -144,6 +143,7 @@ const createTrails = (state) => {
 };
 
 const resetTrails = (state) => {
+    state.clearCanvas(); // ???
 	trails = [];
 	createTrails(state);
 };
@@ -162,11 +162,6 @@ const updateTrail = (trail, state) => {
 
 	trail.width *= 0.98;
 }
-
-const clearCanvas = (ctx) => {
-	ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
-	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-};
 
 const renderTrail = (trail, ctx, phase) => {
 	let { x, y, length, vel, angle } = trail;
@@ -190,7 +185,7 @@ const renderTrail = (trail, ctx, phase) => {
 }
 
 function drawTrails(ctx, state) {
-	clearCanvas(ctx);
+	state.fadeCanvas();
 
 	trails.forEach((t) => {
 		updateTrail(t, state);
@@ -208,154 +203,84 @@ function drawTrails(ctx, state) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+const NoiseGenerator = {
+    canvas: null,
+    ctx: null,
+    texture: null,
 
-const canvasMod = {};
-function setup(api) {
-    //-------- ----------
-    // built in draw methods
-    //-------- ----------
-    const DRAW = {};
-    // square draw method
-    DRAW.square = (canObj, ctx, canvas, state) => {
-        ctx.fillStyle = canObj.palette[0]
-        ctx.lineWidth = 1;
-        ctx.fillRect(0.5, 0.5, canvas.width - 1, canvas.height - 1);
-        ctx.strokeStyle = canObj.palette[1]
-        ctx.strokeRect(0.5, 0.5, canvas.width - 1, canvas.height - 1);
-    };
-    // random using palette colors
-    DRAW.rnd = (canObj, ctx, canvas, state) => {
-        let i = 0;
-        const gSize =  state.gSize === undefined ? 5 : state.gSize;
-        const len = gSize * gSize;
-        const pxSize = canObj.size / gSize;
-        while(i < len){
-            const ci = Math.floor( canObj.palette.length * Math.random() );
-            const x = i % gSize;
-            const y = Math.floor(i / gSize);
-            ctx.fillStyle = canObj.palette[ci];
-            ctx.fillRect(0.5 + x * pxSize, 0.5 + y * pxSize, pxSize, pxSize);
-            i += 1;
-        }
-    };
-    //-------- ----------
-    // HELPERS
-    //-------- ----------
-    // parse draw option helper
-    const parseDrawOption = (opt) => {
-        // if opt.draw is false for any reason return DRAW.square
-        if(!opt.draw){
-            return DRAW.square;
-        }
-        // if a string is given assume it is a key for a built in draw method
-        if(typeof opt.draw === 'string'){
-            return DRAW[opt.draw];
-        }
-        // assume we where given a custom function
-        return opt.draw;
-    };
-    //-------- ----------
-    // PUBLIC API
-    //-------- ----------
-    // create and return a canvas texture
-    api.create = function (opt) {
-        opt = opt || {};
-        // create canvas, get context, set size
-        const canvas = document.createElement('canvas'),
-        ctx = canvas.getContext('2d');
-        opt.size = opt.size === undefined ? 16 : opt.size;
-        canvas.width = opt.size;
-        canvas.height = opt.size;
-        // create canvas object
-        const canObj = {
-            texture: null,
-            size: opt.size,
-            canvas: canvas, ctx: ctx,
-            palette: opt.palette || ['black', 'white'],
-            state: opt.state || {},
-            draw: parseDrawOption(opt)
-        };
-        // create texture object
-        canObj.texture = new THREE.CanvasTexture(canvas);
-        canObj.texture.magFilter = THREE.NearestFilter;
-        canObj.texture.minFilter = THREE.NearestFilter;
-        api.update(canObj);
-        return canObj;
-    };
-    // update
-    api.update = (canObj) => {
-        canObj.draw.call(canObj, canObj, canObj.ctx, canObj.canvas, canObj.state);
-        canObj.texture.needsUpdate = true;
-    };
-}
-
-setup(canvasMod); // !!!!!!!!!!!!!
-
-const opt = {
     size: 512,
-    state: {
-        rPer: 0.2
+    width: 512,
+    height: 512,
+    widthHalf: 256,
+    heightHalf: 256,
+
+    rPer: 0.2,
+
+    init: function() {
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.ctx = this.canvas.getContext('2d');
+
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.strokeStyle = '#ff00ff';
+        this.ctx.strokeRect(0, 0, this.width, this.height);
+
+        resetTrails(this); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        this.texture = new THREE.CanvasTexture(this.canvas);
+        this.texture.magFilter = THREE.NearestFilter;
+        this.texture.minFilter = THREE.NearestFilter;
+
+        this.update();
     },
-    draw: function (canObj, ctx, canvas, state) {
-        drawTrails(ctx, state);
+
+    update: function() {
+        drawTrails(this.ctx, this);
+        this.texture.needsUpdate = true;
+    },
+
+    clearCanvas: function() {
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, this.width, this.height);
+    },
+
+    fadeCanvas: function() {
+    	this.ctx.fillStyle = 'rgba(0, 0, 0, 0.17)';
+    	this.ctx.fillRect(0, 0, this.width, this.height);
     }
+
 };
 
-var canvas = document.createElement('canvas'),
-ctx = canvas.getContext('2d');
-canvas.width = opt.size;
-canvas.height = opt.size;
-ctx.fillStyle = '#000000';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.strokeStyle = '#ff00ff';
-ctx.strokeRect(0, 0, canvas.width, canvas.height);
+NoiseGenerator.init();
 
-var texture = new THREE.CanvasTexture(canvas);
-texture.magFilter = THREE.NearestFilter;
-texture.minFilter = THREE.NearestFilter;
-
-// const material = new THREE.MeshBasicMaterial({ map: texture });
-// const material = new THREE.MeshBasicMaterial({color: 0xff0000});
-// const material = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xffffff), emissiveMap: texture });
-
-const canvasObject = canvasMod.create(opt);
-canvasObject.state.width = canvas.width;
-canvasObject.state.height = canvas.height;
-canvasObject.state.widthHalf = canvas.width / 2;
-canvasObject.state.heightHalf = canvas.height / 2;
-
-resetTrails(canvasObject.state); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-const material = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xffffff), emissiveMap: canvasObject.texture });
-
-const geo = new THREE.BoxGeometry(20, 20, 20);
-const mesh = new THREE.Mesh(geo, material);
-scene.add(mesh);
+const perlinNoiseMaterial = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xffffff), emissiveMap: NoiseGenerator.texture });
+const perlinNoiseGeometry = new THREE.BoxGeometry(20, 20, 20);
+const perlinNoiseMesh = new THREE.Mesh(perlinNoiseGeometry, perlinNoiseMaterial);
+scene.add(perlinNoiseMesh);
 
 scene.background = new THREE.Color(0x000000);
-
-// update
-const update = function(frame, frameMax) {
-    let a = frame / frameMax;
-    mesh.rotation.y = Math.PI * 2 * a;
-    canvasMod.update(canvasObject);
-};
 
 const FPS_UPDATE = 60, // fps rate to update ( low fps for low CPU use, but choppy video )
 FPS_MOVEMENT = 60;     // fps rate to move object by that is independent of frame update rate
 const FRAME_MAX = 600;
 let secs = 0,
-frame = 0,
-lt = new Date();
+    frame = 0,
+    lt = new Date();
 
 function animate() {
 	const now = new Date(),
     secs = (now - lt) / 1000;
     requestAnimationFrame(animate);
     if(secs > 1 / FPS_UPDATE) {
-        // update, render
-        update( Math.floor(frame), FRAME_MAX);
+
+        let a = Math.floor(frame) / FRAME_MAX;
+        perlinNoiseMesh.rotation.y = Math.PI * 2 * a;
+        NoiseGenerator.update();
+
         renderer.render(scene, camera);
+
         // step frame
         frame += FPS_MOVEMENT * secs;
         frame %= FRAME_MAX;
