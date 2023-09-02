@@ -1,18 +1,6 @@
 import * as THREE from 'three';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.x = 25;
-camera.position.y = 10;
-camera.position.z = -15;
-camera.lookAt(0, 0, 0);
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////
+// PERLIN NOISE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function Gradient(x, y, z) {
   this.x = x; this.y = y; this.z = z;
@@ -21,7 +9,6 @@ function Gradient(x, y, z) {
 Gradient.prototype.dot = function(x, y, z) {
   return this.x*x + this.y*y + this.z*z;
 };
-
 
 var PerlinNoise = {
 
@@ -114,96 +101,110 @@ var PerlinNoise = {
 };
 
 PerlinNoise.seed(Math.random());
-const PI2 = Math.PI * 2;
-const FF = PI2 / 8;
-var angleFF = 0;
 
-const getAngle = () => {
-	const angle = (PI2 * Math.random());
-	return angleFF = angle - (angle % FF);
+
+// LINE TRAILS /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var LineTrails = {
+
+    trailWidth: 10,
+    numberOfTrails: 400,
+    fullyClearCanvasBetweenTrailGenerations: false,
+
+    PI2: Math.PI * 2,
+    FF:  Math.PI / 4,
+
+    phase: 0,
+    trails: [],
+
+    nextAngle: function() {
+        const angle = (this.PI2 * Math.random());
+        return (angle - (angle % this.FF));
+    },
+
+    createTrails: function(state) {
+    	let num = this.numberOfTrails;
+
+    	while (num--) {
+    	    var trail = {
+                dead: false,
+                x: state.widthHalf,
+                y: state.heightHalf,
+                width: this.trailWidth,
+                vel: 1 + (2 * Math.random()),
+                angle: this.nextAngle(),
+            };
+
+    		this.trails.push(trail);
+    	}
+    },
+
+    resetTrails: function(state) {
+        if(this.fullyClearCanvasBetweenTrailGenerations) {
+            state.clearCanvas();
+        }
+
+    	this.trails = [];
+    	this.createTrails(state);
+    },
+
+    updateTrail: function(state, trail) {
+    	const shouldChange = (Math.random() > 0.97);
+    	const incAngle = (Math.random() > 0.5);
+    	trail.dead = (trail.x < 0 || trail.x > state.width || trail.y < 0 || trail.y > state.height || trail.width < 0.2);
+
+    	if (shouldChange && incAngle) {
+    		trail.angle += this.FF;
+    	} else if (shouldChange) {
+    		trail.angle -= this.FF;
+    	}
+
+    	trail.width *= 0.98;
+    },
+
+    renderTrail: function(state, trail) {
+    	let { x, y, length, vel, angle } = trail;
+
+    	const scale = 0.0009;
+    	const n = PerlinNoise.perlin(x * scale, y * scale, this.phase);
+    	const h = 180 * n;
+
+    	state.ctx.beginPath();
+    	state.ctx.lineWidth = trail.width;
+    	state.ctx.strokeStyle = `hsl(${h}, 100%, 50%)`;
+
+    	state.ctx.moveTo(trail.x, trail.y);
+
+    	trail.x += Math.cos(angle) * vel;
+    	trail.y += Math.sin(angle) * vel;
+
+    	state.ctx.lineTo(trail.x, trail.y);
+    	state.ctx.stroke();
+    	state.ctx.closePath();
+    },
+
+    drawTrails: function(state) {
+        state.fadeCanvas();
+
+        this.trails.forEach((trail) => {
+            this.updateTrail(state, trail);
+            this.renderTrail(state, trail);
+        });
+
+        this.trails = this.trails.filter(t => !t.dead);
+
+        if (!this.trails.length) {
+            this.resetTrails(state);
+        }
+
+        this.phase += 0.004;
+    }
 };
 
-let phase = 0;
-let trails = [];
-const trailWidth = 10;
-
-const createTrails = (state) => {
-	let num = 400;
-
-	while (num--) {
-		trails.push({
-			dead: false,
-			x: state.widthHalf,
-			y: state.heightHalf,
-			width: trailWidth,
-			vel: 1 + (2 * Math.random()),
-			angle: getAngle(),
-		});
-	}
-};
-
-const resetTrails = (state) => {
-    state.clearCanvas(); // ???
-	trails = [];
-	createTrails(state);
-};
-
-const updateTrail = (trail, state) => {
-	const shouldChange = Math.random() > 0.97;
-	const incAngle = Math.random() > 0.5;
-
-	trail.dead = trail.x < 0 || trail.x > state.width || trail.y < 0 || trail.y > state.height || trail.width < 0.2;
-
-	if (shouldChange && incAngle) {
-		trail.angle += FF;
-	} else if (shouldChange) {
-		trail.angle -= FF;
-	}
-
-	trail.width *= 0.98;
-}
-
-const renderTrail = (trail, ctx, phase) => {
-	let { x, y, length, vel, angle } = trail;
-
-	const scale = 0.0009;
-	const n = PerlinNoise.perlin(x * scale, y * scale, phase);
-	const h = 180 * n;
-
-	ctx.beginPath();
-	ctx.lineWidth = trail.width;
-	ctx.strokeStyle = `hsl(${h}, 100%, 50%)`;
-
-	ctx.moveTo(trail.x, trail.y);
-
-	trail.x += Math.cos(angle) * vel;
-	trail.y += Math.sin(angle) * vel;
-
-	ctx.lineTo(trail.x, trail.y);
-	ctx.stroke();
-	ctx.closePath();
-}
-
-function drawTrails(ctx, state) {
-	state.fadeCanvas();
-
-	trails.forEach((t) => {
-		updateTrail(t, state);
-		renderTrail(t, ctx, phase);
-	});
-
-	trails = trails.filter(t => !t.dead);
-
-	if (!trails.length) {
-		resetTrails(state);
-	}
-
-	phase += 0.004;
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-const NoiseGenerator = {
+const TextureGenerator = {
     canvas: null,
     ctx: null,
     texture: null,
@@ -227,7 +228,7 @@ const NoiseGenerator = {
         this.ctx.strokeStyle = '#ff00ff';
         this.ctx.strokeRect(0, 0, this.width, this.height);
 
-        resetTrails(this); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        LineTrails.resetTrails(this);
 
         this.texture = new THREE.CanvasTexture(this.canvas);
         this.texture.magFilter = THREE.NearestFilter;
@@ -237,7 +238,7 @@ const NoiseGenerator = {
     },
 
     update: function() {
-        drawTrails(this.ctx, this);
+        LineTrails.drawTrails(this);
         this.texture.needsUpdate = true;
     },
 
@@ -253,9 +254,4 @@ const NoiseGenerator = {
 
 };
 
-NoiseGenerator.init();
-
-const perlinNoiseMaterial = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xffffff), emissiveMap: NoiseGenerator.texture });
-const perlinNoiseGeometry = new THREE.BoxGeometry(20, 20, 20);
-const perlinNoiseMesh = new THREE.Mesh(perlinNoiseGeometry, perlinNoiseMaterial);
-scene.add(perlinNoiseMesh);
+TextureGenerator.init();
