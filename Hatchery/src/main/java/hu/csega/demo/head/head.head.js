@@ -18,8 +18,6 @@ const textureCrisis = new THREE.TextureLoader().load( "crisis.png" );
 const textureFaceSmile = new THREE.TextureLoader().load( "face-smile.png" );
 const textureFaceSad = new THREE.TextureLoader().load( "face-sad.png" );
 
-console.log(textureCrisis);
-
 var r1 = 10;
 var r2 = 1;
 
