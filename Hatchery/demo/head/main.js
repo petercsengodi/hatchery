@@ -18,8 +18,6 @@ const textureCrisis = new THREE.TextureLoader().load( "crisis.png" );
 const textureFaceSmile = new THREE.TextureLoader().load( "face-smile.png" );
 const textureFaceSad = new THREE.TextureLoader().load( "face-sad.png" );
 
-console.log(textureCrisis);
-
 var r1 = 10;
 var r2 = 1;
 
@@ -256,19 +254,95 @@ function partBoopCylinder() {
   }
 }
 
+function partBottom() {
+  var y = 0;
+  headVerticesRaw.push(0);
+  headVerticesRaw.push(y);
+  headVerticesRaw.push(0);
+
+  var centerIndex = headIndex;
+  headIndex++;
+
+  var firstRow = true;
+  var finishRadius = false;
+  var numberOfIndicesInARow = 0;
+  var rowIndex = 0;
+  var currentIndex = headIndex;
+
+  var radius;
+  for(radius = delta; ; radius += delta) {
+
+      if(radius >= rBoop) {
+        radius = rBoop;
+        finishRadius = true;
+      }
+
+      var finish = false;
+
+      var cylinderAngle;
+      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
+        if(cylinderAngle >= PI2) {
+          cylinderAngle = PI2;
+          finish = true;
+        }
+
+        headVerticesRaw.push(Math.cos(cylinderAngle) * radius);
+        headVerticesRaw.push(y);
+        headVerticesRaw.push(Math.sin(cylinderAngle) * radius);
+
+        headIndex++;
+
+        if(firstRow) {
+          numberOfIndicesInARow++;
+          if(cylinderAngle > 0) {
+            headIndices.push(centerIndex);
+            headIndices.push(currentIndex-1);
+            headIndices.push(currentIndex);
+          }
+        }
+
+        if(!firstRow && cylinderAngle > 0) {
+            headIndices.push(currentIndex - numberOfIndicesInARow -1);
+            headIndices.push(currentIndex - 1);
+            headIndices.push(currentIndex - numberOfIndicesInARow);
+            headIndices.push(currentIndex - numberOfIndicesInARow);
+            headIndices.push(currentIndex - 1);
+            headIndices.push(currentIndex);
+        }
+
+        ++currentIndex;
+
+        if(finish) {
+          break;
+        }
+
+      } // end for cylinderAngle
+
+      if(finishRadius) {
+        break;
+      }
+
+      firstRow = false;
+      rowIndex++;
+  } // end for curveAngle
+
+}
 
 partNeckCylinder();
 partLowerCurve();
 partLargeCylinder();
 partUpperCurve();
 partBoopCylinder();
+partBottom();
 
 const headGeometry = new THREE.BufferGeometry();
 const headVertices = new Float32Array(headVerticesRaw);
 headGeometry.setIndex(headIndices);
 headGeometry.setAttribute('position', new THREE.BufferAttribute(headVertices, 3));
-const headMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+headGeometry.computeVertexNormals();
+const headMaterial = new THREE.MeshPhongMaterial( { map: textureCrisis, ambient: 0x050505, specular: 0x555555, shininess: 30 });
 const headMesh = new THREE.Mesh(headGeometry, headMaterial);
+headMesh.castShadow = true;
 scene.add(headMesh);
 
 // ---------------------------------------------
@@ -327,8 +401,10 @@ const faceVertices = new Float32Array(faceVerticesRaw);
 faceGeometry.setIndex(faceIndices);
 faceGeometry.setAttribute('position', new THREE.BufferAttribute(faceVertices, 3));
 faceGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(faceTextureRaw), 2));
-const faceMaterial = new THREE.MeshBasicMaterial({map: textureFaceSmile});
+faceGeometry.computeVertexNormals();
+const faceMaterial = new THREE.MeshPhongMaterial( { map: textureFaceSmile, ambient: 0x050505, specular: 0x555555, shininess: 30 });
 const faceMesh = new THREE.Mesh(faceGeometry, faceMaterial);
+faceMesh.castShadow = true;
 scene.add(faceMesh);
 
 // ----------------------------------------------
@@ -424,15 +500,40 @@ const topGeometry = new THREE.BufferGeometry();
 topGeometry.setIndex(topIndices);
 topGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(topVerticesRaw), 3));
 topGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(topTextureRaw), 2));
-const topMaterial = new THREE.MeshBasicMaterial({map: textureCrisis});
+topGeometry.computeVertexNormals();
+const topMaterial = new THREE.MeshPhongMaterial( { map: textureCrisis, ambient: 0x050505, specular: 0x555555, shininess: 30 });
 const topMesh = new THREE.Mesh(topGeometry, topMaterial);
+topMesh.castShadow = true;
 scene.add(topMesh);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
-scene.background = new THREE.Color(0x404040);
+scene.background = new THREE.Color(0x000000);
+renderer.shadowMapEnabled = true
+renderer.shadowMapType = THREE.PCFSoftShadowMap;
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.15);
+scene.add(ambientLight);
+
+const light = new THREE.DirectionalLight();
+light.position.set(250, 200, 200);
+light.castShadow = true;
+light.shadow.mapSize.width = 512;
+light.shadow.mapSize.height = 512;
+light.shadow.camera.near = 0.5;
+light.shadow.camera.far = 10000;
+scene.add(light);
+
+const lightColor = { color: light.color.getHex() };
+light.color.set(lightColor.color);
+
+const planeGeometry = new THREE.PlaneGeometry(1000, 1000);
+const plane = new THREE.Mesh(planeGeometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+plane.rotateX(-Math.PI / 2);
+plane.position.y = -20;
+plane.receiveShadow = true;
+scene.add(plane);
 
 var counter = 0;
 var textureIndex = 0;
