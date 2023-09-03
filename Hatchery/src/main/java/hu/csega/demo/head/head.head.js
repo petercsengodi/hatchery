@@ -14,586 +14,604 @@ document.body.appendChild(renderer.domElement);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-const textureCrisis = new THREE.TextureLoader().load( "crisis.png" );
-const textureFaceSmile = new THREE.TextureLoader().load( "face-smile.png" );
-const textureFaceSad = new THREE.TextureLoader().load( "face-sad.png" );
+var HeadShape = {
+    textureCrisis: new THREE.TextureLoader().load("crisis.png"),
+    textureFaceSmile: new THREE.TextureLoader().load("face-smile.png"),
+    textureFaceSad: new THREE.TextureLoader().load("face-sad.png"),
 
-var r1 = 10;
-var r2 = 1;
+    castShadow: true,
+    receiveShadow: false, // If true, the shadow casted on itself is not perfect.
 
-var rLarge = 10;
-var hLarge = 8;
+    init: function() {
+        this.numberOfVerticesInARow = 0;
+        this.headIndex = 0;
 
-var rNeck = 6.1;
-var hNeck = 3;
+        this.rLarge = 10;
+        this.hLarge = 8;
 
-var rBoop = 6;
-var hBoop = 3;
+        this.rNeck = 6.1;
+        this.hNeck = 3;
 
-var rCurve = (rLarge - rBoop);
+        this.rBoop = 6;
+        this.hBoop = 3;
 
-var delta = 0.3;
-var cylinderAngleDelta = delta / rLarge;
-var curveAngleDelta = delta / rCurve;
+        this.rCurve = (this.rLarge - this.rBoop);
 
-var PI2 = 2 * Math.PI;
-var PIper2 = Math.PI / 2;
-var FaceFrom = - Math.PI / 4;
-var FaceTo = Math.PI / 4;
-var FaceWidth = FaceTo - FaceFrom;
-var HeadFrom = Math.PI / 4;
-var HeadTo = PI2 - Math.PI / 4;
+        this.delta = 0.3;
+        this.cylinderAngleDelta = this.delta / this.rLarge;
+        this.curveAngleDelta = this.delta / this.rCurve;
 
-// -----------------------------------------------------------
+        this.PI2 = 2 * Math.PI;
+        this.PIper2 = Math.PI / 2;
+        this.FaceFrom = - Math.PI / 4;
+        this.FaceTo = Math.PI / 4;
+        this.FaceWidth = this.FaceTo - this.FaceFrom;
+        this.HeadFrom = Math.PI / 4;
+        this.HeadTo = this.PI2 - Math.PI / 4;
 
-var headVerticesRaw = [];
-var headIndices = [];
-var headIndex = 0;
-
-function partNeckCylinder() {
-  var finishHeight = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = headIndex;
-
-  var height;
-  for(height = 0; ; height += delta) {
-
-      if(height >= hNeck) {
-        height = hNeck;
-        finishHeight = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= PI2) {
-          cylinderAngle = PI2;
-          finish = true;
+        var cylinderAngle;
+        for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+            this.numberOfVerticesInARow++;
+            if(cylinderAngle >= this.PI2) {
+                break;
+            }
         }
 
-        headVerticesRaw.push(Math.cos(cylinderAngle) * rNeck);
-        headVerticesRaw.push(height);
-        headVerticesRaw.push(Math.sin(cylinderAngle) * rNeck);
-        headIndex++;
-
-        if(height <= 0) { numberOfIndicesInARow++; }
-        if(height > 0 && cylinderAngle > 0) {
-            headIndices.push(currentIndex - numberOfIndicesInARow - 1);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex);
-        }
-
-        currentIndex++;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishHeight) {
-        break;
-      }
-
-      rowIndex++;
-  } // end for height
-
-}
-
-function partLowerCurve() {
-  var finishCurve = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = headIndex;
-
-  var curveAngle;
-  for(curveAngle = 0; ; curveAngle += curveAngleDelta) {
-
-      if(curveAngle >= PIper2) {
-        curveAngle = PIper2;
-        finishCurve = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= PI2) {
-          cylinderAngle = PI2;
-          finish = true;
-        }
-
-        headVerticesRaw.push(Math.cos(cylinderAngle) * (rLarge - rCurve * (1- Math.cos(curveAngle))));
-        headVerticesRaw.push(hNeck + rCurve * (1 - Math.sin(curveAngle)));
-        headVerticesRaw.push(Math.sin(cylinderAngle) * (rLarge - rCurve * (1- Math.cos(curveAngle))));
-        headIndex++;
-
-        if(curveAngle <= 0) { numberOfIndicesInARow++; }
-        if(curveAngle > 0 && cylinderAngle > 0) {
-            headIndices.push(currentIndex - numberOfIndicesInARow - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex);
-        }
-
-        currentIndex++;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishCurve) {
-        break;
-      }
-
-      rowIndex++;
-  } // end for curveAngle
-
-}
-
-function partLargeCylinder() {
-  var finishHeight = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = headIndex;
-
-  var height;
-  for(height = 0; ; height += delta) {
-
-      if(height >= hLarge) {
-        height = hLarge;
-        finishHeight = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = HeadFrom; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= HeadTo) {
-          cylinderAngle = HeadTo;
-          finish = true;
-        }
-
-        headVerticesRaw.push(Math.cos(cylinderAngle) * rLarge);
-        headVerticesRaw.push(hNeck + rCurve + height);
-        headVerticesRaw.push(Math.sin(cylinderAngle) * rLarge);
-        headIndex++;
-
-        if(height <= 0) { numberOfIndicesInARow++; }
-        if(height > 0 && cylinderAngle > HeadFrom) {
-            headIndices.push(currentIndex - numberOfIndicesInARow - 1);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex);
-        }
-
-        currentIndex++;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishHeight) {
-        break;
-      }
-
-      rowIndex++;
-  } // end for height
-
-}
-
-function partUpperCurve() {
-  var finishCurve = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = headIndex;
-
-  var curveAngle;
-  for(curveAngle = 0; ; curveAngle += curveAngleDelta) {
-
-      if(curveAngle >= PIper2) {
-        curveAngle = PIper2;
-        finishCurve = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= PI2) {
-          cylinderAngle = PI2;
-          finish = true;
-        }
-
-        headVerticesRaw.push(Math.cos(cylinderAngle) * (rLarge - rCurve + rCurve * Math.cos(curveAngle)));
-        headVerticesRaw.push(hNeck + rCurve + hLarge + rCurve * Math.sin(curveAngle));
-        headVerticesRaw.push(Math.sin(cylinderAngle) * (rLarge - rCurve + rCurve * Math.cos(curveAngle)));
-        headIndex++;
-
-        if(curveAngle <= 0) { numberOfIndicesInARow++; }
-        if(curveAngle > 0 && cylinderAngle > 0) {
-            headIndices.push(currentIndex - numberOfIndicesInARow - 1);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex);
-        }
-
-        currentIndex++;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishCurve) {
-        break;
-      }
-
-      rowIndex++;
-  } // end for curveAngle
-
-}
-
-function partBoopCylinder() {
-  var finishHeight = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = headIndex;
-
-  var height;
-  for(height = 0; ; height += delta) {
-
-      if(height >= hBoop) {
-        height = hBoop;
-        finishHeight = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= PI2) {
-          cylinderAngle = PI2;
-          finish = true;
-        }
-
-        headVerticesRaw.push(Math.cos(cylinderAngle) * rBoop);
-        headVerticesRaw.push(hNeck + rCurve + hLarge + rCurve + height);
-        headVerticesRaw.push(Math.sin(cylinderAngle) * rBoop);
-        headIndex++;
-
-        if(height <= 0) { numberOfIndicesInARow++; }
-        if(height > 0 && cylinderAngle > 0) {
-            headIndices.push(currentIndex - numberOfIndicesInARow - 1);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex);
-        }
-
-        currentIndex++;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishHeight) {
-        break;
-      }
-
-      rowIndex++;
-  } // end for height
-
-}
-
-function partBottom() {
-  var y = delta; // Should be zero.
-  headVerticesRaw.push(0);
-  headVerticesRaw.push(y);
-  headVerticesRaw.push(0);
-
-  var centerIndex = headIndex;
-  headIndex++;
-
-  var firstRow = true;
-  var finishRadius = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = headIndex;
-
-  var radius;
-  for(radius = delta; ; radius += delta) {
-
-      if(radius >= rBoop) {
-        radius = rBoop;
-        finishRadius = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= PI2) {
-          cylinderAngle = PI2;
-          finish = true;
-        }
-
-        headVerticesRaw.push(Math.cos(cylinderAngle) * radius);
-        headVerticesRaw.push(y);
-        headVerticesRaw.push(Math.sin(cylinderAngle) * radius);
-
-        headIndex++;
-
-        if(firstRow) {
-          numberOfIndicesInARow++;
-          if(cylinderAngle > 0) {
-            headIndices.push(centerIndex);
-            headIndices.push(currentIndex-1);
-            headIndices.push(currentIndex);
-          }
-        }
-
-        if(!firstRow && cylinderAngle > 0) {
-            headIndices.push(currentIndex - numberOfIndicesInARow -1);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - numberOfIndicesInARow);
-            headIndices.push(currentIndex - 1);
-            headIndices.push(currentIndex);
-        }
-
-        ++currentIndex;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishRadius) {
-        break;
-      }
-
-      firstRow = false;
-      rowIndex++;
-  } // end for curveAngle
-
-}
-
-partNeckCylinder();
-partLowerCurve();
-partLargeCylinder();
-partUpperCurve();
-partBoopCylinder();
-partBottom();
-
-const headGeometry = new THREE.BufferGeometry();
-const headVertices = new Float32Array(headVerticesRaw);
-headGeometry.setIndex(headIndices);
-headGeometry.setAttribute('position', new THREE.BufferAttribute(headVertices, 3));
-headGeometry.computeVertexNormals();
-const headMaterial = new THREE.MeshPhongMaterial( { map: textureCrisis, ambient: 0x050505, specular: 0x555555, shininess: 30 });
-const headMesh = new THREE.Mesh(headGeometry, headMaterial);
-headMesh.castShadow = true;
-scene.add(headMesh);
-
-// ---------------------------------------------
-
-var faceVerticesRaw = [];
-var faceTextureRaw = [];
-var faceIndices = [];
-var faceIndex = 0;
-
-function partFace() {
-  var finishHeight = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = faceIndex;
-
-  var height;
-  for(height = 0; ; height += delta) {
-
-      if(height >= hLarge) {
-        height = hLarge;
-        finishHeight = true;
-      }
-
-      var v = (height / hLarge);
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = FaceFrom; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= FaceTo) {
-          cylinderAngle = FaceTo;
-          finish = true;
-        }
-
-        faceVerticesRaw.push(Math.cos(cylinderAngle) * rLarge);
-        faceVerticesRaw.push(hNeck + rCurve + height);
-        faceVerticesRaw.push(Math.sin(cylinderAngle) * rLarge);
-        faceIndex++;
-
-        var u = (cylinderAngle - FaceFrom) / FaceWidth;
-        faceTextureRaw.push(u);
-        faceTextureRaw.push(v);
-
-        if(height <= 0) { numberOfIndicesInARow++; }
-        if(height > 0 && cylinderAngle > FaceFrom) {
-            faceIndices.push(currentIndex - numberOfIndicesInARow - 1);
-            faceIndices.push(currentIndex - 1);
-            faceIndices.push(currentIndex - numberOfIndicesInARow);
-            faceIndices.push(currentIndex - numberOfIndicesInARow);
-            faceIndices.push(currentIndex - 1);
-            faceIndices.push(currentIndex);
-        }
-
-        currentIndex++;
-
-        if(finish) {
-          break;
-        }
-
-      } // end for cylinderAngle
-
-      if(finishHeight) {
-        break;
-      }
-
-      rowIndex++;
-  } // end for height
-
-}
-
-partFace();
-
-const faceGeometry = new THREE.BufferGeometry();
-const faceVertices = new Float32Array(faceVerticesRaw);
-faceGeometry.setIndex(faceIndices);
-faceGeometry.setAttribute('position', new THREE.BufferAttribute(faceVertices, 3));
-faceGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(faceTextureRaw), 2));
-faceGeometry.computeVertexNormals();
-const faceMaterial = new THREE.MeshPhongMaterial( { map: textureFaceSmile, ambient: 0x050505, specular: 0x555555, shininess: 30 });
-const faceMesh = new THREE.Mesh(faceGeometry, faceMaterial);
-faceMesh.castShadow = true;
-scene.add(faceMesh);
-
-// ----------------------------------------------
-
-var topVerticesRaw = [];
-var topTextureRaw = [];
-var topIndices = [];
-var topIndex = 0;
-
-function partTop() {
-  var y = hNeck + rCurve + hLarge + rCurve + hBoop;
-  topVerticesRaw.push(0);
-  topVerticesRaw.push(y);
-  topVerticesRaw.push(0);
-
-  topTextureRaw.push(0.5);
-  topTextureRaw.push(0.5);
-
-  var centerIndex = topIndex;
-  topIndex++;
-
-  var firstRow = true;
-  var finishRadius = false;
-  var numberOfIndicesInARow = 0;
-  var rowIndex = 0;
-  var currentIndex = topIndex;
-
-  var radius;
-  for(radius = delta; ; radius += delta) {
-
-      if(radius >= rBoop) {
-        radius = rBoop;
-        finishRadius = true;
-      }
-
-      var finish = false;
-
-      var cylinderAngle;
-      for(cylinderAngle = 0; ; cylinderAngle += cylinderAngleDelta) {
-        if(cylinderAngle >= PI2) {
-          cylinderAngle = PI2;
-          finish = true;
-        }
-
-        topVerticesRaw.push(Math.cos(cylinderAngle) * radius);
-        topVerticesRaw.push(y);
-        topVerticesRaw.push(Math.sin(cylinderAngle) * radius);
-
-        topTextureRaw.push(0.5 - Math.sin(cylinderAngle) * (0.5 * radius / rBoop));
-        topTextureRaw.push(0.5 - Math.cos(cylinderAngle) * (0.5 * radius / rBoop));
+        var headVertices = [];
+        var headIndices = [];
+
+        this.partBottom(headVertices, headIndices);
+        this.partNeckCylinder(headVertices, headIndices);
+        this.partLowerCurve(headVertices, headIndices);
+        this.partBackOfHead(headVertices, headIndices);
+        this.partUpperCurve(headVertices, headIndices);
+        this.partBoopCylinder(headVertices, headIndices);
+
+        const headGeometry = new THREE.BufferGeometry();
+        headGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(headVertices), 3));
+        headGeometry.setIndex(headIndices);
+        headGeometry.computeVertexNormals();
+        const headMaterial = new THREE.MeshPhongMaterial( { map: this.textureCrisis, ambient: 0x050505, specular: 0x555555, shininess: 30 });
+        this.headMesh = new THREE.Mesh(headGeometry, headMaterial);
+        this.headMesh.castShadow = this.castShadow;
+        this.headMesh.receiveShadow = this.receiveShadow;
+
+        this.partTop();
+
+        this.partFace();
+    },
+
+    partBottom: function(headVertices, headIndices) {
+        var y = 0;
+        headVertices.push(0);
+        headVertices.push(y);
+        headVertices.push(0);
+
+        var centerIndex = this.headIndex;
+        this.headIndex++;
+
+        var firstRow = true;
+        var finishRadius = false;
+        var currentIndex = this.headIndex;
+
+        var radius;
+        for(radius = this.delta; ; radius += this.delta) {
+
+            if(radius >= this.rBoop) {
+                radius = this.rBoop;
+                finishRadius = true;
+            }
+
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.PI2) {
+                    cylinderAngle = this.PI2;
+                    finish = true;
+                }
+
+                headVertices.push(Math.cos(cylinderAngle) * radius);
+                headVertices.push(y);
+                headVertices.push(Math.sin(cylinderAngle) * radius);
+                this.headIndex++;
+
+                if(firstRow && cylinderAngle > 0) {
+                    headIndices.push(centerIndex);
+                    headIndices.push(currentIndex-1);
+                    headIndices.push(currentIndex);
+                }
+
+                if(!firstRow && cylinderAngle > 0) {
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow - 1);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishRadius) {
+                break;
+            }
+
+            firstRow = false;
+        } // end for curveAngle
+
+    }, // end of function partBottom(...)
+
+    partNeckCylinder: function(headVertices, headIndices) {
+        var finishHeight = false;
+        var currentIndex = this.headIndex;
+
+        var height;
+        for(height = this.delta; ; height += this.delta) {
+            if(height >= this.hNeck) {
+                height = this.hNeck;
+                finishHeight = true;
+            }
+
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.PI2) {
+                    cylinderAngle = this.PI2;
+                    finish = true;
+                }
+
+                headVertices.push(Math.cos(cylinderAngle) * this.rNeck);
+                headVertices.push(height);
+                headVertices.push(Math.sin(cylinderAngle) * this.rNeck);
+                this.headIndex++;
+
+                if(cylinderAngle > 0) {
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow - 1);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+                } // end for cylinderAngle
+
+                if(finishHeight) {
+                    break;
+                }
+
+        } // end for height
+
+    }, // end of function partNeckCylinder(...)
+
+    partLowerCurve: function(headVertices, headIndices) {
+        var finishCurve = false;
+        var currentIndex = this.headIndex;
+
+        var curveAngle;
+        for(curveAngle = this.curveAngleDelta; ; curveAngle += this.curveAngleDelta) {
+            if(curveAngle >= this.PIper2) {
+                curveAngle = this.PIper2;
+                finishCurve = true;
+            }
 
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.PI2) {
+                    cylinderAngle = this.PI2;
+                    finish = true;
+                }
+
+                headVertices.push(Math.cos(cylinderAngle) * (this.rLarge - this.rCurve + this.rCurve * Math.cos(curveAngle - this.PIper2)));
+                headVertices.push(this.hNeck + this.rCurve + this.rCurve * (Math.sin(curveAngle - this.PIper2)));
+                headVertices.push(Math.sin(cylinderAngle) * (this.rLarge - this.rCurve + this.rCurve * Math.cos(curveAngle - this.PIper2)));
+                this.headIndex++;
+
+                if(curveAngle > 0 && cylinderAngle > 0) {
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow - 1);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishCurve) {
+                break;
+            }
+
+        } // end for curveAngle
+
+    }, // end of function partLowerCurve(...)
+
+    partBackOfHead: function(headVertices, headIndices) {
+        var finishHeight = false;
+        var backOfHeadVerticesInARow = 0;
+        var currentIndex = this.headIndex;
+
+        var height;
+        for(height = 0; ; height += this.delta) {
+
+            if(height >= this.hLarge) {
+                height = this.hLarge;
+                finishHeight = true;
+            }
+
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = this.HeadFrom; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.HeadTo) {
+                    cylinderAngle = this.HeadTo;
+                    finish = true;
+                }
+
+                headVertices.push(Math.cos(cylinderAngle) * this.rLarge);
+                headVertices.push(this.hNeck + this.rCurve + height);
+                headVertices.push(Math.sin(cylinderAngle) * this.rLarge);
+                this.headIndex++;
+
+                if(height <= 0) {
+                    backOfHeadVerticesInARow++;
+                }
+
+                if(height > 0 && cylinderAngle > this.HeadFrom) {
+                    headIndices.push(currentIndex - backOfHeadVerticesInARow - 1);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex - backOfHeadVerticesInARow);
+                    headIndices.push(currentIndex - backOfHeadVerticesInARow);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishHeight) {
+                break;
+            }
+
+        } // end for height
+
+    }, // end of function partBackOfHead(...)
+
+    partUpperCurve: function(headVertices, headIndices) {
+        var finishCurve = false;
+        var currentIndex = this.headIndex;
+
+        var curveAngle;
+        for(curveAngle = 0; ; curveAngle += this.curveAngleDelta) {
+            if(curveAngle >= this.PIper2) {
+                curveAngle = this.PIper2;
+                finishCurve = true;
+            }
+
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.PI2) {
+                    cylinderAngle = this.PI2;
+                    finish = true;
+                }
+
+                headVertices.push(Math.cos(cylinderAngle) * (this.rLarge - this.rCurve + this.rCurve * Math.cos(curveAngle)));
+                headVertices.push(this.hNeck + this.rCurve + this.hLarge + this.rCurve * Math.sin(curveAngle));
+                headVertices.push(Math.sin(cylinderAngle) * (this.rLarge - this.rCurve + this.rCurve * Math.cos(curveAngle)));
+                this.headIndex++;
+
+                if(curveAngle > 0 && cylinderAngle > 0) {
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow - 1);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishCurve) {
+                break;
+            }
+
+        } // end for curveAngle
+
+    }, // end of function partUpperCurve(...)
+
+    partBoopCylinder: function(headVertices, headIndices) {
+        var finishHeight = false;
+        var currentIndex = this.headIndex;
+
+        var height;
+        for(height = 0; ; height += this.delta) {
+            if(height >= this.hBoop) {
+                height = this.hBoop;
+                finishHeight = true;
+            }
+
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.PI2) {
+                    cylinderAngle = this.PI2;
+                    finish = true;
+                }
+
+                headVertices.push(Math.cos(cylinderAngle) * this.rBoop);
+                headVertices.push(this.hNeck + this.rCurve + this.hLarge + this.rCurve + height);
+                headVertices.push(Math.sin(cylinderAngle) * this.rBoop);
+                this.headIndex++;
+
+                if(height > 0 && cylinderAngle > 0) {
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow - 1);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    headIndices.push(currentIndex - 1);
+                    headIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishHeight) {
+                break;
+            }
+
+        } // end for height
+
+    }, // end of function partBoopCylinder(...)
+
+    partTop: function() {
+        var topVertices = [];
+        var topTexture = [];
+        var topIndices = [];
+        var topIndex = 0;
+
+        var y = this.hNeck + this.rCurve + this.hLarge + this.rCurve + this.hBoop;
+        topVertices.push(0);
+        topVertices.push(y);
+        topVertices.push(0);
+
+        topTexture.push(0.5);
+        topTexture.push(0.5);
+
+        var centerIndex = topIndex;
         topIndex++;
 
-        if(firstRow) {
-          numberOfIndicesInARow++;
-          if(cylinderAngle > 0) {
-            topIndices.push(centerIndex);
-            topIndices.push(currentIndex);
-            topIndices.push(currentIndex-1);
-          }
+        var firstRow = true;
+        var finishRadius = false;
+        var currentIndex = topIndex;
+
+        var radius;
+        for(radius = this.delta; ; radius += this.delta) {
+            if(radius >= this.rBoop) {
+                radius = this.rBoop;
+                finishRadius = true;
+            }
+
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.PI2) {
+                    cylinderAngle = this.PI2;
+                    finish = true;
+                }
+
+                topVertices.push(Math.cos(cylinderAngle) * radius);
+                topVertices.push(y);
+                topVertices.push(Math.sin(cylinderAngle) * radius);
+
+                topTexture.push(0.5 - Math.sin(cylinderAngle) * (0.48 * radius / this.rBoop));
+                topTexture.push(0.5 - Math.cos(cylinderAngle) * (0.48 * radius / this.rBoop));
+
+                topIndex++;
+
+                if(firstRow && cylinderAngle > 0) {
+                    topIndices.push(centerIndex);
+                    topIndices.push(currentIndex);
+                    topIndices.push(currentIndex-1);
+                }
+
+                if(!firstRow && cylinderAngle > 0) {
+                    topIndices.push(currentIndex - this.numberOfVerticesInARow -1);
+                    topIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    topIndices.push(currentIndex - 1);
+                    topIndices.push(currentIndex - 1);
+                    topIndices.push(currentIndex - this.numberOfVerticesInARow);
+                    topIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishRadius) {
+                break;
+            }
+
+            firstRow = false;
+        } // end for curveAngle
+
+        const topGeometry = new THREE.BufferGeometry();
+        topGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(topVertices), 3));
+        topGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(topTexture), 2));
+        topGeometry.setIndex(topIndices);
+        topGeometry.computeVertexNormals();
+        const topMaterial = new THREE.MeshPhongMaterial( { map: this.textureCrisis, ambient: 0x050505, specular: 0x555555, shininess: 30 });
+        this.topMesh = new THREE.Mesh(topGeometry, topMaterial);
+        this.topMesh.castShadow = this.castShadow;
+        this.topMesh.receiveShadow = this.receiveShadow;
+    }, // end of function partTop(...)
+
+    partFace: function() {
+        var faceVertices = [];
+        var faceTexture = [];
+        var faceIndices = [];
+        var faceIndex = 0;
+
+        var finishHeight = false;
+        var numberOfFaceVerticesInARow = 0;
+        var currentIndex = faceIndex;
+
+        var height;
+        for(height = 0; ; height += this.delta) {
+            if(height >= this.hLarge) {
+                height = this.hLarge;
+                finishHeight = true;
+            }
+
+            var v = (height / this.hLarge);
+            var finish = false;
+
+            var cylinderAngle;
+            for(cylinderAngle = this.FaceFrom; ; cylinderAngle += this.cylinderAngleDelta) {
+                if(cylinderAngle >= this.FaceTo) {
+                    cylinderAngle = this.FaceTo;
+                    finish = true;
+                }
+
+                faceVertices.push(Math.cos(cylinderAngle) * this.rLarge);
+                faceVertices.push(this.hNeck + this.rCurve + height);
+                faceVertices.push(Math.sin(cylinderAngle) * this.rLarge);
+                faceIndex++;
+
+                var u = (cylinderAngle - this.FaceFrom) / this.FaceWidth;
+                faceTexture.push(u * 0.94 + 0.03);
+                faceTexture.push(v * 0.94 + 0.03);
+
+                if(height <= 0) {
+                    numberOfFaceVerticesInARow++;
+                }
+
+                if(height > 0 && cylinderAngle > this.FaceFrom) {
+                    faceIndices.push(currentIndex - numberOfFaceVerticesInARow - 1);
+                    faceIndices.push(currentIndex - 1);
+                    faceIndices.push(currentIndex - numberOfFaceVerticesInARow);
+                    faceIndices.push(currentIndex - numberOfFaceVerticesInARow);
+                    faceIndices.push(currentIndex - 1);
+                    faceIndices.push(currentIndex);
+                }
+
+                currentIndex++;
+
+                if(finish) {
+                    break;
+                }
+
+            } // end for cylinderAngle
+
+            if(finishHeight) {
+                break;
+            }
+
+        } // end for height
+
+        const faceGeometry = new THREE.BufferGeometry();
+        faceGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(faceVertices), 3));
+        faceGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(faceTexture), 2));
+        faceGeometry.setIndex(faceIndices);
+        faceGeometry.computeVertexNormals();
+        const faceMaterial = new THREE.MeshPhongMaterial( { map: this.textureFaceSmile, ambient: 0x050505, specular: 0x555555, shininess: 30 });
+        this.faceMesh = new THREE.Mesh(faceGeometry, faceMaterial);
+        this.faceMesh.castShadow = this.castShadow;
+        this.faceMesh.receiveShadow = this.receiveShadow;
+
+    }, // end of function partFace(...)
+
+    position: function(x, y, z) {
+        this.headMesh.position.set(x, y, z);
+        this.faceMesh.position.set(x, y, z);
+        this.topMesh.position.set(x, y, z);
+    },
+
+    scale: function(x, y, z) {
+        this.headMesh.scale.set(x, y, z);
+        this.faceMesh.scale.set(x, y, z);
+        this.topMesh.scale.set(x, y, z);
+    },
+
+    rotate: function(x, y, z) {
+        if(x != 0) {
+            this.headMesh.rotation.x += x;
+            this.faceMesh.rotation.x += x;
+            this.topMesh.rotation.x += x;
         }
 
-        if(!firstRow && cylinderAngle > 0) {
-            topIndices.push(currentIndex - numberOfIndicesInARow -1);
-            topIndices.push(currentIndex - numberOfIndicesInARow);
-            topIndices.push(currentIndex - 1);
-            topIndices.push(currentIndex - 1);
-            topIndices.push(currentIndex - numberOfIndicesInARow);
-            topIndices.push(currentIndex);
+        if(y != 0) {
+            this.headMesh.rotation.y += y;
+            this.faceMesh.rotation.y += y;
+            this.topMesh.rotation.y += y;
         }
 
-        ++currentIndex;
-
-        if(finish) {
-          break;
+        if(z != 0) {
+            this.headMesh.rotation.z += z;
+            this.faceMesh.rotation.z += z;
+            this.topMesh.rotation.z += z;
         }
+    },
 
-      } // end for cylinderAngle
+    setFace: function (texture) {
+        this.faceMesh.material.map = texture;
+        this.faceMesh.material.needsUpdate = true;
+    },
 
-      if(finishRadius) {
-        break;
-      }
-
-      firstRow = false;
-      rowIndex++;
-  } // end for curveAngle
-
-}
-
-partTop();
-
-const topGeometry = new THREE.BufferGeometry();
-topGeometry.setIndex(topIndices);
-topGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(topVerticesRaw), 3));
-topGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(topTextureRaw), 2));
-topGeometry.computeVertexNormals();
-const topMaterial = new THREE.MeshPhongMaterial( { map: textureCrisis, ambient: 0x050505, specular: 0x555555, shininess: 30 });
-const topMesh = new THREE.Mesh(topGeometry, topMaterial);
-topMesh.castShadow = true;
-scene.add(topMesh);
+    addToScene: function(scene) {
+        scene.add(this.headMesh);
+        scene.add(this.topMesh);
+        scene.add(this.faceMesh);
+    }
+};
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+
+HeadShape.init();
+HeadShape.addToScene(scene)

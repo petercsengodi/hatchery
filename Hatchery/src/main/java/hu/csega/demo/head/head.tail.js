@@ -31,9 +31,7 @@ var textureIndex = 0;
 function animate() {
     requestAnimationFrame(animate);
 
-    headMesh.rotation.z += 0.01;
-    faceMesh.rotation.z += 0.01;
-    topMesh.rotation.z += 0.01;
+    HeadShape.rotate(0, 0, 0.01);
 
     counter++;
     if(counter > 20) {
@@ -41,12 +39,11 @@ function animate() {
       textureIndex = 1 - textureIndex;
 
       if(textureIndex == 0) {
-        faceMesh.material.map = textureFaceSmile;
+        HeadShape.setFace(HeadShape.textureFaceSmile);
       } else {
-        faceMesh.material.map = textureFaceSad;
+        HeadShape.setFace(HeadShape.textureFaceSad);
       }
 
-      faceMesh.material.needsUpdate = true;
       counter = 0;
     }
 
