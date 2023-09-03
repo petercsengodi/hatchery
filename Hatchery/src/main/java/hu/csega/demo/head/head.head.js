@@ -2,9 +2,9 @@ import * as THREE from 'three';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.x = 30;
-camera.position.y = 12;
-camera.position.z = -17;
+camera.position.x = 40;
+camera.position.y = 5;
+camera.position.z = 0;
 camera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer();
@@ -18,6 +18,7 @@ var HeadShape = {
     textureCrisis: new THREE.TextureLoader().load("crisis.png"),
     textureFaceSmile: new THREE.TextureLoader().load("face-smile.png"),
     textureFaceSad: new THREE.TextureLoader().load("face-sad.png"),
+    textureFaceTired: new THREE.TextureLoader().load("face-tired.png"),
 
     castShadow: true,
     receiveShadow: false, // If true, the shadow casted on itself is not perfect.
@@ -43,11 +44,11 @@ var HeadShape = {
 
         this.PI2 = 2 * Math.PI;
         this.PIper2 = Math.PI / 2;
-        this.FaceFrom = - Math.PI / 4;
-        this.FaceTo = Math.PI / 4;
+        this.FaceTo = Math.PI / 6;
+        this.FaceFrom = - this.FaceTo;
         this.FaceWidth = this.FaceTo - this.FaceFrom;
-        this.HeadFrom = Math.PI / 4;
-        this.HeadTo = this.PI2 - Math.PI / 4;
+        this.HeadFrom = this.FaceTo;
+        this.HeadTo = this.PI2 - this.FaceTo;
 
         var cylinderAngle;
         for(cylinderAngle = 0; ; cylinderAngle += this.cylinderAngleDelta) {
@@ -614,4 +615,8 @@ var HeadShape = {
 
 
 HeadShape.init();
-HeadShape.addToScene(scene)
+HeadShape.addToScene(scene);
+
+// HeadShape.rotate(0, Math.PI/2, 0);
+HeadShape.position(0, -10, 0);
+

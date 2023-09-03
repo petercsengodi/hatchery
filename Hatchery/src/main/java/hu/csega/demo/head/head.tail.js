@@ -31,17 +31,22 @@ var textureIndex = 0;
 function animate() {
     requestAnimationFrame(animate);
 
-    HeadShape.rotate(0, 0, 0.01);
-
     counter++;
-    if(counter > 20) {
+    if(counter <= 40) {
+        HeadShape.rotate(0, 0, -0.005);
+    } else if(counter <= 80) {
+        HeadShape.rotate(0, 0, +0.005);
+    } else {
       // change face texture
-      textureIndex = 1 - textureIndex;
+      textureIndex++;
 
-      if(textureIndex == 0) {
+      if(textureIndex >= 3) {
         HeadShape.setFace(HeadShape.textureFaceSmile);
-      } else {
+        textureIndex = 0;
+      } else if(textureIndex == 1) {
         HeadShape.setFace(HeadShape.textureFaceSad);
+      } else {
+        HeadShape.setFace(HeadShape.textureFaceTired);
       }
 
       counter = 0;
