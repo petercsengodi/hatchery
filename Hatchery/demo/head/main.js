@@ -19,6 +19,13 @@ var HeadShape = {
     textureFaceSmile: new THREE.TextureLoader().load("face-smile.png"),
     textureFaceSad: new THREE.TextureLoader().load("face-sad.png"),
     textureFaceTired: new THREE.TextureLoader().load("face-tired.png"),
+    textureFaceNerd: new THREE.TextureLoader().load("face-nerd.png"),
+    textureFaceHope: new THREE.TextureLoader().load("face-hope.png"),
+    textureFaceWorked: new THREE.TextureLoader().load("face-worked.png"),
+    textureFaceUnamused: new THREE.TextureLoader().load("face-unamused.png"),
+    textureFaceDesperate: new THREE.TextureLoader().load("face-desp.png"),
+    textureFaceProud: new THREE.TextureLoader().load("face-proud.png"),
+    textureFaceExhausted: new THREE.TextureLoader().load("face-exhausted.png"),
 
     castShadow: true,
     receiveShadow: false, // If true, the shadow casted on itself is not perfect.
@@ -44,7 +51,7 @@ var HeadShape = {
 
         this.PI2 = 2 * Math.PI;
         this.PIper2 = Math.PI / 2;
-        this.FaceTo = Math.PI / 6;
+        this.FaceTo = Math.PI / 6.5;
         this.FaceFrom = - this.FaceTo;
         this.FaceWidth = this.FaceTo - this.FaceFrom;
         this.HeadFrom = this.FaceTo;
@@ -524,7 +531,7 @@ var HeadShape = {
                 faceVertices.push(Math.sin(cylinderAngle) * this.rLarge);
                 faceIndex++;
 
-                var u = (cylinderAngle - this.FaceFrom) / this.FaceWidth;
+                var u = 1 - ((cylinderAngle - this.FaceFrom) / this.FaceWidth);
                 faceTexture.push(u * 0.94 + 0.03);
                 faceTexture.push(v * 0.94 + 0.03);
 
@@ -662,13 +669,27 @@ function animate() {
       // change face texture
       textureIndex++;
 
-      if(textureIndex >= 3) {
+      if(textureIndex == 1) {
+        HeadShape.setFace(HeadShape.textureFaceSad);
+      } else if(textureIndex == 2) {
+        HeadShape.setFace(HeadShape.textureFaceNerd);
+      } else if(textureIndex == 3) {
+        HeadShape.setFace(HeadShape.textureFaceProud);
+      } else if(textureIndex == 4) {
+        HeadShape.setFace(HeadShape.textureFaceHope);
+      } else if(textureIndex == 5) {
+        HeadShape.setFace(HeadShape.textureFaceWorked);
+      } else if(textureIndex == 6) {
+        HeadShape.setFace(HeadShape.textureFaceUnamused);
+      } else if(textureIndex == 7) {
+        HeadShape.setFace(HeadShape.textureFaceDesperate);
+      } else if(textureIndex == 8) {
+        HeadShape.setFace(HeadShape.textureFaceTired);
+      } else if(textureIndex == 9) {
+        HeadShape.setFace(HeadShape.textureFaceExhausted);
+      } else {
         HeadShape.setFace(HeadShape.textureFaceSmile);
         textureIndex = 0;
-      } else if(textureIndex == 1) {
-        HeadShape.setFace(HeadShape.textureFaceSad);
-      } else {
-        HeadShape.setFace(HeadShape.textureFaceTired);
       }
 
       counter = 0;

@@ -40,13 +40,27 @@ function animate() {
       // change face texture
       textureIndex++;
 
-      if(textureIndex >= 3) {
+      if(textureIndex == 1) {
+        HeadShape.setFace(HeadShape.textureFaceSad);
+      } else if(textureIndex == 2) {
+        HeadShape.setFace(HeadShape.textureFaceNerd);
+      } else if(textureIndex == 3) {
+        HeadShape.setFace(HeadShape.textureFaceProud);
+      } else if(textureIndex == 4) {
+        HeadShape.setFace(HeadShape.textureFaceHope);
+      } else if(textureIndex == 5) {
+        HeadShape.setFace(HeadShape.textureFaceWorked);
+      } else if(textureIndex == 6) {
+        HeadShape.setFace(HeadShape.textureFaceUnamused);
+      } else if(textureIndex == 7) {
+        HeadShape.setFace(HeadShape.textureFaceDesperate);
+      } else if(textureIndex == 8) {
+        HeadShape.setFace(HeadShape.textureFaceTired);
+      } else if(textureIndex == 9) {
+        HeadShape.setFace(HeadShape.textureFaceExhausted);
+      } else {
         HeadShape.setFace(HeadShape.textureFaceSmile);
         textureIndex = 0;
-      } else if(textureIndex == 1) {
-        HeadShape.setFace(HeadShape.textureFaceSad);
-      } else {
-        HeadShape.setFace(HeadShape.textureFaceTired);
       }
 
       counter = 0;
