@@ -31,9 +31,7 @@ var PerlinNoise = {
     gradP: new Array(512),
 
     fade: function (t) {
-              var result = t*t*t*(t*(t*6-15)+10);
-              // if(result < 0.4) { result = 0; }
-              return result;
+              return t*t*t*(t*(t*6-15)+10);
           },
 
     lerp: function (a, b, t) {
@@ -112,7 +110,7 @@ var LineTrails = {
     fullyClearCanvasBetweenTrailGenerations: false,
 
     PI2: Math.PI * 2,
-    FF:  Math.PI / 4,
+    FF:  Math.PI / 5,
 
     phase: 0,
     trails: [],
@@ -151,7 +149,7 @@ var LineTrails = {
     updateTrail: function(state, trail) {
     	const shouldChange = (Math.random() > 0.97);
     	const incAngle = (Math.random() > 0.5);
-    	trail.dead = (trail.x < 0 || trail.x > state.width || trail.y < 0 || trail.y > state.height || trail.width < 0.2);
+    	trail.dead = (trail.width < 0.2);
 
     	if (shouldChange && incAngle) {
     		trail.angle += this.FF;
@@ -159,7 +157,21 @@ var LineTrails = {
     		trail.angle -= this.FF;
     	}
 
-    	trail.width *= 0.98;
+    	while(trail.angle < 0) { trail.angle += this.PI2; }
+    	while(trail.angle > this.PI2) { trail.angle -= this.PI2; }
+
+        if(trail.x < 0 && Math.cos(trail.angle) < 0 || trail.x > state.width && Math.cos(trail.angle) > 0) {
+            trail.angle = Math.PI - trail.angle;
+        }
+
+        if(trail.y < 0 && Math.sin(trail.angle) < 0 || trail.y > state.height && Math.sin(trail.angle) > 0) {
+            trail.angle = -trail.angle;
+        }
+
+    	while(trail.angle < 0) { trail.angle += this.PI2; }
+    	while(trail.angle > this.PI2) { trail.angle -= this.PI2; }
+
+    	trail.width *= 0.998;
     },
 
     renderTrail: function(state, trail) {
