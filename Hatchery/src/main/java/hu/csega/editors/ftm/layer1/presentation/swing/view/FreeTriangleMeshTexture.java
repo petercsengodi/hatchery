@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.common.lens.EditorPoint;
-import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
@@ -62,7 +62,7 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 			g.drawImage(textureImage, 0, 0, imageWidth, imageHeight, null);
 		}
 
-		List<Object> selectedObjects = model.getSelectedObjects();
+		Collection<Object> selectedObjects = model.getSelectedObjects();
 
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = model.getTriangles();

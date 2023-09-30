@@ -2,6 +2,7 @@ package hu.csega.games.library.mesh.v1.ftm;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	private transient FreeTriangleMeshSnapshots _snapshots;
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
-	private List<Object> selectedObjects = new ArrayList<>();
+	private Collection<Object> selectedObjects = new HashSet<>();
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
 
 	private double canvasXYTranslateX;
@@ -45,6 +46,13 @@ public class FreeTriangleMeshModel implements Serializable {
 	private String textureFilename;
 
 	private double grid = 10.0;
+
+	public void migrateData() {
+		if(selectedObjects == null)
+			selectedObjects = new HashSet<>();
+		else
+			selectedObjects = new HashSet<>(selectedObjects);
+	}
 
 	public boolean isInvalid() {
 		return !built;
@@ -92,7 +100,8 @@ public class FreeTriangleMeshModel implements Serializable {
 
 		for(FreeTriangleMeshVertex vertex : mesh.getVertices()) {
 			if(enabled(vertex) && cube.contains(vertex)) {
-				selectedObjects.add(vertex);
+				if(!selectedObjects.remove(vertex))
+					selectedObjects.add(vertex);
 			}
 		}
 	}
@@ -100,7 +109,7 @@ public class FreeTriangleMeshModel implements Serializable {
 	public void selectFirst(FreeTriangleMeshSphereLineIntersection intersection, FreeTriangleMeshLine line, double radius, boolean add) {
 		Object selectedBefore = null;
 		if(selectedObjects.size() == 1)
-			selectedBefore = selectedObjects.get(0);
+			selectedBefore = selectedObjects.iterator().next();
 
 		if(!add)
 			clearSelection();
@@ -153,12 +162,14 @@ public class FreeTriangleMeshModel implements Serializable {
 
 		List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
-		int i1 = vertices.indexOf(selectedObjects.get(0));
-		int i2 = vertices.indexOf(selectedObjects.get(1));
+		Iterator<Object> it = selectedObjects.iterator();
+
+		int i1 = vertices.indexOf(it.next());
+		int i2 = vertices.indexOf(it.next());
 		int i3;
 
 		for(int i = 2; i < selectedObjects.size(); i++) {
-			i3 = vertices.indexOf(selectedObjects.get(i));
+			i3 = vertices.indexOf(it.next());
 			triangles.add(new FreeTriangleMeshTriangle(i1, i2, i3));
 			i1 = i2;
 			i2 = i3;
@@ -510,11 +521,11 @@ public class FreeTriangleMeshModel implements Serializable {
 		this.mesh.setTriangles(triangles);
 	}
 
-	public List<Object> getSelectedObjects() {
+	public Collection<Object> getSelectedObjects() {
 		return selectedObjects;
 	}
 
-	public void setSelectedObjects(List<Object> selectedObjects) {
+	public void setSelectedObjects(Set<Object> selectedObjects) {
 		this.selectedObjects = selectedObjects;
 	}
 

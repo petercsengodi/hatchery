@@ -1,6 +1,7 @@
 package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 
 import hu.csega.editors.common.lens.EditorPoint;
@@ -52,7 +53,7 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		}
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		List<Object> selectedObjects = model.getSelectedObjects();
+		Collection<Object> selectedObjects = model.getSelectedObjects();
 
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = model.getTriangles();

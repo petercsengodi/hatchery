@@ -41,6 +41,8 @@ class FileOpen implements ActionListener {
 			if(model == null) {
 				model = new FreeTriangleMeshModel();
 				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
+			} else {
+				model.migrateData();
 			}
 
 			String texture = model.getTextureFilename();
