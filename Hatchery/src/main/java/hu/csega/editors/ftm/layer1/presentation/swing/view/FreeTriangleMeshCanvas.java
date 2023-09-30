@@ -225,7 +225,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int numberOfRotations = e.getWheelRotation();
-		zoomIndex += numberOfRotations;
+		zoomIndex -= numberOfRotations;
 		if(zoomIndex < 0)
 			zoomIndex = 0;
 		else if(zoomIndex >= ZOOM_VALUES.length)
