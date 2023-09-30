@@ -71,9 +71,17 @@ public class FreeTriangleMeshZYSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
-	protected void moveSelected(double x, double y) {
+	protected void moveSelected(double x1, double y1, double x2, double y2) {
 		FreeTriangleMeshModel model = getModel();
-		model.moveSelected(0, -y, x);
+
+		EditorPoint p1 = lenses.fromScreenToModel(new EditorPoint(0, y1, x1, 1));
+		EditorPoint p2 = lenses.fromScreenToModel(new EditorPoint(0, y2, x2, 1));
+
+		double dx = p2.getX() - p1.getX();
+		double dy = p2.getY() - p1.getY();
+		double dz = p2.getZ() - p1.getZ();
+
+		model.moveSelected(dx, dy, dz);
 	}
 
 	@Override

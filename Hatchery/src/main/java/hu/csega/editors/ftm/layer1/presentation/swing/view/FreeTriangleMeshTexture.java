@@ -124,8 +124,11 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 	}
 
 	@Override
-	protected void moveSelected(double x, double y) {
+	protected void moveSelected(double x1, double y1, double x2, double y2) {
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+
+		double x = x2 - x1;
+		double y = y2 - y1;
 
 		int width = (textureImage == null ? imageWidth : Math.min(imageWidth, textureImage.getWidth()));
 		int height = (textureImage == null ? imageHeight : Math.min(imageHeight, textureImage.getHeight()));

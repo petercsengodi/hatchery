@@ -108,7 +108,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	protected abstract void createVertexAt(double x, double y);
 
-	protected abstract void moveSelected(double x, double y);
+	protected abstract void moveSelected(double x1, double y1, double x2, double y2);
 
 	protected abstract EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex);
 
@@ -122,14 +122,14 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		Point p = new Point(e.getX(), e.getY());
 
 		if(mouseLeftPressed) {
-			int dx = mouseLeftAt.x - p.x;
-			int dy = mouseLeftAt.y - p.y;
 			if(selectionBoxEnabled) {
+				int dx = mouseLeftAt.x - p.x;
+				int dy = mouseLeftAt.y - p.y;
 				selectionEnd.x -= dx;
 				selectionEnd.y -= dy;
 				repaint();
 			} else if(e.isControlDown()) {
-				moveSelected(-dx, -dy);
+				moveSelected(mouseLeftAt.x, mouseLeftAt.y, p.x, p.y);
 				repaintEverything();
 			}
 			mouseLeftAt.x = p.x;
