@@ -4,6 +4,7 @@ public class EditorLensPipeline {
 
 	private EditorLensTranslateImpl translate = new EditorLensTranslateImpl();
 	private EditorLensScaleImpl scale = new EditorLensScaleImpl();
+	private EditorLensScreenTransformationImpl screenTransformation = new EditorLensScreenTransformationImpl();
 
 	public void setScale(double scaling) {
 		EditorPoint current = scale.getScaling();
@@ -31,6 +32,7 @@ public class EditorLensPipeline {
 
 	public void addTranslation(double x, double y, double z) {
 		EditorPoint ep = new EditorPoint(x, y, z, 0.0);
+		screenTransformation.fromScreenToModel(ep);
 		scale.fromScreenToModel(ep);
 
 		EditorPoint current = translate.getTranslation();
@@ -40,6 +42,7 @@ public class EditorLensPipeline {
 
 	public void addTranslation(EditorPoint translation) {
 		EditorPoint ep = new EditorPoint(translation);
+		screenTransformation.fromScreenToModel(ep);
 		scale.fromScreenToModel(ep);
 
 		EditorPoint current = translate.getTranslation();
@@ -51,6 +54,7 @@ public class EditorLensPipeline {
 		EditorPoint result = new EditorPoint(x, y, z, 1.0);
 		translate.fromModelToScreen(result);
 		scale.fromModelToScreen(result);
+		screenTransformation.fromModelToScreen(result);
 		return result;
 	}
 
@@ -58,11 +62,13 @@ public class EditorLensPipeline {
 		EditorPoint result = new EditorPoint(original);
 		translate.fromModelToScreen(result);
 		scale.fromModelToScreen(result);
+		screenTransformation.fromModelToScreen(result);
 		return result;
 	}
 
 	public EditorPoint fromScreenToModel(EditorPoint original) {
 		EditorPoint result = new EditorPoint(original);
+		screenTransformation.fromScreenToModel(result);
 		scale.fromScreenToModel(result);
 		translate.fromScreenToModel(result);
 		return result;
@@ -70,6 +76,7 @@ public class EditorLensPipeline {
 
 	public EditorPoint fromScreenToModel(double x, double y) {
 		EditorPoint result = new EditorPoint(x, y, 0, 1);
+		screenTransformation.fromScreenToModel(result);
 		scale.fromScreenToModel(result);
 		translate.fromScreenToModel(result);
 		return result;

@@ -106,7 +106,7 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 	}
 
 	private EditorPoint transformToScreen(EditorPoint p) {
-		return lenses.fromModelToScreen(p.getX(), -p.getY(), 0.0);
+		return lenses.fromModelToScreen(p.getX(), p.getY(), 0.0);
 	}
 
 	private void drawLine(Graphics2D g, EditorPoint end1, EditorPoint end2) {

@@ -249,7 +249,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	private EditorPoint transformToModel(int x, int y) {
 		int widthDiv2 = lastSize.width / 2;
 		int heightDiv2 = lastSize.height / 2;
-		return lenses.fromScreenToModel(x - widthDiv2, heightDiv2 - y);
+		return lenses.fromScreenToModel(x - widthDiv2, y - heightDiv2);
 	}
 
 	protected double distance(double x1, double y1, double x2, double y2) {
