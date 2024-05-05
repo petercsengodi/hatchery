@@ -1,10 +1,9 @@
 package hu.csega.editors;
 
-import hu.csega.editors.anm.components.ComponentExtractJointList;
-import hu.csega.editors.anm.components.ComponentJointListView;
-import hu.csega.editors.anm.layer1.opengl.AnimatorConnector;
 import hu.csega.editors.anm.components.Component3DView;
+import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
+import hu.csega.editors.anm.components.ComponentJointListView;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
 import hu.csega.editors.anm.components.ComponentOpenGLTransformer;
 import hu.csega.editors.anm.components.ComponentPartListView;
@@ -12,6 +11,8 @@ import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
 import hu.csega.editors.anm.components.ComponentWireFrameTransformer;
+import hu.csega.editors.anm.layer1.opengl.AnimatorConnector;
+import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListView;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListView;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameConverter;
@@ -24,7 +25,6 @@ import hu.csega.editors.anm.layer2.transformation.AnimatorExtractJointList;
 import hu.csega.editors.anm.layer2.transformation.AnimatorExtractPartList;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
-import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.common.resources.FileResourceAdapter;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.common.ApplicationStarter;
@@ -96,6 +96,7 @@ public class AnimatorStarter {
 
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);
-	}
 
+
+	}
 }
