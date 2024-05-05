@@ -44,5 +44,20 @@ public class FreeTriangleMeshMesh implements Serializable {
 		}
 	}
 
+	public void addTriangles(List<FreeTriangleMeshVertex> vertices, List<FreeTriangleMeshTriangle> relativeTriangles) {
+		int offset = this.vertices.size();
+		this.vertices.addAll(vertices);
+
+		for(FreeTriangleMeshTriangle relativeTriangle : relativeTriangles) {
+			FreeTriangleMeshTriangle absoluteTriangle = new FreeTriangleMeshTriangle(
+					relativeTriangle.getVertex1() + offset,
+					relativeTriangle.getVertex2() + offset,
+					relativeTriangle.getVertex3() + offset
+			);
+
+			this.triangles.add(absoluteTriangle);
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 }

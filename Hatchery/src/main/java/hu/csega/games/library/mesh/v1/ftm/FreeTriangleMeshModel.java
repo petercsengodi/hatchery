@@ -500,6 +500,34 @@ public class FreeTriangleMeshModel implements Serializable {
 	public void createBasicSphere() {
 	}
 
+	public void createBasicPatch10x10() {
+		snapshots().addState(mesh);
+
+		List<FreeTriangleMeshVertex> v = new ArrayList<>(130);
+		List<FreeTriangleMeshTriangle> t = new ArrayList<>(105);
+		int[][] i = new int[11][11];
+
+		int index = 0;
+		for(int xi = 0; xi <= 10; xi++) {
+			for(int yi = 0; yi <= 10; yi++) {
+				double tx = 0.2 + xi / 50.;
+				double ty = 0.2 + yi / 50.0;
+				v.add(new FreeTriangleMeshVertex(-50 + xi * 10, -50 + yi * 10, 0).texture(tx, ty));
+				i[xi][yi] = index++;
+			}
+		}
+
+		for(int xi = 0; xi < 10; xi++) {
+			for(int yi = 0; yi < 10; yi++) {
+				t.add(new FreeTriangleMeshTriangle(i[xi][yi], i[xi][yi + 1], i[xi + 1][yi]));
+				t.add(new FreeTriangleMeshTriangle(i[xi][yi + 1], i[xi + 1][yi + 1], i[xi + 1][yi]));
+			}
+		}
+
+		mesh.addTriangles(v, t);
+		invalidate();
+	}
+
 	public List<FreeTriangleMeshGroup> getGroups() {
 		initGroupsIfNeeded();
 		return groups;

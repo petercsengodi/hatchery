@@ -107,9 +107,17 @@ public class FreeTriangleMeshMenu {
 			facade.window().repaintEverything();
 		});
 
+		JMenuItem patch10x10Item = new JMenuItem("10x10 patch");
+		patch10x10Item.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.createBasicPatch10x10();
+			facade.window().repaintEverything();
+		});
+
 		JMenu shapesMenu = new JMenu("Basic Shapes");
 		shapesMenu.add(cubeItem);
 		shapesMenu.add(sphereItem);
+		shapesMenu.add(patch10x10Item);
 		return shapesMenu;
 	}
 
