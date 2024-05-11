@@ -1,6 +1,6 @@
 package hu.csega.common.juimq;
 
-public class PooledQueue<T> {
+public class PooledQueueChain<T> {
 
     public void add(T content) {
         QueueChainElement<T> chainElement;

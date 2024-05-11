@@ -1,13 +1,13 @@
 package hu.csega.common.juimq;
 
-public abstract class AbstractMessageQueueComponent implements MessageQueueComponent {
+public abstract class AbstractMessageReceiver implements MessageReceiver {
 
-    protected AbstractMessageQueueComponent(MessageQueueHandler parent, String name) {
+    protected AbstractMessageReceiver(MessageQueue parent, String name) {
         this.parent = parent;
         this.name = name;
     }
 
-    private final MessageQueueHandler parent;
+    private final MessageQueue parent;
     private final String name;
 
     public String getName() {

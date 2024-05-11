@@ -3,9 +3,9 @@ package hu.csega.common.juimq;
 public class ThreadWorker implements Runnable {
 
     private final String id;
-    private final MessageQueueHandler parent;
+    private final MessageQueue parent;
 
-    ThreadWorker(String id, MessageQueueHandler parent) {
+    ThreadWorker(String id, MessageQueue parent) {
         this.id = id;
         this.parent = parent;
     }
@@ -17,8 +17,8 @@ public class ThreadWorker implements Runnable {
             while (parent.active) {
                 QueueMessage message = parent.nextMessage();
                 if(message != null) {
-                    AbstractMessageQueueComponent receiver = message.getReceiver();
-                    AbstractMessageQueueComponent sender = message.getSender();
+                    AbstractMessageReceiver receiver = message.getReceiver();
+                    AbstractMessageReceiver sender = message.getSender();
                     String name = message.getName();
                     System.out.println("Message from " + nameOf(sender) + " to " + nameOf(receiver) + ": " + name);
                 } else {
@@ -32,7 +32,7 @@ public class ThreadWorker implements Runnable {
         }
     }
 
-    private String nameOf(AbstractMessageQueueComponent component) {
+    private String nameOf(AbstractMessageReceiver component) {
         if(component == null) {
             return "unknown";
         }

@@ -1,10 +1,10 @@
 package hu.csega.common.juimq;
 
-public class MessageQueueHandler {
+public class MessageQueue {
 
     private static final int NUMBER_OF_THREADS = 20;
 
-    private final PooledQueue<QueueMessage> messages = new PooledQueue<>();
+    private final PooledQueueChain<QueueMessage> messages = new PooledQueueChain<>();
 
     private Thread[] threads = null;
     boolean active = false;

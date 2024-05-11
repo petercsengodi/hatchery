@@ -3,10 +3,10 @@ package hu.csega.common.juimq;
 public abstract class AbstractQueueMessage implements QueueMessage {
 
     private final String name;
-    private final AbstractMessageQueueComponent receiver;
-    private final AbstractMessageQueueComponent sender;
+    private final AbstractMessageReceiver receiver;
+    private final AbstractMessageReceiver sender;
 
-    protected AbstractQueueMessage(String name, AbstractMessageQueueComponent receiver, AbstractMessageQueueComponent sender) {
+    protected AbstractQueueMessage(String name, AbstractMessageReceiver receiver, AbstractMessageReceiver sender) {
         this.name = name;
         this.sender = sender;
         this.receiver = receiver;
@@ -18,12 +18,12 @@ public abstract class AbstractQueueMessage implements QueueMessage {
     }
 
     @Override
-    public AbstractMessageQueueComponent getReceiver() {
+    public AbstractMessageReceiver getReceiver() {
         return receiver;
     }
 
     @Override
-    public AbstractMessageQueueComponent getSender() {
+    public AbstractMessageReceiver getSender() {
         return sender;
     }
 }
