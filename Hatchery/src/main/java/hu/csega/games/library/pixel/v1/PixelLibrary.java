@@ -43,6 +43,14 @@ public class PixelLibrary extends ArrayList<PixelSheet> {
         }
     }
 
+	public void generate(File f) {
+		try (JSGeneratorOutputStream stream = new JSGeneratorOutputStream(new FileOutputStream(f))) {
+			stream.writeObject(this);
+		} catch(Exception ex) {
+			throw new RuntimeException("Saving failed!", ex);
+		}
+	}
+
     public void setUsed(int i) {
     	used[i] = true;
     }
