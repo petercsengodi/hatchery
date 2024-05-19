@@ -19,11 +19,12 @@ import hu.csega.games.library.pixel.v1.PixelSheet;
 
 public class P32x32Editor extends JFrame {
 
-	public P32x32Editor(String filename, int maximumNumberOfSheets, int spwidth, int spheight) {
+	public P32x32Editor(String filename, String jsExportFilename, int maximumNumberOfSheets, int spwidth, int spheight) {
 		super("Pixel Editor 32x32");
 
 		this.maximumNumberOfSheets = maximumNumberOfSheets;
 		this.filename = filename;
+		this.jsExportFilename = jsExportFilename;
 		this.spwidth = spwidth;
 		this.spheight = spheight;
 
@@ -120,6 +121,16 @@ public class P32x32Editor extends JFrame {
 			}
 		});
 
+		save = new JButton("Generate JS!");
+		board.add(save);
+		save.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				generateJS();
+			}
+		});
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 	}
@@ -156,6 +167,13 @@ public class P32x32Editor extends JFrame {
 		if(f.exists())
 			f.delete();
 		library.save(f);
+	}
+
+	private void generateJS() {
+		File f = new File(jsExportFilename);
+		if(f.exists())
+			f.delete();
+		library.generateJS(f);
 	}
 
 	private void setCurrentSheet() {
@@ -198,6 +216,7 @@ public class P32x32Editor extends JFrame {
 	}
 
 	private final String filename;
+	private final String jsExportFilename;
 	private final int maximumNumberOfSheets;
 
 	private PixelLibrary library;
@@ -216,6 +235,7 @@ public class P32x32Editor extends JFrame {
 	private JTextField copyInput;
 	private JButton copyOk;
 	private JButton save;
+	private JButton jsExport;
 
 	private static final long serialVersionUID = 1L;
 }
