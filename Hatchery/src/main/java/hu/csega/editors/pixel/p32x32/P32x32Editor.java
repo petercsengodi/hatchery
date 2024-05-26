@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -40,59 +38,25 @@ public class P32x32Editor extends JFrame {
 
 		first = new JButton("|<<");
 		board.add(first);
-		first.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setCurrentSheet(0);
-			}
-
-		});
+		first.addActionListener(e -> setCurrentSheet(0));
 
 		previous = new JButton("<");
 		board.add(previous);
-		previous.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setCurrentSheet(currentSheet - 1);
-			}
-
-		});
+		previous.addActionListener(e -> setCurrentSheet(currentSheet - 1));
 
 		numberOfSheet = new JTextField();
 		numberOfSheet.setPreferredSize(new Dimension(60, 32));
 		numberOfSheet.setText("0");
 		board.add(numberOfSheet);
-		numberOfSheet.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setCurrentSheet();
-			}
-		});
+		numberOfSheet.addActionListener(e -> setCurrentSheet());
 
 		next = new JButton(">");
 		board.add(next);
-		next.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setCurrentSheet(currentSheet + 1);
-			}
-
-		});
+		next.addActionListener(e -> setCurrentSheet(currentSheet + 1));
 
 		last = new JButton(">>|");
 		board.add(last);
-		last.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setCurrentSheet(P32x32Editor.this.maximumNumberOfSheets - 1);
-			}
-
-		});
+		last.addActionListener(e -> setCurrentSheet(P32x32Editor.this.maximumNumberOfSheets - 1));
 
 		copyLabel = new JLabel("Copy this sheet to: ");
 		board.add(copyLabel);
@@ -103,33 +67,15 @@ public class P32x32Editor extends JFrame {
 
 		copyOk = new JButton("Copy!");
 		board.add(copyOk);
-		copyOk.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				copySheetTo();
-			}
-		});
+		copyOk.addActionListener(e -> copySheetTo());
 
 		save = new JButton("SAVE ALL!");
 		board.add(save);
-		save.addActionListener(new ActionListener() {
+		save.addActionListener(e -> saveToFile());
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveToFile();
-			}
-		});
-
-		save = new JButton("Generate JS!");
-		board.add(save);
-		save.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				generateJS();
-			}
-		});
+		jsExport = new JButton("Generate JS!");
+		board.add(jsExport);
+		jsExport.addActionListener(e -> generateJS());
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
@@ -221,21 +167,22 @@ public class P32x32Editor extends JFrame {
 
 	private PixelLibrary library;
 	private int currentSheet = 0;
-	private P32x32Canvas canvas;
-	private int spwidth;
-	private int spheight;
 
-	private JPanel board;
-	private JButton first;
-	private JButton previous;
-	private JTextField numberOfSheet;
-	private JButton next;
-	private JButton last;
-	private JLabel copyLabel;
-	private JTextField copyInput;
-	private JButton copyOk;
-	private JButton save;
-	private JButton jsExport;
+	private final P32x32Canvas canvas;
+	private final int spwidth;
+	private final int spheight;
+
+	private final JPanel board;
+	private final JButton first;
+	private final JButton previous;
+	private final JTextField numberOfSheet;
+	private final JButton next;
+	private final JButton last;
+	private final JLabel copyLabel;
+	private final JTextField copyInput;
+	private final JButton copyOk;
+	private final JButton save;
+	private final JButton jsExport;
 
 	private static final long serialVersionUID = 1L;
 }
