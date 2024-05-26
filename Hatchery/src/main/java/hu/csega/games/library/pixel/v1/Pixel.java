@@ -29,6 +29,10 @@ public class Pixel implements Serializable {
 		return ret;
 	}
 
+	public String toJSConstruct() {
+		return "{ \"r\": " + red +", \"g\": " + green + ", \"b\": " + blue + ", \"a\": " + alpha + " }";
+	}
+
 	@Override
 	public String toString() {
 		return "R:"+red+"|G:"+green+"|B:"+blue+"|A:"+alpha;

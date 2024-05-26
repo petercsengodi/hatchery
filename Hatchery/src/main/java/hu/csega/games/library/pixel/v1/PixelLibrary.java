@@ -1,12 +1,10 @@
 package hu.csega.games.library.pixel.v1;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PixelLibrary extends ArrayList<PixelSheet> {
 
@@ -43,9 +41,75 @@ public class PixelLibrary extends ArrayList<PixelSheet> {
         }
     }
 
-	public void generate(File f) {
-		try (JSGeneratorOutputStream stream = new JSGeneratorOutputStream(new FileOutputStream(f))) {
-			stream.writeObject(this);
+	public void generateJS(File f) {
+		int counter = 0;
+		Map<String, Integer> map = new HashMap<>();
+
+		try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(f))) {
+			writer.write("var pal = []; // palette\n");
+
+			// 1st round: Construct palette
+			for(int i = 0; i < size(); i++) {
+				if(used[i]) {
+					PixelSheet sheet = get(i);
+					int minx = 0;
+					int maxx = PixelSheet.WIDTH - 1;
+					int miny = 0;
+					int maxy = PixelSheet.HEIGHT - 1;
+
+					for (int y = miny; y <= maxy; y++) {
+						for (int x = minx; x <= maxx; x++) {
+							Pixel pixel = sheet.pixels[x][y];
+							String key = pixel.toString();
+							if(!map.containsKey(key)) {
+								String js = pixel.toJSConstruct();
+								int value = counter++;
+								map.put(key, value);
+								writer.write("pal[" + value + "] = " + js + ";\n");
+							}
+						}
+					}
+				}
+			} // enf dor i
+
+
+			// 2nd round: List only used pixels
+			writer.write("\nvar img = [];\n");
+
+			for(int i = 0; i < size(); i++) {
+				if(used[i]) {
+					writer.flush();
+					writer.write("img[" + i + "] = [");
+
+					PixelSheet sheet = get(i);
+					int minx = 0;
+					int maxx = PixelSheet.WIDTH - 1;
+					int miny = 0;
+					int maxy = PixelSheet.HEIGHT - 1;
+
+					boolean first = true;
+
+					for (int y = miny; y <= maxy; y++) {
+						for (int x = minx; x <= maxx; x++) {
+
+							if(first) {
+								first = false;
+							} else {
+								writer.write(", ");
+							}
+
+							Pixel pixel = sheet.pixels[x][y];
+							String key = pixel.toString();
+							writer.write(map.get(key));
+
+						}
+					}
+
+					writer.write("];\n");
+				}
+			}
+
+			writer.write("];\n");
 		} catch(Exception ex) {
 			throw new RuntimeException("Saving failed!", ex);
 		}
