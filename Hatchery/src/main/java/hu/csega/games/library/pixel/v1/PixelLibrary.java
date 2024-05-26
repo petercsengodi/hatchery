@@ -79,7 +79,7 @@ public class PixelLibrary extends ArrayList<PixelSheet> {
 			for(int i = 0; i < size(); i++) {
 				if(used[i]) {
 					writer.flush();
-					writer.write("img[" + i + "] = [");
+					writer.write("img[" + i + "] = [\n");
 
 					PixelSheet sheet = get(i);
 					int minx = 0;
@@ -90,26 +90,25 @@ public class PixelLibrary extends ArrayList<PixelSheet> {
 					boolean first = true;
 
 					for (int y = miny; y <= maxy; y++) {
+						writer.write("[");
 						for (int x = minx; x <= maxx; x++) {
-
-							if(first) {
-								first = false;
-							} else {
-								writer.write(", ");
-							}
-
 							Pixel pixel = sheet.pixels[x][y];
 							String key = pixel.toString();
-							writer.write(map.get(key));
-
+							writer.write(String.valueOf(map.get(key)));
+							if(x < maxx)
+								writer.write(",");
 						}
+
+						writer.write("]");
+						if(y < maxy)
+							writer.write(",");
+						writer.write("\n");
 					}
 
 					writer.write("];\n");
+					writer.flush();
 				}
 			}
-
-			writer.write("];\n");
 		} catch(Exception ex) {
 			throw new RuntimeException("Saving failed!", ex);
 		}
