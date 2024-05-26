@@ -30,7 +30,9 @@ public class Pixel implements Serializable {
 	}
 
 	public String toJSConstruct() {
-		return "{ \"r\": " + red +", \"g\": " + green + ", \"b\": " + blue + ", \"a\": " + alpha + " }";
+		// HACK: In reality 255 means fully transparent, 0 means fully opaque.
+		int opacity = (alpha >= 128 ? 0 : 255);
+		return "{ \"r\": " + red +", \"g\": " + green + ", \"b\": " + blue + ", \"a\": " + opacity + " }";
 	}
 
 	@Override
