@@ -14,9 +14,9 @@ import java.awt.event.KeyEvent;
 
 public class SuperstitionGameRenderer {
 
-	private Matrix4f rotation = new Matrix4f();
-	private Vector4f target = new Vector4f();
-	private Vector4f up = new Vector4f();
+	private final Matrix4f rotation = new Matrix4f();
+	private final Vector4f target = new Vector4f();
+	private final Vector4f up = new Vector4f();
 
 	private Robot robot;
 	private long lastCheck;
@@ -25,11 +25,6 @@ public class SuperstitionGameRenderer {
 		GameGraphics g = facade.graphics();
 
 		SuperstitionPlayer player = universe.player;
-
-		GameObjectPlacement cameraLocation = new GameObjectPlacement();
-		cameraLocation.position.x = (float)player.x;
-		cameraLocation.position.y = (float)player.y;
-		cameraLocation.position.z = (float)player.z;
 
 		rotation.identity();
 		rotation.rotateAffineXYZ(0f,
@@ -41,12 +36,29 @@ public class SuperstitionGameRenderer {
 
 		up.set(0f, 1f, 0f, 1f);
 		rotation.transform(up);
-		cameraLocation.up.set(up.x, up.y, up.z);
 
 		target.set(0f, 0f, 1f, 1f);
 		rotation.transform(target);
-		cameraLocation.target.set(target.x + cameraLocation.position.x, target.y + cameraLocation.position.y,
-				target.z + cameraLocation.position.z);
+
+		GameObjectPlacement playerPlacement = new GameObjectPlacement();
+		playerPlacement.position.set((float)player.x, (float)player.y, (float)player.z);
+		playerPlacement.target.set(
+				playerPlacement.position.x + target.x,
+				playerPlacement.position.y /* + target.y */,
+				playerPlacement.position.z + target.z
+		);
+		playerPlacement.up.set(0f, 1f, 0f);
+		playerPlacement.scale.set(0.1f, 0.1f, 0.1f);
+
+		float dist = 400.0f;
+
+		GameObjectPlacement cameraLocation = new GameObjectPlacement();
+		cameraLocation.target.copyValuesFrom(playerPlacement.position);
+		cameraLocation.up.set(up.x, up.y, up.z);
+		cameraLocation.position.set(
+				playerPlacement.position.x - target.x * dist,
+				playerPlacement.position.y - target.y * dist,
+				playerPlacement.position.z - target.z * dist);
 
 		g.placeCamera(cameraLocation);
 
@@ -54,9 +66,9 @@ public class SuperstitionGameRenderer {
 
 		g.drawModel(elements.boxModel, universe.boxPlacement4);
 
-		GameObjectPlacement center = new GameObjectPlacement();
-		int sceneIndex = (int)((System.currentTimeMillis() / 100L) % 50);
-		g.drawAnimation(elements.testAnimationHandler, sceneIndex, center);
+		int sceneIndex = (int)((System.currentTimeMillis() / 25L) % 50);
+
+		g.drawAnimation(elements.testAnimationHandler, sceneIndex, playerPlacement);
 
 		hackBlockScreenSaverActivation();
 	}

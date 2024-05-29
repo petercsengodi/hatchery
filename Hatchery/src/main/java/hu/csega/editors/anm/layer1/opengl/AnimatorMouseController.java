@@ -13,7 +13,9 @@ import java.awt.event.MouseWheelListener;
 
 public class AnimatorMouseController implements MouseListener, MouseMotionListener, MouseWheelListener{
 
-	public static final double[] ZOOM_VALUES = { 0.0001, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50, 2.0, 3.0, 4.0, 5.0, 10.0, 100.0 };
+	public static final double[] ZOOM_VALUES = { 0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
+			0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50, 2.0, 3.0, 4.0, 5.0,
+			10.0, 15.0, 20.0, 30.0, 50.0, 80.0, 100.0 };
 	public static final int DEFAULT_ZOOM_INDEX = 8;
 
 	private int zoomIndex = DEFAULT_ZOOM_INDEX;
