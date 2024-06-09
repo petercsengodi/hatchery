@@ -6,11 +6,15 @@ import org.joml.Vector4f;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.intf.GameGraphics;
+import hu.csega.superstition.game.play.CollisionUtil;
+import hu.csega.superstition.game.play.MonsterData;
+import hu.csega.superstition.game.play.SpellInProgress;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 
 public class SuperstitionGameRenderer {
 
@@ -66,12 +70,61 @@ public class SuperstitionGameRenderer {
 
 		g.drawModel(elements.boxModel, universe.boxPlacement4);
 
-		player.animate(System.currentTimeMillis());
+		long timestamp = System.currentTimeMillis();
+		player.animate(timestamp);
 		int sceneIndex = player.spellCastingIndex();
 
-		System.out.println("Scene index: " + sceneIndex);
+		if(player.shouldCastNow()) {
+			SpellInProgress spell = new SpellInProgress(timestamp, player.x, player.y - 5.0, player.z,
+					player.x + target.x * 1000.0, player.y - 5.0, player.z + target.z * 1000.0);
+			universe.spellsInProgress.add(spell);
+		}
 
 		g.drawAnimation(elements.testAnimationHandler, sceneIndex, playerPlacement);
+
+		Iterator<SpellInProgress> iterator = universe.spellsInProgress.iterator();
+		while(iterator.hasNext()) {
+			SpellInProgress spell = iterator.next();
+			spell.animate(timestamp);
+			if(spell.isOver()) {
+				iterator.remove();
+			} else {
+				GameObjectPlacement spellPlacement = new GameObjectPlacement();
+				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
+				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
+				spellPlacement.up.set(0f, 1f, 0f);
+				spellPlacement.scale.set(0.3f, 0.3f, 0.3f);
+				g.drawModel(elements.boxModel, spellPlacement);
+			}
+		}
+
+		Iterator<MonsterData> monsters = universe.monstersAlive.iterator();
+		while(monsters.hasNext()) {
+			MonsterData monster = monsters.next();
+			boolean dead = false;
+
+			iterator = universe.spellsInProgress.iterator();
+			while(iterator.hasNext()) {
+				SpellInProgress spell = iterator.next();
+				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
+					iterator.remove();
+					dead = true;
+					break;
+				}
+			}
+
+			if(dead) {
+				monsters.remove();
+				continue;
+			}
+
+			GameObjectPlacement monsterPlacement = new GameObjectPlacement();
+			monsterPlacement.position.set((float) monster.x, (float) monster.y, (float) monster.z);
+			monsterPlacement.target.set((float) monster.x, (float) monster.y, (float) monster.z + 10f);
+			monsterPlacement.up.set(0f, 1f, 0f);
+			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
+			g.drawAnimation(elements.testAnimationHandler, 0, monsterPlacement);
+		}
 
 		hackBlockScreenSaverActivation();
 	}
