@@ -94,7 +94,7 @@ public class SuperstitionGameRenderer {
 				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
 				spellPlacement.up.set(0f, 1f, 0f);
 				spellPlacement.scale.set(0.3f, 0.3f, 0.3f);
-				g.drawModel(elements.boxModel, spellPlacement);
+				g.drawModel(elements.spellModel, spellPlacement);
 			}
 		}
 

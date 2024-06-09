@@ -11,22 +11,25 @@ import hu.csega.games.engine.g3d.GameTexturePosition;
 
 public class SuperstitionGameElements {
 
-	private static final float GOUND_DEPTH = -50f;
+	private static final float GOUND_DEPTH = -12f;
 	private static final float GOUND_SIZE = 200f;
 
 	GameObjectHandler groundTexture;
 	GameObjectHandler groundHandler;
 	GameObjectHandler boxModel;
 	GameObjectHandler testAnimationHandler;
+	GameObjectHandler spellModel;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
 
 		groundHandler = buildGround(store, "grass-texture.png");
 
-		boxModel = buildBox(store, -130f, -30f, -30f, -70f, 30f, 30f, "wood-texture.jpg");
+		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
 		testAnimationHandler = loadAnimation(store, "wizard2.json");
+
+		spellModel = buildBox(store, -25f, -25f, -25f, 25f, 25f, 25f, "wood-texture.jpg");
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {
@@ -67,8 +70,8 @@ public class SuperstitionGameElements {
 				groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
 
 				groundBuilder.getIndices().add(counter + 0);
-				groundBuilder.getIndices().add(counter + 1);
 				groundBuilder.getIndices().add(counter + 2);
+				groundBuilder.getIndices().add(counter + 1);
 				groundBuilder.getIndices().add(counter + 0);
 				groundBuilder.getIndices().add(counter + 3);
 				groundBuilder.getIndices().add(counter + 2);
@@ -87,18 +90,18 @@ public class SuperstitionGameElements {
 
 		int offset = 0;
 
-		offset = buildRectangle(builder, offset, x1, y1, z1, x2, y1, z1, x2, y2, z1, x1, y2, z1, 0f, 0f, -1f);
-		offset = buildRectangle(builder, offset, x1, y1, z2, x2, y1, z2, x2, y2, z2, x1, y2, z2, 0f, 0f, 1f);
-		offset = buildRectangle(builder, offset, x1, y1, z1, x1, y2, z1, x1, y2, z2, x1, y1, z2, -1f, 0f, 0f);
-		offset = buildRectangle(builder, offset, x2, y1, z1, x2, y2, z1, x2, y2, z2, x2, y1, z2, 1f, 0f, 0f);
-		offset = buildRectangle(builder, offset, x1, y1, z1, x2, y1, z1, x2, y1, z2, x1, y1, z2, 0f, -1f, 0f);
-		offset = buildRectangle(builder, offset, x1, y2, z1, x2, y2, z1, x2, y2, z2, x1, y2, z2, 0f, 1f, 0f);
+		offset = buildRectangle(builder, offset, x1, y1, z1, x2, y1, z1, x2, y2, z1, x1, y2, z1, 0f, 0f, -1f, true);
+		offset = buildRectangle(builder, offset, x1, y1, z2, x2, y1, z2, x2, y2, z2, x1, y2, z2, 0f, 0f, 1f, false);
+		offset = buildRectangle(builder, offset, x1, y1, z1, x1, y2, z1, x1, y2, z2, x1, y1, z2, -1f, 0f, 0f, true);
+		offset = buildRectangle(builder, offset, x2, y1, z1, x2, y2, z1, x2, y2, z2, x2, y1, z2, 1f, 0f, 0f, false);
+		offset = buildRectangle(builder, offset, x1, y1, z1, x2, y1, z1, x2, y1, z2, x1, y1, z2, 0f, -1f, 0f, false);
+		offset = buildRectangle(builder, offset, x1, y2, z1, x2, y2, z1, x2, y2, z2, x1, y2, z2, 0f, 1f, 0f, true);
 
 		return store.buildMesh(builder);
 	}
 
 	private int buildRectangle(GameModelBuilder builder, int offset, float x1, float y1, float z1, float x2, float y2, float z2,
-			float x3, float y3, float z3, float x4, float y4, float z4, float nx, float ny, float nz) {
+			float x3, float y3, float z3, float x4, float y4, float z4, float nx, float ny, float nz, boolean reverse) {
 
 		GameObjectPosition p;
 		GameTexturePosition tex;
@@ -120,12 +123,21 @@ public class SuperstitionGameElements {
 		tex = new GameTexturePosition(0f, 1f);
 		builder.getVertices().add(new GameObjectVertex(p, d, tex));
 
-		builder.getIndices().add(offset + 0);
-		builder.getIndices().add(offset + 1);
-		builder.getIndices().add(offset + 2);
-		builder.getIndices().add(offset + 0);
-		builder.getIndices().add(offset + 3);
-		builder.getIndices().add(offset + 2);
+		if(reverse) {
+			builder.getIndices().add(offset + 0);
+			builder.getIndices().add(offset + 2);
+			builder.getIndices().add(offset + 1);
+			builder.getIndices().add(offset + 0);
+			builder.getIndices().add(offset + 3);
+			builder.getIndices().add(offset + 2);
+		} else {
+			builder.getIndices().add(offset + 0);
+			builder.getIndices().add(offset + 1);
+			builder.getIndices().add(offset + 2);
+			builder.getIndices().add(offset + 0);
+			builder.getIndices().add(offset + 2);
+			builder.getIndices().add(offset + 3);
+		}
 
 		offset += 4;
 		return offset;
