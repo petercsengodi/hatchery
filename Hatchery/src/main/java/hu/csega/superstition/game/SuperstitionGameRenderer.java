@@ -66,13 +66,19 @@ public class SuperstitionGameRenderer {
 
 		g.drawModel(elements.boxModel, universe.boxPlacement4);
 
-		int sceneIndex = (int)((System.currentTimeMillis() / 25L) % 50);
+		player.animate(System.currentTimeMillis());
+		int sceneIndex = player.spellCastingIndex();
+
+		System.out.println("Scene index: " + sceneIndex);
 
 		g.drawAnimation(elements.testAnimationHandler, sceneIndex, playerPlacement);
 
 		hackBlockScreenSaverActivation();
 	}
 
+	/**
+	 * This is needed so the screen saver isn't activated when user doesn't do anything.
+	 */
 	private void hackBlockScreenSaverActivation() {
 		long now = System.currentTimeMillis();
 		if(now - lastCheck < 15_000) {

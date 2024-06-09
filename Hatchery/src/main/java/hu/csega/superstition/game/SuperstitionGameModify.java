@@ -12,7 +12,6 @@ public class SuperstitionGameModify {
 	private static final double PLAYER_FORWARD = 1.0;
 
 	public static void modify(SuperstitionSerializableModel model, GameControl control) {
-
 		SuperstitionPlayer player = model.player;
 
 		double speedModifier = (control.isControlOn() ? 15.0 : 1.0) * PLAYER_FORWARD;
@@ -54,6 +53,10 @@ public class SuperstitionGameModify {
 	}
 
 	public static void pressed(SuperstitionSerializableModel model, int x, int y, boolean leftMouse, boolean rightMouse) {
+		if(leftMouse) {
+			SuperstitionPlayer player = model.player;
+			player.startSpellCasting(75.0);
+		}
 	}
 
 	public static void released(SuperstitionSerializableModel model, int x, int y, boolean leftMouse, boolean rightMouse) {
