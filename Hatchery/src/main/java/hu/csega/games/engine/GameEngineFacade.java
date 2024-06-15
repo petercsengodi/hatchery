@@ -1,6 +1,7 @@
 package hu.csega.games.engine;
 
 import hu.csega.games.engine.g3d.GameModelStore;
+import hu.csega.games.engine.impl.GameEngine;
 import hu.csega.games.engine.intf.GameControl;
 import hu.csega.games.engine.intf.GameGraphics;
 import hu.csega.games.engine.intf.GameTimer;
@@ -16,6 +17,8 @@ public interface GameEngineFacade {
 	 * Gets the model object registered in the engine.
 	 */
 	Object model();
+
+	GameEngine engine();
 
 	/**
 	 * Asks for new re-run of the BUILD step.

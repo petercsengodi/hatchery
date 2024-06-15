@@ -113,5 +113,38 @@ public class FreeTriangleMeshSnapshots {
 		return ret;
 	}
 
+	public static byte[] readAllBytes(InputStream stream) {
+		int size = (int)file.length();
+		if(size == 0) {
+			logger.error("Zero sized file: " + file.getName());
+			return null;
+		}
+
+		byte[] ret = new byte[size];
+		byte[] array = new byte[2000];
+		int pos = 0;
+		int read;
+
+		try (InputStream ios = new FileInputStream(file)) {
+			while ( (read = ios.read(array, 0, 2000)) >= 0 ) {
+				if(read == 0)
+					continue;
+
+				if(pos + read > size) {
+					logger.error("Invalid sized file: " + file.getName());
+					return null;
+				}
+
+				System.arraycopy(array, 0, ret, pos, read);
+				pos += read;
+			}
+		} catch(IOException ex) {
+			logger.error("Error during reading file: " + file.getName(), ex);
+			return null;
+		}
+
+		return ret;
+	}
+
 	private static final Logger logger = LoggerFactory.createLogger(FreeTriangleMeshSnapshots.class);
 }

@@ -29,6 +29,11 @@ public class GameEngineFacadeImpl implements GameEngineFacade {
 	}
 
 	@Override
+	public GameEngine engine() {
+		return engine;
+	}
+
+	@Override
 	public GameEngineFacade requestRebuild() {
 		return engine.requestRebuild();
 	}
