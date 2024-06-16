@@ -49,8 +49,13 @@ public class GeneticAlgorithm {
     }
 
     public static class Individual {
+
+        /** Representation of genes, preferably binary stream. */
         private String genotype;
+
+        /** Real-life representation, calculated from the genotype. */
         private String phenotype;
+
         private double fitness;
 
         public Individual() {
