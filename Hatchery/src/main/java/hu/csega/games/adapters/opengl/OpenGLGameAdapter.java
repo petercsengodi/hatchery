@@ -7,6 +7,7 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 
+import hu.csega.games.adapters.opengl.gl2.OpenGLProfileGL2GLUAdapter;
 import hu.csega.games.adapters.opengl.gl2.OpenGLProfileGL2TriangleAdapter;
 import hu.csega.games.adapters.opengl.gl3.OpenGLProfileGL3Adapter;
 import hu.csega.games.adapters.opengl.models.OpenGLModelStoreImpl;
@@ -49,8 +50,7 @@ public class OpenGLGameAdapter implements GameAdapter {
 			try {
 				logger.info("Trying to acquire GL2 profile...");
 				glProfile = GLProfile.get(GLProfile.GL2);
-				// openGLProfileAdapter = new OpenGLProfileGL2GLUAdapter();
-				openGLProfileAdapter = new OpenGLProfileGL2TriangleAdapter();
+				openGLProfileAdapter = new OpenGLProfileGL2GLUAdapter();
 				logger.info("GL2 profile acquired, adapter: " + openGLProfileAdapter.getClass().getSimpleName());
 			} catch(Exception ex2) {
 				logger.error("Couldn't get GL2 for GLU! (" + ex2.getMessage() + ')');

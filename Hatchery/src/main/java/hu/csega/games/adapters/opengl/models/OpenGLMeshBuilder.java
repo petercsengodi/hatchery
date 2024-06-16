@@ -133,6 +133,14 @@ public class OpenGLMeshBuilder {
 	}
 
 	public int indexLength(int i) {
-		return builder.getIndices().size();
+		if(builder != null) {
+			return builder.getIndices().size();
+		}
+
+		if(mesh != null) {
+			return mesh.getTriangles().size() * 3;
+		}
+
+		return 0;
 	}
 }
