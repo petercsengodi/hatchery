@@ -113,6 +113,7 @@ public class FreeTriangleMeshSnapshots {
 		return ret;
 	}
 
+	/*
 	public static byte[] readAllBytes(InputStream stream) {
 		int size = (int)file.length();
 		if(size == 0) {
@@ -145,6 +146,6 @@ public class FreeTriangleMeshSnapshots {
 
 		return ret;
 	}
-
+*/
 	private static final Logger logger = LoggerFactory.createLogger(FreeTriangleMeshSnapshots.class);
 }

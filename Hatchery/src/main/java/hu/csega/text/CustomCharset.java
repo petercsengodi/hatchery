@@ -12,8 +12,8 @@ public class CustomCharset {
 	public static final int HEIGHT = 13;
 
 	public static CustomCharset load() {
-		FreeTriangleMeshSnapshots.readAllBytes(CustomCharset.class.getResourceAsStream())
-		return
+		// FreeTriangleMeshSnapshots.readAllBytes(CustomCharset.class.getResourceAsStream())
+		return null;
 	}
 
 	public CustomCharset(byte[] charsetBytes) {
