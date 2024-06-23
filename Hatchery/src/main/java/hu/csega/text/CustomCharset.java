@@ -1,9 +1,6 @@
 package hu.csega.text;
 
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
-import hu.csega.games.library.util.FileUtil;
-
-import java.io.IOException;
 
 public class CustomCharset {
 
@@ -12,8 +9,8 @@ public class CustomCharset {
 	public static final int HEIGHT = 13;
 
 	public static CustomCharset load() {
-		FreeTriangleMeshSnapshots.readAllBytes(CustomCharset.class.getResourceAsStream())
-		return
+		byte[] bytes = FreeTriangleMeshSnapshots.readAllBytes(CustomCharset.class.getResourceAsStream("charsets.dat"));
+		return new CustomCharset(bytes);
 	}
 
 	public CustomCharset(byte[] charsetBytes) {
@@ -30,5 +27,5 @@ public class CustomCharset {
 
 	} // end of ctr
 
-	public int[][][] content = new int[CHARACTERS][HEIGHT][WIDTH];
+	public final int[][][] content = new int[CHARACTERS][HEIGHT][WIDTH];
 }

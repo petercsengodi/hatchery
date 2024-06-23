@@ -1,5 +1,6 @@
 package hu.csega.editors.ftm.layer4.data;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,8 +17,8 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 public class FreeTriangleMeshSnapshots {
 
-	private List<byte[]> previousStates = new ArrayList<>();
-	private List<byte[]> nextStates = new ArrayList<>();
+	private final List<byte[]> previousStates = new ArrayList<>();
+	private final List<byte[]> nextStates = new ArrayList<>();
 
 	public void addState(Serializable state) {
 		byte[] snapshot = FileSystemIntegration.serialize(state);
@@ -32,8 +33,7 @@ public class FreeTriangleMeshSnapshots {
 		byte[] currentState = FileSystemIntegration.serialize(current);
 		nextStates.add(currentState);
 		byte[] snapshot = previousStates.remove(previousStates.size() - 1);
-		Serializable newState = FileSystemIntegration.deserialize(snapshot);
-		return newState;
+		return FileSystemIntegration.deserialize(snapshot);
 	}
 
 	public Serializable redo(Serializable current) {
@@ -43,8 +43,7 @@ public class FreeTriangleMeshSnapshots {
 		byte[] currentState = FileSystemIntegration.serialize(current);
 		previousStates.add(currentState);
 		byte[] snapshot = nextStates.remove(nextStates.size() - 1);
-		Serializable newState = FileSystemIntegration.deserialize(snapshot);
-		return newState;
+		return FileSystemIntegration.deserialize(snapshot);
 	}
 
 	public void clear() {
@@ -114,36 +113,29 @@ public class FreeTriangleMeshSnapshots {
 	}
 
 	public static byte[] readAllBytes(InputStream stream) {
-		int size = (int)file.length();
-		if(size == 0) {
-			logger.error("Zero sized file: " + file.getName());
-			return null;
-		}
-
-		byte[] ret = new byte[size];
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] array = new byte[2000];
-		int pos = 0;
 		int read;
 
-		try (InputStream ios = new FileInputStream(file)) {
-			while ( (read = ios.read(array, 0, 2000)) >= 0 ) {
+		try {
+			while ( (read = stream.read(array, 0, 2000)) >= 0 ) {
 				if(read == 0)
 					continue;
 
-				if(pos + read > size) {
-					logger.error("Invalid sized file: " + file.getName());
-					return null;
-				}
-
-				System.arraycopy(array, 0, ret, pos, read);
-				pos += read;
+				baos.write(array, 0, read);
 			}
 		} catch(IOException ex) {
-			logger.error("Error during reading file: " + file.getName(), ex);
+			logger.error("Error during reading stream.", ex);
 			return null;
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException ex) {
+				logger.warning("Could not close stream.");
+			}
 		}
 
-		return ret;
+		return baos.toByteArray();
 	}
 
 	private static final Logger logger = LoggerFactory.createLogger(FreeTriangleMeshSnapshots.class);
