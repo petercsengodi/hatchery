@@ -28,6 +28,7 @@ import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
+/** Used on the old machine. */
 public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
 	private GL2 gl2 = null;
@@ -304,9 +305,9 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
 			float[] verticies = builder.vertexData(part);
 
-			int numberOfindicies = builder.indexLength(part);
+			int numberOfIndicies = builder.indexLength(part);
 			short[] indicies = builder.indexData(part);
-			for(int index = 0; index < numberOfindicies; index++) {
+			for(int index = 0; index < numberOfIndicies; index++) {
 				offset = indicies[index] * stride;
 
 				vx = verticies[offset++];

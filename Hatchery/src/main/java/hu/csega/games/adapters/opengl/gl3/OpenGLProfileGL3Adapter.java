@@ -39,6 +39,7 @@ import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
+/** Used on the newer machine. */
 public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 
 	private int[] programHandlers = new int[2];
