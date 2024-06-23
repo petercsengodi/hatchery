@@ -1,6 +1,8 @@
 package hu.csega.text;
 
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
+import hu.csega.toolshed.logging.Logger;
+import hu.csega.toolshed.logging.LoggerFactory;
 
 public class CustomCharset {
 
@@ -14,7 +16,10 @@ public class CustomCharset {
 	}
 
 	public CustomCharset(byte[] charsetBytes) {
-		if(charsetBytes.length < WIDTH * HEIGHT * CHARACTERS);
+		if(charsetBytes.length < WIDTH * HEIGHT * CHARACTERS) {
+			logger.warning("CustomCharset is initialized with a byte array of invalid length.");
+			return;
+		}
 
 		int cursor = 0;
 		for(int c = 0; c < CustomCharset.CHARACTERS; c++) {
@@ -28,4 +33,6 @@ public class CustomCharset {
 	} // end of ctr
 
 	public final int[][][] content = new int[CHARACTERS][HEIGHT][WIDTH];
+
+	private static final Logger logger = LoggerFactory.createLogger(FreeTriangleMeshSnapshots.class);
 }
