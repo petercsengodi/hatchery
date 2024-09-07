@@ -19,7 +19,15 @@ public class SuperstitionGameElements {
 	GameObjectHandler boxModel;
 	GameObjectHandler testAnimationHandler;
 	GameObjectHandler spellModel;
-	GameObjectHandler alphabetA;
+	GameObjectHandler[] alphabet;
+	int numberOfLetters = 3;
+	GameObjectHandler[] numbers;
+	int numberOfNumbers = 2;
+	GameObjectHandler dot;
+	GameObjectHandler column;
+	GameObjectHandler exclamation;
+	GameObjectHandler comma;
+	GameObjectHandler question;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
@@ -30,7 +38,21 @@ public class SuperstitionGameElements {
 
 		testAnimationHandler = loadAnimation(store, "wizard2.json");
 
-		alphabetA = store.loadMesh("alphabet-a.json");
+		alphabet = new GameObjectHandler[numberOfLetters];
+		for(int i = 0; i < numberOfLetters; i++) {
+			alphabet[i] = store.loadMesh("alphabet-" + (char)((int)'a' + i) + ".json");
+		}
+
+		numbers = new GameObjectHandler[numberOfNumbers];
+		for(int i = 0; i < numberOfNumbers; i++) {
+			numbers[i] = store.loadMesh("number-" + i + ".json");
+		}
+
+		dot = store.loadMesh("alphabet-dot.json");
+		column = store.loadMesh("alphabet-column.json");
+		exclamation = store.loadMesh("alphabet-exclamation.json");
+		comma = store.loadMesh("alphabet-comma.json");
+		question = store.loadMesh("alphabet-question.json");
 
 		spellModel = buildBox(store, -25f, -25f, -25f, 25f, 25f, 25f, "wood-texture.jpg");
 	}

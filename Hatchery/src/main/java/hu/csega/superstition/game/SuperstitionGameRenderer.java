@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.intf.GameGraphics;
 import hu.csega.superstition.game.play.CollisionUtil;
@@ -126,9 +127,18 @@ public class SuperstitionGameRenderer {
 			g.drawAnimation(elements.testAnimationHandler, 0, monsterPlacement);
 		}
 
-		g.drawOnScreen(elements.alphabetA, 0, 0);
-		g.drawOnScreen(elements.alphabetA, 0, 1);
-		g.drawOnScreen(elements.alphabetA, 0, 2);
+		g.drawOnScreen(elements.alphabet[0], 0, 0);
+		g.drawOnScreen(elements.alphabet[1], 0, 1);
+		g.drawOnScreen(elements.alphabet[2], 0, 2);
+
+		g.drawOnScreen(elements.numbers[0], 2, 0);
+		g.drawOnScreen(elements.numbers[1], 2, 1);
+
+		g.drawOnScreen(elements.dot, 3, 0);
+		g.drawOnScreen(elements.column, 3, 1);
+		g.drawOnScreen(elements.exclamation, 3, 2);
+		g.drawOnScreen(elements.comma, 3, 3);
+		g.drawOnScreen(elements.question, 3, 4);
 
 		hackBlockScreenSaverActivation();
 	}
