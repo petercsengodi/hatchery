@@ -1,5 +1,6 @@
 package hu.csega.games.adapters.opengl.models;
 
+import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 
 import hu.csega.games.adapters.opengl.OpenGLProfileAdapter;
@@ -71,6 +72,11 @@ public abstract class OpenGLModelContainer implements OpenGLObjectContainer {
 
 		initialized = false;
 		logger.trace("Disposed model: " + filename);
+	}
+
+	public void drawOnScreen(GLAutoDrawable glAutoDrawable, double x, double y) {
+		adapter.flippedFrontFace(glAutoDrawable, false);
+		adapter.drawOnScreen(glAutoDrawable, this, x, y, store);
 	}
 
 	public void draw(GLAutoDrawable glAutoDrawable, GameObjectPlacement placement) {

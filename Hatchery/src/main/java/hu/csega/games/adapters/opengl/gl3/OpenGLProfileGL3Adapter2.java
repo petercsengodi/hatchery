@@ -283,6 +283,14 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 	}
 
 	@Override
+	public void drawOnScreen(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, double x, double y, OpenGLModelStoreImpl store) {
+		calculatedMatrix.identity();
+		calculatedMatrix.translate((float)x, (float)y, -1000);
+
+		drawModel(glAutoDrawable, model, store);
+	}
+
+	@Override
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, OpenGLModelStoreImpl store) {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);

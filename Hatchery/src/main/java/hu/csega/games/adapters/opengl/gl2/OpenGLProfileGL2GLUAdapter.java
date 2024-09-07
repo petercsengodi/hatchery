@@ -232,6 +232,16 @@ public class OpenGLProfileGL2GLUAdapter implements OpenGLProfileAdapter {
 	}
 
 	@Override
+	public void drawOnScreen(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, double x, double y, OpenGLModelStoreImpl store) {
+		/*
+		calculatedMatrix.identity();
+		calculatedMatrix.translate((float)x, (float)y, -1000);
+
+		drawModel(glAutoDrawable, model, store);
+		*/
+	}
+
+	@Override
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, OpenGLModelStoreImpl store) {
 		gl2.glPushMatrix();
 

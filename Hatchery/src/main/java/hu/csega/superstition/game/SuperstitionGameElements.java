@@ -19,6 +19,7 @@ public class SuperstitionGameElements {
 	GameObjectHandler boxModel;
 	GameObjectHandler testAnimationHandler;
 	GameObjectHandler spellModel;
+	GameObjectHandler alphabetA;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
@@ -28,6 +29,8 @@ public class SuperstitionGameElements {
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
 		testAnimationHandler = loadAnimation(store, "wizard2.json");
+
+		alphabetA = store.loadMesh("alphabet-a.json");
 
 		spellModel = buildBox(store, -25f, -25f, -25f, 25f, 25f, 25f, "wood-texture.jpg");
 	}

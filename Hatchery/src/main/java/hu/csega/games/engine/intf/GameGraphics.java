@@ -26,6 +26,8 @@ public interface GameGraphics {
 	void drawSprite(BufferedImage image, double x, double y);
 	void drawHitShape(GameHitShape hitShape, double x, double y, GameColor color);
 
+	void drawOnScreen(GameObjectHandler alphabetA, double x, double y);
+
 	void startFrame();
 	void placeCamera(GameObjectPlacement cameraLocation);
 	void drawModel(GameObjectHandler modelReference, GameObjectPlacement modelLocation);
@@ -34,5 +36,4 @@ public interface GameGraphics {
 	void endFrame();
 
 	void setBaseMatricesAndViewPort(GameSelectionLine selectionLine);
-
 }

@@ -49,6 +49,7 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 	private Matrix4f perspectiveMatrix = new Matrix4f().identity();
 	private Matrix4f cameraMatrix = new Matrix4f().identity();
 	private Matrix4f calculatedMatrix = new Matrix4f().identity();
+	private Matrix4f textPerspectiveMatrix = new Matrix4f().identity();
 	private float[] matrixBuffer = new float[16]; // 4 * 4
 	private int modelToClipMatrixUL;
 
@@ -85,6 +86,8 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		perspectiveMatrix.identity().setPerspective(viewAngle, aspect, zNear, zFar);
 
 		perspectiveMatrix.invert(inversePerspectiveMatrix);
+
+		textPerspectiveMatrix.identity().setPerspectiveRect(width, height, -110f, 110f);
 	}
 
 	@Override
@@ -266,6 +269,17 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		} catch (Throwable t) {
 			throw new RuntimeException("initialization", t);
 		}
+	}
+
+	@Override
+	public void drawOnScreen(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, double x, double y, OpenGLModelStoreImpl store) {
+		gl3.glDisable(GL3.GL_DEPTH_TEST);
+		calculatedMatrix.identity().scale(-1f, -1f, 1f).translate(0f, (float)(-0.8 + 0.1 * y), 0f);
+		calculatedMatrix.mul(textPerspectiveMatrix);
+		calculatedMatrix.translate((float)(-4000.0 + 200 * x), 0f, -800f);
+		calculatedMatrix.get(matrixBuffer);
+		drawModel(glAutoDrawable, model, store);
+		gl3.glEnable(GL3.GL_DEPTH_TEST);
 	}
 
 	@Override

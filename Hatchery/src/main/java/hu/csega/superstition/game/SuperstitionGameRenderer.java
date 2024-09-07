@@ -126,6 +126,10 @@ public class SuperstitionGameRenderer {
 			g.drawAnimation(elements.testAnimationHandler, 0, monsterPlacement);
 		}
 
+		g.drawOnScreen(elements.alphabetA, 0, 0);
+		g.drawOnScreen(elements.alphabetA, 0, 1);
+		g.drawOnScreen(elements.alphabetA, 0, 2);
+
 		hackBlockScreenSaverActivation();
 	}
 

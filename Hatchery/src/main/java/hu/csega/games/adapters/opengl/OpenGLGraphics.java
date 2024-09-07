@@ -97,6 +97,16 @@ public class OpenGLGraphics implements GameGraphics {
 	}
 
 	@Override
+	public void drawOnScreen(GameObjectHandler modelReference, double x, double y) {
+		if(modelReference == null) {
+			return;
+		}
+
+		OpenGLModelContainer resolvedModel = store.resolveModel(modelReference);
+		resolvedModel.drawOnScreen(glAutodrawable, x, y);
+	}
+
+	@Override
 	public void drawModel(GameObjectHandler modelReference, GameObjectPlacement modelPlacement) {
 		if(modelReference == null || modelPlacement == null) {
 			return;

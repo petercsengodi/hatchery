@@ -113,7 +113,6 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 	@Override
 	public void startFrame(GLAutoDrawable glAutoDrawable) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -125,7 +124,6 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 	@Override
 	public void endFrame(GLAutoDrawable glAutoDrawable) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -136,43 +134,41 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 	@Override
 	public void loadTexture(GLAutoDrawable glAutodrawable, String filename, OpenGLTextureContainer container) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void disposeTexture(GLAutoDrawable glAutoDrawable, OpenGLTextureContainer container) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void loadModel(GLAutoDrawable glAutoDrawable, String filename, OpenGLModelContainer model) {
 		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public void drawOnScreen(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, double x, double y, OpenGLModelStoreImpl store) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, OpenGLModelStoreImpl store) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameTransformation transformation, OpenGLModelStoreImpl store) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void disposeModel(GLAutoDrawable glAutodrawable, OpenGLModelContainer model) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
