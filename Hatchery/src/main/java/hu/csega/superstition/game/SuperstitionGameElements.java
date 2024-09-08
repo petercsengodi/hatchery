@@ -22,7 +22,7 @@ public class SuperstitionGameElements {
 	GameObjectHandler[] alphabet;
 	int numberOfLetters = 26;
 	GameObjectHandler[] numbers;
-	int numberOfNumbers = 3;
+	int numberOfNumbers = 10;
 	GameObjectHandler dot;
 	GameObjectHandler colon;
 	GameObjectHandler exclamation;
