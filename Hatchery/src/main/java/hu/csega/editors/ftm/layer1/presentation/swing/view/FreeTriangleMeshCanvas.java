@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.common.lens.EditorLensPipeline;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
@@ -90,6 +91,8 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		g2d.setColor(Color.black);
 
 		paint2d(g2d);
+
+		g2d.drawImage(FreeTriangleMeshToolStarter.SPRITES[0], 0, 0, null);
 
 		g.drawImage(buffer, 0, 0, null);
 	}

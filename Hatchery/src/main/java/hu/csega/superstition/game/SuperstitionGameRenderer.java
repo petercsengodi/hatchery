@@ -81,7 +81,7 @@ public class SuperstitionGameRenderer {
 			universe.spellsInProgress.add(spell);
 		}
 
-		g.drawAnimation(elements.testAnimationHandler, sceneIndex, playerPlacement);
+		g.drawAnimation(elements.wizardShootingAnimationHandler, sceneIndex, playerPlacement);
 
 		Iterator<SpellInProgress> iterator = universe.spellsInProgress.iterator();
 		while(iterator.hasNext()) {
@@ -120,11 +120,11 @@ public class SuperstitionGameRenderer {
 			}
 
 			GameObjectPlacement monsterPlacement = new GameObjectPlacement();
-			monsterPlacement.position.set((float) monster.x, (float) monster.y, (float) monster.z);
-			monsterPlacement.target.set((float) monster.x, (float) monster.y, (float) monster.z + 10f);
+			monsterPlacement.position.set((float) monster.x, (float) monster.y + 25f, (float) monster.z);
+			monsterPlacement.target.set((float) monster.x, (float) monster.y + 25f, (float) monster.z + 10f);
 			monsterPlacement.up.set(0f, 1f, 0f);
 			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
-			g.drawAnimation(elements.testAnimationHandler, 0, monsterPlacement);
+			g.drawAnimation(elements.enemyRunningAnimationHandler, 0, monsterPlacement);
 		}
 
 		g.drawOnScreen(elements.alphabet[0], 0, 0);

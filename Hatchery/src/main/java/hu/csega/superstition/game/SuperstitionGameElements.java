@@ -14,10 +14,12 @@ public class SuperstitionGameElements {
 	private static final float GOUND_DEPTH = -12f;
 	private static final float GOUND_SIZE = 200f;
 
+	GameObjectHandler wizardShootingAnimationHandler;
+	GameObjectHandler enemyRunningAnimationHandler;
+
 	GameObjectHandler groundTexture;
 	GameObjectHandler groundHandler;
 	GameObjectHandler boxModel;
-	GameObjectHandler testAnimationHandler;
 	GameObjectHandler spellModel;
 	GameObjectHandler[] alphabet;
 	int numberOfLetters = 26;
@@ -36,7 +38,8 @@ public class SuperstitionGameElements {
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
-		testAnimationHandler = loadAnimation(store, "wizard2.json");
+		wizardShootingAnimationHandler = loadAnimation(store, "wizard2.json");
+		enemyRunningAnimationHandler = loadAnimation(store, "run.json");
 
 		alphabet = new GameObjectHandler[numberOfLetters];
 		for(int i = 0; i < numberOfLetters; i++) {

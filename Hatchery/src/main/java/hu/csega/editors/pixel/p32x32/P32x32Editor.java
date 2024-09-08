@@ -18,7 +18,7 @@ import hu.csega.games.library.pixel.v1.PixelSheet;
 public class P32x32Editor extends JFrame {
 
 	public P32x32Editor(String filename, String jsExportFilename, int maximumNumberOfSheets, int spwidth, int spheight) {
-		super("Pixel Editor 32x32");
+		super("Pixel Editor " + spwidth + 'x' + spheight);
 
 		this.filename = filename;
 		this.jsExportFilename = jsExportFilename;
