@@ -20,7 +20,7 @@ public class SuperstitionGameElements {
 	GameObjectHandler testAnimationHandler;
 	GameObjectHandler spellModel;
 	GameObjectHandler[] alphabet;
-	int numberOfLetters = 4;
+	int numberOfLetters = 26;
 	GameObjectHandler[] numbers;
 	int numberOfNumbers = 3;
 	GameObjectHandler dot;

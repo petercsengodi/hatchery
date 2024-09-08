@@ -142,6 +142,8 @@ public class SuperstitionGameRenderer {
 
 		drawString(g, elements, 4, 0, "Hello!\nAnybody there?\nZ is the last letter...");
 
+		drawString(g, elements, 4, 6, "abcdefghijklmnopqrstuvwxyz");
+
 		hackBlockScreenSaverActivation();
 	}
 
