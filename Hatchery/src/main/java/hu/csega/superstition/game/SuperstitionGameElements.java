@@ -20,11 +20,11 @@ public class SuperstitionGameElements {
 	GameObjectHandler testAnimationHandler;
 	GameObjectHandler spellModel;
 	GameObjectHandler[] alphabet;
-	int numberOfLetters = 3;
+	int numberOfLetters = 4;
 	GameObjectHandler[] numbers;
-	int numberOfNumbers = 2;
+	int numberOfNumbers = 3;
 	GameObjectHandler dot;
-	GameObjectHandler column;
+	GameObjectHandler colon;
 	GameObjectHandler exclamation;
 	GameObjectHandler comma;
 	GameObjectHandler question;
@@ -49,7 +49,7 @@ public class SuperstitionGameElements {
 		}
 
 		dot = store.loadMesh("alphabet-dot.json");
-		column = store.loadMesh("alphabet-column.json");
+		colon = store.loadMesh("alphabet-column.json");
 		exclamation = store.loadMesh("alphabet-exclamation.json");
 		comma = store.loadMesh("alphabet-comma.json");
 		question = store.loadMesh("alphabet-question.json");

@@ -135,12 +135,59 @@ public class SuperstitionGameRenderer {
 		g.drawOnScreen(elements.numbers[1], 2, 1);
 
 		g.drawOnScreen(elements.dot, 3, 0);
-		g.drawOnScreen(elements.column, 3, 1);
+		g.drawOnScreen(elements.colon, 3, 1);
 		g.drawOnScreen(elements.exclamation, 3, 2);
 		g.drawOnScreen(elements.comma, 3, 3);
 		g.drawOnScreen(elements.question, 3, 4);
 
+		drawString(g, elements, 4, 0, "Hello!\nAnybody there?\nZ is the last letter...");
+
 		hackBlockScreenSaverActivation();
+	}
+
+	private void drawString(GameGraphics g, SuperstitionGameElements elements, int x, int y, String s) {
+		int pos = x;
+		int line = y;
+
+		for(int i = 0; i < s.length(); i++) {
+			GameObjectHandler character = elements.question;
+			char c = s.charAt(i);
+			if(c == '\n') {
+				line ++;
+				pos = x;
+			}
+
+			if(c != '\n' && c != '\r' && c <= ' ')
+				pos ++;
+
+			if(c <= ' ')
+				continue;
+
+			int maybe = (int)(c - 'a');
+			if(maybe >= 0 && maybe < elements.numberOfLetters) {
+				character = elements.alphabet[maybe];
+			} else {
+				maybe = (int)(c - 'A');
+				if(maybe >= 0 && maybe < elements.numberOfLetters) {
+					character = elements.alphabet[maybe];
+				} else {
+					maybe = (int)(c - '0');
+					if(maybe >= 0 && maybe < elements.numberOfNumbers) {
+						character = elements.numbers[maybe];
+					} else {
+						switch(c) {
+							case '.': character = elements.dot; break;
+							case ',': character = elements.comma; break;
+							case ':': character = elements.colon; break;
+							case '!': character = elements.exclamation; break;
+							case '?': character = elements.question; break;
+						}
+					}
+				}
+			}
+
+			g.drawOnScreen(character, pos ++, line);
+		}
 	}
 
 	/**
