@@ -116,7 +116,7 @@ public class FreeTriangleMeshMenu {
 
 		JMenu shapesMenu = new JMenu("Basic Shapes");
 		shapesMenu.add(cubeItem);
-		shapesMenu.add(sphereItem);
+		// shapesMenu.add(sphereItem);
 		shapesMenu.add(patch10x10Item);
 		return shapesMenu;
 	}
