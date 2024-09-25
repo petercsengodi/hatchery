@@ -26,6 +26,8 @@ public class SuperstitionGameRenderer {
 	private Robot robot;
 	private long lastCheck;
 
+	int lastAnimIndex;
+
 	public void renderGame(GameEngineFacade facade, SuperstitionSerializableModel universe, SuperstitionGameElements elements) {
 		GameGraphics g = facade.graphics();
 
@@ -99,6 +101,10 @@ public class SuperstitionGameRenderer {
 			}
 		}
 
+		lastAnimIndex+=8;
+		if(lastAnimIndex > 999)
+			lastAnimIndex = 0;
+
 		Iterator<MonsterData> monsters = universe.monstersAlive.iterator();
 		while(monsters.hasNext()) {
 			MonsterData monster = monsters.next();
@@ -124,7 +130,7 @@ public class SuperstitionGameRenderer {
 			monsterPlacement.target.set((float) monster.x, (float) monster.y + 25f, (float) monster.z + 10f);
 			monsterPlacement.up.set(0f, 1f, 0f);
 			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
-			g.drawAnimation(elements.enemyRunningAnimationHandler, 0, monsterPlacement);
+			g.drawAnimation(elements.enemyRunningAnimationHandler, lastAnimIndex / 10, monsterPlacement);
 		}
 
 		g.drawOnScreen(elements.alphabet[0], 0, 0);

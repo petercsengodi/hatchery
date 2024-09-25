@@ -1,6 +1,8 @@
 package hu.csega.superstition.game;
 
 import hu.csega.games.engine.intf.GameControl;
+import hu.csega.superstition.game.play.CollisionUtil;
+import hu.csega.superstition.game.play.MonsterData;
 
 public class SuperstitionGameModify {
 
@@ -11,7 +13,9 @@ public class SuperstitionGameModify {
 	private static final double PLAYER_ROTATION = 0.01;
 	private static final double PLAYER_FORWARD = 1.0;
 
-	public static void modify(SuperstitionSerializableModel model, GameControl control) {
+	private static final double MONSTER_SPEED = 40.0;
+
+	public static void modify(SuperstitionSerializableModel model, GameControl control, double elapsedTime) {
 		SuperstitionPlayer player = model.player;
 
 		double speedModifier = (control.isControlOn() ? 15.0 : 1.0) * PLAYER_FORWARD;
@@ -48,6 +52,38 @@ public class SuperstitionGameModify {
 		if(control.isDownOn()) {
 			player.x -= (-speedModifier * Math.sin(player.movingRotation));
 			player.z -= (speedModifier * Math.cos(player.movingRotation));
+		}
+
+		for(MonsterData monster : model.monstersAlive) {
+			double dx = player.x - monster.x;
+			double dz = player.z - monster.z;
+			if(Math.abs(dx) > 5 || Math.abs(dz) > 5) {
+				// TODO definitely wrong
+				monster.x = monster.x + MONSTER_SPEED * Math.signum(dx) * elapsedTime;
+				monster.z = monster.z + MONSTER_SPEED * Math.signum(dz) * elapsedTime;
+			}
+		}
+
+		// TODO monsters colliding with each other
+		for(MonsterData monster1 : model.monstersAlive) {
+			for(MonsterData monster2 : model.monstersAlive) {
+				if(monster1 == monster2) {
+					continue;
+				}
+
+				// TODO definitely wrong
+				double dx = monster2.x - monster1.x;
+				double dz = monster2.z - monster1.z;
+				double d = Math.sqrt(dx*dx + dz*dz);
+				if(d < 10.0) {
+					double ddx = (10.0-dx) / 2.0;
+					monster2.x -= ddx;
+					monster1.x += ddx;
+					double ddz = (10.0-dz) / 2.0;
+					monster2.z -= ddz;
+					monster1.z += ddz;
+				}
+			}
 		}
 
 	}

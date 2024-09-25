@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
+import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
 
@@ -17,7 +17,6 @@ public class SuperstitionSerializableModel implements Serializable {
 	public Set<MonsterData> monstersAlive = new HashSet<>();
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
 
-	GameObjectHandler ground;
 	GameObjectPlacement groundPlacement = new GameObjectPlacement();
 	GameObjectPlacement testFTMPlacement = new GameObjectPlacement();
 	GameObjectPlacement figureFTMPlacement = new GameObjectPlacement();
@@ -27,6 +26,8 @@ public class SuperstitionSerializableModel implements Serializable {
 	GameObjectPlacement boxPlacement2 = new GameObjectPlacement();
 	GameObjectPlacement boxPlacement3 = new GameObjectPlacement();
 	GameObjectPlacement boxPlacement4 = new GameObjectPlacement();
+
+    SuperstitionMap map = new SuperstitionMap();
 
 	public SuperstitionSerializableModel() {
 		player.z = -500f;
