@@ -122,7 +122,8 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		glu.gluPerspective(viewAngle, aspect, zNear, zFar);
 
 		// float[] ambientLight = { 1f, 1f, 1f, 0f };
-		float[] ambientLight = { 0.3f, 0.3f, 0.3f, 0f };
+		// float[] ambientLight = { 0.3f, 0.3f, 0.3f, 0f };
+        float[] ambientLight = { 0.7f, 0.7f, 0.7f, 0f };
 		float[] diffuseLight = { 10000f, 10000f, 10000f, 0f };
 		float[] specular = { 1f, 1f, 1f, 0f};
 		float[] lightPosition = { 100f, 100f, 100f, 0f }; // w = 0f for directed light, w = 1 for spotlight

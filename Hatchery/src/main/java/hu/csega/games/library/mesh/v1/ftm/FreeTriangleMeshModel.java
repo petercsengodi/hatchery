@@ -22,6 +22,7 @@ public class FreeTriangleMeshModel implements Serializable {
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
 	private Collection<Object> selectedObjects = new HashSet<>();
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
+	private int lastSelectedTriangleIndex = -1;
 
 	private double canvasXYTranslateX;
 	private double canvasXYTranslateY;
@@ -154,6 +155,58 @@ public class FreeTriangleMeshModel implements Serializable {
 		}
 	}
 
+	public void selectNextTriangle() {
+		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
+		if(triangles == null || triangles.isEmpty()) {
+			lastSelectedTriangleIndex = -1;
+			selectedObjects.clear();
+			return;
+		}
+
+		if(lastSelectedTriangleIndex > 0 && lastSelectedTriangleIndex < triangles.size() && selectedObjects.isEmpty()) {
+			FreeTriangleMeshTriangle t = triangles.get(lastSelectedTriangleIndex);
+			FreeTriangleMeshVertex v1 = mesh.getVertices().get(t.getVertex1());
+			FreeTriangleMeshVertex v2 = mesh.getVertices().get(t.getVertex2());
+			FreeTriangleMeshVertex v3 = mesh.getVertices().get(t.getVertex3());
+			if(enabled(v1) && enabled(v2) && enabled(v3)) {
+				selectedObjects.add(v1);
+				selectedObjects.add(v2);
+				selectedObjects.add(v3);
+				return;
+			}
+		}
+
+		selectedObjects.clear();
+
+		lastSelectedTriangleIndex++;
+		while(lastSelectedTriangleIndex < triangles.size()) {
+			FreeTriangleMeshTriangle t = triangles.get(lastSelectedTriangleIndex);
+			FreeTriangleMeshVertex v1 = mesh.getVertices().get(t.getVertex1());
+			FreeTriangleMeshVertex v2 = mesh.getVertices().get(t.getVertex2());
+			FreeTriangleMeshVertex v3 = mesh.getVertices().get(t.getVertex3());
+			if(!enabled(v1) || !enabled(v2) || !enabled(v3)) {
+				lastSelectedTriangleIndex++;
+			} else {
+				selectedObjects.add(v1);
+				selectedObjects.add(v2);
+				selectedObjects.add(v3);
+				break;
+			}
+		}
+
+		if(lastSelectedTriangleIndex >= triangles.size()) {
+			lastSelectedTriangleIndex = -1;
+		}
+	}
+
+	public void createVertexAt(double x, double y, double z) {
+		snapshots().addState(mesh);
+		FreeTriangleMeshVertex vertex = new FreeTriangleMeshVertex(x, y, z);
+		vertex.setTX(RND.nextDouble());
+		vertex.setTY(RND.nextDouble());
+		mesh.getVertices().add(vertex);
+	}
+
 	public void createTriangleStrip() {
 		if(selectedObjects.size() < 3)
 			return;
@@ -257,6 +310,29 @@ public class FreeTriangleMeshModel implements Serializable {
 		invalidate();
 	}
 
+	public void finalizeMove() {
+		moved = false;
+	}
+
+	public void moveTexture(double horizontalMove, double verticalMove) {
+		if(selectedObjects.isEmpty())
+			return;
+
+		if(!moved) {
+			snapshots().addState(mesh);
+			moved = true;
+		}
+
+		for(Object object : selectedObjects) {
+			if(object instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
+				v.moveTexture(horizontalMove, verticalMove);
+			}
+		}
+
+		invalidate();
+	}
+
 	public void snapVerticesToGrid() {
 		if(selectedObjects.isEmpty())
 			return;
@@ -347,35 +423,22 @@ public class FreeTriangleMeshModel implements Serializable {
 		invalidate();
 	}
 
-	public void finalizeMove() {
-		moved = false;
-	}
 
-	public void moveTexture(double horizontalMove, double verticalMove) {
-		if(selectedObjects.isEmpty())
+	public void flip(boolean x, boolean y, boolean z) {
+		if(selectedObjects == null || selectedObjects.isEmpty() || (!x && !y && !z)) {
 			return;
-
-		if(!moved) {
-			snapshots().addState(mesh);
-			moved = true;
 		}
 
-		for(Object object : selectedObjects) {
-			if(object instanceof FreeTriangleMeshVertex) {
-				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
-				v.moveTexture(horizontalMove, verticalMove);
+		snapshots().addState(mesh);
+		for(Object obj : selectedObjects) {
+			if(obj instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) obj;
+				if(x) { v.setPX(-v.getPX()); }
+				if(y) { v.setPY(-v.getPY()); }
+				if(z) { v.setPZ(-v.getPZ()); }
 			}
 		}
 
-		invalidate();
-	}
-
-	public void createVertexAt(double x, double y, double z) {
-		snapshots().addState(mesh);
-		FreeTriangleMeshVertex vertex = new FreeTriangleMeshVertex(x, y, z);
-		vertex.setTX(RND.nextDouble());
-		vertex.setTY(RND.nextDouble());
-		mesh.getVertices().add(vertex);
 	}
 
 	public void setGroupForSelectedVertices(int i) {

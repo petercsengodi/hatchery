@@ -23,6 +23,9 @@ public class FreeTriangleMeshMenu {
 		JMenu textureMenu = createTextureMenu(frame, facade);
 		menuBar.add(textureMenu);
 
+		JMenu actionsMenu = createActionsMenu(frame, facade);
+		menuBar.add(actionsMenu);
+
 		JMenu shapesMenu = createShapesMenu(frame, facade);
 		menuBar.add(shapesMenu);
 
@@ -119,6 +122,35 @@ public class FreeTriangleMeshMenu {
 		// shapesMenu.add(sphereItem);
 		shapesMenu.add(patch10x10Item);
 		return shapesMenu;
+	}
+
+	private static JMenu createActionsMenu(JFrame frame, final GameEngineFacade facade) {
+		JMenuItem flipX = new JMenuItem("FlipX");
+		flipX.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.flip(true, false, false);
+			facade.window().repaintEverything();
+		});
+
+		JMenuItem flipY = new JMenuItem("FlipY");
+		flipY.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.flip(false, true, false);
+			facade.window().repaintEverything();
+		});
+
+		JMenuItem flipZ = new JMenuItem("FlipZ");
+		flipZ.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.flip(false, false, true);
+			facade.window().repaintEverything();
+		});
+
+		JMenu actionsMenu = new JMenu("Actions");
+		actionsMenu.add(flipX);
+		actionsMenu.add(flipY);
+		actionsMenu.add(flipZ);
+		return actionsMenu;
 	}
 
 	private static JMenu createExportMenu(JFrame frame, GameEngineFacade facade) {

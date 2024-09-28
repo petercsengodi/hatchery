@@ -41,6 +41,11 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 			facade.window().repaintEverything();
 		}
 
+		if(key == 'n' || key == 'N') { // N: select next triangle
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.selectNextTriangle();
+			facade.window().repaintEverything();
+		}
 
 		if(key == 'r' || key == 'R') { // R: reverse current selection
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
