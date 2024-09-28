@@ -423,7 +423,6 @@ public class FreeTriangleMeshModel implements Serializable {
 		invalidate();
 	}
 
-
 	public void flip(boolean x, boolean y, boolean z) {
 		if(selectedObjects == null || selectedObjects.isEmpty() || (!x && !y && !z)) {
 			return;
@@ -438,7 +437,37 @@ public class FreeTriangleMeshModel implements Serializable {
 				if(z) { v.setPZ(-v.getPZ()); }
 			}
 		}
+	}
 
+	public void rotate90(boolean x, boolean y, boolean z) {
+		if(selectedObjects == null || selectedObjects.isEmpty() || (!x && !y && !z)) {
+			return;
+		}
+
+		snapshots().addState(mesh);
+		for(Object obj : selectedObjects) {
+			if(obj instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) obj;
+
+				if(x) {
+					double tmp = v.getPY();
+					v.setPY(v.getPZ());
+					v.setPZ(-tmp);
+				}
+
+				if(y) {
+					double tmp = v.getPX();
+					v.setPX(v.getPZ());
+					v.setPZ(-tmp);
+				}
+
+				if(z) {
+					double tmp = v.getPX();
+					v.setPX(v.getPY());
+					v.setPY(-tmp);
+				}
+			}
+		}
 	}
 
 	public void setGroupForSelectedVertices(int i) {

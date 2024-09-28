@@ -125,24 +125,45 @@ public class FreeTriangleMeshMenu {
 	}
 
 	private static JMenu createActionsMenu(JFrame frame, final GameEngineFacade facade) {
-		JMenuItem flipX = new JMenuItem("FlipX");
+		JMenuItem flipX = new JMenuItem("Flip X");
 		flipX.addActionListener(event -> {
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
 			model.flip(true, false, false);
 			facade.window().repaintEverything();
 		});
 
-		JMenuItem flipY = new JMenuItem("FlipY");
+		JMenuItem flipY = new JMenuItem("Flip Y");
 		flipY.addActionListener(event -> {
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
 			model.flip(false, true, false);
 			facade.window().repaintEverything();
 		});
 
-		JMenuItem flipZ = new JMenuItem("FlipZ");
+		JMenuItem flipZ = new JMenuItem("Flip Z");
 		flipZ.addActionListener(event -> {
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
 			model.flip(false, false, true);
+			facade.window().repaintEverything();
+		});
+
+		JMenuItem rotateX = new JMenuItem("Rotate 90 X");
+		rotateX.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.rotate90(true, false, false);
+			facade.window().repaintEverything();
+		});
+
+		JMenuItem rotateY = new JMenuItem("Rotate 90 Y");
+		rotateY.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.rotate90(false, true, false);
+			facade.window().repaintEverything();
+		});
+
+		JMenuItem rotateZ = new JMenuItem("Rotate 90 Z");
+		rotateZ.addActionListener(event -> {
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.rotate90( false, false, true);
 			facade.window().repaintEverything();
 		});
 
@@ -150,6 +171,9 @@ public class FreeTriangleMeshMenu {
 		actionsMenu.add(flipX);
 		actionsMenu.add(flipY);
 		actionsMenu.add(flipZ);
+		actionsMenu.add(rotateX);
+		actionsMenu.add(rotateY);
+		actionsMenu.add(rotateZ);
 		return actionsMenu;
 	}
 
