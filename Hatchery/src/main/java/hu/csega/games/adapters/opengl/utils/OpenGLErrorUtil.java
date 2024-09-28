@@ -35,6 +35,12 @@ public class OpenGLErrorUtil {
 			case GL_OUT_OF_MEMORY:
 				errorString = "GL_OUT_OF_MEMORY";
 				break;
+			case 1283: // 0x0503
+				errorString = "GL_STACK_OVERFLOW"; // Pushed too many matrices.
+				break;
+			case 1284: // 0x0504
+				errorString = "GL_STACK_UNDERFLOW"; // Popped matrix when stack was empty.
+				break;
 			default:
 				errorString = "UNKNOWN";
 				break;

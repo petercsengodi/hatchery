@@ -48,7 +48,7 @@ class FileOpen implements ActionListener {
 			String texture = model.getTextureFilename();
 			if(texture == null || texture.length() == 0) {
 				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
-			} else if(texture.contains(File.separator)){
+			} else if(texture.contains(File.separator)) {
 
 				if(resourceAdapter == null)
 					resourceAdapter = UnitStore.instance(ResourceAdapter.class);
@@ -60,6 +60,8 @@ class FileOpen implements ActionListener {
 				}
 
 			}
+
+			facade.store().loadTexture(texture);
 
 			facade.setModel(model);
 			facade.window().repaintEverything();
