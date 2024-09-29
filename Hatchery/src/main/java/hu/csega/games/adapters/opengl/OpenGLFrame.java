@@ -134,9 +134,13 @@ MouseListener, MouseMotionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		char keyChar = e.getKeyChar();
+		int keyCode = e.getKeyCode();
+		if(keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) {
+			keyChar = (char)(keyCode - KeyEvent.VK_A + 'a');
+		}
+
 		control.hit(keyChar);
 
-		int keyCode = e.getKeyCode();
 		if(keyCode == KeyEvent.VK_LEFT)
 			control.setLeftIsOn(true);
 		if(keyCode == KeyEvent.VK_RIGHT)

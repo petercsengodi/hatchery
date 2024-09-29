@@ -20,7 +20,7 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	private transient FreeTriangleMeshSnapshots _snapshots;
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
-	private Collection<Object> selectedObjects = new HashSet<>();
+	private Set<Object> selectedObjects = new HashSet<>();
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
 	private int lastSelectedTriangleIndex = -1;
 
@@ -196,6 +196,63 @@ public class FreeTriangleMeshModel implements Serializable {
 
 		if(lastSelectedTriangleIndex >= triangles.size()) {
 			lastSelectedTriangleIndex = -1;
+		}
+	}
+
+	public void unboundVertices() {
+		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
+		if(triangles == null || triangles.isEmpty() || selectedObjects == null || selectedObjects.isEmpty()) {
+			return;
+		}
+
+		snapshots().addState(mesh);
+		boolean changed = false;
+
+		Iterator<FreeTriangleMeshTriangle> it = triangles.iterator();
+		while(it.hasNext()) {
+			FreeTriangleMeshTriangle t = it.next();
+			FreeTriangleMeshVertex v1 = mesh.getVertices().get(t.getVertex1());
+			FreeTriangleMeshVertex v2 = mesh.getVertices().get(t.getVertex2());
+			FreeTriangleMeshVertex v3 = mesh.getVertices().get(t.getVertex3());
+			if(selectedObjects.contains(v1) || selectedObjects.contains(v2) || selectedObjects.contains(v3)) {
+				it.remove();
+				changed = true;
+			}
+		}
+
+		if(changed) {
+			invalidate();
+		} else {
+			snapshots().removeTopState();
+		}
+	}
+
+	public void unboundTriangles() {
+		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
+		if(triangles == null || triangles.isEmpty() || selectedObjects == null || selectedObjects.isEmpty()) {
+			return;
+		}
+
+		snapshots().addState(mesh);
+		boolean changed = false;
+
+		Iterator<FreeTriangleMeshTriangle> it = triangles.iterator();
+		while(it.hasNext()) {
+			FreeTriangleMeshTriangle t = it.next();
+			FreeTriangleMeshVertex v1 = mesh.getVertices().get(t.getVertex1());
+			FreeTriangleMeshVertex v2 = mesh.getVertices().get(t.getVertex2());
+			FreeTriangleMeshVertex v3 = mesh.getVertices().get(t.getVertex3());
+			if(selectedObjects.contains(v1) && selectedObjects.contains(v2) && selectedObjects.contains(v3)) {
+				it.remove();
+				changed = true;
+			}
+		}
+
+
+		if(changed) {
+			invalidate();
+		} else {
+			snapshots().removeTopState();
 		}
 	}
 

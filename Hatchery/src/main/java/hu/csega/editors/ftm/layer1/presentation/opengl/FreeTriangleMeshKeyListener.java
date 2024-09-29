@@ -71,10 +71,22 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 				model.setGroupForSelectedVertices(key - '0');
 				facade.window().repaintEverything();
 			}
+
+			if(key == 'u' || key == 'U') { // CTRL + U: unbound all triangles containing selected vertices
+				FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+				model.unboundVertices();
+				facade.window().repaintEverything();
+			}
 		} else {
 			if(key >= '0' && key <= '9') { // NUM: toggle selection group visibility
 				FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
 				model.setToggleGroupVisibility(key - '0');
+				facade.window().repaintEverything();
+			}
+
+			if(key == 'u' || key == 'U') { // U: unbound triangles where all vertices are selected
+				FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+				model.unboundTriangles();
 				facade.window().repaintEverything();
 			}
 		}

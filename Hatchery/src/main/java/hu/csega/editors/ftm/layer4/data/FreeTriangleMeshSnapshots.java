@@ -26,6 +26,10 @@ public class FreeTriangleMeshSnapshots {
 		nextStates.clear();
 	}
 
+	public void removeTopState() {
+		previousStates.remove(previousStates.size() - 1);
+	}
+
 	public Serializable undo(Serializable current) {
 		if(previousStates.isEmpty())
 			return null;
