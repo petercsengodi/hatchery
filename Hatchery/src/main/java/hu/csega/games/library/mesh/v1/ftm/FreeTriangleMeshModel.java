@@ -21,6 +21,7 @@ public class FreeTriangleMeshModel implements Serializable {
 	private transient FreeTriangleMeshSnapshots _snapshots;
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
 	private Set<Object> selectedObjects = new HashSet<>();
+	private long selectionLastChanged;
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
 	private int lastSelectedTriangleIndex = -1;
 
@@ -65,6 +66,15 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	public void invalidate() {
 		this.built = false;
+		invalidateSelection();
+	}
+
+	public void invalidateSelection() {
+		this.selectionLastChanged = System.currentTimeMillis();
+	}
+
+	public long getSelectionLastChanged() {
+		return selectionLastChanged;
 	}
 
 	public FreeTriangleMeshSnapshots snapshots() {
@@ -105,6 +115,8 @@ public class FreeTriangleMeshModel implements Serializable {
 					selectedObjects.add(vertex);
 			}
 		}
+
+		invalidateSelection();
 	}
 
 	public void selectFirst(FreeTriangleMeshSphereLineIntersection intersection, FreeTriangleMeshLine line, double radius, boolean add) {
@@ -153,6 +165,8 @@ public class FreeTriangleMeshModel implements Serializable {
 				}
 			}
 		}
+
+		invalidateSelection();
 	}
 
 	public void selectNextTriangle() {
@@ -197,6 +211,8 @@ public class FreeTriangleMeshModel implements Serializable {
 		if(lastSelectedTriangleIndex >= triangles.size()) {
 			lastSelectedTriangleIndex = -1;
 		}
+
+		invalidateSelection();
 	}
 
 	public void unboundVertices() {
@@ -494,6 +510,8 @@ public class FreeTriangleMeshModel implements Serializable {
 				if(z) { v.setPZ(-v.getPZ()); }
 			}
 		}
+
+		invalidate();
 	}
 
 	public void rotate90(boolean x, boolean y, boolean z) {
@@ -525,6 +543,8 @@ public class FreeTriangleMeshModel implements Serializable {
 				}
 			}
 		}
+
+		invalidate();
 	}
 
 	public void setGroupForSelectedVertices(int i) {

@@ -26,12 +26,14 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 		model.setCanvasXYTranslateX(x);
 		model.setCanvasXYTranslateY(y);
 		lenses.addTranslation(x, y, 0.0);
+		somethingChanged();
 	}
 
 	@Override
 	protected void zoom(double delta) {
 		FreeTriangleMeshModel model = getModel();
 		model.setCanvasXYZoom(model.getCanvasXYZoom() + delta);
+		somethingChanged();
 	}
 
 	@Override
@@ -51,6 +53,7 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 
 		FreeTriangleMeshModel model = getModel();
 		model.selectAll(cube, add);
+		somethingChanged();
 	}
 
 	@Override
@@ -62,6 +65,7 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 
 		FreeTriangleMeshModel model = getModel();
 		model.selectFirst(intersection, selectionLine, radius, add);
+		somethingChanged();
 	}
 
 	@Override
@@ -82,6 +86,7 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 		double dz = p2.getZ() - p1.getZ();
 
 		model.moveSelected(dx, dy, dz);
+		somethingChanged();
 	}
 
 	@Override

@@ -1,9 +1,13 @@
 package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
@@ -16,12 +20,18 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
 	protected FreeTriangleMeshSphereLineIntersection intersection = new FreeTriangleMeshSphereLineIntersection();
+	private Set<FreeTriangleMeshPictogram> pictograms;
+	private long selectionLastChanged = -1L;
 
 	public FreeTriangleMeshSideView(GameEngineFacade facade) {
 		super(facade);
 	}
 
 	public abstract String label();
+	
+	protected void somethingChanged() {
+		selectionLastChanged = -1L;
+	}
 
 	@Override
 	protected void paint2d(Graphics2D g) {
@@ -88,9 +98,21 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		Stroke stroke = g.getStroke();
 		g.setStroke(new BasicStroke(3));
 		g.setColor(Color.PINK);
-		g.drawLine(-10, -10, 10, 10);
-		g.drawLine(-10, 10, 10, -10);
+		EditorPoint centerEP = new EditorPoint(0.0, 0.0, 0.0, 1.0);
+		centerEP = transformToScreen(centerEP);
+		int centerX = (int) centerEP.getX();
+		int centerY = (int) centerEP.getY();
+		g.drawLine(centerX - 10, centerY - 10, centerX + 10, centerY + 10);
+		g.drawLine(centerX - 10, centerY + 10, centerX + 10, centerY - 10);
 		g.setStroke(stroke);
+
+		Set<FreeTriangleMeshPictogram> pictograms = getPictograms(model);
+		if(pictograms != null && !pictograms.isEmpty()) {
+			for(FreeTriangleMeshPictogram p : pictograms) {
+				BufferedImage img = FreeTriangleMeshToolStarter.SPRITES[p.action];
+				g.drawImage(img, (int)p.x, (int)p.y, null);
+			}
+		}
 
 		g.translate(-widthDiv2, -heightDiv2);
 
@@ -116,6 +138,41 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 
 	private void drawRectangle(Graphics2D g, EditorPoint end1, EditorPoint end2) {
 		g.drawRect((int)end1.getX(), (int)end1.getY(), (int)(end2.getX() - end1.getX()), (int)(end2.getY() - end1.getY()));
+	}
+
+	public Set<FreeTriangleMeshPictogram> getPictograms(FreeTriangleMeshModel model) {
+		Collection<Object> selectedObjects = model.getSelectedObjects();
+		if(selectedObjects == null || selectedObjects.size() < 2) {
+			return null;
+		}
+
+		if(pictograms == null || selectionLastChanged < model.getSelectionLastChanged()) {
+			selectionLastChanged = model.getSelectionLastChanged();
+			pictograms = new HashSet<>();
+
+			double minx = Double.MAX_VALUE;
+			double miny = Double.MAX_VALUE;
+			double maxx = Double.MIN_VALUE;
+			double maxy = Double.MIN_VALUE;
+
+			for(Object obj : selectedObjects) {
+				if(obj instanceof FreeTriangleMeshVertex) {
+					FreeTriangleMeshVertex v = ((FreeTriangleMeshVertex)obj);
+					EditorPoint p = transformToScreen(transformVertexToPoint(v));
+
+					double x = p.getX();
+					double y = p.getY();
+					if(x < minx) { minx = x; }
+					if(y < miny) { miny = y; }
+					if(x > maxx) { maxx = x; }
+					if(y > maxy) { maxy = y; }
+				}
+			}
+
+			pictograms.add(new FreeTriangleMeshPictogram(minx, miny, 0));
+		}
+
+		return pictograms;
 	}
 
 	private static final long serialVersionUID = 1L;

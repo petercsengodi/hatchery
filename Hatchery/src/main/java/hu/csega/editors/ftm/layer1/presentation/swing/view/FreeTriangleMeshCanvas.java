@@ -92,8 +92,6 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 		paint2d(g2d);
 
-		g2d.drawImage(FreeTriangleMeshToolStarter.SPRITES[0], 0, 0, null);
-
 		g.drawImage(buffer, 0, 0, null);
 	}
 
