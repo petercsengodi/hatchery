@@ -65,6 +65,7 @@ public class AnimatorStarter {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 2. Register components and providers:
 
+		// FIXME: Loads everything, it should not.
 		UnitStore.registerInstance(TextureLibrary.class, new TextureLibrary(resourceAdapter.textureFolder()));
 		UnitStore.registerInstance(MeshLibrary.class, new MeshLibrary(resourceAdapter.meshFolder()));
 

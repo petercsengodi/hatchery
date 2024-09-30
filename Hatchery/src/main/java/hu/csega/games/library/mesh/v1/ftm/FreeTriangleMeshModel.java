@@ -20,7 +20,7 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	private transient FreeTriangleMeshSnapshots _snapshots;
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
-	private Set<Object> selectedObjects = new HashSet<>();
+	private Collection<Object> selectedObjects = new HashSet<>(); // May also be ArrayList in serialized objects.
 	private long selectionLastChanged;
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
 	private int lastSelectedTriangleIndex = -1;
