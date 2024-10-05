@@ -14,10 +14,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
-import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.common.lens.EditorLensPipeline;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
@@ -29,9 +29,12 @@ import hu.csega.games.engine.intf.GameWindow;
 public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanvas, MouseListener, MouseMotionListener, MouseWheelListener {
 
 	protected GameEngineFacade facade;
+	protected Set<FreeTriangleMeshPictogram> pictograms;
 
 	public static final Dimension PREFERRED_SIZE = new Dimension(400, 300);
 	protected Dimension lastSize = new Dimension(PREFERRED_SIZE.width, PREFERRED_SIZE.height);
+	protected int PICT_SIZE_X = 16;
+	protected int PICT_SIZE_Y = 16;
 
 	public static final double[] ZOOM_VALUES = { 0.0001, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50, 2.0, 3.0, 4.0, 5.0, 10.0, 100.0 };
 	public static final int DEFAULT_ZOOM_INDEX = 8;
@@ -47,6 +50,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	private Point selectionStart = new Point();
 	private Point selectionEnd = new Point();
 	private Rectangle selectionBox = new Rectangle();
+	private int selectedPictogramAction = -1;
 
 	protected EditorLensPipeline lenses = new EditorLensPipeline();
 	protected int zoomIndex = DEFAULT_ZOOM_INDEX;
@@ -165,10 +169,22 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		if(e.getButton() == 1) {
 			mouseLeftPressed = true;
 			mouseLeftAt = new Point(e.getX(), e.getY());
+			selectedPictogramAction = -1;
 			if(!e.isControlDown()) {
-				selectionBoxEnabled = true;
-				selectionStart.x = selectionEnd.x = mouseLeftAt.x;
-				selectionStart.y = selectionEnd.y = mouseLeftAt.y;
+				if(pictograms != null && !pictograms.isEmpty()) {
+					for (FreeTriangleMeshPictogram pictogram : pictograms) {
+						if (mouseLeftAt.x >= pictogram.x && mouseLeftAt.x < pictogram.x + PICT_SIZE_X &&
+								mouseLeftAt.y >= pictogram.y && mouseLeftAt.y < pictogram.y + PICT_SIZE_Y) {
+							selectedPictogramAction = pictogram.action;
+						}
+					}
+				}
+
+				if(selectedPictogramAction < 0) {
+					selectionBoxEnabled = true;
+					selectionStart.x = selectionEnd.x = mouseLeftAt.x;
+					selectionStart.y = selectionEnd.y = mouseLeftAt.y;
+				}
 			}
 		}
 
@@ -189,6 +205,15 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 				selectAll(p1.getX(), p1.getY(), p2.getX(), p2.getY(), e.isShiftDown());
 				selectionBoxEnabled = false;
 				repaintEverything();
+			}
+
+			if(selectedPictogramAction >= 0) {
+				int action = selectedPictogramAction;
+				int dx = e.getX() - mouseLeftAt.x;
+				int dy = e.getY() - mouseLeftAt.y;
+				mouseLeftAt = null;
+				selectedPictogramAction = -1;
+				pictogramAction(action, dx, dy);
 			}
 
 			FreeTriangleMeshModel model = getModel();
@@ -245,6 +270,9 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		} else {
 			return null;
 		}
+	}
+
+	protected void pictogramAction(int action, int dx, int dy) {
 	}
 
 	private EditorPoint transformToModel(int x, int y) {

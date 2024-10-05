@@ -5,14 +5,14 @@ public class FreeTriangleMeshPictogram {
     public FreeTriangleMeshPictogram() {
     }
 
-    public FreeTriangleMeshPictogram(double x, double y, int action) {
+    public FreeTriangleMeshPictogram(int action, double x, double y) {
+        this.action = action;
         this.x = x;
         this.y = y;
-        this.action = action;
     }
 
+    public int action;
     public double x;
     public double y;
-    public int action;
 
 }

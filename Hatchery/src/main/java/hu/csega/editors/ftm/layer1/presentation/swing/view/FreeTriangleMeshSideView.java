@@ -20,7 +20,6 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
 	protected FreeTriangleMeshSphereLineIntersection intersection = new FreeTriangleMeshSphereLineIntersection();
-	private Set<FreeTriangleMeshPictogram> pictograms;
 	private long selectionLastChanged = -1L;
 
 	public FreeTriangleMeshSideView(GameEngineFacade facade) {
