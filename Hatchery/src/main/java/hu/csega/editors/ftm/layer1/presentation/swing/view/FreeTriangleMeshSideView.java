@@ -105,6 +105,8 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		g.drawLine(centerX - 10, centerY + 10, centerX + 10, centerY - 10);
 		g.setStroke(stroke);
 
+		g.translate(-widthDiv2, -heightDiv2);
+
 		Set<FreeTriangleMeshPictogram> pictograms = getPictograms(model);
 		if(pictograms != null && !pictograms.isEmpty()) {
 			for(FreeTriangleMeshPictogram p : pictograms) {
@@ -112,8 +114,6 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 				g.drawImage(img, (int)p.x, (int)p.y, null);
 			}
 		}
-
-		g.translate(-widthDiv2, -heightDiv2);
 
 		g.setColor(Color.BLACK);
 		g.drawLine(0, 0, 300, 0);
@@ -148,11 +148,13 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		if(pictograms == null || selectionLastChanged < model.getSelectionLastChanged()) {
 			selectionLastChanged = model.getSelectionLastChanged();
 			pictograms = new HashSet<>();
+			int widthDiv2 = lastSize.width / 2;
+			int heightDiv2 = lastSize.height / 2;
 
-			double minx = Double.MAX_VALUE;
-			double miny = Double.MAX_VALUE;
-			double maxx = Double.MIN_VALUE;
-			double maxy = Double.MIN_VALUE;
+			double minx = Double.POSITIVE_INFINITY;
+			double miny = Double.POSITIVE_INFINITY;
+			double maxx = Double.NEGATIVE_INFINITY;
+			double maxy = Double.NEGATIVE_INFINITY;
 
 			for(Object obj : selectedObjects) {
 				if(obj instanceof FreeTriangleMeshVertex) {
@@ -168,7 +170,10 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 				}
 			}
 
-			pictograms.add(new FreeTriangleMeshPictogram(minx, miny, 0));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_LEFT_ARROW, minx + widthDiv2 - 16, miny + heightDiv2 - 16));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_RIGHT_ARROW, maxx + widthDiv2, miny + heightDiv2 - 16));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_LEFT_ARROW, minx + widthDiv2 - 16, maxy + heightDiv2));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW, maxx + widthDiv2, maxy + heightDiv2));
 		}
 
 		return pictograms;

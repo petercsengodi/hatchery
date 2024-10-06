@@ -47,7 +47,7 @@ public class FreeTriangleMeshToolStarter {
 		File pixelLibraryFile = new File(resourceAdapter.projectRoot() + File.separator + "tmp.p16");
 		PIXELS = PixelLibrary.load(pixelLibraryFile);
 
-		SPRITES = new BufferedImage[1];
+		SPRITES = new BufferedImage[12];
 		for(int i = 0; i < SPRITES.length; i++) {
 			BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 			SPRITES[i] = img;

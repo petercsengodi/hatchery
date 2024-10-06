@@ -145,6 +145,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 			int dx = p.x - mouseRightAt.x;
 			int dy = p.y - mouseRightAt.y;
 			translate(dx, dy);
+			pictograms = null;
 			repaint();
 			mouseRightAt.x = p.x;
 			mouseRightAt.y = p.y;
