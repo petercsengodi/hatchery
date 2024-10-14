@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
@@ -377,6 +378,97 @@ public class FreeTriangleMeshModel implements Serializable {
 			if(object instanceof FreeTriangleMeshVertex) {
 				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
 				v.move(x, y, z);
+			}
+		}
+
+		invalidate();
+	}
+
+	public void elasticMove(EditorPoint fixed, EditorPoint started, EditorPoint ended) {
+		if(selectedObjects.isEmpty())
+			return;
+
+		if(!moved) {
+			snapshots().addState(mesh);
+			moved = true;
+		}
+
+		for(Object object : selectedObjects) {
+			if(object instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
+				double x = v.getPX();
+				double y = v.getPY();
+				double z = v.getPZ();
+
+				if(x != fixed.getX()) {
+					double r1 = started.getX() - fixed.getX();
+					double r2 = ended.getX() - fixed.getX();
+					if(Math.abs(r1) > 0) {
+						double l1 = x - fixed.getX();
+						double l2 = l1 * r2 / r1;
+						v.setPX(fixed.getX() + l2);
+					}
+				}
+
+				if(y != fixed.getY()) {
+					double r1 = started.getY() - fixed.getY();
+					double r2 = ended.getY() - fixed.getY();
+					if(Math.abs(r1) > 0) {
+						double l1 = y - fixed.getY();
+						double l2 = l1 * r2 / r1;
+						v.setPY(fixed.getY() + l2);
+					}
+				}
+
+				if(z != fixed.getZ()) {
+					double r1 = started.getZ() - fixed.getZ();
+					double r2 = ended.getZ() - fixed.getZ();
+					if(Math.abs(r1) > 0) {
+						double l1 = y - fixed.getZ();
+						double l2 = l1 * r2 / r1;
+						v.setPZ(fixed.getZ() + l2);
+					}
+				}
+			}
+		}
+
+		invalidate();
+	}
+
+	public void elasticTextureMove(EditorPoint fixed, EditorPoint started, EditorPoint ended) {
+		if(selectedObjects.isEmpty())
+			return;
+
+		if(!moved) {
+			snapshots().addState(mesh);
+			moved = true;
+		}
+
+		for(Object object : selectedObjects) {
+			if(object instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
+				double x = v.getTX();
+				double y = v.getTY();
+
+				if(x != fixed.getX()) {
+					double r1 = started.getX() - fixed.getX();
+					double r2 = ended.getX() - fixed.getX();
+					if(Math.abs(r1) > 0) {
+						double l1 = x - fixed.getX();
+						double l2 = l1 * r2 / r1;
+						v.setTX(truncate(fixed.getX() + l2, 0.0, 1.0));
+					}
+				}
+
+				if(y != fixed.getY()) {
+					double r1 = started.getY() - fixed.getY();
+					double r2 = ended.getY() - fixed.getY();
+					if(Math.abs(r1) > 0) {
+						double l1 = y - fixed.getY();
+						double l2 = l1 * r2 / r1;
+						v.setTY(truncate(fixed.getY() + l2, 0.0, 1.0));
+					}
+				}
 			}
 		}
 
@@ -844,6 +936,15 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	public void setTextureFilename(String textureFilename) {
 		this.textureFilename = textureFilename;
+	}
+
+	private double truncate(double value, double low, double high) {
+		if(value < low)
+			return low;
+		else if(value > high)
+			return high;
+		else
+			return value;
 	}
 
 	private void initGroupsIfNeeded() {

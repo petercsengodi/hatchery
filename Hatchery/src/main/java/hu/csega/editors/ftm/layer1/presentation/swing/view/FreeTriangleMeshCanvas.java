@@ -43,8 +43,15 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	private boolean mouseLeftPressed = false;
 	private boolean mouseRightPressed = false;
+	private Point mouseLeftStarted = new Point(0, 0);
 	private Point mouseLeftAt = new Point(0, 0);
 	private Point mouseRightAt = new Point(0, 0);
+
+	protected long selectionLastChanged = -1L;
+	protected double selectionMinX;
+	protected double selectionMinY;
+	protected double selectionMaxX;
+	protected double selectionMaxY;
 
 	private boolean selectionBoxEnabled = false;
 	private Point selectionStart = new Point();
@@ -69,6 +76,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	public Component getRealCanvas() {
 		return this;
+	}
+
+	protected void somethingChanged() {
+		selectionLastChanged = -1L;
 	}
 
 	@Override
@@ -169,6 +180,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton() == 1) {
 			mouseLeftPressed = true;
+			mouseLeftStarted = new Point(e.getX(), e.getY());
 			mouseLeftAt = new Point(e.getX(), e.getY());
 			selectedPictogramAction = -1;
 			if(!e.isControlDown()) {
@@ -210,11 +222,15 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 			if(selectedPictogramAction >= 0) {
 				int action = selectedPictogramAction;
-				int dx = e.getX() - mouseLeftAt.x;
-				int dy = e.getY() - mouseLeftAt.y;
+				int dx = e.getX() - mouseLeftStarted.x;
+				int dy = e.getY() - mouseLeftStarted.y;
+				EditorPoint started = transformToModel(mouseLeftStarted.x, mouseLeftStarted.y);
+				EditorPoint ended = transformToModel(mouseLeftAt.x, mouseLeftAt.y);
+				mouseLeftStarted = null;
 				mouseLeftAt = null;
 				selectedPictogramAction = -1;
-				pictogramAction(action, dx, dy);
+				pictogramAction(action, dx, dy, started, ended);
+				repaintEverything();
 			}
 
 			FreeTriangleMeshModel model = getModel();
@@ -273,8 +289,9 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		}
 	}
 
-	protected void pictogramAction(int action, int dx, int dy) {
-	}
+	protected abstract Set<FreeTriangleMeshPictogram> refreshPictograms(FreeTriangleMeshModel model);
+
+	protected abstract void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended);
 
 	private EditorPoint transformToModel(int x, int y) {
 		int widthDiv2 = lastSize.width / 2;
@@ -285,8 +302,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected double distance(double x1, double y1, double x2, double y2) {
 		double dx = x1 - x2;
 		double dy = y1 - y2;
-		double ret = Math.sqrt(dx*dx + dy*dy);
-		return ret;
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 
 	protected abstract void paint2d(Graphics2D g);

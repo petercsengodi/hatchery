@@ -94,10 +94,5 @@ public class FreeTriangleMeshZYSideView extends FreeTriangleMeshSideView {
 		return ret;
 	}
 
-	@Override
-	protected void pictogramAction(int action, int dx, int dy) {
-		System.out.println("ACTION: " + action);
-	}
-
 	private static final long serialVersionUID = 1L;
 }

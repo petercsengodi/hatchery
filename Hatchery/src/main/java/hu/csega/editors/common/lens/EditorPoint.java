@@ -65,4 +65,9 @@ public class EditorPoint {
 	public void setW(double w) {
 		this.w = w;
 	}
+
+	@Override
+	public String toString() {
+		return '(' + String.valueOf(x) + ';' + String.valueOf(y) + ';' + String.valueOf(z) + ';' + String.valueOf(w) + ')';
+	}
 }
