@@ -43,7 +43,6 @@ public class JSONRequest {
 
     public JSONObject send(JSONObject request) {
         String content = request.toString();
-        System.out.println("\nSending: " + content + '\n');
         byte[] bytes = content.getBytes(UTF_8);
         int length = bytes.length;
 
