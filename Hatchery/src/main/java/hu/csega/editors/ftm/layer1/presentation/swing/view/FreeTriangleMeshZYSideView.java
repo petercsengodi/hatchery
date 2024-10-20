@@ -10,6 +10,7 @@ public class FreeTriangleMeshZYSideView extends FreeTriangleMeshSideView {
 
 	public FreeTriangleMeshZYSideView(GameEngineFacade facade) {
 		super(facade);
+		this.lenses.screenZY();
 
 		this.selectionLine.setX1(-1000.0);
 		this.selectionLine.setX2(1000.0);
@@ -35,11 +36,11 @@ public class FreeTriangleMeshZYSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
-	protected void selectAll(double x1, double y1, double x2, double y2, boolean add) {
-		double vz1 = Math.min(x1, x2);
-		double vz2 = Math.max(x1, x2);
-		double vy1 = Math.min(y1, y2);
-		double vy2 = Math.max(y1, y2);
+	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
+		double vz1 = Math.min(topLeft.getZ(), bottomRight.getZ());
+		double vz2 = Math.max(topLeft.getZ(), bottomRight.getZ());
+		double vy1 = Math.min(topLeft.getY(), bottomRight.getY());
+		double vy2 = Math.max(topLeft.getY(), bottomRight.getY());
 
 		FreeTriangleMeshCube cube = new FreeTriangleMeshCube();
 		cube.setX1(Double.NEGATIVE_INFINITY);
@@ -54,44 +55,14 @@ public class FreeTriangleMeshZYSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
-	protected void selectFirst(double x, double y, double radius, boolean add) {
-		selectionLine.setZ1(x);
-		selectionLine.setZ2(x);
-		selectionLine.setY1(y);
-		selectionLine.setY2(y);
+	protected void selectFirst(EditorPoint p, double radius, boolean add) {
+		selectionLine.setZ1(p.getZ());
+		selectionLine.setZ2(p.getZ());
+		selectionLine.setY1(p.getY());
+		selectionLine.setY2(p.getY());
 
 		FreeTriangleMeshModel model = getModel();
 		model.selectFirst(intersection, selectionLine, radius, add);
-	}
-
-	@Override
-	protected void createVertexAt(double x, double y) {
-		FreeTriangleMeshModel model = getModel();
-		model.createVertexAt(0, y, x);
-	}
-
-	@Override
-	protected void moveSelected(double x1, double y1, double x2, double y2) {
-		FreeTriangleMeshModel model = getModel();
-
-		EditorPoint p1 = lenses.fromScreenToModel(new EditorPoint(0, y1, x1, 1));
-		EditorPoint p2 = lenses.fromScreenToModel(new EditorPoint(0, y2, x2, 1));
-
-		double dx = p2.getX() - p1.getX();
-		double dy = p2.getY() - p1.getY();
-		double dz = p2.getZ() - p1.getZ();
-
-		model.moveSelected(dx, dy, dz);
-	}
-
-	@Override
-	protected EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex) {
-		EditorPoint ret = new EditorPoint();
-
-		ret.setX(vertex.getPZ());
-		ret.setY(vertex.getPY());
-
-		return ret;
 	}
 
 	private static final long serialVersionUID = 1L;

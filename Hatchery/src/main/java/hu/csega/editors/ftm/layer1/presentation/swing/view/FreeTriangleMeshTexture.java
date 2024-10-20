@@ -142,26 +142,25 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 	}
 
 	@Override
-	protected void selectAll(double x1, double y1, double x2, double y2, boolean add) {
+	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
 		// not applicable
 	}
 
 	@Override
-	protected void selectFirst(double x, double y, double radius, boolean add) {
+	protected void selectFirst(EditorPoint p, double radius, boolean add) {
 		// not applicable
 	}
 
 	@Override
-	protected void createVertexAt(double x, double y) {
-		// not applicable
+	protected void createVertexAt(EditorPoint p) {
 	}
 
 	@Override
-	protected void moveSelected(double x1, double y1, double x2, double y2) {
+	protected void moveSelected(EditorPoint p1, EditorPoint p2) {
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
 
-		double x = x2 - x1;
-		double y = y2 - y1;
+		double x = p2.getX() - p1.getX();
+		double y = p2.getY() - p1.getY();
 
 		int width = (textureImage == null ? imageWidth : Math.min(imageWidth, textureImage.getWidth()));
 		int height = (textureImage == null ? imageHeight : Math.min(imageHeight, textureImage.getHeight()));

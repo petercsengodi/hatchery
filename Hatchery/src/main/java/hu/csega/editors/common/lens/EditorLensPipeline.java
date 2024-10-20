@@ -5,6 +5,15 @@ public class EditorLensPipeline {
 	private EditorLensTranslateImpl translate = new EditorLensTranslateImpl();
 	private EditorLensScaleImpl scale = new EditorLensScaleImpl();
 	private EditorLensScreenTransformationImpl screenTransformation = new EditorLensScreenTransformationImpl();
+	private EditorLens screenDirection = new EditorLensXYToXY();
+
+	public void screenXZ() {
+		screenDirection = new EditorLensXYToXZ();
+	}
+
+	public void screenZY() {
+		screenDirection = new EditorLensXYToZY();
+	}
 
 	public void setScale(double scaling) {
 		EditorPoint current = scale.getScaling();
@@ -52,6 +61,7 @@ public class EditorLensPipeline {
 
 	public EditorPoint fromModelToScreen(double x, double y, double z) {
 		EditorPoint result = new EditorPoint(x, y, z, 1.0);
+		screenDirection.fromModelToScreen(result);
 		translate.fromModelToScreen(result);
 		scale.fromModelToScreen(result);
 		screenTransformation.fromModelToScreen(result);
@@ -60,6 +70,7 @@ public class EditorLensPipeline {
 
 	public EditorPoint fromModelToScreen(EditorPoint original) {
 		EditorPoint result = new EditorPoint(original);
+		screenDirection.fromModelToScreen(result);
 		translate.fromModelToScreen(result);
 		scale.fromModelToScreen(result);
 		screenTransformation.fromModelToScreen(result);
@@ -68,6 +79,7 @@ public class EditorLensPipeline {
 
 	public EditorPoint fromScreenToModel(EditorPoint original) {
 		EditorPoint result = new EditorPoint(original);
+		screenDirection.fromScreenToModel(result);
 		screenTransformation.fromScreenToModel(result);
 		scale.fromScreenToModel(result);
 		translate.fromScreenToModel(result);
@@ -76,6 +88,7 @@ public class EditorLensPipeline {
 
 	public EditorPoint fromScreenToModel(double x, double y) {
 		EditorPoint result = new EditorPoint(x, y, 0, 1);
+		screenDirection.fromScreenToModel(result);
 		screenTransformation.fromScreenToModel(result);
 		scale.fromScreenToModel(result);
 		translate.fromScreenToModel(result);
