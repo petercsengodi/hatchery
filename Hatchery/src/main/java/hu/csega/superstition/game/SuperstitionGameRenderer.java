@@ -7,6 +7,8 @@ import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.intf.GameGraphics;
+import hu.csega.superstition.game.map.MapTile;
+import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.CollisionUtil;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
@@ -69,7 +71,16 @@ public class SuperstitionGameRenderer {
 
 		g.placeCamera(cameraLocation);
 
-		g.drawModel(elements.groundHandler, universe.groundPlacement);
+		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
+			for(int iy = 0; iy < SuperstitionMap.SIZE_X; iy++) {
+				MapTile mt = SuperstitionMap.mapTiles[ix][iy];
+				if(mt == null) {
+					continue;
+				}
+
+				g.drawModel(mt.handler, universe.groundPlacement);
+			}
+		}
 
 		g.drawModel(elements.boxModel, universe.boxPlacement4);
 

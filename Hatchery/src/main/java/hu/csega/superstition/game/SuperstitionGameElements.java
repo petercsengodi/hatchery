@@ -8,6 +8,8 @@ import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPosition;
 import hu.csega.games.engine.g3d.GameObjectVertex;
 import hu.csega.games.engine.g3d.GameTexturePosition;
+import hu.csega.superstition.game.map.MapTile;
+import hu.csega.superstition.game.map.SuperstitionMap;
 
 public class SuperstitionGameElements {
 
@@ -18,7 +20,6 @@ public class SuperstitionGameElements {
 	GameObjectHandler enemyRunningAnimationHandler;
 
 	GameObjectHandler groundTexture;
-	GameObjectHandler groundHandler;
 	GameObjectHandler boxModel;
 	GameObjectHandler spellModel;
 	GameObjectHandler[] alphabet;
@@ -34,7 +35,7 @@ public class SuperstitionGameElements {
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
 
-		groundHandler = buildGround(store, "grass-texture.png");
+		buildGround(store, "grass-texture.png");
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
@@ -64,11 +65,8 @@ public class SuperstitionGameElements {
 		return store.loadAnimation(filename);
 	}
 
-	private GameObjectHandler buildGround(GameModelStore store, String texture) {
-		GameModelBuilder groundBuilder = new GameModelBuilder();
-
+	private void buildGround(GameModelStore store, String texture) {
 		groundTexture = store.loadTexture(texture);
-		groundBuilder.setTextureHandler(groundTexture);
 
 		GameObjectPosition p;
 		GameObjectDirection d;
@@ -78,8 +76,17 @@ public class SuperstitionGameElements {
 
 		int counter = 0;
 
-		for(float x = -1000f; x < 1000f; x += GOUND_SIZE) {
-			for(float y = -1000f; y < 1000f; y += GOUND_SIZE) {
+		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
+			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
+				counter = 0; // I know, I know, I just should remove the counter.
+				if(ix != 0 && iy != 0)
+					continue;
+
+				float x = ix * 100f;
+				float y = iy * 100f;
+
+				GameModelBuilder groundBuilder = new GameModelBuilder();
+				groundBuilder.setTextureHandler(groundTexture);
 
 				p = new GameObjectPosition(x, GOUND_DEPTH, y);
 				tex = new GameTexturePosition(0f, 0f);
@@ -105,10 +112,11 @@ public class SuperstitionGameElements {
 				groundBuilder.getIndices().add(counter + 2);
 
 				counter += 4;
+				MapTile mt = new MapTile();
+				SuperstitionMap.mapTiles[ix][iy] = mt;
+				mt.handler = store.buildMesh(groundBuilder);
 			}
 		}
-
-		return store.buildMesh(groundBuilder);
 	}
 
 	private GameObjectHandler buildBox(GameModelStore store, float x1, float y1, float z1, float x2, float y2, float z2, String texture) {
