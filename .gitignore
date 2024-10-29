@@ -28,5 +28,5 @@ Hatchery/target
 
 # Other
 Hatchery/conf/virtual-space.properties
-
+Hatchery/temp/*
 
