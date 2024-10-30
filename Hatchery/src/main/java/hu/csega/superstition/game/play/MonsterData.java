@@ -9,7 +9,9 @@ public class MonsterData implements Serializable {
     public double z;
     public double movingRotation;
 
-    private int health;
+    public double health = 100.0;
+
+    public Object target;
 
     private static final long serialVersionUID = 1L;
 }

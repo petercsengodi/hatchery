@@ -79,11 +79,11 @@ public class SuperstitionGameElements {
 		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
 			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
 				counter = 0; // I know, I know, I just should remove the counter.
-				if(ix != 0 && iy != 0)
+				if(ix - SuperstitionMap.CENTER_X != 0 && iy - SuperstitionMap.CENTER_Y != 0)
 					continue;
 
-				float x = ix * 100f;
-				float y = iy * 100f;
+				float x = (ix - SuperstitionMap.CENTER_X) * 100f;
+				float y = (iy - SuperstitionMap.CENTER_Y) * 100f;
 
 				GameModelBuilder groundBuilder = new GameModelBuilder();
 				groundBuilder.setTextureHandler(groundTexture);

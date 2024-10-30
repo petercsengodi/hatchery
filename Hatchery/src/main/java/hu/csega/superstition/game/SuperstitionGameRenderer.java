@@ -72,9 +72,16 @@ public class SuperstitionGameRenderer {
 		g.placeCamera(cameraLocation);
 
 		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
-			for(int iy = 0; iy < SuperstitionMap.SIZE_X; iy++) {
+			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
 				MapTile mt = SuperstitionMap.mapTiles[ix][iy];
 				if(mt == null) {
+					continue;
+				}
+
+				// Bad AF.
+				float x = (ix - SuperstitionMap.CENTER_X) * 100f;
+				float y = (iy - SuperstitionMap.CENTER_Y) * 100f;
+				if(distance(x + 50f, y + 50f, -player.x, -player.z) > 1000f) {
 					continue;
 				}
 
@@ -119,21 +126,28 @@ public class SuperstitionGameRenderer {
 		Iterator<MonsterData> monsters = universe.monstersAlive.iterator();
 		while(monsters.hasNext()) {
 			MonsterData monster = monsters.next();
-			boolean dead = false;
+			boolean hit = false;
 
 			iterator = universe.spellsInProgress.iterator();
 			while(iterator.hasNext()) {
 				SpellInProgress spell = iterator.next();
 				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
 					iterator.remove();
-					dead = true;
+					hit = true;
 					break;
 				}
 			}
 
-			if(dead) {
-				monsters.remove();
-				continue;
+			if(hit) {
+				monster.health -= 40.0;
+				if(monster.health < 0.0) {
+					monsters.remove();
+					continue;
+				}
+
+				if(monster.target == null) {
+					monster.target = player;
+				}
 			}
 
 			GameObjectPlacement monsterPlacement = new GameObjectPlacement();
@@ -141,7 +155,9 @@ public class SuperstitionGameRenderer {
 			monsterPlacement.target.set((float) monster.x, (float) monster.y + 25f, (float) monster.z + 10f);
 			monsterPlacement.up.set(0f, 1f, 0f);
 			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
-			g.drawAnimation(elements.enemyRunningAnimationHandler, lastAnimIndex / 10, monsterPlacement);
+
+			int animationIndex = (monster.target == null ? 0 : lastAnimIndex / 10);
+			g.drawAnimation(elements.enemyRunningAnimationHandler, animationIndex, monsterPlacement);
 		}
 
 		g.drawOnScreen(elements.alphabet[0], 0, 0);
@@ -232,6 +248,12 @@ public class SuperstitionGameRenderer {
 		} catch(Exception ex) {
 			logger.error("Could not reset screensaver timer: " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
 		}
+	}
+
+	private static double distance(double x1, double y1, double x2, double y2) {
+		double dx = x1 - x2;
+		double dy = y1 - y2;
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 
 	private static final Logger logger = LoggerFactory.createLogger(SuperstitionGameRenderer.class);

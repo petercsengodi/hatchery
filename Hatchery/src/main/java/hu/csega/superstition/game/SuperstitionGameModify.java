@@ -55,6 +55,10 @@ public class SuperstitionGameModify {
 		}
 
 		for(MonsterData monster : model.monstersAlive) {
+			if(monster.target == null) {
+				continue;
+			}
+
 			double dx = player.x - monster.x;
 			double dz = player.z - monster.z;
 			if(Math.abs(dx) > 5 || Math.abs(dz) > 5) {
