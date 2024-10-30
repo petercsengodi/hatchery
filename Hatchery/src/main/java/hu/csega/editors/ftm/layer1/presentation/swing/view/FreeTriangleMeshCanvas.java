@@ -118,13 +118,13 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	protected abstract void zoom(double delta);
 
-	protected abstract void selectAll(double x1, double y1, double x2, double y2, boolean add);
+	protected abstract void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add);
 
-	protected abstract void selectFirst(double x, double y, double radius, boolean add);
+	protected abstract void selectFirst(EditorPoint p, double radius, boolean add);
 
-	protected abstract void createVertexAt(double x, double y);
+	protected abstract void createVertexAt(EditorPoint p);
 
-	protected abstract void moveSelected(double x1, double y1, double x2, double y2);
+	protected abstract void moveSelected(EditorPoint p1, EditorPoint p2);
 
 	protected abstract EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex);
 
@@ -145,7 +145,9 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 				selectionEnd.y -= dy;
 				repaint();
 			} else if(e.isControlDown()) {
-				moveSelected(mouseLeftAt.x, mouseLeftAt.y, p.x, p.y);
+				EditorPoint moveFrom = transformToModel(mouseLeftAt.x, mouseLeftAt.y);
+				EditorPoint moveTo = transformToModel(p.x, p.y);
+				moveSelected(moveFrom, moveTo);
 				repaintEverything();
 			}
 			mouseLeftAt.x = p.x;
@@ -215,7 +217,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 				calculateSelectionBox();
 				EditorPoint p1 = transformToModel(selectionStart.x, selectionStart.y);
 				EditorPoint p2 = transformToModel(selectionEnd.x, selectionEnd.y);
-				selectAll(p1.getX(), p1.getY(), p2.getX(), p2.getY(), e.isShiftDown());
+				selectAll(p1, p2, e.isShiftDown());
 				selectionBoxEnabled = false;
 				repaintEverything();
 			}
@@ -246,12 +248,12 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 			if(e.isControlDown()) {
 				// create new vertex
 				EditorPoint p = transformToModel(e.getX(), e.getY());
-				createVertexAt(p.getX(), p.getY());
+				createVertexAt(p);
 				repaintEverything();
 			} else {
 				// select one vertex
 				EditorPoint p = transformToModel(e.getX(), e.getY());
-				selectFirst(p.getX(), p.getY(), 5, e.isShiftDown());
+				selectFirst(p, 5, e.isShiftDown());
 				repaintEverything();
 			}
 		}

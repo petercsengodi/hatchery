@@ -37,11 +37,11 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
-	protected void selectAll(double x1, double y1, double x2, double y2, boolean add) {
-		double vx1 = Math.min(x1, x2);
-		double vx2 = Math.max(x1, x2);
-		double vy1 = Math.min(y1, y2);
-		double vy2 = Math.max(y1, y2);
+	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
+		double vx1 = Math.min(topLeft.getX(), bottomRight.getX());
+		double vx2 = Math.max(topLeft.getX(), bottomRight.getX());
+		double vy1 = Math.min(topLeft.getY(), bottomRight.getY());
+		double vy2 = Math.max(topLeft.getY(), bottomRight.getY());
 
 		FreeTriangleMeshCube cube = new FreeTriangleMeshCube();
 		cube.setX1(vx1);
@@ -57,46 +57,15 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
-	protected void selectFirst(double x, double y, double radius, boolean add) {
-		selectionLine.setX1(x);
-		selectionLine.setX2(x);
-		selectionLine.setY1(y);
-		selectionLine.setY2(y);
+	protected void selectFirst(EditorPoint p, double radius, boolean add) {
+		selectionLine.setX1(p.getX());
+		selectionLine.setX2(p.getX());
+		selectionLine.setY1(p.getY());
+		selectionLine.setY2(p.getY());
 
 		FreeTriangleMeshModel model = getModel();
 		model.selectFirst(intersection, selectionLine, radius, add);
 		somethingChanged();
-	}
-
-	@Override
-	protected void createVertexAt(double x, double y) {
-		FreeTriangleMeshModel model = getModel();
-		model.createVertexAt(x, y, 0);
-	}
-
-	@Override
-	protected void moveSelected(double x1, double y1, double x2, double y2) {
-		FreeTriangleMeshModel model = getModel();
-
-		EditorPoint p1 = lenses.fromScreenToModel(new EditorPoint(x1, y1, 0, 1));
-		EditorPoint p2 = lenses.fromScreenToModel(new EditorPoint(x2, y2, 0, 1));
-
-		double dx = p2.getX() - p1.getX();
-		double dy = p2.getY() - p1.getY();
-		double dz = p2.getZ() - p1.getZ();
-
-		model.moveSelected(dx, dy, dz);
-		somethingChanged();
-	}
-
-	@Override
-	protected EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex) {
-		EditorPoint ret = new EditorPoint();
-
-		ret.setX(vertex.getPX());
-		ret.setY(vertex.getPY());
-
-		return ret;
 	}
 
 	private static final long serialVersionUID = 1L;

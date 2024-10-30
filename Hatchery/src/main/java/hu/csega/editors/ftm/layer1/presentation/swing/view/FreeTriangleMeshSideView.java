@@ -51,8 +51,8 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 				drawLine(g, p1, p2);
 			}
 
-			EditorPoint p1 = transformToScreen(new EditorPoint(-10, -10, 0.0, 1.0));
-			EditorPoint p2 = transformToScreen(new EditorPoint(10, 10, 0.0, 1.0));
+			EditorPoint p1 = transformToScreen(new EditorPoint(-10.0, -10.0, -10.00, 1.0));
+			EditorPoint p2 = transformToScreen(new EditorPoint(10.0, 10.0, 10.0, 1.0));
 			drawRectangle(g, p1, p2);
 		}
 
@@ -122,8 +122,31 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		}
 	}
 
+	@Override
+	protected void createVertexAt(EditorPoint p) {
+		FreeTriangleMeshModel model = getModel();
+		model.createVertexAt(p.getX(), p.getY(), p.getZ());
+	}
+
+	@Override
+	protected void moveSelected(EditorPoint p1, EditorPoint p2) {
+		FreeTriangleMeshModel model = getModel();
+
+		double dx = p2.getX() - p1.getX();
+		double dy = p2.getY() - p1.getY();
+		double dz = p2.getZ() - p1.getZ();
+
+		model.moveSelected(dx, dy, dz);
+		somethingChanged();
+	}
+
+	@Override
+	protected EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex) {
+		return new EditorPoint(vertex.getPX(), vertex.getPY(), vertex.getPZ(), 1.0);
+	}
+
 	private EditorPoint transformToScreen(EditorPoint p) {
-		return lenses.fromModelToScreen(p.getX(), p.getY(), 0.0);
+		return lenses.fromModelToScreen(p.getX(), p.getY(), p.getZ());
 	}
 
 	private void drawLine(Graphics2D g, EditorPoint end1, EditorPoint end2) {
