@@ -31,6 +31,12 @@ import hu.csega.toolshed.logging.LoggerFactory;
 /** Used on the old machine. */
 public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
+	public OpenGLProfileGL2TriangleAdapter(boolean lightingEnabled) {
+		this.lightingEnabled = lightingEnabled;
+	}
+
+	private boolean lightingEnabled;
+
 	private GL2 gl2 = null;
 	private GLU glu = null;
 	private GLUT glut = null;
@@ -112,25 +118,27 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		gl2.glEnable(GL2.GL_DEPTH_TEST);
 		gl2.glEnable(GL2.GL_TEXTURE_2D);
 
-		gl2.glEnable(GL2.GL_LIGHTING);
-		gl2.glEnable(GL2.GL_LIGHT0);
-		gl2.glEnable(GL2.GL_NORMALIZE);
-		gl2.glEnable(GL2.GL_AUTO_NORMAL); // ?
-
 		gl2.glMatrixMode(GL2.GL_PROJECTION);
 		gl2.glLoadIdentity();
 		glu.gluPerspective(viewAngle, aspect, zNear, zFar);
 
-		// float[] ambientLight = { 1f, 1f, 1f, 0f };
-		// float[] ambientLight = { 0.3f, 0.3f, 0.3f, 0f };
-        float[] ambientLight = { 0.7f, 0.7f, 0.7f, 0f };
-		float[] diffuseLight = { 10000f, 10000f, 10000f, 0f };
-		float[] specular = { 1f, 1f, 1f, 0f};
-		float[] lightPosition = { 100f, 100f, 100f, 0f }; // w = 0f for directed light, w = 1 for spotlight
-		gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambientLight, 0);
-		gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuseLight, 0);
-		gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specular, 0);
-		gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPosition, 0); // transformed as well
+		if(lightingEnabled) {
+			gl2.glEnable(GL2.GL_LIGHTING);
+			gl2.glEnable(GL2.GL_LIGHT0);
+			gl2.glEnable(GL2.GL_NORMALIZE);
+			gl2.glEnable(GL2.GL_AUTO_NORMAL); // ?
+
+			// float[] ambientLight = { 1f, 1f, 1f, 0f };
+			// float[] ambientLight = { 0.3f, 0.3f, 0.3f, 0f };
+			float[] ambientLight = {0.7f, 0.7f, 0.7f, 0f};
+			float[] diffuseLight = {10000f, 10000f, 10000f, 0f};
+			float[] specular = {1f, 1f, 1f, 0f};
+			float[] lightPosition = {100f, 100f, 100f, 0f}; // w = 0f for directed light, w = 1 for spotlight
+			gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambientLight, 0);
+			gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuseLight, 0);
+			gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specular, 0);
+			gl2.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPosition, 0); // transformed as well
+		}
 
 		gl2.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl2.glMatrixMode(GL.GL_TEXTURE);

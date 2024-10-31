@@ -97,7 +97,7 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 		descriptor.setVersion("v00.00.0001");
 		descriptor.setDescription("My work from the university severely changed and ported to Java/OpenGL.");
 
-		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot, meshRoot, animationRoot);
+		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot, meshRoot, animationRoot, true);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 
 		engine.step(GameEngineStep.INIT, new SuperstitionInitStep());

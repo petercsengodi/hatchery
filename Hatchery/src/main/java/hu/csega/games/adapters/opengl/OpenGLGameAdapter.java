@@ -27,12 +27,15 @@ public class OpenGLGameAdapter implements GameAdapter {
 	private String textureRoot;
 	private String meshRoot;
 	private String animationRoot;
+	private boolean lightingEnabled;
 
-	public OpenGLGameAdapter(String shaderRoot, String textureRoot, String meshRoot, String animationRoot) {
+	public OpenGLGameAdapter(String shaderRoot, String textureRoot, String meshRoot, String animationRoot,
+			boolean lightingEnabled) {
 		this.shaderRoot = shaderRoot;
 		this.textureRoot = textureRoot;
 		this.meshRoot = meshRoot;
 		this.animationRoot = animationRoot;
+		this.lightingEnabled = lightingEnabled;
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class OpenGLGameAdapter implements GameAdapter {
 					logger.info("Trying to acquire GL2 profile...");
 					glProfile = GLProfile.get(GLProfile.GL2);
 					// openGLProfileAdapter = new OpenGLProfileGL2Adapter();
-					openGLProfileAdapter = new OpenGLProfileGL2TriangleAdapter();
+					openGLProfileAdapter = new OpenGLProfileGL2TriangleAdapter(lightingEnabled);
 					logger.info("GL2 profile acquired, adapter: " + openGLProfileAdapter.getClass().getSimpleName());
 				} catch(Exception ex2) {
 					logger.error("Couldn't get GL2 either! (" + ex2.getMessage() + ')');
