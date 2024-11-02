@@ -96,8 +96,14 @@ public class SuperstitionGameRenderer {
 		int sceneIndex = player.spellCastingIndex();
 
 		if(player.shouldCastNow()) {
+			double dx = target.x;
+			double dz = target.z;
+			double l = Math.sqrt(dx*dx + dz*dz);
+			double rl = 1000.0 / l;
+			double nx = dx * rl;
+			double nz = dz * rl;
 			SpellInProgress spell = new SpellInProgress(timestamp, player.x, player.y - 5.0, player.z,
-					player.x + target.x * 1000.0, player.y - 5.0, player.z + target.z * 1000.0);
+					player.x + nx, player.y - 5.0, player.z + nz);
 			universe.spellsInProgress.add(spell);
 		}
 
