@@ -120,7 +120,7 @@ public class SuperstitionGameRenderer {
 				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
 				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
 				spellPlacement.up.set(0f, 1f, 0f);
-				spellPlacement.scale.set(0.3f, 0.3f, 0.3f);
+				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
 				g.drawModel(elements.spellModel, spellPlacement);
 			}
 		}

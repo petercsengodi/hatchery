@@ -58,7 +58,7 @@ public class SuperstitionGameElements {
 		comma = store.loadMesh("alphabet-comma.json");
 		question = store.loadMesh("alphabet-question.json");
 
-		spellModel = buildBox(store, -25f, -25f, -25f, 25f, 25f, 25f, "wood-texture.jpg");
+		spellModel = store.loadMesh("fireball.json");
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {
