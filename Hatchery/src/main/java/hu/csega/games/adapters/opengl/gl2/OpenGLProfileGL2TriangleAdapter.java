@@ -99,7 +99,7 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		GL2 gl2 = glAutoDrawable.getGL().getGL2();
 
 		gl2.glEnable(GL2.GL_CULL_FACE);
-		gl2.glFrontFace(GL2.GL_CCW); // FIXME this should dependant on if the current model is flipped or not
+		gl2.glFrontFace(GL2.GL_CCW); // FIXME this should depend on if the current model is flipped or not
 
 		OpenGLErrorUtil.checkError(gl2, "init");
 	}

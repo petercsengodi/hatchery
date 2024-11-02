@@ -41,7 +41,8 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 	public void run(Environment env) {
 		logger.info(className() + " start run()");
 
-		startGameEngine();
+		GameEngine ge = startGameEngine();
+		logger.info("Received GameEngine instance: " + (ge != null));
 
 		logger.info(className() + " end run()");
 	}
@@ -90,12 +91,11 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 	}
 
 	private GameEngine startGameEngine() {
-
 		GameDescriptor descriptor = new GameDescriptor();
 		descriptor.setId("superstition");
-		descriptor.setTitle("Superstition – ported game seed from the university");
-		descriptor.setVersion("v00.00.0001");
-		descriptor.setDescription("My work from the university severely changed and ported to Java/OpenGL.");
+		descriptor.setTitle("Superstition – Witty Little Wizard");
+		descriptor.setVersion("v00.00.0002");
+		descriptor.setDescription("My first complete(?) Java/OpenGL game.");
 
 		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot, meshRoot, animationRoot, true);
 		GameEngine engine = GameEngine.create(descriptor, adapter);
