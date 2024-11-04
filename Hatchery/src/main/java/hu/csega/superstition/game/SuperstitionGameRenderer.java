@@ -79,9 +79,10 @@ public class SuperstitionGameRenderer {
 				}
 
 				// Bad AF.
-				float x = (ix - SuperstitionMap.CENTER_X) * 100f;
-				float y = (iy - SuperstitionMap.CENTER_Y) * 100f;
-				if(distance(x + 50f, y + 50f, -player.x, -player.z) > 1000f) {
+				float half = SuperstitionGameElements.GOUND_SIZE / 2f;
+				float x = (ix - SuperstitionMap.CENTER_X) * SuperstitionGameElements.GOUND_SIZE;
+				float y = (iy - SuperstitionMap.CENTER_Y) * SuperstitionGameElements.GOUND_SIZE;
+				if(distance(x + half, y + half, -player.x, -player.z) > 1000f) {
 					continue;
 				}
 

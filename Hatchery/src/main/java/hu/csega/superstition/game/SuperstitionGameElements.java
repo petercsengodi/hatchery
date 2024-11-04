@@ -13,8 +13,8 @@ import hu.csega.superstition.game.map.SuperstitionMap;
 
 public class SuperstitionGameElements {
 
-	private static final float GOUND_DEPTH = -12f;
-	private static final float GOUND_SIZE = 200f;
+	public static final float GOUND_DEPTH = -12f;
+	public static final float GOUND_SIZE = 200f;
 
 	GameObjectHandler wizardShootingAnimationHandler;
 	GameObjectHandler enemyRunningAnimationHandler;
@@ -82,8 +82,8 @@ public class SuperstitionGameElements {
 				if(ix - SuperstitionMap.CENTER_X != 0 && iy - SuperstitionMap.CENTER_Y != 0)
 					continue;
 
-				float x = (ix - SuperstitionMap.CENTER_X) * 100f;
-				float y = (iy - SuperstitionMap.CENTER_Y) * 100f;
+				float x = (ix - SuperstitionMap.CENTER_X) * GOUND_SIZE;
+				float y = (iy - SuperstitionMap.CENTER_Y) * GOUND_SIZE;
 
 				GameModelBuilder groundBuilder = new GameModelBuilder();
 				groundBuilder.setTextureHandler(groundTexture);
