@@ -6,10 +6,13 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.GameEngineFacade;
 
+import java.awt.*;
+
 public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 
 	public FreeTriangleMeshXYSideView(GameEngineFacade facade) {
 		super(facade);
+		this.lenses.screenXY();
 
 		this.selectionLine.setZ1(-1000.0);
 		this.selectionLine.setZ2(1000.0);
@@ -18,6 +21,44 @@ public class FreeTriangleMeshXYSideView extends FreeTriangleMeshSideView {
 	@Override
 	public String label() {
 		return "Front";
+	}
+
+	@Override
+	protected EditorPoint transformToScreen(EditorPoint p) {
+		EditorPoint result = lenses.fromModelToScreen(p.getX(), p.getY(), p.getZ());
+		double x = lastSize.width / 2.0 + result.getX();
+		double y = lastSize.height / 2.0 + result.getY();
+		double z = result.getZ();
+
+		result.setX(x);
+		result.setY(y);
+		result.setZ(z);
+		return result;
+	}
+
+	@Override
+	protected EditorPoint transformToModel(int x, int y) {
+		EditorPoint result = new EditorPoint(0, 0, 0, 1);
+		result.setX(x - lastSize.width / 2.0);
+		result.setY(y - lastSize.height / 2.0);
+		return lenses.fromScreenToModel(result);
+	}
+
+	@Override
+	protected void drawGrid(Graphics2D g) {
+		g.setColor(Color.WHITE);
+
+		for(int x = -400; x <= 400; x += 20) {
+			EditorPoint p1 = transformToScreen(new EditorPoint(x, -400.0, 0.0, 1.0));
+			EditorPoint p2 = transformToScreen(new EditorPoint(x, 400.0, 0.0, 1.0));
+			drawLine(g, p1, p2);
+		}
+
+		for(int y = -400; y <= 400; y += 20) {
+			EditorPoint p1 = transformToScreen(new EditorPoint(-400.0, y, 0.0, 1.0));
+			EditorPoint p2 = transformToScreen(new EditorPoint(400.0, y, 0.0, 1.0));
+			drawLine(g, p1, p2);
+		}
 	}
 
 	@Override

@@ -5,7 +5,11 @@ public class EditorLensPipeline {
 	private EditorLensTranslateImpl translate = new EditorLensTranslateImpl();
 	private EditorLensScaleImpl scale = new EditorLensScaleImpl();
 	private EditorLensScreenTransformationImpl screenTransformation = new EditorLensScreenTransformationImpl();
-	private EditorLens screenDirection = new EditorLensXYToXY();
+	private EditorLens screenDirection = null;
+
+	public void screenXY() {
+		screenDirection = new EditorLensXYToXY();
+	}
 
 	public void screenXZ() {
 		screenDirection = new EditorLensXYToXZ();
@@ -31,67 +35,34 @@ public class EditorLensPipeline {
 		current.setW(1.0);
 	}
 
-	public void setTranslation(EditorPoint translation) {
-		EditorPoint current = translate.getTranslation();
-		current.setX(translation.getX());
-		current.setY(translation.getY());
-		current.setZ(translation.getZ());
-		current.setW(0.0);
-	}
-
 	public void addTranslation(double x, double y, double z) {
-		EditorPoint ep = new EditorPoint(x, y, z, 0.0);
-		screenTransformation.fromScreenToModel(ep);
-		scale.fromScreenToModel(ep);
-
-		EditorPoint current = translate.getTranslation();
-		current.addValuesFrom(ep);
-		current.setW(0.0);
-	}
-
-	public void addTranslation(EditorPoint translation) {
-		EditorPoint ep = new EditorPoint(translation);
-		screenTransformation.fromScreenToModel(ep);
-		scale.fromScreenToModel(ep);
-
-		EditorPoint current = translate.getTranslation();
-		current.addValuesFrom(ep);
-		current.setW(0.0);
+		translate.addTranslation(x, y, z);
 	}
 
 	public EditorPoint fromModelToScreen(double x, double y, double z) {
 		EditorPoint result = new EditorPoint(x, y, z, 1.0);
-		screenDirection.fromModelToScreen(result);
-		translate.fromModelToScreen(result);
 		scale.fromModelToScreen(result);
 		screenTransformation.fromModelToScreen(result);
+		screenDirection.fromModelToScreen(result);
+		translate.fromModelToScreen(result);
 		return result;
 	}
 
 	public EditorPoint fromModelToScreen(EditorPoint original) {
 		EditorPoint result = new EditorPoint(original);
-		screenDirection.fromModelToScreen(result);
-		translate.fromModelToScreen(result);
 		scale.fromModelToScreen(result);
 		screenTransformation.fromModelToScreen(result);
+		screenDirection.fromModelToScreen(result);
+		translate.fromModelToScreen(result);
 		return result;
 	}
 
 	public EditorPoint fromScreenToModel(EditorPoint original) {
 		EditorPoint result = new EditorPoint(original);
+		translate.fromScreenToModel(result);
 		screenDirection.fromScreenToModel(result);
 		screenTransformation.fromScreenToModel(result);
 		scale.fromScreenToModel(result);
-		translate.fromScreenToModel(result);
-		return result;
-	}
-
-	public EditorPoint fromScreenToModel(double x, double y) {
-		EditorPoint result = new EditorPoint(x, y, 0, 1);
-		screenDirection.fromScreenToModel(result);
-		screenTransformation.fromScreenToModel(result);
-		scale.fromScreenToModel(result);
-		translate.fromScreenToModel(result);
 		return result;
 	}
 

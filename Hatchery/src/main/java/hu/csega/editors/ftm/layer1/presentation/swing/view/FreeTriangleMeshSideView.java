@@ -29,32 +29,7 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected void paint2d(Graphics2D g) {
-		int widthDiv2 = lastSize.width / 2;
-		int heightDiv2 = lastSize.height / 2;
-		g.translate(widthDiv2, heightDiv2);
-
-		//		SwingGraphics graphics = new SwingGraphics(g, lastSize.width, heightDiv2);
-		//		gameEngine.runStep(GameEngineStep.RENDER, graphics);
-
-		{
-			g.setColor(Color.WHITE);
-
-			for(int x = -400; x <= 400; x += 20) {
-				EditorPoint p1 = transformToScreen(new EditorPoint(x, -400, 0.0, 1.0));
-				EditorPoint p2 = transformToScreen(new EditorPoint(x, 400, 0.0, 1.0));
-				drawLine(g, p1, p2);
-			}
-
-			for(int y = -400; y <= 400; y += 20) {
-				EditorPoint p1 = transformToScreen(new EditorPoint(-400, y, 0.0, 1.0));
-				EditorPoint p2 = transformToScreen(new EditorPoint(400, y, 0.0, 1.0));
-				drawLine(g, p1, p2);
-			}
-
-			EditorPoint p1 = transformToScreen(new EditorPoint(-10.0, -10.0, -10.00, 1.0));
-			EditorPoint p2 = transformToScreen(new EditorPoint(10.0, 10.0, 10.0, 1.0));
-			drawRectangle(g, p1, p2);
-		}
+		drawGrid(g);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
 		Collection<Object> selectedObjects = model.getSelectedObjects();
@@ -100,8 +75,6 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		g.drawLine(centerX - 10, centerY + 10, centerX + 10, centerY - 10);
 		g.setStroke(stroke);
 
-		g.translate(-widthDiv2, -heightDiv2);
-
 		Set<FreeTriangleMeshPictogram> pictograms = refreshPictograms(model);
 		if(pictograms != null && !pictograms.isEmpty()) {
 			for(FreeTriangleMeshPictogram p : pictograms) {
@@ -145,17 +118,15 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		return new EditorPoint(vertex.getPX(), vertex.getPY(), vertex.getPZ(), 1.0);
 	}
 
-	private EditorPoint transformToScreen(EditorPoint p) {
-		return lenses.fromModelToScreen(p.getX(), p.getY(), p.getZ());
-	}
-
-	private void drawLine(Graphics2D g, EditorPoint end1, EditorPoint end2) {
+	protected void drawLine(Graphics2D g, EditorPoint end1, EditorPoint end2) {
 		g.drawLine((int)end1.getX(), (int)end1.getY(), (int)end2.getX(), (int)end2.getY());
 	}
 
-	private void drawRectangle(Graphics2D g, EditorPoint end1, EditorPoint end2) {
+	protected void drawRectangle(Graphics2D g, EditorPoint end1, EditorPoint end2) {
 		g.drawRect((int)end1.getX(), (int)end1.getY(), (int)(end2.getX() - end1.getX()), (int)(end2.getY() - end1.getY()));
 	}
+
+	protected abstract void drawGrid(Graphics2D g);
 
 	@Override
 	protected Set<FreeTriangleMeshPictogram> refreshPictograms(FreeTriangleMeshModel model) {

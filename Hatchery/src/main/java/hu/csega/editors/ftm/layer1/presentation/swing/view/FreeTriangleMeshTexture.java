@@ -132,6 +132,16 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 	}
 
 	@Override
+	protected EditorPoint transformToScreen(EditorPoint p) {
+		return new EditorPoint(imageWidth * p.getX(), imageHeight * p.getY(), 0, 1);
+	}
+
+	@Override
+	protected EditorPoint transformToModel(int x, int y) {
+		return new EditorPoint(x / (double) imageWidth, y / (double) imageHeight, 0, 1);
+	}
+
+	@Override
 	protected void translate(double x, double y) {
 		// not applicable
 	}

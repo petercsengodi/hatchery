@@ -114,6 +114,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		facade.window().repaintEverything();
 	}
 
+	protected abstract EditorPoint transformToScreen(EditorPoint p);
+
+	protected abstract EditorPoint transformToModel(int x, int y);
+
 	protected abstract void translate(double x, double y);
 
 	protected abstract void zoom(double delta);
@@ -129,8 +133,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected abstract EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex);
 
 	protected FreeTriangleMeshModel getModel() {
-		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		return model;
+		return (FreeTriangleMeshModel) facade.model();
 	}
 
 	@Override
@@ -294,12 +297,6 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected abstract Set<FreeTriangleMeshPictogram> refreshPictograms(FreeTriangleMeshModel model);
 
 	protected abstract void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended);
-
-	private EditorPoint transformToModel(int x, int y) {
-		int widthDiv2 = lastSize.width / 2;
-		int heightDiv2 = lastSize.height / 2;
-		return lenses.fromScreenToModel(x - widthDiv2, y - heightDiv2);
-	}
 
 	protected double distance(double x1, double y1, double x2, double y2) {
 		double dx = x1 - x2;

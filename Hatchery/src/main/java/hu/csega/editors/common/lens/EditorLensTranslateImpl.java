@@ -4,12 +4,16 @@ public class EditorLensTranslateImpl implements EditorLens {
 
 	private EditorPoint translation = new EditorPoint(0.0, 0.0, 0.0, 0.0);
 
-	public EditorPoint getTranslation() {
-		return translation;
+	public void addTranslation(double x, double y, double z) {
+		this.translation.setX(translation.getX() + x);
+		this.translation.setY(translation.getY() + y);
+		this.translation.setZ(translation.getZ() + z);
 	}
 
-	public void setTranslation(EditorPoint translation) {
-		this.translation = translation;
+	public void setTranslation(double x, double y, double z) {
+		this.translation.setX(x);
+		this.translation.setY(y);
+		this.translation.setZ(z);
 	}
 
 	@Override
