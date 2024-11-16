@@ -40,7 +40,7 @@ public class FreeTriangleMeshXZSideView extends FreeTriangleMeshSideView {
 	protected EditorPoint transformToModel(int x, int y) {
 		EditorPoint result = new EditorPoint(0, 0, 0, 1);
 		result.setX(x - lastSize.width / 2.0);
-		result.setZ(y - lastSize.height / 2.0);
+		result.setY(y - lastSize.height / 2.0);
 		return lenses.fromScreenToModel(result);
 	}
 
