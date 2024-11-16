@@ -207,18 +207,18 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 			int widthDiv2 = lastSize.width / 2;
 			int heightDiv2 = lastSize.height / 2;
 
-			selectionMinX = Double.POSITIVE_INFINITY;
-			selectionMinY = Double.POSITIVE_INFINITY;
-			selectionMaxX = Double.NEGATIVE_INFINITY;
-			selectionMaxY = Double.NEGATIVE_INFINITY;
+			selectionMinX = Integer.MAX_VALUE;
+			selectionMinY = Integer.MAX_VALUE;
+			selectionMaxX = Integer.MIN_VALUE;
+			selectionMaxY = Integer.MIN_VALUE;
 
 			for(Object obj : selectedObjects) {
 				if(obj instanceof FreeTriangleMeshVertex) {
 					FreeTriangleMeshVertex v = ((FreeTriangleMeshVertex)obj);
 					EditorPoint p = transformVertexToPoint(v);
 
-					double x = p.getX();
-					double y = p.getY();
+					int x = (int) p.getX();
+					int y = (int) p.getY();
 					if(x < selectionMinX) { selectionMinX = x; }
 					if(y < selectionMinY) { selectionMinY = y; }
 					if(x > selectionMaxX) { selectionMaxX = x; }

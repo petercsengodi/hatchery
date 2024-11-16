@@ -48,10 +48,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	private Point mouseRightAt = new Point(0, 0);
 
 	protected long selectionLastChanged = -1L;
-	protected double selectionMinX;
-	protected double selectionMinY;
-	protected double selectionMaxX;
-	protected double selectionMaxY;
+	protected int selectionMinX;
+	protected int selectionMinY;
+	protected int selectionMaxX;
+	protected int selectionMaxY;
 
 	private boolean selectionBoxEnabled = false;
 	private Point selectionStart = new Point();

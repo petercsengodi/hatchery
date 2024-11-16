@@ -138,21 +138,19 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		if(pictograms == null || selectionLastChanged < model.getSelectionLastChanged()) {
 			selectionLastChanged = model.getSelectionLastChanged();
 			pictograms = new HashSet<>();
-			int widthDiv2 = lastSize.width / 2;
-			int heightDiv2 = lastSize.height / 2;
 
-			selectionMinX = Double.POSITIVE_INFINITY;
-			selectionMinY = Double.POSITIVE_INFINITY;
-			selectionMaxX = Double.NEGATIVE_INFINITY;
-			selectionMaxY = Double.NEGATIVE_INFINITY;
+			selectionMinX = Integer.MAX_VALUE;
+			selectionMinY = Integer.MAX_VALUE;
+			selectionMaxX = Integer.MIN_VALUE;
+			selectionMaxY = Integer.MIN_VALUE;
 
 			for(Object obj : selectedObjects) {
 				if(obj instanceof FreeTriangleMeshVertex) {
 					FreeTriangleMeshVertex v = ((FreeTriangleMeshVertex)obj);
 					EditorPoint p = transformToScreen(transformVertexToPoint(v));
 
-					double x = p.getX();
-					double y = p.getY();
+					int x = (int) p.getX();
+					int y = (int) p.getY();
 					if(x < selectionMinX) { selectionMinX = x; }
 					if(y < selectionMinY) { selectionMinY = y; }
 					if(x > selectionMaxX) { selectionMaxX = x; }
@@ -160,10 +158,10 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 				}
 			}
 
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_LEFT_ARROW, selectionMinX + widthDiv2 - 16, selectionMinY + heightDiv2 - 16));
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_RIGHT_ARROW, selectionMaxX + widthDiv2, selectionMinY + heightDiv2 - 16));
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_LEFT_ARROW, selectionMinX + widthDiv2 - 16, selectionMaxY + heightDiv2));
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW, selectionMaxX + widthDiv2, selectionMaxY + heightDiv2));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_LEFT_ARROW, selectionMinX - 16, selectionMinY - 16));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_RIGHT_ARROW, selectionMaxX, selectionMinY - 16));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_LEFT_ARROW, selectionMinX - 16, selectionMaxY));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW, selectionMaxX, selectionMaxY));
 		}
 
 		return pictograms;
@@ -176,19 +174,19 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		FreeTriangleMeshModel model = getModel();
 		switch(action) {
 			case FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMinX, selectionMinY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMinX, selectionMinY);
 				model.elasticMove(fixed, started, ended);
 			} break;
 			case FreeTriangleMeshPictogram.UP_LEFT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMaxX, selectionMaxY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMaxX, selectionMaxY);
 				model.elasticMove(fixed, started, ended);
 			} break;
 			case FreeTriangleMeshPictogram.UP_RIGHT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMinX, selectionMaxY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMinX, selectionMaxY);
 				model.elasticMove(fixed, started, ended);
 			} break;
 			case FreeTriangleMeshPictogram.DOWN_LEFT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMaxX, selectionMinY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMaxX, selectionMinY);
 				model.elasticMove(fixed, started, ended);
 			} break;
 		}
