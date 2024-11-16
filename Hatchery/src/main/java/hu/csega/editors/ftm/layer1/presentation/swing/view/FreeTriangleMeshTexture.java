@@ -20,14 +20,14 @@ import hu.csega.games.engine.GameEngineFacade;
 
 public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 
-	private int frameWidth = 300;
-	private int frameHeight = 300;
+	private final int frameWidth = 300;
+	private final int frameHeight = 300;
 
-	private int imageWidth = 280;
-	private int imageHeight = 280;
+	private final int imageWidth = 280;
+	private final int imageHeight = 280;
 
-	private int imageLeft = 10;
-	private int imageTop = 10;
+	private final int imageLeft = 10;
+	private final int imageTop = 10;
 
 	private int originalWidth = imageWidth; // Max value.
 	private int originalHeight = imageHeight; // Max value.
@@ -133,12 +133,12 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected EditorPoint transformToScreen(EditorPoint p) {
-		return new EditorPoint(imageWidth * p.getX(), imageHeight * p.getY(), 0, 1);
+		return new EditorPoint(imageWidth * p.getX() + imageLeft, imageHeight * (1 - p.getY()) + imageTop, 0.0, 1.0);
 	}
 
 	@Override
 	protected EditorPoint transformToModel(int x, int y) {
-		return new EditorPoint(x / (double) imageWidth, y / (double) imageHeight, 0, 1);
+		return new EditorPoint((x - imageLeft) / (double) imageWidth, 1.0 - (y - imageTop) / (double) imageHeight, 0.0, 1.0);
 	}
 
 	@Override
@@ -168,20 +168,7 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 	@Override
 	protected void moveSelected(EditorPoint p1, EditorPoint p2) {
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-
-		double x = p2.getX() - p1.getX();
-		double y = p2.getY() - p1.getY();
-
-		int width = (textureImage == null ? imageWidth : Math.min(imageWidth, textureImage.getWidth()));
-		int height = (textureImage == null ? imageHeight : Math.min(imageHeight, textureImage.getHeight()));
-
-		double horizontalStretch = 1.0 / width;
-		double horizontalMove = x * horizontalStretch;
-
-		double verticalStretch = 1.0 / height;
-		double verticalMove = -y * verticalStretch;
-
-		model.moveTexture(horizontalMove, verticalMove);
+		model.moveTexture(p2.getX() - p1.getX(), p2.getY() - p1.getY());
 	}
 
 	@Override
@@ -189,8 +176,8 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 		int width = (textureImage == null ? imageWidth : Math.min(imageWidth, textureImage.getWidth()));
 		int height = (textureImage == null ? imageHeight : Math.min(imageHeight, textureImage.getHeight()));
 
-		double x = vertex.getTX() * width;
-		double y = (1 - vertex.getTY()) * height;
+		double x = vertex.getTX() * width + imageLeft;
+		double y = (1 - vertex.getTY()) * height + imageTop;
 		return new EditorPoint(x, y, 0.0, 1.0);
 	}
 
@@ -204,8 +191,6 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 		if(pictograms == null || selectionLastChanged < model.getSelectionLastChanged()) {
 			selectionLastChanged = model.getSelectionLastChanged();
 			pictograms = new HashSet<>();
-			int widthDiv2 = lastSize.width / 2;
-			int heightDiv2 = lastSize.height / 2;
 
 			selectionMinX = Integer.MAX_VALUE;
 			selectionMinY = Integer.MAX_VALUE;
@@ -226,10 +211,10 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 				}
 			}
 
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_LEFT_ARROW, selectionMinX + widthDiv2 - 16, selectionMinY + heightDiv2 - 16));
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_RIGHT_ARROW, selectionMaxX + widthDiv2, selectionMinY + heightDiv2 - 16));
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_LEFT_ARROW, selectionMinX + widthDiv2 - 16, selectionMaxY + heightDiv2));
-			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW, selectionMaxX + widthDiv2, selectionMaxY + heightDiv2));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_LEFT_ARROW, selectionMinX - 16, selectionMinY - 16));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_RIGHT_ARROW, selectionMaxX, selectionMinY - 16));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_LEFT_ARROW, selectionMinX - 16, selectionMaxY));
+			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW, selectionMaxX, selectionMaxY));
 		}
 
 		return pictograms;
@@ -237,24 +222,22 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended) {
-		System.out.println("ACTION: " + action + " dx: " + dx + " dy: " + dy + " Start: " +started + " End: " + ended);
-
 		FreeTriangleMeshModel model = getModel();
 		switch(action) {
 			case FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMinX, selectionMinY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMinX, selectionMinY);
 				model.elasticTextureMove(fixed, started, ended);
 			} break;
 			case FreeTriangleMeshPictogram.UP_LEFT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMaxX, selectionMaxY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMaxX, selectionMaxY);
 				model.elasticTextureMove(fixed, started, ended);
 			} break;
 			case FreeTriangleMeshPictogram.UP_RIGHT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMinX, selectionMaxY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMinX, selectionMaxY);
 				model.elasticTextureMove(fixed, started, ended);
 			} break;
 			case FreeTriangleMeshPictogram.DOWN_LEFT_ARROW: {
-				EditorPoint fixed = lenses.fromScreenToModel(new EditorPoint(selectionMaxX, selectionMinY, 0.0, 1.0));
+				EditorPoint fixed = transformToModel(selectionMaxX, selectionMinY);
 				model.elasticTextureMove(fixed, started, ended);
 			} break;
 		}

@@ -450,7 +450,7 @@ public class FreeTriangleMeshModel implements Serializable {
 				double x = v.getTX();
 				double y = v.getTY();
 
-				if(x != fixed.getX()) {
+				if(started.getX() != ended.getX() && x != fixed.getX()) {
 					double r1 = started.getX() - fixed.getX();
 					double r2 = ended.getX() - fixed.getX();
 					if(Math.abs(r1) > 0) {
@@ -460,7 +460,7 @@ public class FreeTriangleMeshModel implements Serializable {
 					}
 				}
 
-				if(y != fixed.getY()) {
+				if(started.getY() != ended.getY() && y != fixed.getY()) {
 					double r1 = started.getY() - fixed.getY();
 					double r2 = ended.getY() - fixed.getY();
 					if(Math.abs(r1) > 0) {

@@ -169,8 +169,6 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended) {
-		System.out.println("ACTION: " + action + " dx: " + dx + " dy: " + dy + " Start: " +started + " End: " + ended);
-
 		FreeTriangleMeshModel model = getModel();
 		switch(action) {
 			case FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW: {
