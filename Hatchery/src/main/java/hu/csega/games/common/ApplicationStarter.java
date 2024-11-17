@@ -1,7 +1,9 @@
 package hu.csega.games.common;
 
+import hu.csega.games.engine.env.Environment;
 import hu.csega.games.engine.env.EnvironmentImpl;
 import hu.csega.games.engine.env.GameEngineException;
+import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
@@ -19,6 +21,7 @@ public class ApplicationStarter {
 		logger.info("Creating and setting environment.");
 
 		EnvironmentImpl env = new EnvironmentImpl();
+		UnitStore.registerInstance(Environment.class, env);
 		this.setEnvironment(env);
 
 		try {
@@ -81,8 +84,8 @@ public class ApplicationStarter {
 		connector.run(env);
 
 		logger.info("Waiting for tool to finish.");
-		env.waitForExitting();
-		logger.info("Exitting tool.");
+		env.waitForExiting();
+		logger.info("Exiting tool.");
 		phase = Phase.GAME_OVER;
 	}
 

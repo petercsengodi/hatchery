@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.env.Disposable;
+import hu.csega.games.engine.env.Environment;
 import hu.csega.games.engine.g3d.GameModelStore;
 import hu.csega.games.engine.intf.GameAdapter;
 import hu.csega.games.engine.intf.GameCanvas;
@@ -66,9 +67,9 @@ public class GameEngine implements Disposable {
 		rebuildRequested = true;
 	}
 
-	public void startInNewWindow() {
+	public void startInNewWindow(Environment env) {
 		// TODO not nice this way.
-		GameWindow gameWindow = adapter.createWindow(this);
+		GameWindow gameWindow = adapter.createWindow(this, env);
 		gameWindow.setFullScreen(true);
 		startIn(gameWindow, ((JFrame)gameWindow).getContentPane());
 	}

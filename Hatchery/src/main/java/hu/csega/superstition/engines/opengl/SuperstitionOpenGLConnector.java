@@ -41,7 +41,7 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 	public void run(Environment env) {
 		logger.info(className() + " start run()");
 
-		GameEngine ge = startGameEngine();
+		GameEngine ge = startGameEngine(env);
 		logger.info("Received GameEngine instance: " + (ge != null));
 
 		logger.info(className() + " end run()");
@@ -76,7 +76,6 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 		for(GameWindowListener listener: listeners) {
 			listener.onFinishingWork();
 		}
-		System.exit(0);
 	}
 
 	@Override
@@ -90,7 +89,7 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 	public void repaintEverything() {
 	}
 
-	private GameEngine startGameEngine() {
+	private GameEngine startGameEngine(Environment env) {
 		GameDescriptor descriptor = new GameDescriptor();
 		descriptor.setId("superstition");
 		descriptor.setTitle("Superstition – Witty Little Wizard");
@@ -104,7 +103,7 @@ public class SuperstitionOpenGLConnector implements Connector, GameWindow {
 		engine.step(GameEngineStep.MODIFY, new SuperstitionModifyStep());
 		engine.step(GameEngineStep.RENDER, new SuperstitionRenderStep());
 
-		engine.startInNewWindow();
+		engine.startInNewWindow(env);
 		return engine;
 	}
 

@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import hu.csega.editors.common.resources.ResourceAdapter;
+import hu.csega.editors.ftm.layer1.presentation.swing.dialogs.FreeTriangleMeshDialogs;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.UnitStore;
@@ -105,9 +106,8 @@ public class FreeTriangleMeshMenu {
 
 		JMenuItem sphereItem = new JMenuItem("Sphere");
 		sphereItem.addActionListener(event -> {
-			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
-			model.createBasicSphere();
-			facade.window().repaintEverything();
+			FreeTriangleMeshDialogs dialogs = UnitStore.instance(FreeTriangleMeshDialogs.class);
+			dialogs.spheres.setVisible(true);
 		});
 
 		JMenuItem patch10x10Item = new JMenuItem("10x10 patch");
@@ -119,7 +119,7 @@ public class FreeTriangleMeshMenu {
 
 		JMenu shapesMenu = new JMenu("Basic Shapes");
 		shapesMenu.add(cubeItem);
-		// shapesMenu.add(sphereItem);
+		shapesMenu.add(sphereItem);
 		shapesMenu.add(patch10x10Item);
 		return shapesMenu;
 	}

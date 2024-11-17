@@ -1,5 +1,8 @@
 package hu.csega.games.engine.env;
 
+import hu.csega.toolshed.logging.Logger;
+import hu.csega.toolshed.logging.LoggerFactory;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +15,7 @@ public class EnvironmentImpl implements Environment {
 	}
 
 	@Override
-	public void notifyExitting() {
+	public void notifyExiting() {
 		synchronized (this) {
 			this.notify();
 		}
@@ -22,13 +25,14 @@ public class EnvironmentImpl implements Environment {
 	 * Only reachable by the game main frame.
 	 * @throws IOException
 	 */
-	public void waitForExitting() {
+	public void waitForExiting() {
 		try {
 
 			synchronized (this) {
 				this.wait();
 			}
 
+			logger.info("Exiting application.");
 		} catch(InterruptedException ex) {
 			throw new GameEngineException("Interruption when waiting.", ex)
 			.description("Main running class was waiting for the game to finish while an "
@@ -46,5 +50,7 @@ public class EnvironmentImpl implements Environment {
 		}
 	}
 
-	private Set<Disposable> disposables = new HashSet<>();
+	private final Set<Disposable> disposables = new HashSet<>();
+
+	private static final Logger logger = LoggerFactory.createLogger(EnvironmentImpl.class);
 }

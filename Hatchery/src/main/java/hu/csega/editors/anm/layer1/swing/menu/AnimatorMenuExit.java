@@ -6,6 +6,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.engine.env.Environment;
+import hu.csega.games.units.UnitStore;
 
 @SuppressWarnings("unused")
 class AnimatorMenuExit implements ActionListener {
@@ -22,6 +24,7 @@ class AnimatorMenuExit implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.exit(0);
+		Environment env = UnitStore.instance(Environment.class);
+		env.notifyExiting();
 	}
 }

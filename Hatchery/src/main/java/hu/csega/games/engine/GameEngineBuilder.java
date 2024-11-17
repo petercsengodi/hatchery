@@ -1,5 +1,6 @@
 package hu.csega.games.engine;
 
+import hu.csega.games.engine.env.Environment;
 import hu.csega.games.engine.impl.GameEngine;
 import hu.csega.games.engine.intf.GameAdapter;
 import hu.csega.games.engine.intf.GameDescriptor;
@@ -49,14 +50,14 @@ public class GameEngineBuilder {
 		return this;
 	}
 
-	public void startEngine() {
+	public void startEngine(Environment env) {
 		if(!engineStarted) {
 
 			if(engine == null) {
 				logger.error("Game Engine wasn't created!");
 			} else {
 				// TODO not nice this way
-				engine.startInNewWindow();
+				engine.startInNewWindow(env);
 			}
 
 			engineStarted = true;

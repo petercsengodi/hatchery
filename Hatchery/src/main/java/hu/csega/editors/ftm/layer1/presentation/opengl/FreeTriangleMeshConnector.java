@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 
+import hu.csega.editors.ftm.layer1.presentation.swing.dialogs.FreeTriangleMeshDialogs;
 import hu.csega.editors.ftm.layer1.presentation.swing.menu.FreeTriangleMeshMenu;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTexture;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTreeMapping;
@@ -30,19 +31,21 @@ import hu.csega.games.engine.intf.GameDescriptor;
 import hu.csega.games.engine.intf.GameEngineStep;
 import hu.csega.games.engine.intf.GameWindow;
 import hu.csega.games.engine.intf.GameWindowListener;
+import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
 public class FreeTriangleMeshConnector implements Connector, GameWindow {
 
 	private List<GameWindowListener> listeners = new ArrayList<>();
+	private FreeTriangleMeshDialogs dialogs;
 	private GameWindow gameWindow;
 	private JTree tree;
 
-	private String shaderRoot;
-	private String textureRoot;
-	private String meshRoot;
-	private String animationRoot;
+	private final String shaderRoot;
+	private final String textureRoot;
+	private final String meshRoot;
+	private final String animationRoot;
 
 	public FreeTriangleMeshConnector(String shaderRoot, String textureRoot, String meshRoot, String animationRoot) {
 		this.shaderRoot = shaderRoot;
@@ -59,7 +62,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 	public void run(Environment env) {
 		logger.info(className() + " start run()");
 
-		startGameEngine();
+		startGameEngine(env);
 
 		logger.info(className() + " end run()");
 	}
@@ -93,7 +96,6 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		for(GameWindowListener listener: listeners) {
 			listener.onFinishingWork();
 		}
-		System.exit(0);
 	}
 
 	@Override
@@ -103,7 +105,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		logger.info(className() + " end dispose()");
 	}
 
-	private GameEngine startGameEngine() {
+	private GameEngine startGameEngine(Environment env) {
 
 		GameDescriptor descriptor = new GameDescriptor();
 		descriptor.setId("ftm");
@@ -124,7 +126,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 
 		engine.getControl().registerKeyListener(new FreeTriangleMeshKeyListener());
 
-		gameWindow = adapter.createWindow(engine);
+		gameWindow = adapter.createWindow(engine, env);
 		gameWindow.setFullScreen(true);
 
 		JFrame frame = (JFrame) gameWindow;
@@ -160,6 +162,9 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		component.addMouseWheelListener(mouseController);
 
 		renderer.setMouseController(mouseController);
+
+		dialogs = new FreeTriangleMeshDialogs(frame);
+		UnitStore.registerInstance(FreeTriangleMeshDialogs.class, dialogs);
 
 		return engine;
 	}

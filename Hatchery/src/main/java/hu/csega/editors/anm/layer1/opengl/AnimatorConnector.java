@@ -39,10 +39,10 @@ public class AnimatorConnector implements Connector, GameWindow {
 	private List<GameWindowListener> listeners = new ArrayList<>();
 	private ComponentRefreshViews refreshViews;
 
-	private String shaderRoot;
-	private String textureRoot;
-	private String meshRoot;
-	private String animationRoot;
+	private final String shaderRoot;
+	private final String textureRoot;
+	private final String meshRoot;
+	private final String animationRoot;
 
 	public AnimatorConnector(String shaderRoot, String textureRoot, String meshRoot, String animationRoot) {
 		this.shaderRoot = shaderRoot;
@@ -59,7 +59,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 	public void run(Environment env) {
 		logger.info(className() + " start run()");
 
-		startGameEngine();
+		startGameEngine(env);
 
 		logger.info(className() + " end run()");
 	}
@@ -93,7 +93,6 @@ public class AnimatorConnector implements Connector, GameWindow {
 		for(GameWindowListener listener: listeners) {
 			listener.onFinishingWork();
 		}
-		System.exit(0);
 	}
 
 	@Override
@@ -103,7 +102,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 		logger.info(className() + " end dispose()");
 	}
 
-	private GameEngine startGameEngine() {
+	private GameEngine startGameEngine(Environment env) {
 
 		GameDescriptor descriptor = new GameDescriptor();
 		descriptor.setId("anm");
@@ -133,7 +132,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 		// Swing View(s)
 
 		AnimatorUIComponents components = UnitStore.instance(AnimatorUIComponents.class);
-		components.gameWindow = adapter.createWindow(engine);
+		components.gameWindow = adapter.createWindow(engine, env);
 		components.gameWindow.setFullScreen(true);
 		logger.info("Window/Frame instance created: " + components.gameWindow.getClass().getName());
 

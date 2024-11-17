@@ -17,20 +17,24 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import hu.csega.editors.AnimatorStarter;
+import hu.csega.games.engine.env.Environment;
 import hu.csega.games.engine.impl.GameControlImpl;
 import hu.csega.games.engine.impl.GameEngine;
 import hu.csega.games.engine.intf.GameCanvas;
 import hu.csega.games.engine.intf.GameWindow;
 import hu.csega.games.engine.intf.GameWindowListener;
+import hu.csega.toolshed.logging.Logger;
+import hu.csega.toolshed.logging.LoggerFactory;
 
-public class OpenGLFrame extends JFrame implements GameWindow, WindowListener, KeyListener,
-MouseListener, MouseMotionListener {
+public class OpenGLFrame extends JFrame implements GameWindow, WindowListener, KeyListener, MouseListener, MouseMotionListener {
 
 	private boolean CENTER_MOUSE = true;
 
-	private GameEngine engine;
-	private GameControlImpl control;
-	private List<GameWindowListener> listeners = new ArrayList<>();
+	private final GameEngine engine;
+	private final GameControlImpl control;
+	private final List<GameWindowListener> listeners = new ArrayList<>();
+	private final Environment env;
 
 	private boolean leftMouseButtonDown = false;
 	private boolean rightMouseButtonDown = false;
@@ -41,11 +45,14 @@ MouseListener, MouseMotionListener {
 	private Robot robot;
 	private boolean centerMouse;
 
-	public OpenGLFrame(GameEngine engine) {
+	public OpenGLFrame(GameEngine engine, Environment env) {
 		super(engine.getDescriptor().getTitle());
 		this.engine = engine;
 		this.control = (GameControlImpl)this.engine.getControl();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.env = env;
+
 		this.addWindowListener(this);
 		this.addKeyListener(this);
 		// this.addMouseListener(this);
@@ -94,7 +101,7 @@ MouseListener, MouseMotionListener {
 		// setVisible(false);
 		for(GameWindowListener listener : listeners)
 			listener.onFinishingWork();
-		System.exit(0);
+		env.notifyExiting();
 	}
 
 	@Override
@@ -103,12 +110,13 @@ MouseListener, MouseMotionListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		for(GameWindowListener listener : listeners)
-			listener.onFinishingWork();
+		logger.info("Window closing.");
+		closeApplication();
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
+		logger.info("Window closed.");
 	}
 
 	@Override
@@ -336,6 +344,14 @@ MouseListener, MouseMotionListener {
 		lastMouseY = this.getLocationOnScreen().y + getHeight() / 2;
 		robot.mouseMove(lastMouseX, lastMouseY);
 	}
+
+	@Override
+	public void dispose() {
+		logger.info("Disposing frame: " + this.getClass().getName());
+		super.dispose();
+	}
+
+	private static final Logger logger = LoggerFactory.createLogger(OpenGLFrame.class);
 
 	private static final long serialVersionUID = 1L;
 }

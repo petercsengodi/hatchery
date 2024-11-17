@@ -6,13 +6,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.engine.env.Environment;
+import hu.csega.games.units.UnitStore;
 
 @SuppressWarnings("unused")
 class FileExit implements ActionListener {
 
-	private JFrame frame;
-	private JFileChooser saveDialog;
-	private GameEngineFacade facade;
+	private final JFrame frame;
+	private final JFileChooser saveDialog;
+	private final GameEngineFacade facade;
 
 	public FileExit(JFrame frame, JFileChooser saveDialog, GameEngineFacade facade) {
 		this.frame = frame;
@@ -22,6 +24,7 @@ class FileExit implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.exit(0);
+		Environment env = UnitStore.instance(Environment.class);
+		env.notifyExiting();
 	}
 }

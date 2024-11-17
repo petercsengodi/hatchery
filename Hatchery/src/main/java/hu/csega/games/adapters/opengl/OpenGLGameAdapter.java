@@ -11,6 +11,7 @@ import hu.csega.games.adapters.opengl.gl2.OpenGLProfileGL2GLUAdapter;
 import hu.csega.games.adapters.opengl.gl2.OpenGLProfileGL2TriangleAdapter;
 import hu.csega.games.adapters.opengl.gl3.OpenGLProfileGL3Adapter;
 import hu.csega.games.adapters.opengl.models.OpenGLModelStoreImpl;
+import hu.csega.games.engine.env.Environment;
 import hu.csega.games.engine.g3d.GameModelStore;
 import hu.csega.games.engine.impl.GameEngine;
 import hu.csega.games.engine.intf.GameAdapter;
@@ -39,8 +40,10 @@ public class OpenGLGameAdapter implements GameAdapter {
 	}
 
 	@Override
-	public GameWindow createWindow(GameEngine engine) {
-		return new OpenGLFrame(engine);
+	public GameWindow createWindow(GameEngine engine, Environment env) {
+		OpenGLFrame openGLFrame = new OpenGLFrame(engine, env);
+		env.registerForDisposing(openGLFrame);
+		return openGLFrame;
 	}
 
 	@Override

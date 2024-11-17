@@ -52,7 +52,7 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 	public void run(Environment env) {
 		logger.info(className() + " start run()");
 
-		startGameEngine();
+		startGameEngine(env);
 
 		logger.info(className() + " end run()");
 	}
@@ -86,7 +86,6 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 		for(GameWindowListener listener: listeners) {
 			listener.onFinishingWork();
 		}
-		System.exit(0);
 	}
 
 	@Override
@@ -96,7 +95,7 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 		logger.info(className() + " end dispose()");
 	}
 
-	private GameEngine startGameEngine() {
+	private GameEngine startGameEngine(Environment env) {
 
 		GameDescriptor descriptor = new GameDescriptor();
 		descriptor.setId("tt");
@@ -117,7 +116,7 @@ public class TransformationTesterConnector implements Connector, GameWindow {
 
 		engine.getControl().registerKeyListener(new TransformationTesterKeyListener());
 
-		gameWindow = adapter.createWindow(engine);
+		gameWindow = adapter.createWindow(engine, env);
 		gameWindow.setFullScreen(true);
 
 		JFrame frame = (JFrame) gameWindow;
