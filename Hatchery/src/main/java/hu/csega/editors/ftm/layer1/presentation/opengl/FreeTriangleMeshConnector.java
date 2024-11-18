@@ -118,6 +118,8 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		GameEngine engine = GameEngine.create(descriptor, adapter);
 		GameEngineFacade facade = engine.getFacade();
 
+		UnitStore.registerInstance(GameEngineFacade.class, facade);
+
 		FreeTriangleMeshRenderStep renderer = new FreeTriangleMeshRenderStep();
 
 		engine.step(GameEngineStep.INIT, new FreeTriangleMeshInitStep());

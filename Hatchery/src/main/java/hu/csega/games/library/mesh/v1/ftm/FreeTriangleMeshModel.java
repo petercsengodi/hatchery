@@ -15,6 +15,7 @@ import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
+import hu.csega.editors.ftm.util.FreeTriangleMeshMathLibrary;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
 
 public class FreeTriangleMeshModel implements Serializable {
@@ -758,7 +759,26 @@ public class FreeTriangleMeshModel implements Serializable {
 		invalidate();
 	}
 
-	public void createBasicSphere() {
+	public void createBasicSphere(double rx, double ry, double rz, int density) {
+		snapshots().addState(mesh);
+
+		// FIXME: Correct algorithm.
+
+		double PI2 = Math.PI * 2.0;
+		double delta = PI2 / density;
+		double limit = PI2 - 0.01;
+		for(double beta = 0; beta < Math.PI; beta += delta) {
+			for(double alpha = 0; alpha < PI2; alpha += delta) {
+				FreeTriangleMeshVertex vertex = new FreeTriangleMeshVertex(
+						FreeTriangleMeshMathLibrary.sphereX(rx, ry, rz, alpha, beta),
+						FreeTriangleMeshMathLibrary.sphereY(rx, ry, rz, alpha, beta),
+						FreeTriangleMeshMathLibrary.sphereZ(rx, ry, rz, alpha, beta)
+				).texture(0, 0);
+				mesh.getVertices().add(vertex);
+			}
+		}
+
+		invalidate();
 	}
 
 	public void createBasicPatch10x10() {

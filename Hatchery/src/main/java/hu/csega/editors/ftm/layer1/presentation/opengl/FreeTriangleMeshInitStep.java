@@ -4,6 +4,7 @@ import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.units.UnitStore;
 
 public class FreeTriangleMeshInitStep implements GameEngineCallback {
 
@@ -12,6 +13,8 @@ public class FreeTriangleMeshInitStep implements GameEngineCallback {
 		FreeTriangleMeshModel model = new FreeTriangleMeshModel();
 		model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
 		facade.setModel(model);
+
+		UnitStore.registerInstance(FreeTriangleMeshModel.class, model);
 		return facade;
 	}
 

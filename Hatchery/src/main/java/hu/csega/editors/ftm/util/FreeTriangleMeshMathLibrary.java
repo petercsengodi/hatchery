@@ -27,4 +27,17 @@ public class FreeTriangleMeshMathLibrary {
 
 		return new FreeTriangleMeshPoint(px / 3.0, py / 3.0, pz / 3.0);
 	}
+
+	public static double sphereX(double rx, double ry, double rz, double alpha, double beta) {
+		return rx * Math.cos(alpha) * Math.sin(beta);
+	}
+
+	public static double sphereY(double rx, double ry, double rz, double alpha, double beta) {
+		return ry * Math.cos(beta);
+	}
+
+	public static double sphereZ(double rx, double ry, double rz, double alpha, double beta) {
+		return rz * Math.sin(alpha) * Math.sin(beta);
+	}
+
 }
