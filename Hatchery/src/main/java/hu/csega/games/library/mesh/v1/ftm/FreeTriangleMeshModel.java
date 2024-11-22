@@ -762,20 +762,66 @@ public class FreeTriangleMeshModel implements Serializable {
 	public void createBasicSphere(double rx, double ry, double rz, int density) {
 		snapshots().addState(mesh);
 
-		// FIXME: Correct algorithm.
-
 		double PI2 = Math.PI * 2.0;
 		double delta = PI2 / density;
-		double limit = PI2 - 0.01;
-		for(double beta = 0; beta < Math.PI; beta += delta) {
-			for(double alpha = 0; alpha < PI2; alpha += delta) {
+		double limitAlpha = PI2 - 0.001;
+		double limitBeta = Math.PI - 0.001;
+		List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
+		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
+
+		// FIXME: Correct algorithm.
+		Integer topVertex = vertices.size();
+		vertices.add(new FreeTriangleMeshVertex(0, ry, 0).texture(0.5, 0.5));
+		Integer bottomVertex = vertices.size();
+		vertices.add(new FreeTriangleMeshVertex(0, -ry, 0).texture(0.5, 0.5));
+
+		int numberOfHorizontalVertices = 0;
+		int numberOfVerticalVertices = -1;
+		for(double alpha = 0; alpha < limitAlpha; alpha += delta) {
+			numberOfHorizontalVertices++;
+			if(alpha < limitBeta)
+				numberOfVerticalVertices++;
+		}
+
+		Integer[][] inBetweenVertices = new Integer[numberOfVerticalVertices][numberOfHorizontalVertices];
+
+		int vertical = 0;
+		for(double beta = delta; beta < limitBeta; beta += delta) {
+			int horizontal = 0;
+			for(double alpha = 0; alpha < limitAlpha; alpha += delta) {
+				inBetweenVertices[vertical][horizontal] = vertices.size();
+				double tl = (1 - Math.cos(beta / 2)) / 2;
+				if(tl < 0.0) { tl = 0.0; }
+				if(tl > 0.5) { tl = 0.5; }
+
+				double tx = tl * Math.sin(alpha) + 0.5;
+				if(tx < 0.0) { tx = 0.0; }
+				if(tx > 1.0) { tx = 1.0; }
+
+				double ty = tl * Math.cos(alpha) + 0.5;
+				if(ty < 0.0) { ty = 0.0; }
+				if(ty > 1.0) { ty = 1.0; }
+
 				FreeTriangleMeshVertex vertex = new FreeTriangleMeshVertex(
 						FreeTriangleMeshMathLibrary.sphereX(rx, ry, rz, alpha, beta),
 						FreeTriangleMeshMathLibrary.sphereY(rx, ry, rz, alpha, beta),
 						FreeTriangleMeshMathLibrary.sphereZ(rx, ry, rz, alpha, beta)
-				).texture(0, 0);
-				mesh.getVertices().add(vertex);
+				).texture(tx, ty);
+
+				vertices.add(vertex);
+				horizontal++;
 			}
+			vertical++;
+		}
+
+
+		for(int x = 0; x < numberOfHorizontalVertices; x++) {
+			triangles.add(new FreeTriangleMeshTriangle(topVertex, inBetweenVertices[0][(x+1) % numberOfHorizontalVertices], inBetweenVertices[0][x]));
+			for(int y = 0; y < numberOfVerticalVertices - 1; y++) {
+				triangles.add(new FreeTriangleMeshTriangle(inBetweenVertices[y][x], inBetweenVertices[y][(x+1) % numberOfHorizontalVertices], inBetweenVertices[y + 1][x]));
+				triangles.add(new FreeTriangleMeshTriangle(inBetweenVertices[y][(x+1) % numberOfHorizontalVertices], inBetweenVertices[y + 1][(x+1) % numberOfHorizontalVertices], inBetweenVertices[y + 1][x]));
+			}
+			triangles.add(new FreeTriangleMeshTriangle(inBetweenVertices[numberOfVerticalVertices - 1][x], inBetweenVertices[numberOfVerticalVertices - 1][(x+1) % numberOfHorizontalVertices], bottomVertex));
 		}
 
 		invalidate();
