@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 
 import hu.csega.editors.common.lens.EditorLensPipeline;
 import hu.csega.editors.common.lens.EditorPoint;
+import hu.csega.editors.ftm.layer1.presentation.swing.menu.FreeTriangleMeshContextMenu;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.GameEngineFacade;
@@ -62,6 +63,8 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected EditorLensPipeline lenses = new EditorLensPipeline();
 	protected int zoomIndex = DEFAULT_ZOOM_INDEX;
 
+	protected final FreeTriangleMeshContextMenu contextMenu;
+
 	public FreeTriangleMeshCanvas(GameEngineFacade facade) {
 		this.facade = facade;
 		setPreferredSize(PREFERRED_SIZE);
@@ -72,6 +75,8 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		GameWindow window = facade.window();
 		KeyListener keyListener = (KeyListener) window;
 		addKeyListener(keyListener);
+
+		this.contextMenu = new FreeTriangleMeshContextMenu(this);
 	}
 
 	public Component getRealCanvas() {
@@ -250,9 +255,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		if(e.getButton() == MouseEvent.BUTTON1) {
 			if(e.isControlDown()) {
 				// create new vertex
-				EditorPoint p = transformToModel(e.getX(), e.getY());
-				createVertexAt(p);
-				repaintEverything();
+				createVertexAtXY(e.getX(), e.getY());
 			} else {
 				// select one vertex
 				EditorPoint p = transformToModel(e.getX(), e.getY());
@@ -260,6 +263,11 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 				repaintEverything();
 			}
 		}
+
+		if(e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
+			contextMenu.setPosition(e.getX(), e.getY());
+		    contextMenu.show(this, e.getX(), e.getY());
+        }
 	}
 
 	@Override
@@ -280,6 +288,12 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 			zoomIndex = ZOOM_VALUES.length - 1;
 		lenses.setScale(ZOOM_VALUES[zoomIndex]);
 		repaint();
+	}
+
+	public void createVertexAtXY(int x, int y) {
+		EditorPoint p = transformToModel(x, y);
+		createVertexAt(p);
+		repaintEverything();
 	}
 
 	protected Rectangle calculateSelectionBox() {
