@@ -49,7 +49,7 @@ public class SuperstitionSerializableModel implements Serializable {
 		boxPlacement4.moveTo(-150f, -50f, -20f);
 
 		for(int i = 0; i < 10; i++) {
-			MonsterData data = new MonsterData();
+			MonsterData data = new MonsterData(i < 8 ? "run_2.json" : "snake.json");
 			data.x = 30.0*i;
 			monstersAlive.add(data);
 		}

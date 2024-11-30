@@ -1,7 +1,6 @@
 package hu.csega.superstition.game;
 
 import hu.csega.games.engine.intf.GameControl;
-import hu.csega.superstition.game.play.CollisionUtil;
 import hu.csega.superstition.game.play.MonsterData;
 
 public class SuperstitionGameModify {

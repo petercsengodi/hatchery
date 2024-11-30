@@ -18,6 +18,7 @@ public class SuperstitionGameElements {
 
 	GameObjectHandler wizardShootingAnimationHandler;
 	GameObjectHandler enemyRunningAnimationHandler;
+	GameObjectHandler snakeAnimationHandler;
 
 	GameObjectHandler groundTexture;
 	GameObjectHandler boxModel;
@@ -41,6 +42,7 @@ public class SuperstitionGameElements {
 
 		wizardShootingAnimationHandler = loadAnimation(store, "wizard2.json");
 		enemyRunningAnimationHandler = loadAnimation(store, "run_2.json");
+		snakeAnimationHandler = loadAnimation(store, "snake.json");
 
 		alphabet = new GameObjectHandler[numberOfLetters];
 		for(int i = 0; i < numberOfLetters; i++) {

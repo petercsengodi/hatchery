@@ -164,7 +164,8 @@ public class SuperstitionGameRenderer {
 			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
 
 			int animationIndex = (monster.target == null ? 0 : lastAnimIndex / 10);
-			g.drawAnimation(elements.enemyRunningAnimationHandler, animationIndex, monsterPlacement);
+			GameObjectHandler animation = (monster.animation.startsWith("snake") ? elements.snakeAnimationHandler : elements.enemyRunningAnimationHandler);
+			g.drawAnimation(animation, animationIndex, monsterPlacement);
 		}
 
 		g.drawOnScreen(elements.alphabet[0], 0, 0);
