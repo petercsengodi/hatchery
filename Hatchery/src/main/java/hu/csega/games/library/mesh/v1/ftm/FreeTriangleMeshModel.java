@@ -644,6 +644,7 @@ public class FreeTriangleMeshModel implements Serializable {
 		snapshots().addState(mesh);
 
 		List<FreeTriangleMeshTriangle> trianglesToAdd = new ArrayList<>();
+		List<FreeTriangleMeshTriangle> trianglesToRemove = new ArrayList<>();
 
 		if(selectedObjects.size() < 3) {
 			// edge split
@@ -684,12 +685,48 @@ public class FreeTriangleMeshModel implements Serializable {
 			}
 		} else {
 			// split only fully selected triangles
+			List<FreeTriangleMeshVertex> vertices = getVertices();
+
+			for(FreeTriangleMeshTriangle t : getTriangles()) {
+				FreeTriangleMeshVertex v1 = vertices.get(t.getVertex1());
+				FreeTriangleMeshVertex v2 = vertices.get(t.getVertex2());
+				FreeTriangleMeshVertex v3 = vertices.get(t.getVertex3());
+				if(selectedObjects.contains(v1) && selectedObjects.contains(v2) && selectedObjects.contains(v3)) {
+					trianglesToRemove.add(t);
+
+					FreeTriangleMeshVertex avg = new FreeTriangleMeshVertex(0.0, 0.0, 0.0);
+					avg.add(v1);
+					avg.add(v2);
+					avg.add(v3);
+					avg.divide(3.0);
+
+					int iavg = vertices.size();
+					vertices.add(avg);
+
+					FreeTriangleMeshTriangle t1 = t.copy();
+					t1.setVertex1(iavg);
+					trianglesToAdd.add(t1);
+
+					FreeTriangleMeshTriangle t2 = t.copy();
+					t2.setVertex2(iavg);
+					trianglesToAdd.add(t2);
+
+					FreeTriangleMeshTriangle t3 = t.copy();
+					t3.setVertex3(iavg);
+					trianglesToAdd.add(t3);
+				}
+			}
 		}
 
 		if(!trianglesToAdd.isEmpty()) {
 			getTriangles().addAll(trianglesToAdd);
 		}
 
+		if(!trianglesToRemove.isEmpty()) {
+			getTriangles().removeAll(trianglesToRemove);
+		}
+
+		selectedObjects.clear();
 		invalidate();
 	}
 
