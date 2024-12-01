@@ -316,6 +316,13 @@ public class FreeTriangleMeshModel implements Serializable {
 
 		snapshots().addState(mesh);
 
+		removeVertices();
+
+		invalidate();
+	}
+
+	public void removeVertices() {
+		List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
 		int[] mapping = new int[vertices.size()];
 		int mapToIndex = 0;
 		int currentIndex = 0;
@@ -362,8 +369,6 @@ public class FreeTriangleMeshModel implements Serializable {
 				t.setVertex3(mapToIndex);
 			}
 		}
-
-		invalidate();
 	}
 
 	public void moveSelected(double x, double y, double z) {
@@ -589,6 +594,56 @@ public class FreeTriangleMeshModel implements Serializable {
 		invalidate();
 	}
 
+	public void mergeVertices() {
+		if(selectedObjects.isEmpty())
+			return;
+
+		snapshots().addState(mesh);
+
+		Set<Integer> verticesToRemove = new HashSet<>();
+		int minimumIndex = Integer.MAX_VALUE;
+
+		FreeTriangleMeshVertex avg = new FreeTriangleMeshVertex(0.0, 0.0, 0.0);
+
+		for(Object object : selectedObjects) {
+			if(object instanceof FreeTriangleMeshVertex) {
+				FreeTriangleMeshVertex v = (FreeTriangleMeshVertex) object;
+				int index = getVertices().indexOf(v);
+				minimumIndex = Math.min(minimumIndex, index);
+				verticesToRemove.add(index);
+
+				avg.add(v);
+			}
+		}
+
+		avg.divide(verticesToRemove.size());
+
+		verticesToRemove.remove(minimumIndex);
+		FreeTriangleMeshVertex vertexResult = getVertices().get(minimumIndex);
+		vertexResult.copyValuesFrom(avg);
+		selectedObjects.remove(vertexResult);
+
+		for(FreeTriangleMeshTriangle triangle : getTriangles()) {
+			if(verticesToRemove.contains(triangle.getVertex1()))
+				triangle.setVertex1(minimumIndex);
+			if(verticesToRemove.contains(triangle.getVertex2()))
+				triangle.setVertex2(minimumIndex);
+			if(verticesToRemove.contains(triangle.getVertex3()))
+				triangle.setVertex3(minimumIndex);
+		}
+
+		removeVertices();
+
+		invalidate();
+	}
+
+	public void splitTriangles() {
+		if(selectedObjects.isEmpty())
+			return;
+
+		snapshots().addState(mesh);
+	}
+
 	public void flip(boolean x, boolean y, boolean z) {
 		if(selectedObjects == null || selectedObjects.isEmpty() || (!x && !y && !z)) {
 			return;
@@ -760,6 +815,77 @@ public class FreeTriangleMeshModel implements Serializable {
 	}
 
 	public void createBasicSphere(double rx, double ry, double rz, int density) {
+		snapshots().addState(mesh);
+
+		double PI2 = Math.PI * 2.0;
+		double delta = PI2 / density;
+		double deltaVertical = Math.PI / density;
+		double limitAlpha = PI2 - 0.001;
+		double limitBeta = Math.PI - 0.001;
+		List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
+		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
+
+		// FIXME: Correct algorithm.
+		Integer topVertex = vertices.size();
+		vertices.add(new FreeTriangleMeshVertex(0, ry, 0).texture(0.5, 0.5));
+		Integer bottomVertex = vertices.size();
+		vertices.add(new FreeTriangleMeshVertex(0, -ry, 0).texture(0.5, 0.5));
+
+		int numberOfHorizontalVertices = 0;
+		for(double alpha = 0; alpha < limitAlpha; alpha += delta) {
+			numberOfHorizontalVertices++;
+		}
+
+		int numberOfVerticalVertices = 0;
+		for(double beta = deltaVertical; beta < limitBeta; beta += deltaVertical) {
+			numberOfVerticalVertices++;
+		}
+
+		Integer[][] inBetweenVertices = new Integer[numberOfVerticalVertices][numberOfHorizontalVertices];
+
+		int vertical = 0;
+		for(double beta = deltaVertical; beta < limitBeta; beta += deltaVertical) {
+			int horizontal = 0;
+			for(double alpha = 0; alpha < limitAlpha; alpha += delta) {
+				inBetweenVertices[vertical][horizontal] = vertices.size();
+				double tl = (1 - Math.cos(beta / 2)) / 2;
+				if(tl < 0.0) { tl = 0.0; }
+				if(tl > 0.5) { tl = 0.5; }
+
+				double tx = tl * Math.sin(alpha) + 0.5;
+				if(tx < 0.0) { tx = 0.0; }
+				if(tx > 1.0) { tx = 1.0; }
+
+				double ty = tl * Math.cos(alpha) + 0.5;
+				if(ty < 0.0) { ty = 0.0; }
+				if(ty > 1.0) { ty = 1.0; }
+
+				FreeTriangleMeshVertex vertex = new FreeTriangleMeshVertex(
+						FreeTriangleMeshMathLibrary.sphereX(rx, ry, rz, alpha, beta),
+						FreeTriangleMeshMathLibrary.sphereY(rx, ry, rz, alpha, beta),
+						FreeTriangleMeshMathLibrary.sphereZ(rx, ry, rz, alpha, beta)
+				).texture(tx, ty);
+
+				vertices.add(vertex);
+				horizontal++;
+			}
+			vertical++;
+		}
+
+
+		for(int x = 0; x < numberOfHorizontalVertices; x++) {
+			triangles.add(new FreeTriangleMeshTriangle(topVertex, inBetweenVertices[0][(x+1) % numberOfHorizontalVertices], inBetweenVertices[0][x]));
+			for(int y = 0; y < numberOfVerticalVertices - 1; y++) {
+				triangles.add(new FreeTriangleMeshTriangle(inBetweenVertices[y][x], inBetweenVertices[y][(x+1) % numberOfHorizontalVertices], inBetweenVertices[y + 1][x]));
+				triangles.add(new FreeTriangleMeshTriangle(inBetweenVertices[y][(x+1) % numberOfHorizontalVertices], inBetweenVertices[y + 1][(x+1) % numberOfHorizontalVertices], inBetweenVertices[y + 1][x]));
+			}
+			triangles.add(new FreeTriangleMeshTriangle(inBetweenVertices[numberOfVerticalVertices - 1][x], inBetweenVertices[numberOfVerticalVertices - 1][(x+1) % numberOfHorizontalVertices], bottomVertex));
+		}
+
+		invalidate();
+	}
+
+	public void createBasicSphere_old1(double rx, double ry, double rz, int density) {
 		snapshots().addState(mesh);
 
 		double PI2 = Math.PI * 2.0;
@@ -1029,4 +1155,5 @@ public class FreeTriangleMeshModel implements Serializable {
 	private static final Random RND = new Random(System.currentTimeMillis());
 
 	private static final long serialVersionUID = 1L;
+
 }

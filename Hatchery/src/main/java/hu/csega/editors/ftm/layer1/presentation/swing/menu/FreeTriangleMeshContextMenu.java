@@ -3,6 +3,7 @@ package hu.csega.editors.ftm.layer1.presentation.swing.menu;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshCanvas;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshSideView;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.UnitStore;
 
 import javax.swing.*;
@@ -32,10 +33,30 @@ public class FreeTriangleMeshContextMenu extends JPopupMenu {
         this.add(createNewTriangle);
         JMenuItem reverseTriangle = new JMenuItem("Reverse triangle (R)");
         this.add(reverseTriangle);
+
         JMenuItem nextTriangle = new JMenuItem("Next triangle (N)");
         this.add(nextTriangle);
+        nextTriangle.addActionListener(e -> {
+            GameEngineFacade facade = parent.getFacade();
+            ((FreeTriangleMeshModel)facade.model()).selectNextTriangle();
+            facade.window().repaintEverything();
+        });
+
         JMenuItem mergeVertices = new JMenuItem("Merge vertices (M)");
         this.add(mergeVertices);
+        mergeVertices.addActionListener(e -> {
+            GameEngineFacade facade = parent.getFacade();
+            ((FreeTriangleMeshModel)facade.model()).mergeVertices();
+            facade.window().repaintEverything();
+        });
+
+        JMenuItem splitTriangles = new JMenuItem("Split triangles (S)");
+        this.add(splitTriangles);
+        splitTriangles.addActionListener(e -> {
+            GameEngineFacade facade = parent.getFacade();
+            ((FreeTriangleMeshModel)facade.model()).splitTriangles();
+            facade.window().repaintEverything();
+        });
     }
 
     public void setPosition(int x, int y) {

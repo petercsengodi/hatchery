@@ -83,6 +83,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		return this;
 	}
 
+	public GameEngineFacade getFacade() {
+		return facade;
+	}
+
 	protected void somethingChanged() {
 		selectionLastChanged = -1L;
 	}

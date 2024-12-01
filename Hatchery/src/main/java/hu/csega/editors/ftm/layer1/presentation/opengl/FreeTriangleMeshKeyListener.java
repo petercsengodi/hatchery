@@ -41,6 +41,12 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 			facade.window().repaintEverything();
 		}
 
+		if(key == 'm' || key == 'M') { // M: merge vertices
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.mergeVertices();
+			facade.window().repaintEverything();
+		}
+
 		if(key == 'n' || key == 'N') { // N: select next triangle
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
 			model.selectNextTriangle();

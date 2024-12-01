@@ -43,6 +43,39 @@ public class FreeTriangleMeshVertex implements Serializable {
 		return v;
 	}
 
+	public void copyValuesFrom(FreeTriangleMeshVertex v) {
+		this.pX = v.pX;
+		this.pY = v.pY;
+		this.pZ = v.pZ;
+		this.nX = v.nX;
+		this.nY = v.nY;
+		this.nZ = v.nZ;
+		this.tX = v.tX;
+		this.tY = v.tY;
+	}
+
+	public void add(FreeTriangleMeshVertex v) {
+		this.pX += v.pX;
+		this.pY += v.pY;
+		this.pZ += v.pZ;
+		this.nX += v.nX;
+		this.nY += v.nY;
+		this.nZ += v.nZ;
+		this.tX += v.tX;
+		this.tY += v.tY;
+	}
+
+	public void divide(double d) {
+		this.pX /= d;
+		this.pY /= d;
+		this.pZ /= d;
+		this.nX /= d;
+		this.nY /= d;
+		this.nZ /= d;
+		this.tX /= d;
+		this.tY /= d;
+	}
+
 	public FreeTriangleMeshPoint positionToPoint() {
 		return new FreeTriangleMeshPoint(pX, pY, pZ);
 	}
