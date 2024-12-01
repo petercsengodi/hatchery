@@ -638,10 +638,59 @@ public class FreeTriangleMeshModel implements Serializable {
 	}
 
 	public void splitTriangles() {
-		if(selectedObjects.isEmpty())
+		if(selectedObjects.size() < 2)
 			return;
 
 		snapshots().addState(mesh);
+
+		List<FreeTriangleMeshTriangle> trianglesToAdd = new ArrayList<>();
+
+		if(selectedObjects.size() < 3) {
+			// edge split
+			FreeTriangleMeshVertex avg = new FreeTriangleMeshVertex(0.0, 0.0, 0.0);
+			Iterator<Object> it = selectedObjects.iterator();
+			FreeTriangleMeshVertex v1, v2;
+			avg.add(v1 = (FreeTriangleMeshVertex) it.next());
+			avg.add(v2 = (FreeTriangleMeshVertex) it.next());
+			avg.divide(2.0);
+
+			int i1 = getVertices().indexOf(v1);
+			int i2 = getVertices().indexOf(v2);
+			List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
+			int iavg = vertices.size();
+			vertices.add(avg);
+
+			for(FreeTriangleMeshTriangle t : getTriangles()) {
+				if(t.getVertex1() == i1 || t.getVertex2() == i1 || t.getVertex3() == i1) {
+					if(t.getVertex1() == i2 || t.getVertex2() == i2 || t.getVertex3() == i2) {
+						if(t.getVertex1() != i1 && t.getVertex1() != i2) {
+							FreeTriangleMeshTriangle newTriangle = t.copy();
+							t.setVertex2(iavg);
+							newTriangle.setVertex3(iavg);
+							trianglesToAdd.add(newTriangle);
+						} else if(t.getVertex2() != i1 && t.getVertex2() != i2) {
+							FreeTriangleMeshTriangle newTriangle = t.copy();
+							t.setVertex1(iavg);
+							newTriangle.setVertex3(iavg);
+							trianglesToAdd.add(newTriangle);
+						} else if(t.getVertex3() != i1 && t.getVertex3() != i2) {
+							FreeTriangleMeshTriangle newTriangle = t.copy();
+							t.setVertex1(iavg);
+							newTriangle.setVertex2(iavg);
+							trianglesToAdd.add(newTriangle);
+						}
+					}
+				}
+			}
+		} else {
+			// split only fully selected triangles
+		}
+
+		if(!trianglesToAdd.isEmpty()) {
+			getTriangles().addAll(trianglesToAdd);
+		}
+
+		invalidate();
 	}
 
 	public void flip(boolean x, boolean y, boolean z) {

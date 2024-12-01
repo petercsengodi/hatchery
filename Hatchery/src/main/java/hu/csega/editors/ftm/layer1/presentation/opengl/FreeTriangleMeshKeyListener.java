@@ -59,6 +59,12 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 			facade.window().repaintEverything();
 		}
 
+		if(key == 's' || key == 'S') { // S: split triangles / edges
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.splitTriangles();
+			facade.window().repaintEverything();
+		}
+
 		if(facade.control().isControlOn()) {
 			if(key == 'z' || key == 'Z' || key == 26) { // CTRL + Z: undo
 				FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();

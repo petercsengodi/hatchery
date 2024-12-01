@@ -20,6 +20,10 @@ public class FreeTriangleMeshTriangle implements Serializable {
 		vertex2 = tmp;
 	}
 
+	public FreeTriangleMeshTriangle copy() {
+		return new FreeTriangleMeshTriangle(vertex1, vertex2, vertex3);
+	}
+
 	public int getVertex1() {
 		return vertex1;
 	}
