@@ -14,6 +14,7 @@ import java.util.Set;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
 import hu.csega.editors.ftm.util.FreeTriangleMeshMathLibrary;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
@@ -637,6 +638,58 @@ public class FreeTriangleMeshModel implements Serializable {
 		invalidate();
 	}
 
+	public void selectAll() {
+		selectedObjects.clear();
+		selectedObjects.addAll(getVertices());
+	}
+
+	public void splitLongestEdge() {
+		if(selectedObjects.size() < 2)
+			return;
+
+		double lengthOfLongestEdge = -1;
+		Set<FreeTriangleMeshVertex> longestEdge = new HashSet<>();
+		List<FreeTriangleMeshVertex> vertices = getVertices();
+
+		for(FreeTriangleMeshTriangle t : getTriangles()) {
+			FreeTriangleMeshVertex v1 = vertices.get(t.getVertex1());
+			FreeTriangleMeshVertex v2 = vertices.get(t.getVertex2());
+			FreeTriangleMeshVertex v3 = vertices.get(t.getVertex3());
+
+			double d;
+
+			d = distance(v1, v2);
+			if(d > lengthOfLongestEdge) {
+				longestEdge.clear();
+				longestEdge.add(v1);
+				longestEdge.add(v2);
+				lengthOfLongestEdge = d;
+			}
+
+			d = distance(v2, v3);
+			if(d > lengthOfLongestEdge) {
+				longestEdge.clear();
+				longestEdge.add(v2);
+				longestEdge.add(v3);
+				lengthOfLongestEdge = d;
+			}
+
+			d = distance(v3, v1);
+			if(d > lengthOfLongestEdge) {
+				longestEdge.clear();
+				longestEdge.add(v3);
+				longestEdge.add(v1);
+				lengthOfLongestEdge = d;
+			}
+		}
+
+		selectedObjects.clear();
+		if(lengthOfLongestEdge > 0.000000001) {
+			selectedObjects.addAll(longestEdge);
+			splitTriangles();
+		}
+	}
+
 	public void splitTriangles() {
 		if(selectedObjects.size() < 2)
 			return;
@@ -1236,6 +1289,14 @@ public class FreeTriangleMeshModel implements Serializable {
 				groups.add(group);
 			}
 		}
+	}
+
+	private static double distance(FreeTriangleMeshVertex v1, FreeTriangleMeshVertex v2) {
+		double dx = v1.getPX() - v2.getPX();
+		double dy = v1.getPY() - v2.getPY();
+		double dz = v1.getPZ() - v2.getPZ();
+
+		return Math.sqrt(dx*dx + dy*dy + dz*dz);
 	}
 
 	private static final Random RND = new Random(System.currentTimeMillis());

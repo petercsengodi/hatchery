@@ -17,15 +17,21 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 			facade.window().repaintEverything();
 		}
 
-		if(key == 'd' || key == 'D' || key == 127) { // del
+		if(key == 'a' || key == 'A') { // A: select all
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
-			model.deleteVertices();
+			model.selectAll();
 			facade.window().repaintEverything();
 		}
 
-		if(key == 't' || key == 'T') { // T: create triangle (strip)
+		if(key == 'c' || key == 'C') { // C: duplicate current selection
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
-			model.createTriangleStrip();
+			model.duplicateCurrentSelection();
+			facade.window().repaintEverything();
+		}
+
+		if(key == 'd' || key == 'D' || key == 127) { // del
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.deleteVertices();
 			facade.window().repaintEverything();
 		}
 
@@ -35,9 +41,9 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 			facade.window().repaintEverything();
 		}
 
-		if(key == 'c' || key == 'C') { // C: duplicate current selection
+		if(key == 'l' || key == 'l') { // L: split longest edge
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
-			model.duplicateCurrentSelection();
+			model.splitLongestEdge();
 			facade.window().repaintEverything();
 		}
 
@@ -62,6 +68,12 @@ public class FreeTriangleMeshKeyListener implements GameKeyListener {
 		if(key == 's' || key == 'S') { // S: split triangles / edges
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
 			model.splitTriangles();
+			facade.window().repaintEverything();
+		}
+
+		if(key == 't' || key == 'T') { // T: create triangle (strip)
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel)facade.model();
+			model.createTriangleStrip();
 			facade.window().repaintEverything();
 		}
 
