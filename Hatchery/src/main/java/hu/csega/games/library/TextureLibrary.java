@@ -16,24 +16,39 @@ import hu.csega.games.library.util.FileUtil;
 public class TextureLibrary {
 
 	private String root;
+	private boolean texturesPreloaded;
+	private Map<STextureRef, BufferedImage> textures;
 
 	public TextureLibrary(String root) {
 		this.root = root;
+		this.textures = new HashMap<>();
+	}
 
+	public void preloadTextures() {
 		List<String> ret = new ArrayList<>();
 		FileUtil.collectFiles(root, ret);
 
-		this.textures = new HashMap<>();
 		for(String fileName : ret) {
 			STextureRef key = new STextureRef();
 			key.setName(FileUtil.cleanUpName(fileName));
 			BufferedImage value = load(root, fileName);
 			this.textures.put(key, value);
 		}
+
+		this.texturesPreloaded = true;
 	}
 
 	public BufferedImage resolve(STextureRef ref) {
-		return textures.get(ref);
+		BufferedImage bufferedImage = textures.get(ref);
+		if(bufferedImage != null)
+			return bufferedImage;
+
+		if(texturesPreloaded)
+			throw new RuntimeException("Textures are preloaded, but this one is missing: " + ref);
+
+		BufferedImage value = load(root, ref.getName());
+		this.textures.put(ref, value);
+		return value;
 	}
 
 	private static BufferedImage load(String root, String filename) {
@@ -54,5 +69,4 @@ public class TextureLibrary {
 		return bufferedImage;
 	}
 
-	private Map<STextureRef, BufferedImage> textures;
 }
