@@ -2,6 +2,7 @@ package hu.csega.superstition.game;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import hu.csega.games.engine.g3d.GameObjectPlacement;
@@ -48,8 +49,19 @@ public class SuperstitionSerializableModel implements Serializable {
 
 		boxPlacement4.moveTo(-150f, -50f, -20f);
 
+		Random random = new Random(System.currentTimeMillis());
 		for(int i = 0; i < 10; i++) {
-			MonsterData data = new MonsterData(i < 8 ? "run_2.json" : "snake.json");
+			MonsterData data;
+
+			int rnd = random.nextInt(100);
+			if(rnd < 30) {
+				data = new MonsterData(SuperstitionGameElements.MONSTRUM_ANIMATION);
+			} else if(rnd < 60) {
+				data = new MonsterData(SuperstitionGameElements.MONKEY_ANIMATION);
+			} else {
+				data = new MonsterData(SuperstitionGameElements.RUNNING_ANIMATION);
+			}
+
 			data.x = 30.0*i;
 			monstersAlive.add(data);
 		}

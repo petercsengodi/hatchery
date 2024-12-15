@@ -1,7 +1,5 @@
 package hu.csega.superstition.game.play;
 
-import hu.csega.games.engine.g3d.GameObjectHandler;
-
 import java.io.Serializable;
 
 public class MonsterData implements Serializable {

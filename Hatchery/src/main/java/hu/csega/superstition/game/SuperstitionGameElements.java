@@ -11,14 +11,21 @@ import hu.csega.games.engine.g3d.GameTexturePosition;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SuperstitionGameElements {
 
 	public static final float GOUND_DEPTH = -12f;
 	public static final float GOUND_SIZE = 200f;
 
-	GameObjectHandler wizardShootingAnimationHandler;
-	GameObjectHandler enemyRunningAnimationHandler;
-	GameObjectHandler snakeAnimationHandler;
+	public static String WIZARD_ANIMATION = "wizard2.json";
+	public static String RUNNING_ANIMATION = "run_2.json";
+	public static String MONKEY_ANIMATION = "monkey_2.json";
+	public static String SNAKE_ANIMATION = "snake.json";
+	public static String MONSTRUM_ANIMATION = "monstrum.json";
+
+	Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
 	GameObjectHandler groundTexture;
 	GameObjectHandler boxModel;
@@ -40,9 +47,11 @@ public class SuperstitionGameElements {
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
-		wizardShootingAnimationHandler = loadAnimation(store, "wizard2.json");
-		enemyRunningAnimationHandler = loadAnimation(store, "run_2.json");
-		snakeAnimationHandler = loadAnimation(store, "snake.json");
+		monsterAnimations.put(WIZARD_ANIMATION, loadAnimation(store, WIZARD_ANIMATION));
+		monsterAnimations.put(RUNNING_ANIMATION, loadAnimation(store, RUNNING_ANIMATION));
+		monsterAnimations.put(MONKEY_ANIMATION, loadAnimation(store, MONKEY_ANIMATION));
+		monsterAnimations.put(SNAKE_ANIMATION, loadAnimation(store, SNAKE_ANIMATION));
+		monsterAnimations.put(MONSTRUM_ANIMATION, loadAnimation(store, MONSTRUM_ANIMATION));
 
 		alphabet = new GameObjectHandler[numberOfLetters];
 		for(int i = 0; i < numberOfLetters; i++) {

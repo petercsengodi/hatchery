@@ -108,7 +108,7 @@ public class SuperstitionGameRenderer {
 			universe.spellsInProgress.add(spell);
 		}
 
-		g.drawAnimation(elements.wizardShootingAnimationHandler, sceneIndex, playerPlacement);
+		g.drawAnimation(elements.monsterAnimations.get(SuperstitionGameElements.WIZARD_ANIMATION), sceneIndex, playerPlacement);
 
 		Iterator<SpellInProgress> iterator = universe.spellsInProgress.iterator();
 		while(iterator.hasNext()) {
@@ -164,7 +164,7 @@ public class SuperstitionGameRenderer {
 			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
 
 			int animationIndex = (monster.target == null ? 0 : lastAnimIndex / 10);
-			GameObjectHandler animation = (monster.animation.startsWith("snake") ? elements.snakeAnimationHandler : elements.enemyRunningAnimationHandler);
+			GameObjectHandler animation = elements.monsterAnimations.get(monster.animation);
 			g.drawAnimation(animation, animationIndex, monsterPlacement);
 		}
 
