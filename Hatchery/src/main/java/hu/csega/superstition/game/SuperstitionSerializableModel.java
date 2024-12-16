@@ -19,14 +19,6 @@ public class SuperstitionSerializableModel implements Serializable {
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
 
 	GameObjectPlacement groundPlacement = new GameObjectPlacement();
-	GameObjectPlacement testFTMPlacement = new GameObjectPlacement();
-	GameObjectPlacement figureFTMPlacement = new GameObjectPlacement();
-	GameObjectPlacement faceFTMPlacement = new GameObjectPlacement();
-
-	GameObjectPlacement boxPlacement1 = new GameObjectPlacement();
-	GameObjectPlacement boxPlacement2 = new GameObjectPlacement();
-	GameObjectPlacement boxPlacement3 = new GameObjectPlacement();
-	GameObjectPlacement boxPlacement4 = new GameObjectPlacement();
 
     SuperstitionMap map = new SuperstitionMap();
 
@@ -34,20 +26,6 @@ public class SuperstitionSerializableModel implements Serializable {
 		player.z = -500f;
 
 		groundPlacement.moveTo(0f, 0f, 0f);
-
-		testFTMPlacement.moveTo(0f, 0f, 0f);
-
-		figureFTMPlacement.moveTo(20f, 0f, 0f);
-
-		faceFTMPlacement.moveTo(100f, 100f, 100f);
-
-		boxPlacement1.moveTo(-120f, 10f, -20f);
-
-		boxPlacement2.moveTo(-130f, -10f, -20f);
-
-		boxPlacement3.moveTo(-140f, -30f, -20f);
-
-		boxPlacement4.moveTo(-150f, -50f, -20f);
 
 		Random random = new Random(System.currentTimeMillis());
 		for(int i = 0; i < 10; i++) {

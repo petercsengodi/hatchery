@@ -17,6 +17,7 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.util.Iterator;
 
 public class SuperstitionGameRenderer {
@@ -89,8 +90,6 @@ public class SuperstitionGameRenderer {
 				g.drawModel(mt.handler, universe.groundPlacement);
 			}
 		}
-
-		g.drawModel(elements.boxModel, universe.boxPlacement4);
 
 		long timestamp = System.currentTimeMillis();
 		player.animate(timestamp);
@@ -168,6 +167,7 @@ public class SuperstitionGameRenderer {
 			g.drawAnimation(animation, animationIndex, monsterPlacement);
 		}
 
+		/*
 		g.drawOnScreen(elements.alphabet[0], 0, 0);
 		g.drawOnScreen(elements.alphabet[1], 0, 1);
 		g.drawOnScreen(elements.alphabet[2], 0, 2);
@@ -184,6 +184,9 @@ public class SuperstitionGameRenderer {
 		drawString(g, elements, 4, 0, "Hello!\nAnybody there?\nZ is the last letter...");
 
 		// drawString(g, elements, 4, 6, "0123456789");
+		*/
+
+		drawString(g, elements, 0, 0, new Date().toString());
 
 		hackBlockScreenSaverActivation();
 	}
