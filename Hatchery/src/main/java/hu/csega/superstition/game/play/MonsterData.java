@@ -5,7 +5,12 @@ import java.io.Serializable;
 public class MonsterData implements Serializable {
 
     public MonsterData(String animation) {
+        this(animation, 100.0);
+    }
+    public MonsterData(String animation, double initialHealth) {
         this.animation = animation;
+        this.health = initialHealth;
+        this.scale = 0.1;
     }
 
     public String animation;
@@ -13,9 +18,10 @@ public class MonsterData implements Serializable {
     public double x;
     public double y;
     public double z;
+    public double scale;
     public double movingRotation;
 
-    public double health = 100.0;
+    public double health;
 
     /* FIXME this is not serializable. */
     public Object target;

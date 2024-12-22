@@ -24,6 +24,7 @@ public class SuperstitionGameElements {
 	public static String MONKEY_ANIMATION = "monkey_2.json";
 	public static String SNAKE_ANIMATION = "snake.json";
 	public static String MONSTRUM_ANIMATION = "monstrum.json";
+	public static String BEHEMOTH_ANIMATION = "behemoth.json";
 
 	Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
@@ -52,6 +53,7 @@ public class SuperstitionGameElements {
 		monsterAnimations.put(MONKEY_ANIMATION, loadAnimation(store, MONKEY_ANIMATION));
 		monsterAnimations.put(SNAKE_ANIMATION, loadAnimation(store, SNAKE_ANIMATION));
 		monsterAnimations.put(MONSTRUM_ANIMATION, loadAnimation(store, MONSTRUM_ANIMATION));
+		monsterAnimations.put(BEHEMOTH_ANIMATION, loadAnimation(store, BEHEMOTH_ANIMATION));
 
 		alphabet = new GameObjectHandler[numberOfLetters];
 		for(int i = 0; i < numberOfLetters; i++) {

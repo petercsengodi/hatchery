@@ -17,8 +17,10 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 public class SuperstitionGameRenderer {
 
@@ -30,6 +32,8 @@ public class SuperstitionGameRenderer {
 	private long lastCheck;
 
 	int lastAnimIndex;
+
+	private final List<String> logsOnScreen = new ArrayList<>();
 
 	public void renderGame(GameEngineFacade facade, SuperstitionSerializableModel universe, SuperstitionGameElements elements) {
 		GameGraphics g = facade.graphics();
@@ -147,6 +151,7 @@ public class SuperstitionGameRenderer {
 			if(hit) {
 				monster.health -= 40.0;
 				if(monster.health < 0.0) {
+					addToLog("Dies!");
 					monsters.remove();
 					continue;
 				}
@@ -154,13 +159,15 @@ public class SuperstitionGameRenderer {
 				if(monster.target == null) {
 					monster.target = player;
 				}
+
+				addToLog("Hit! HP: " + monster.health);
 			}
 
 			GameObjectPlacement monsterPlacement = new GameObjectPlacement();
 			monsterPlacement.position.set((float) monster.x, (float) monster.y + 25f, (float) monster.z);
 			monsterPlacement.target.set((float) monster.x, (float) monster.y + 25f, (float) monster.z + 10f);
 			monsterPlacement.up.set(0f, 1f, 0f);
-			monsterPlacement.scale.set(0.1f, 0.1f, 0.1f);
+			monsterPlacement.scale.set((float) monster.scale, (float) monster.scale, (float) monster.scale);
 
 			int animationIndex = (monster.target == null ? 0 : lastAnimIndex / 10);
 			GameObjectHandler animation = elements.monsterAnimations.get(monster.animation);
@@ -186,7 +193,9 @@ public class SuperstitionGameRenderer {
 		// drawString(g, elements, 4, 6, "0123456789");
 		*/
 
-		drawString(g, elements, 0, 0, new Date().toString());
+		int y = -1;
+		for(String line : logsOnScreen)
+			drawString(g, elements, 30, y++, line);
 
 		hackBlockScreenSaverActivation();
 	}
@@ -265,6 +274,12 @@ public class SuperstitionGameRenderer {
 		double dx = x1 - x2;
 		double dy = y1 - y2;
 		return Math.sqrt(dx*dx + dy*dy);
+	}
+
+	private void addToLog(String line) {
+		while(logsOnScreen.size() > 4)
+			logsOnScreen.remove(0);
+		logsOnScreen.add(line);
 	}
 
 	private static final Logger logger = LoggerFactory.createLogger(SuperstitionGameRenderer.class);

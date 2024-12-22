@@ -43,6 +43,13 @@ public class SuperstitionSerializableModel implements Serializable {
 			data.x = 30.0*i;
 			monstersAlive.add(data);
 		}
+
+		// Behemoth.
+		MonsterData behemoth = new MonsterData(SuperstitionGameElements.BEHEMOTH_ANIMATION, 1_000_000.0);
+		behemoth.x = -300.0;
+		behemoth.z = -300.0;
+		behemoth.scale = 1.0;
+		monstersAlive.add(behemoth);
 	}
 
 	private static final long serialVersionUID = 1L;
