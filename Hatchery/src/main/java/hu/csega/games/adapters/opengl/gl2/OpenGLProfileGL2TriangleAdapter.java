@@ -355,6 +355,10 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 				tx = verticies[offset++];
 				ty = verticies[offset++];
 
+				// FIXME: This calculation should be done by the modeling tool.
+				if(nx == 0.0f && ny == 0.0f && nz == 0.0f)
+					ny = 1.0f;
+
 				gl2.glNormal3f(nx, ny, nz);
 				gl2.glTexCoord2f(tx, ty);
 				gl2.glVertex3f(vx, vy, vz);
