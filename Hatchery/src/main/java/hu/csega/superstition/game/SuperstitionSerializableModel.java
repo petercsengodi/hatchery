@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Set;
 
 import hu.csega.games.engine.g3d.GameObjectPlacement;
+import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
@@ -27,7 +28,7 @@ public class SuperstitionSerializableModel implements Serializable {
 
 		groundPlacement.moveTo(0f, 0f, 0f);
 
-		Random random = new Random(System.currentTimeMillis());
+		Random random = SuperstitionGameStarter.RANDOM;
 		for(int i = 0; i < 10; i++) {
 			MonsterData data;
 

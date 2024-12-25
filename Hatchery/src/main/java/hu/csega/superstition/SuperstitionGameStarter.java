@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 // A Fizz-buzz way of running the game
 
@@ -31,6 +32,7 @@ public class SuperstitionGameStarter {
 	private static Logger logger;
 
 	private static long randomSeed = System.currentTimeMillis();
+	public static Random RANDOM;
 
 	public static void main(String[] args) {
 		LoggerFactory.setDefaultLevel(LOGGING_LEVEL);
@@ -47,6 +49,8 @@ public class SuperstitionGameStarter {
 		}
 
 		logger.info("Starting game with seed: " + randomSeed);
+		RANDOM = new Random(randomSeed);
+
 		String shaderRoot = resourceAdapter.shaderRoot();
 		String textureRoot = resourceAdapter.textureRoot();
 		String meshRoot = resourceAdapter.meshRoot();
