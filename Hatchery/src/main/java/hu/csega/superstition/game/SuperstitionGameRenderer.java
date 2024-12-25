@@ -195,7 +195,7 @@ public class SuperstitionGameRenderer {
 
 		int y = -1;
 		for(String line : logsOnScreen)
-			drawString(g, elements, 30, y++, line);
+			drawString(g, elements, 0, y++, line);
 
 		hackBlockScreenSaverActivation();
 	}

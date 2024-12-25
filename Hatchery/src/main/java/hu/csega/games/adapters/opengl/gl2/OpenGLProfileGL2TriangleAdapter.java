@@ -65,7 +65,6 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
 	private Matrix4f perspectiveMatrix = new Matrix4f();
 	private Matrix4f cameraMatrix = new Matrix4f();
-	private Matrix4f textPerspectiveMatrix = new Matrix4f().identity();
 
 	@Override
 	public void viewPort(GLAutoDrawable glAutoDrawable, int width, int height) {
@@ -89,8 +88,6 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		perspectiveMatrix.identity().setPerspective(viewAngle, aspect, zNear, zFar);
 
 		perspectiveMatrix.invert(inversePerspectiveMatrix);
-
-		textPerspectiveMatrix.identity().setPerspectiveRect(width, height, -110f, 110f);
 	}
 
 	@Override
@@ -205,14 +202,25 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	@Override
 	public void drawOnScreen(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, double x, double y, OpenGLModelStoreImpl store) {
 		gl2.glDisable(GL2.GL_DEPTH_TEST);
+
+		gl2.glMatrixMode(GL2.GL_MODELVIEW);
 		gl2.glPushMatrix();
 		gl2.glLoadIdentity();
-		gl2.glScalef(-1f, -1f, 1f);
-		gl2.glTranslatef(0f, (float)(-0.8 + 0.1 * y), 0f);
-		textPerspectiveMatrix.get(tmpMatrix);
-		gl2.glMultMatrixf(tmpMatrix, 0);
-		gl2.glTranslatef((float)(-4000.0 + 200 * x), 0f, -800f);
+
+		gl2.glMatrixMode(GL2.GL_PROJECTION);
+		gl2.glPushMatrix();
+		gl2.glLoadIdentity();
+
+		glu.gluPerspective(viewAngle, aspect, -110f, 110f);
+		gl2.glScalef(0.025f, 0.025f, 1f);
+		gl2.glTranslatef((float)(-9000.0 + 200 * x), (float)(6000 - 200 * y), -400f);
+
 		drawModel(glAutoDrawable, model, store);
+
+		// FIXME: Universe drawing state, text drawing state.
+		gl2.glMatrixMode(GL2.GL_MODELVIEW);
+		gl2.glPopMatrix();
+		gl2.glMatrixMode(GL2.GL_PROJECTION);
 		gl2.glEnable(GL2.GL_DEPTH_TEST);
 	}
 
