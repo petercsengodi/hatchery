@@ -29,7 +29,7 @@ public class SuperstitionSerializableModel implements Serializable {
 		groundPlacement.moveTo(0f, 0f, 0f);
 
 		Random random = SuperstitionGameStarter.RANDOM;
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 1000; i++) {
 			MonsterData data;
 
 			int rnd = random.nextInt(100);
@@ -41,7 +41,9 @@ public class SuperstitionSerializableModel implements Serializable {
 				data = new MonsterData(SuperstitionGameElements.RUNNING_ANIMATION);
 			}
 
-			data.x = 30.0*i;
+			data.x = 10_000 * SuperstitionGameStarter.RANDOM.nextDouble() - 5000;
+			data.z = 10_000 * SuperstitionGameStarter.RANDOM.nextDouble() - 5000;
+			data.expectedXP = 100;
 			monstersAlive.add(data);
 		}
 

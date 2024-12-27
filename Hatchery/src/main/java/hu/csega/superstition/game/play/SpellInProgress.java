@@ -16,6 +16,8 @@ public class SpellInProgress {
 
     double movingRotation;
 
+    double hitPoint;
+
     public SpellInProgress(long timestamp, double startX, double startY, double startZ,
                            double endX, double endY, double endZ) {
         this.lastTimestamp = timestamp;
@@ -49,6 +51,14 @@ public class SpellInProgress {
 
     public double getCurrentZ() {
         return (endZ - startZ) * t + startZ;
+    }
+
+    public double getHitPoint() {
+        return hitPoint;
+    }
+
+    public void setHitPoint(double hitPoint) {
+        this.hitPoint = hitPoint;
     }
 
     private static final double SPEED = 0.002;

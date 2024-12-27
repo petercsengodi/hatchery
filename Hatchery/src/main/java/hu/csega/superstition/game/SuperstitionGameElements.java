@@ -92,8 +92,8 @@ public class SuperstitionGameElements {
 		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
 			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
 				counter = 0; // I know, I know, I just should remove the counter.
-				if(ix - SuperstitionMap.CENTER_X != 0 && iy - SuperstitionMap.CENTER_Y != 0)
-					continue;
+				// if(ix - SuperstitionMap.CENTER_X != 0 && iy - SuperstitionMap.CENTER_Y != 0)
+				// 	continue;
 
 				float x = (ix - SuperstitionMap.CENTER_X) * GOUND_SIZE;
 				float y = (iy - SuperstitionMap.CENTER_Y) * GOUND_SIZE;

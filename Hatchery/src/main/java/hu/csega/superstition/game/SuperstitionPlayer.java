@@ -14,6 +14,7 @@ public class SuperstitionPlayer {
 	long lastTimestamp = System.currentTimeMillis();
 
 	boolean spellLoadedForFiring;
+	long xp;
 
 	public boolean isOnCoolDown() {
 		return spellCoolDown > 0.0;

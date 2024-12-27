@@ -22,6 +22,7 @@ public class MonsterData implements Serializable {
     public double movingRotation;
 
     public double health;
+    public long expectedXP;
 
     /* FIXME this is not serializable. */
     public Object target;

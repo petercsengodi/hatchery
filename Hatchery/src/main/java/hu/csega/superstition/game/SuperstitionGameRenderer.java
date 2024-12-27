@@ -1,5 +1,6 @@
 package hu.csega.superstition.game;
 
+import hu.csega.superstition.SuperstitionGameStarter;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
@@ -108,6 +109,7 @@ public class SuperstitionGameRenderer {
 			double nz = dz * rl;
 			SpellInProgress spell = new SpellInProgress(timestamp, player.x, player.y - 5.0, player.z,
 					player.x + nx, player.y - 5.0, player.z + nz);
+			spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() + 20);
 			universe.spellsInProgress.add(spell);
 		}
 
@@ -136,31 +138,39 @@ public class SuperstitionGameRenderer {
 		Iterator<MonsterData> monsters = universe.monstersAlive.iterator();
 		while(monsters.hasNext()) {
 			MonsterData monster = monsters.next();
-			boolean hit = false;
+
+			// TODO: So no calculation needed with monsters too far away?
+			// Optimization: If distance in one dimension is too far, then we don't need to calculate full distance.
+			double absXDiff = Math.abs(monster.x - player.x);
+			double absZDiff = Math.abs(monster.z - player.z);
+			if(absXDiff > 1000f || absZDiff > 1000f) {
+				continue;
+			}
+
+			// Optimization, if both dimensions are less than 200f, the distance does not need to be calculated.
+			if(absXDiff > 200f && absZDiff > 200f && distance(monster.x, monster.z, player.x, player.z) > 1000f) {
+				continue;
+			}
 
 			iterator = universe.spellsInProgress.iterator();
 			while(iterator.hasNext()) {
 				SpellInProgress spell = iterator.next();
 				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
 					iterator.remove();
-					hit = true;
-					break;
-				}
-			}
 
-			if(hit) {
-				monster.health -= 40.0;
-				if(monster.health < 0.0) {
-					addToLog("Dies!");
-					monsters.remove();
-					continue;
-				}
+					monster.health -= spell.getHitPoint();
+					if(monster.health < 0.0) {
+						player.xp += monster.expectedXP;
+						addToLog("Dies! XP: " + player.xp);
+						monsters.remove();
+					} else {
+						if (monster.target == null) {
+							monster.target = player;
+						}
 
-				if(monster.target == null) {
-					monster.target = player;
+						addToLog("Hit! HP: " + monster.health);
+					}
 				}
-
-				addToLog("Hit! HP: " + monster.health);
 			}
 
 			GameObjectPlacement monsterPlacement = new GameObjectPlacement();
