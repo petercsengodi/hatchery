@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.superstition.SuperstitionGameStarter;
+import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
@@ -16,20 +16,17 @@ public class SuperstitionSerializableModel implements Serializable {
 	SuperstitionPlayer player = new SuperstitionPlayer();
 	boolean sliding = true;
 
-	public Set<MonsterData> monstersAlive = new HashSet<>();
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
-
-	GameObjectPlacement groundPlacement = new GameObjectPlacement();
 
     SuperstitionMap map = new SuperstitionMap();
 
 	public SuperstitionSerializableModel() {
-		player.z = -500f;
+		player.z = 0f;
+	}
 
-		groundPlacement.moveTo(0f, 0f, 0f);
-
+	public void initializeMonsters() {
 		Random random = SuperstitionGameStarter.RANDOM;
-		for(int i = 0; i < 1000; i++) {
+		for(int i = 0; i < 10_000; i++) {
 			MonsterData data;
 
 			int rnd = random.nextInt(100);
@@ -41,18 +38,24 @@ public class SuperstitionSerializableModel implements Serializable {
 				data = new MonsterData(SuperstitionGameElements.RUNNING_ANIMATION);
 			}
 
-			data.x = 10_000 * SuperstitionGameStarter.RANDOM.nextDouble() - 5000;
-			data.z = 10_000 * SuperstitionGameStarter.RANDOM.nextDouble() - 5000;
+			double px = map.ABSOLUTE_SIZE_X * SuperstitionGameStarter.RANDOM.nextDouble();
+			double py = 0.0;
+			double pz = map.ABSOLUTE_SIZE_Y * SuperstitionGameStarter.RANDOM.nextDouble();
+			MapTile mapTile = map.loadMapTile(px, py, pz);
+			mapTile.monsters.add(data);
+			data.identifyPosition(px, py, pz, mapTile);
 			data.expectedXP = 100;
-			monstersAlive.add(data);
 		}
 
 		// Behemoth.
 		MonsterData behemoth = new MonsterData(SuperstitionGameElements.BEHEMOTH_ANIMATION, 1_000_000.0);
-		behemoth.x = -300.0;
-		behemoth.z = -300.0;
+		double px = SuperstitionMap.ABSOLUTE_SIZE_X - SuperstitionMap.TILE_SIZE_X / 2.0;
+		double py = 100.0;
+		double pz = SuperstitionMap.ABSOLUTE_SIZE_Y - SuperstitionMap.TILE_SIZE_Y / 2.0;
+		MapTile mapTile = map.loadMapTile(px, py, pz);
+		mapTile.monsters.add(behemoth);
+		behemoth.identifyPosition(px, py, pz, mapTile);
 		behemoth.scale = 1.0;
-		monstersAlive.add(behemoth);
 	}
 
 	private static final long serialVersionUID = 1L;

@@ -46,7 +46,7 @@ public class GameObjectPlacement implements Serializable {
 		target.z += z;
 	}
 
-	public void moveTo(float x, float y, float z) {
+	public GameObjectPlacement moveTo(float x, float y, float z) {
 		float dx = target.x - position.x;
 		float dy = target.y - position.y;
 		float dz = target.z - position.z;
@@ -58,6 +58,8 @@ public class GameObjectPlacement implements Serializable {
 		target.x = dx + position.x;
 		target.y = dy + position.y;
 		target.z = dz + position.z;
+
+		return this;
 	}
 
 	public void calculatePosition(GameObjectPosition position) {

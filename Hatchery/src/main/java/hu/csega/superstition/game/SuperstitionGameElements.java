@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class SuperstitionGameElements {
 
-	public static final float GOUND_DEPTH = -12f;
-	public static final float GOUND_SIZE = 200f;
+	public static final float GROUND_DEPTH = -12f;
+	public static final float GROUND_SIZE = 200f;
 
 	public static String WIZARD_ANIMATION = "wizard2.json";
 	public static String RUNNING_ANIMATION = "run_2.json";
@@ -87,47 +87,41 @@ public class SuperstitionGameElements {
 
 		d = new GameObjectDirection(0f, 1f, 0f);
 
-		int counter = 0;
+		float x = -GROUND_SIZE;
+		float y = -GROUND_SIZE;
+
+		GameModelBuilder groundBuilder = new GameModelBuilder();
+		groundBuilder.setTextureHandler(groundTexture);
+
+		p = new GameObjectPosition(x, GROUND_DEPTH, y);
+		tex = new GameTexturePosition(0f, 0f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		p = new GameObjectPosition(x + GROUND_SIZE, GROUND_DEPTH, y);
+		tex = new GameTexturePosition(1f, 0f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		p = new GameObjectPosition(x + GROUND_SIZE, GROUND_DEPTH, y + GROUND_SIZE);
+		tex = new GameTexturePosition(1f, 1f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		p = new GameObjectPosition(x, GROUND_DEPTH, y + GROUND_SIZE);
+		tex = new GameTexturePosition(0f, 1f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		groundBuilder.getIndices().add(0);
+		groundBuilder.getIndices().add(2);
+		groundBuilder.getIndices().add(1);
+		groundBuilder.getIndices().add(0);
+		groundBuilder.getIndices().add(3);
+		groundBuilder.getIndices().add(2);
+		GameObjectHandler groundTileHandler = store.buildMesh(groundBuilder);
 
 		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
 			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
-				counter = 0; // I know, I know, I just should remove the counter.
-				// if(ix - SuperstitionMap.CENTER_X != 0 && iy - SuperstitionMap.CENTER_Y != 0)
-				// 	continue;
-
-				float x = (ix - SuperstitionMap.CENTER_X) * GOUND_SIZE;
-				float y = (iy - SuperstitionMap.CENTER_Y) * GOUND_SIZE;
-
-				GameModelBuilder groundBuilder = new GameModelBuilder();
-				groundBuilder.setTextureHandler(groundTexture);
-
-				p = new GameObjectPosition(x, GOUND_DEPTH, y);
-				tex = new GameTexturePosition(0f, 0f);
-				groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-				p = new GameObjectPosition(x + GOUND_SIZE, GOUND_DEPTH, y);
-				tex = new GameTexturePosition(1f, 0f);
-				groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-				p = new GameObjectPosition(x + GOUND_SIZE, GOUND_DEPTH, y + GOUND_SIZE);
-				tex = new GameTexturePosition(1f, 1f);
-				groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-				p = new GameObjectPosition(x,GOUND_DEPTH, y + GOUND_SIZE);
-				tex = new GameTexturePosition(0f, 1f);
-				groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-				groundBuilder.getIndices().add(counter + 0);
-				groundBuilder.getIndices().add(counter + 2);
-				groundBuilder.getIndices().add(counter + 1);
-				groundBuilder.getIndices().add(counter + 0);
-				groundBuilder.getIndices().add(counter + 3);
-				groundBuilder.getIndices().add(counter + 2);
-
-				counter += 4;
-				MapTile mt = new MapTile();
+				MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
+				mt.handler = groundTileHandler;
 				SuperstitionMap.mapTiles[ix][iy] = mt;
-				mt.handler = store.buildMesh(groundBuilder);
 			}
 		}
 	}

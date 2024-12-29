@@ -30,6 +30,10 @@ public class SuperstitionGamePlayModel implements GameEngineCallback {
 		this.elements = elements;
 	}
 
+	public void initializeMonsters() {
+		serializableModel.initializeMonsters();
+	}
+
 	@Override
 	public Object call(GameEngineFacade facade) {
 		double elapsedTime = 0.0;

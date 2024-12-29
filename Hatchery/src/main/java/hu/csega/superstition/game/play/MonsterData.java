@@ -1,5 +1,7 @@
 package hu.csega.superstition.game.play;
 
+import hu.csega.superstition.game.map.MapTile;
+
 import java.io.Serializable;
 
 public class MonsterData implements Serializable {
@@ -13,6 +15,13 @@ public class MonsterData implements Serializable {
         this.scale = 0.1;
     }
 
+    public void identifyPosition(double x, double y, double z, MapTile mapTile) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.mapTile = mapTile;
+    }
+
     public String animation;
 
     public double x;
@@ -23,6 +32,8 @@ public class MonsterData implements Serializable {
 
     public double health;
     public long expectedXP;
+
+    public MapTile mapTile;
 
     /* FIXME this is not serializable. */
     public Object target;

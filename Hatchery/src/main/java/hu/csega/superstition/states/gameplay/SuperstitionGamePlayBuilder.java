@@ -14,6 +14,9 @@ public class SuperstitionGamePlayBuilder implements GameEngineCallback {
 
 		SuperstitionGamePlayModel gamePlayModel = (SuperstitionGamePlayModel) model.currentModel();
 		gamePlayModel.elements.loadElements(facade);
+
+		gamePlayModel.initializeMonsters();
+
 		return facade;
 	}
 

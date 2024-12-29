@@ -36,6 +36,8 @@ public class SuperstitionGameRenderer {
 
 	private final List<String> logsOnScreen = new ArrayList<>();
 
+	public List<MonsterData> monstersAround = new ArrayList<>();
+
 	public void renderGame(GameEngineFacade facade, SuperstitionSerializableModel universe, SuperstitionGameElements elements) {
 		GameGraphics g = facade.graphics();
 
@@ -77,22 +79,27 @@ public class SuperstitionGameRenderer {
 
 		g.placeCamera(cameraLocation);
 
-		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
-			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
-				MapTile mt = SuperstitionMap.mapTiles[ix][iy];
+		int playerXIndex = SuperstitionMap.xIndexOf(player.x);
+		int playerYIndex = SuperstitionMap.yIndexOf(player.z); // z !!!!
+
+		for(int ix = playerXIndex - 3; ix <= playerXIndex + 3; ix++) {
+			for(int iy = playerYIndex - 3; iy <= playerYIndex + 3; iy++) {
+				MapTile mt = SuperstitionMap.loadMapTile(ix, iy);
 				if(mt == null) {
 					continue;
 				}
 
+				/* FIXME
 				// Bad AF.
-				float half = SuperstitionGameElements.GOUND_SIZE / 2f;
-				float x = (ix - SuperstitionMap.CENTER_X) * SuperstitionGameElements.GOUND_SIZE;
-				float y = (iy - SuperstitionMap.CENTER_Y) * SuperstitionGameElements.GOUND_SIZE;
+				float half = SuperstitionGameElements.GROUND_SIZE / 2f;
+				float x = ix * SuperstitionGameElements.GROUND_SIZE;
+				float y = iy * SuperstitionGameElements.GROUND_SIZE;
 				if(distance(x + half, y + half, -player.x, -player.z) > 1000f) {
 					continue;
 				}
+				*/
 
-				g.drawModel(mt.handler, universe.groundPlacement);
+				g.drawModel(mt.handler, mt.groundPlacement);
 			}
 		}
 
@@ -135,9 +142,10 @@ public class SuperstitionGameRenderer {
 		if(lastAnimIndex > 999)
 			lastAnimIndex = 0;
 
-		Iterator<MonsterData> monsters = universe.monstersAlive.iterator();
-		while(monsters.hasNext()) {
-			MonsterData monster = monsters.next();
+		monstersAround.clear();
+		universe.map.loadMonstersAround(player.x, player.y, player.z, monstersAround);
+
+		for(MonsterData monster : monstersAround) {
 
 			// TODO: So no calculation needed with monsters too far away?
 			// Optimization: If distance in one dimension is too far, then we don't need to calculate full distance.
@@ -162,7 +170,8 @@ public class SuperstitionGameRenderer {
 					if(monster.health < 0.0) {
 						player.xp += monster.expectedXP;
 						addToLog("Dies! XP: " + player.xp);
-						monsters.remove();
+						monster.mapTile.monsters.remove(monster);
+						monster.mapTile = null;
 					} else {
 						if (monster.target == null) {
 							monster.target = player;
@@ -183,6 +192,8 @@ public class SuperstitionGameRenderer {
 			GameObjectHandler animation = elements.monsterAnimations.get(monster.animation);
 			g.drawAnimation(animation, animationIndex, monsterPlacement);
 		}
+
+		monstersAround.clear();
 
 		/*
 		g.drawOnScreen(elements.alphabet[0], 0, 0);
