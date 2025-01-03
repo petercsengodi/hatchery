@@ -183,11 +183,14 @@ public class SuperstitionGameRenderer {
 				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
 					iterator.remove();
 
+					String earlierHealth = doubleToIntString(monster.health);
 					monster.health -= spell.getHitPoint();
 					if(monster.health <= 0.0) {
 						monster.health = 0.0;
+						double earlierXP = (player.xp + 100);
 						player.xp += monster.expectedXP;
-						addToLog("Dies! XP: " + player.xp);
+						player.health = player.health * (player.xp + 100) / earlierXP;
+						addToLog(earlierHealth + " => Dies! XP: " + player.xp + " Health: " + doubleToIntString(player.health));
 						monster.mapTile.monsters.remove(monster);
 						monster.mapTile = null;
 					} else {
@@ -195,7 +198,7 @@ public class SuperstitionGameRenderer {
 							monster.target = player;
 						}
 
-						addToLog("Hit! HP: " + monster.health);
+						addToLog("Hit! HP: " + earlierHealth + " => " + doubleToIntString(monster.health));
 					}
 				}
 			}
@@ -224,7 +227,7 @@ public class SuperstitionGameRenderer {
 					player.health = 0.0;
 					addToLog("You died!");
 				} else {
-					addToLog("Hurt! Health: " + player.health);
+					addToLog("Hurt! Health: " + doubleToIntString(player.health));
 				}
 			}
 		}
@@ -335,6 +338,10 @@ public class SuperstitionGameRenderer {
 		while(logsOnScreen.size() > 4)
 			logsOnScreen.remove(0);
 		logsOnScreen.add(line);
+	}
+
+	private String doubleToIntString(double doubleValue) {
+		return String.valueOf((int) Math.floor(doubleValue));
 	}
 
 	private static final Logger logger = LoggerFactory.createLogger(SuperstitionGameRenderer.class);

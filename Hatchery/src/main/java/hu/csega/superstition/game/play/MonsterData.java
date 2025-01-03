@@ -15,6 +15,7 @@ public class MonsterData implements Serializable {
         this.animation = animation;
         this.health = initialHealth;
         this.scale = 0.1;
+        this.cooldown = 1;
     }
 
     public void identifyPosition(double x, double y, double z, MapTile mapTile) {
@@ -22,6 +23,12 @@ public class MonsterData implements Serializable {
         this.y = y;
         this.z = z;
         this.mapTile = mapTile;
+    }
+
+    public void setLevel(double level) {
+        this.expectedXP = (long) level;
+        this.health = this.expectedXP * 10.0;
+        this.maxHitDamage = this.expectedXP * 2.0;
     }
 
     public void setCooldown(double seconds) {

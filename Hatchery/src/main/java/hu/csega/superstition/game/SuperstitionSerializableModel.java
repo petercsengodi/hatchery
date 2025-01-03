@@ -45,7 +45,7 @@ public class SuperstitionSerializableModel implements Serializable {
 			MapTile mapTile = map.loadMapTile(px, py, pz);
 			mapTile.monsters.add(data);
 			data.identifyPosition(px, py, pz, mapTile);
-			data.expectedXP = 100;
+			data.setLevel(Math.floor(Math.max(pz / 10.0 * SuperstitionGameStarter.RANDOM.nextDouble(), 10)));
 		}
 
 		// Behemoth.
