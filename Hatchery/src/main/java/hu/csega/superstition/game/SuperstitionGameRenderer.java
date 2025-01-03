@@ -138,6 +138,23 @@ public class SuperstitionGameRenderer {
 			}
 		}
 
+		// TODO: basically copied code
+		iterator = universe.monsterSpells.iterator();
+		while(iterator.hasNext()) {
+			SpellInProgress spell = iterator.next();
+			spell.animate(timestamp);
+			if(spell.isOver()) {
+				iterator.remove();
+			} else {
+				GameObjectPlacement spellPlacement = new GameObjectPlacement();
+				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
+				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
+				spellPlacement.up.set(0f, 1f, 0f);
+				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
+				g.drawModel(elements.spellModel, spellPlacement);
+			}
+		}
+
 		lastAnimIndex+=8;
 		if(lastAnimIndex > 999)
 			lastAnimIndex = 0;
@@ -167,7 +184,8 @@ public class SuperstitionGameRenderer {
 					iterator.remove();
 
 					monster.health -= spell.getHitPoint();
-					if(monster.health < 0.0) {
+					if(monster.health <= 0.0) {
+						monster.health = 0.0;
 						player.xp += monster.expectedXP;
 						addToLog("Dies! XP: " + player.xp);
 						monster.mapTile.monsters.remove(monster);
@@ -194,6 +212,22 @@ public class SuperstitionGameRenderer {
 		}
 
 		monstersAround.clear();
+
+		iterator = universe.monsterSpells.iterator();
+		while(iterator.hasNext()) {
+			SpellInProgress spell = iterator.next();
+			if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), player.x, player.z)) {
+				iterator.remove();
+
+				player.health -= spell.getHitPoint();
+				if(player.health <= 0.0) {
+					player.health = 0.0;
+					addToLog("You died!");
+				} else {
+					addToLog("Hurt! Health: " + player.health);
+				}
+			}
+		}
 
 		/*
 		g.drawOnScreen(elements.alphabet[0], 0, 0);

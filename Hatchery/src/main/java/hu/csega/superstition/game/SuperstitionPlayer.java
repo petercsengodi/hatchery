@@ -2,6 +2,8 @@ package hu.csega.superstition.game;
 
 public class SuperstitionPlayer {
 
+	double health = 200;
+
 	double x;
 	double y;
 	double z;

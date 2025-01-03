@@ -17,6 +17,7 @@ public class SpellInProgress {
     double movingRotation;
 
     double hitPoint;
+    double speed;
 
     public SpellInProgress(long timestamp, double startX, double startY, double startZ,
                            double endX, double endY, double endZ) {
@@ -28,13 +29,23 @@ public class SpellInProgress {
         this.endX = endX;
         this.endY = endY;
         this.endZ = endZ;
+
+        this.speed = 0.002;
+    }
+
+    public void setHitPoint(double hitPoint) {
+        this.hitPoint = hitPoint;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     public void animate(long timestamp) {
         double delta = timestamp - lastTimestamp;
         lastTimestamp = timestamp;
 
-        t += delta * SPEED;
+        t += delta * speed;
     }
 
     public boolean isOver() {
@@ -57,9 +68,4 @@ public class SpellInProgress {
         return hitPoint;
     }
 
-    public void setHitPoint(double hitPoint) {
-        this.hitPoint = hitPoint;
-    }
-
-    private static final double SPEED = 0.002;
 }

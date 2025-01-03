@@ -1,8 +1,10 @@
 package hu.csega.superstition.game;
 
 import hu.csega.games.engine.intf.GameControl;
+import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.play.MonsterData;
+import hu.csega.superstition.game.play.SpellInProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class SuperstitionGameModify {
 
 	public static void modify(SuperstitionSerializableModel model, GameControl control, double elapsedTime) {
 		SuperstitionPlayer player = model.player;
+		long now = System.currentTimeMillis();
 
 		double speedModifier = (control.isControlOn() ? 15.0 : 1.0) * PLAYER_FORWARD;
 
@@ -88,6 +91,21 @@ public class SuperstitionGameModify {
 				monster.mapTile.monsters.remove(monster);
 				mapTile.monsters.add(monster);
 				monster.mapTile = mapTile;
+			}
+
+			if(monster.shouldCastSpellNow(elapsedTime)) {
+				double targetX = player.x - monster.x;
+				double targetZ = player.z - monster.z;
+				double l = Math.sqrt(targetX * targetX + targetZ * targetZ);
+				double rl = 1000.0 / l;
+				double nx = targetX * rl;
+				double nz = targetZ * rl;
+				SpellInProgress spell = new SpellInProgress(now, monster.x, monster.y - 5.0, monster.z,
+						monster.x + nx, monster.y - 5.0, monster.z + nz);
+				spell.setHitPoint(monster.maxHitDamage * SuperstitionGameStarter.RANDOM.nextDouble() + 20);
+				spell.setSpeed(0.00045);
+				model.monsterSpells.add(spell);
+				monster.setCooldown(3.0);
 			}
 		}
 

@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class MonsterData implements Serializable {
 
+    public double maxHitDamage = 100.0;
+
     public MonsterData(String animation) {
         this(animation, 100.0);
     }
@@ -22,6 +24,18 @@ public class MonsterData implements Serializable {
         this.mapTile = mapTile;
     }
 
+    public void setCooldown(double seconds) {
+        this.cooldown = seconds;
+    }
+
+    public boolean shouldCastSpellNow(double elapsedSeconds) {
+        cooldown = cooldown - elapsedSeconds;
+        if(cooldown < 0.0)
+            cooldown = 0.0;
+
+        return cooldown <= 0.0;
+    }
+
     public String animation;
 
     public double x;
@@ -32,6 +46,7 @@ public class MonsterData implements Serializable {
 
     public double health;
     public long expectedXP;
+    public double cooldown;
 
     public MapTile mapTile;
 

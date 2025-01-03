@@ -17,6 +17,7 @@ public class SuperstitionSerializableModel implements Serializable {
 	boolean sliding = true;
 
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
+	public Set<SpellInProgress> monsterSpells = new HashSet<>();
 
     SuperstitionMap map = new SuperstitionMap();
 
