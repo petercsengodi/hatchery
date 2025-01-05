@@ -7,48 +7,33 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshWireframe;
+import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.intf.GameCanvas;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 
 public class FreeTriangleMeshMouseController implements MouseListener, MouseMotionListener, MouseWheelListener{
-
-	public static final double[] ZOOM_VALUES = { 0.0001, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50, 2.0, 3.0, 4.0, 5.0, 10.0, 100.0 };
-	public static final int DEFAULT_ZOOM_INDEX = 8;
-
-	private int zoomIndex = DEFAULT_ZOOM_INDEX;
-
-	private double alfa;
-	private double beta;
 
 	private boolean mouseRightPressed = false;
 	private final Point mouseRightAt = new Point(0, 0);
 
-	private GameCanvas canvas;
+	private GameEngineFacade facade;
+	private GameCanvas gameCanvas;
+	private FreeTriangleMeshWireframe wireframeCanvas;
 
-	public double getAlfa() {
-		return alfa;
-	}
-
-	public double getBeta() {
-		return beta;
-	}
-
-	public FreeTriangleMeshMouseController(GameCanvas canvas) {
-		this.canvas = canvas;
-	}
-
-	public double getScaling() {
-		return ZOOM_VALUES[zoomIndex];
+	public FreeTriangleMeshMouseController(GameEngineFacade facade, GameCanvas gameCanvas, FreeTriangleMeshWireframe wireframeCanvas) {
+		this.facade = facade;
+		this.gameCanvas = gameCanvas;
+		this.wireframeCanvas = wireframeCanvas;
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
 		int numberOfRotations = e.getWheelRotation();
-		zoomIndex += numberOfRotations;
-		if(zoomIndex < 0)
-			zoomIndex = 0;
-		else if(zoomIndex >= ZOOM_VALUES.length)
-			zoomIndex = ZOOM_VALUES.length - 1;
-		canvas.repaint();
+		model.modifyOpenGLZoomIndex(numberOfRotations);
+		gameCanvas.repaint();
+		wireframeCanvas.repaint();
 	}
 
 	@Override
@@ -94,24 +79,14 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 			int dx = mouseRightAt.x - e.getX();
 			int dy = mouseRightAt.y - e.getY();
 
-			alfa += dx / 100.0;
-			if(alfa < -PI2)
-				alfa += PI2;
-			else if(alfa > PI2)
-				alfa -= PI2;
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+			model.modifyOpenGLAlpha(dx / 100.0);
+			model.modifyOpenGLBeta(dy / 100.0);
 
-			beta += dy / 100.0;
-			if(beta < -BETA_LIMIT)
-				beta = -BETA_LIMIT;
-			else if(beta > BETA_LIMIT)
-				beta = BETA_LIMIT;
-
-			canvas.repaint();
+			gameCanvas.repaint();
+			wireframeCanvas.repaint();
 			mouseRightAt.x = e.getX();
 			mouseRightAt.y = e.getY();
 		}
 	}
-
-	private static final double PI2 = 2*Math.PI;
-	private static final double BETA_LIMIT = Math.PI / 2;
 }

@@ -151,11 +151,6 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 	}
 
 	@Override
-	protected void zoom(double delta) {
-		// not applicable
-	}
-
-	@Override
 	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
 		// not applicable
 	}

@@ -37,17 +37,13 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected int PICT_SIZE_X = 16;
 	protected int PICT_SIZE_Y = 16;
 
-	public static final double[] ZOOM_VALUES = { 0.0001, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50, 2.0, 3.0, 4.0, 5.0, 10.0, 100.0 };
-	public static final int DEFAULT_ZOOM_INDEX = 8;
-
 	private BufferedImage buffer = null;
 
-	private boolean mouseLeftPressed = false;
-	private boolean mouseRightPressed = false;
-	private final Point mouseLeftStarted = new Point(0, 0);
-	private final Point mouseLeftAt = new Point(0, 0);
-	private final Point mouseRightAt = new Point(0, 0);
-
+	protected boolean mouseLeftPressed = false;
+	protected boolean mouseRightPressed = false;
+	protected final Point mouseLeftStarted = new Point(0, 0);
+	protected final Point mouseLeftAt = new Point(0, 0);
+	protected final Point mouseRightAt = new Point(0, 0);
 	protected final Point trackedMousePosition = new Point(0, 0);
 
 	protected long selectionLastChanged = -1L;
@@ -63,7 +59,7 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	private int selectedPictogramAction = -1;
 
 	protected EditorLensPipeline lenses = new EditorLensPipeline();
-	protected int zoomIndex = DEFAULT_ZOOM_INDEX;
+	protected int zoomIndex = FreeTriangleMeshModel.DEFAULT_ZOOM_INDEX;
 
 	protected final FreeTriangleMeshContextMenu contextMenu;
 
@@ -133,8 +129,6 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected abstract EditorPoint transformToModel(int x, int y);
 
 	protected abstract void translate(double x, double y);
-
-	protected abstract void zoom(double delta);
 
 	protected abstract void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add);
 
@@ -325,9 +319,9 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 		zoomIndex -= numberOfRotations;
 		if(zoomIndex < 0)
 			zoomIndex = 0;
-		else if(zoomIndex >= ZOOM_VALUES.length)
-			zoomIndex = ZOOM_VALUES.length - 1;
-		lenses.setScale(ZOOM_VALUES[zoomIndex]);
+		else if(zoomIndex >= FreeTriangleMeshModel.ZOOM_VALUES.length)
+			zoomIndex = FreeTriangleMeshModel.ZOOM_VALUES.length - 1;
+		lenses.setScale(FreeTriangleMeshModel.ZOOM_VALUES[zoomIndex]);
 		repaint();
 	}
 

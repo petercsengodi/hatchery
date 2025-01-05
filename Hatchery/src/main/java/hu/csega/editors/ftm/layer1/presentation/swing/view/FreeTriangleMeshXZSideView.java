@@ -74,12 +74,6 @@ public class FreeTriangleMeshXZSideView extends FreeTriangleMeshSideView {
 	}
 
 	@Override
-	protected void zoom(double delta) {
-		FreeTriangleMeshModel model = getModel();
-		model.setCanvasXZZoom(model.getCanvasXZZoom() + delta);
-	}
-
-	@Override
 	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
 		double vx1 = Math.min(topLeft.getX(), bottomRight.getX());
 		double vx2 = Math.max(topLeft.getX(), bottomRight.getX());

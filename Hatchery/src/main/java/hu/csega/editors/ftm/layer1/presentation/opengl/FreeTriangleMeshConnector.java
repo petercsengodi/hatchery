@@ -111,7 +111,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		GameDescriptor descriptor = new GameDescriptor();
 		descriptor.setId("ftm");
 		descriptor.setTitle("Free Triangle Mesh Tool");
-		descriptor.setVersion("v00.00.0001");
+		descriptor.setVersion("v00.00.0002");
 		descriptor.setDescription("A tool for creating vertices and triangles based upon them.");
 		descriptor.setMouseCentered(false);
 
@@ -144,10 +144,13 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 
 		contentPane.add(new FreeTriangleMeshXYSideView(facade));
 
+		GameCanvas gameCanvas = engine.getCanvas();
+		FreeTriangleMeshWireframe wireframeCanvas = new FreeTriangleMeshWireframe(facade, gameCanvas);
+
 		JTabbedPane bottomRightTab = new JTabbedPane();
 		bottomRightTab.addKeyListener(keyListener);
 		bottomRightTab.addTab("ZY Side View", new FreeTriangleMeshZYSideView(facade));
-		bottomRightTab.addTab("Wireframe", new FreeTriangleMeshWireframe(facade));
+		bottomRightTab.addTab("Wireframe", wireframeCanvas);
 		bottomRightTab.addTab("Texture Window", new FreeTriangleMeshTexture(facade, textureRoot));
 
 		FreeTriangleMeshTreeMapping treeModel = new FreeTriangleMeshTreeMapping(facade);
@@ -157,15 +160,12 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 
 		contentPane.add(bottomRightTab);
 
-		GameCanvas canvas = engine.getCanvas();
-		FreeTriangleMeshMouseController mouseController = new FreeTriangleMeshMouseController(canvas);
+		FreeTriangleMeshMouseController mouseController = new FreeTriangleMeshMouseController(facade, gameCanvas, wireframeCanvas);
 
-		Component component = ((OpenGLCanvas) canvas).getRealCanvas();
+		Component component = ((OpenGLCanvas) gameCanvas).getRealCanvas();
 		component.addMouseListener(mouseController);
 		component.addMouseMotionListener(mouseController);
 		component.addMouseWheelListener(mouseController);
-
-		renderer.setMouseController(mouseController);
 
 		dialogs = new FreeTriangleMeshDialogs(frame);
 		UnitStore.registerInstance(FreeTriangleMeshDialogs.class, dialogs);

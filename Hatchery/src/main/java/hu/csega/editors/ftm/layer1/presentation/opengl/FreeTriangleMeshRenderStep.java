@@ -28,12 +28,6 @@ public class FreeTriangleMeshRenderStep implements GameEngineCallback {
 	private GameObjectDirection cameraUp = new GameObjectDirection(0f, 1f, 0f);
 	private GameObjectPlacement cameraPlacement = new GameObjectPlacement();
 
-	private FreeTriangleMeshMouseController mouseController = null;
-
-	public void setMouseController(FreeTriangleMeshMouseController mouseController) {
-		this.mouseController = mouseController;
-	}
-
 	@Override
 	public Object call(GameEngineFacade facade) {
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
@@ -82,16 +76,9 @@ public class FreeTriangleMeshRenderStep implements GameEngineCallback {
 			model.setInvalid(false);
 		}
 
-		double alfa = 0.0;
-		double beta = 0.0;
-		double distance = 100.0;
-
-		if(mouseController != null) {
-			double scaling = mouseController.getScaling();
-			distance *= scaling;
-			alfa = mouseController.getAlfa();
-			beta = mouseController.getBeta();
-		}
+		double alfa = model.getOpenGLAlpha();
+		double beta = model.getOpenGLBeta();
+		double distance = model.getOpenGLZoom();
 
 		// Rendering
 

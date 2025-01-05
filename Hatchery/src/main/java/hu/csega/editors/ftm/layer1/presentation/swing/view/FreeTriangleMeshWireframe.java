@@ -6,12 +6,14 @@ import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.common.lens.EditorTransformation;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.engine.intf.GameCanvas;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,18 +22,14 @@ import java.util.Set;
 
 public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 
-	private double alfa;
-	private double beta;
-
-	private boolean mouseRightPressed = false;
-	private final Point mouseRightAt = new Point(0, 0);
-
+	private final GameCanvas gameCanvas;
 	private final EditorTransformation editorTransformation = new EditorTransformation();
 
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
 
-	public FreeTriangleMeshWireframe(GameEngineFacade facade) {
+	public FreeTriangleMeshWireframe(GameEngineFacade facade, GameCanvas gameCanvas) {
 		super(facade);
+		this.gameCanvas = gameCanvas;
 		this.lenses.setCustomTransformation(editorTransformation);
 	}
 
@@ -48,10 +46,6 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected void translate(double x, double y) {
-	}
-
-	@Override
-	protected void zoom(double delta) {
 	}
 
 	@Override
@@ -280,10 +274,26 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 	}
 
 	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
+		int numberOfRotations = e.getWheelRotation();
+		FreeTriangleMeshModel model = getModel();
+		model.modifyOpenGLZoomIndex(numberOfRotations);
+
+		// FIXME: Scaling in lenses.
+
+		gameCanvas.repaint();
+		repaint();
+	}
+
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		trackedMousePosition.x = e.getX();
 		trackedMousePosition.y = e.getY();
 		modifyAlfaAndBetaIfNeeded(e);
+		gameCanvas.repaint();
 		repaint();
 	}
 
@@ -292,6 +302,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		trackedMousePosition.x = e.getX();
 		trackedMousePosition.y = e.getY();
 		modifyAlfaAndBetaIfNeeded(e);
+		gameCanvas.repaint();
 		repaint();
 	}
 
@@ -300,25 +311,13 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 			int dx = mouseRightAt.x - e.getX();
 			int dy = mouseRightAt.y - e.getY();
 
-			alfa += dx / 100.0;
-			if(alfa < -PI2)
-				alfa += PI2;
-			else if(alfa > PI2)
-				alfa -= PI2;
-
-			beta += dy / 100.0;
-			if(beta < -BETA_LIMIT)
-				beta = -BETA_LIMIT;
-			else if(beta > BETA_LIMIT)
-				beta = BETA_LIMIT;
-
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+			model.modifyOpenGLAlpha(dx / 100.0);
+			model.modifyOpenGLBeta(dy / 100.0);
 			mouseRightAt.x = e.getX();
 			mouseRightAt.y = e.getY();
 		}
 	}
-
-	private static final double PI2 = 2*Math.PI;
-	private static final double BETA_LIMIT = Math.PI / 2;
 
 	private static final long serialVersionUID = 1L;
 }

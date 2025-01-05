@@ -14,12 +14,15 @@ import java.util.Set;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
-import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
 import hu.csega.editors.ftm.util.FreeTriangleMeshMathLibrary;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
 
 public class FreeTriangleMeshModel implements Serializable {
+
+	public static final double[] ZOOM_VALUES = { 0.0001, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50,
+			2.0, 3.0, 4.0, 5.0, 10.0, 20.0, 50.0, 100.0, 200.0, 500.0, 1000.0, 2000.0, 5000.0 };
+	public static final int DEFAULT_ZOOM_INDEX = 8;
 
 	private transient FreeTriangleMeshSnapshots _snapshots;
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
@@ -30,21 +33,21 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	private double canvasXYTranslateX;
 	private double canvasXYTranslateY;
-	private double canvasXYZoom = 1.0;
+	private int canvasXYZoomIndex = DEFAULT_ZOOM_INDEX;
 
 	private double canvasXZTranslateX;
 	private double canvasXZTranslateY;
-	private double canvasXZZoom = 1.0;
+	private int canvasXZZoomIndex = DEFAULT_ZOOM_INDEX;
 
 	private double canvasZYTranslateX;
 	private double canvasZYTranslateY;
-	private double canvasZYZoom = 1.0;
+	private int canvasZYZoomIndex = DEFAULT_ZOOM_INDEX;
 
 	private double openGLTranslateX;
 	private double openGLTranslateY;
 	private double openGLAlpha;
 	private double openGLBeta;
-	private double openGLZoom = 1.0;
+	private int openGLZoomIndex = DEFAULT_ZOOM_INDEX;
 
 	private boolean moved = false;
 	private transient boolean built = false;
@@ -1165,12 +1168,20 @@ public class FreeTriangleMeshModel implements Serializable {
 		this.canvasXYTranslateY = canvasXYTranslateY;
 	}
 
-	public double getCanvasXYZoom() {
-		return canvasXYZoom;
+	public int getCanvasXYZoomIndex() {
+		return canvasXYZoomIndex;
 	}
 
-	public void setCanvasXYZoom(double canvasXYZoom) {
-		this.canvasXYZoom = canvasXYZoom;
+	public void setCanvasXYZoomIndex(int canvasXYZoomIndex) {
+		this.canvasXYZoomIndex = canvasXYZoomIndex;
+	}
+
+	public double getCanvasXYZoom() {
+		if(canvasXYZoomIndex < 0 || canvasXYZoomIndex >= ZOOM_VALUES.length) {
+			canvasXYZoomIndex = DEFAULT_ZOOM_INDEX;
+		}
+
+		return ZOOM_VALUES[canvasXYZoomIndex];
 	}
 
 	public double getCanvasXZTranslateX() {
@@ -1189,12 +1200,20 @@ public class FreeTriangleMeshModel implements Serializable {
 		this.canvasXZTranslateY = canvasXZTranslateY;
 	}
 
-	public double getCanvasXZZoom() {
-		return canvasXZZoom;
+	public int getCanvasXZZoomIndex() {
+		return canvasXZZoomIndex;
 	}
 
-	public void setCanvasXZZoom(double canvasXZZoom) {
-		this.canvasXZZoom = canvasXZZoom;
+	public void setCanvasXZZoomIndex(int canvasXZZoomIndex) {
+		this.canvasXZZoomIndex = canvasXZZoomIndex;
+	}
+
+	public double getCanvasXZZoom() {
+		if(canvasXZZoomIndex < 0 || canvasXZZoomIndex >= ZOOM_VALUES.length) {
+			canvasXZZoomIndex = DEFAULT_ZOOM_INDEX;
+		}
+
+		return ZOOM_VALUES[canvasXZZoomIndex];
 	}
 
 	public double getCanvasZYTranslateX() {
@@ -1213,12 +1232,20 @@ public class FreeTriangleMeshModel implements Serializable {
 		this.canvasZYTranslateY = canvasZYTranslateY;
 	}
 
-	public double getCanvasZYZoom() {
-		return canvasZYZoom;
+	public int getCanvasZYZoomIndex() {
+		return canvasZYZoomIndex;
 	}
 
-	public void setCanvasZYZoom(double canvasZYZoom) {
-		this.canvasZYZoom = canvasZYZoom;
+	public void setCanvasZYZoomIndex(int canvasZYZoomIndex) {
+		this.canvasZYZoomIndex = canvasZYZoomIndex;
+	}
+
+	public double getCanvasZYZoom() {
+		if(canvasZYZoomIndex < 0 || canvasZYZoomIndex >= ZOOM_VALUES.length) {
+			canvasZYZoomIndex = DEFAULT_ZOOM_INDEX;
+		}
+
+		return ZOOM_VALUES[canvasZYZoomIndex];
 	}
 
 	public double getOpenGLTranslateX() {
@@ -1245,6 +1272,15 @@ public class FreeTriangleMeshModel implements Serializable {
 		this.openGLAlpha = openGLAlpha;
 	}
 
+	public void modifyOpenGLAlpha(double diff) {
+		this.openGLAlpha += diff;
+		if(this.openGLAlpha < -PI2) {
+			this.openGLAlpha += PI2;
+		} else if(this.openGLAlpha > PI2) {
+			this.openGLAlpha -= PI2;
+		}
+	}
+
 	public double getOpenGLBeta() {
 		return openGLBeta;
 	}
@@ -1253,12 +1289,37 @@ public class FreeTriangleMeshModel implements Serializable {
 		this.openGLBeta = openGLBeta;
 	}
 
-	public double getOpenGLZoom() {
-		return openGLZoom;
+	public void modifyOpenGLBeta(double diff) {
+		this.openGLBeta += diff;
+		if(this.openGLBeta < -BETA_LIMIT) {
+			this.openGLBeta = -BETA_LIMIT;
+		} else if(this.openGLBeta > BETA_LIMIT) {
+			this.openGLBeta = BETA_LIMIT;
+		}
 	}
 
-	public void setOpenGLZoom(double openGLZoom) {
-		this.openGLZoom = openGLZoom;
+	public int getOpenGLZoomIndex() {
+		return openGLZoomIndex;
+	}
+
+	public void setOpenGLZoomIndex(int openGLZoomIndex) {
+		this.openGLZoomIndex = openGLZoomIndex;
+	}
+
+	public void modifyOpenGLZoomIndex(int numberOfRotations) {
+		this.openGLZoomIndex += numberOfRotations;
+		if(this.openGLZoomIndex < 0) {
+			this.openGLZoomIndex = 0;
+		} else if(this.openGLZoomIndex >= ZOOM_VALUES.length) {
+			this.openGLZoomIndex = ZOOM_VALUES.length - 1;
+		}
+	}
+
+	public double getOpenGLZoom() {
+		if(openGLZoomIndex < 0 || openGLZoomIndex >= ZOOM_VALUES.length) {
+			openGLZoomIndex = DEFAULT_ZOOM_INDEX;
+		}
+		return ZOOM_VALUES[openGLZoomIndex];
 	}
 
 	public String getTextureFilename() {
@@ -1299,8 +1360,10 @@ public class FreeTriangleMeshModel implements Serializable {
 		return Math.sqrt(dx*dx + dy*dy + dz*dz);
 	}
 
+	private static final double PI2 = 2*Math.PI;
+	private static final double BETA_LIMIT = Math.PI / 2;
+
 	private static final Random RND = new Random(System.currentTimeMillis());
 
 	private static final long serialVersionUID = 1L;
-
 }
