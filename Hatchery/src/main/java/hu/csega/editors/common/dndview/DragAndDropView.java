@@ -298,13 +298,6 @@ public class DragAndDropView extends JPanel implements CommonUIComponent<JFrame,
 		}
 	}
 
-	protected double distance(double x1, double y1, double x2, double y2) {
-		double dx = x1 - x2;
-		double dy = y1 - y2;
-		double ret = Math.sqrt(dx*dx + dy*dy);
-		return ret;
-	}
-
 	private void paint2d(Graphics2D g) {
 		renderContext.setGraphics(g);
 

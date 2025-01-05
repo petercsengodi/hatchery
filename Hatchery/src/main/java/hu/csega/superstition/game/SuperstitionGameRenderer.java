@@ -1,5 +1,6 @@
 package hu.csega.superstition.game;
 
+import hu.csega.common.math.ScalarUtil;
 import hu.csega.superstition.SuperstitionGameStarter;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -173,7 +174,7 @@ public class SuperstitionGameRenderer {
 			}
 
 			// Optimization, if both dimensions are less than 200f, the distance does not need to be calculated.
-			if(absXDiff > 200f && absZDiff > 200f && distance(monster.x, monster.z, player.x, player.z) > 1000f) {
+			if(absXDiff > 200f && absZDiff > 200f && ScalarUtil.distance(monster.x, monster.z, player.x, player.z) > 1000f) {
 				continue;
 			}
 
@@ -326,12 +327,6 @@ public class SuperstitionGameRenderer {
 		} catch(Exception ex) {
 			logger.error("Could not reset screensaver timer: " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
 		}
-	}
-
-	private static double distance(double x1, double y1, double x2, double y2) {
-		double dx = x1 - x2;
-		double dy = y1 - y2;
-		return Math.sqrt(dx*dx + dy*dy);
 	}
 
 	private void addToLog(String line) {

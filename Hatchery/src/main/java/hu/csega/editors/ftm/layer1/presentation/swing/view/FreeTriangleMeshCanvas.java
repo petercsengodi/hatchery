@@ -316,12 +316,6 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	protected abstract void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended);
 
-	protected double distance(double x1, double y1, double x2, double y2) {
-		double dx = x1 - x2;
-		double dy = y1 - y2;
-		return Math.sqrt(dx*dx + dy*dy);
-	}
-
 	protected abstract void paint2d(Graphics2D g);
 
 	private static final long serialVersionUID = 1L;

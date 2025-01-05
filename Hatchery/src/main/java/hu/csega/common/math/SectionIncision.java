@@ -1,8 +1,8 @@
-package hu.csega.games.engine.util;
+package hu.csega.common.math;
+
+import hu.csega.common.math.ScalarUtil;
 
 public class SectionIncision {
-
-	public static final double EPSILON = 0.00001;
 
 	/**
 	 * Checks if the two sections meet in one single point.
@@ -20,7 +20,7 @@ public class SectionIncision {
 		double dy2 = y3-y2;
 
 		double B = dx2*(y1-y0) - (x1-x0)*dy2;
-		if(Math.abs(B) < EPSILON) // This eliminates the parallel case.
+		if(Math.abs(B) < ScalarUtil.EPSILON) // This eliminates the parallel case.
 			return false;
 
 		double A = (x0-x2)*dy2 - dx2*(y0-y2);
@@ -45,7 +45,7 @@ public class SectionIncision {
 
 		double D = b*b - 4.0*a*c;
 
-		if(Math.abs(D) < EPSILON)
+		if(Math.abs(D) < ScalarUtil.EPSILON)
 			return -b <= 2.0*a;
 
 		if(D < 0)
@@ -62,7 +62,7 @@ public class SectionIncision {
 			double x0, double y0, double r0,
 			double x1, double y1, double r1) {
 
-		if(Math.abs(x1 - x0) < EPSILON && Math.abs(y1 - y0) < EPSILON)
+		if(Math.abs(x1 - x0) < ScalarUtil.EPSILON && Math.abs(y1 - y0) < ScalarUtil.EPSILON)
 			return false;
 
 		double r02 = r0*r0;
