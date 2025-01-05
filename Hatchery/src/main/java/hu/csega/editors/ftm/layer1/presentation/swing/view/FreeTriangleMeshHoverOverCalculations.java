@@ -62,10 +62,19 @@ public class FreeTriangleMeshHoverOverCalculations {
         this.lenses.setScreenTransformation(clippingCoordinatesTransformation);
     }
 
+    /**
+     * @param mouseX If Integer.MIN_VALUE or Integer.MAX_VALUE, hover-over will not be updated, only the screen transformations will be re-calculated.
+     * @param mouseY If Integer.MIN_VALUE or Integer.MAX_VALUE, hover-over will not be updated, only the screen transformations will be re-calculated.
+     */
     public void doCalculations(FreeTriangleMeshModel model, int mouseX, int mouseY, int windowWidth, int windowHeight, Boolean counterClockwise) {
         if(windowWidth < 10 || windowHeight < 10) {
             model.setHoverOverObject(null);
             return;
+        }
+
+        boolean updateHoverOver = true;
+        if(mouseX == Integer.MIN_VALUE || mouseX == Integer.MAX_VALUE || mouseY == Integer.MIN_VALUE || mouseY == Integer.MAX_VALUE) {
+            updateHoverOver = false;
         }
 
         // Create transformations same as in OpenGL.
@@ -122,21 +131,24 @@ public class FreeTriangleMeshHoverOverCalculations {
                 if(minZ > p2.getZ()) { minZ = p2.getZ(); }
                 if(minZ > p3.getZ()) { minZ = p3.getZ(); }
 
-                double zPosition = TriangleUtil.zIfContainedOrInfinity(
-                        p1.getX(), p1.getY(), p1.getZ(),
-                        p2.getX(), p2.getY(), p2.getZ(),
-                        p3.getX(), p3.getY(), p3.getZ(),
-                        mouseX, mouseY, counterClockwise
-                );
+                if(updateHoverOver) {
+                    double zPosition = TriangleUtil.zIfContainedOrInfinity(
+                            p1.getX(), p1.getY(), p1.getZ(),
+                            p2.getX(), p2.getY(), p2.getZ(),
+                            p3.getX(), p3.getY(), p3.getZ(),
+                            mouseX, mouseY, counterClockwise
+                    );
 
-                if(lastZPosition == Double.POSITIVE_INFINITY || zPosition < lastZPosition) {
-                    lastZPosition = zPosition;
-                    hoverOverTriangle = triangle;
+                    if (lastZPosition == Double.POSITIVE_INFINITY || zPosition < lastZPosition) {
+                        lastZPosition = zPosition;
+                        hoverOverTriangle = triangle;
+                    }
                 }
             }
         }
 
-        model.setHoverOverObject(hoverOverTriangle);
+        if(updateHoverOver)
+            model.setHoverOverObject(hoverOverTriangle);
     }
 
     public double getMinZ() {

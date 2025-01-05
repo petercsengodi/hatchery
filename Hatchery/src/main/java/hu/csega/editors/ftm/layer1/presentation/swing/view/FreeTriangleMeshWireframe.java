@@ -68,6 +68,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = model.getTriangles();
 
+		hoverOverCalculations.doCalculations(model, Integer.MIN_VALUE, Integer.MIN_VALUE, gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 		final double minZ = hoverOverCalculations.getMinZ();
 		final double maxZ = hoverOverCalculations.getMaxZ();
 		final double diffZ;

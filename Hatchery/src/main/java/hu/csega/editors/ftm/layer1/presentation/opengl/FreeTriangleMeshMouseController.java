@@ -167,7 +167,6 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 
 	private void repaintBothCanvases() {
 		gameCanvas.repaint();
-		wireframeCanvas.invalidate();
 		wireframeCanvas.repaint();
 	}
 }
