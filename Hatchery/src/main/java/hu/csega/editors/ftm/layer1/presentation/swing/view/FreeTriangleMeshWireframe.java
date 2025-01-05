@@ -129,14 +129,14 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		// Drawing the vertices.
 		for(FreeTriangleMeshVertex vertex : vertices) {
 			if(model.enabled(vertex)) {
+				EditorPoint p = transformVertexToPoint(vertex);
+				EditorPoint transformed = transformToScreen(p);
 				if(selectedObjects.contains(vertex)) {
 					g.setColor(Color.red);
 				} else {
-					g.setColor(Color.black);
+					setColorForEditorPoint(g, transformed, minZ, diffZ);
 				}
 
-				EditorPoint p = transformVertexToPoint(vertex);
-				EditorPoint transformed = transformToScreen(p);
 				g.drawRect((int)transformed.getX() - 2, (int)transformed.getY() - 2, 5, 5);
 			}
 		}
@@ -174,19 +174,6 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 			calculateSelectionBox();
 			g.drawRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
 		}
-	}
-
-	private static void setColorForEditorPoints(Graphics2D g, EditorPoint p1, EditorPoint p2, double minZ, double diffZ) {
-		double colorAvg = (p1.getZ() + p2.getZ()) /  2.0;
-		double colorRatio = (colorAvg - minZ) / diffZ;
-		int colorIndex = (int) Math.floor(colorRatio * 16);
-		if(colorIndex < 0) {
-			colorIndex = 0;
-		} else if(colorIndex >= COLOR_TABLE.length) {
-			colorIndex = COLOR_TABLE.length - 1;
-		}
-
-		g.setColor(COLOR_TABLE[colorIndex]);
 	}
 
 	@Override
@@ -367,6 +354,31 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 			mouseRightAt.x = e.getX();
 			mouseRightAt.y = e.getY();
 		}
+	}
+
+	private static void setColorForEditorPoint(Graphics2D g, EditorPoint p, double minZ, double diffZ) {
+		double colorRatio = (p.getZ() - minZ) / diffZ;
+		int colorIndex = (int) Math.floor(colorRatio * 16);
+		if(colorIndex < 0) {
+			colorIndex = 0;
+		} else if(colorIndex >= COLOR_TABLE.length) {
+			colorIndex = COLOR_TABLE.length - 1;
+		}
+
+		g.setColor(COLOR_TABLE[colorIndex]);
+	}
+
+	private static void setColorForEditorPoints(Graphics2D g, EditorPoint p1, EditorPoint p2, double minZ, double diffZ) {
+		double colorAvg = (p1.getZ() + p2.getZ()) /  2.0;
+		double colorRatio = (colorAvg - minZ) / diffZ;
+		int colorIndex = (int) Math.floor(colorRatio * 16);
+		if(colorIndex < 0) {
+			colorIndex = 0;
+		} else if(colorIndex >= COLOR_TABLE.length) {
+			colorIndex = COLOR_TABLE.length - 1;
+		}
+
+		g.setColor(COLOR_TABLE[colorIndex]);
 	}
 
 	private static final Color[] COLOR_TABLE = new Color[16];

@@ -29,7 +29,7 @@ public class FreeTriangleMeshHoverOverCalculations {
     private final EditorLensClippingCoordinatesTransformationImpl clippingCoordinatesTransformation = new EditorLensClippingCoordinatesTransformationImpl();
 
     // Needed for model transformation, which for now is an identity transformation.
-    private final GameObjectPlacement modelPlacement = new GameObjectPlacement();
+    private final GameObjectPlacement modelPlacement = new GameObjectPlacement(); // Default values.
     private final Vector4f outEye = new Vector4f();
     private final Vector4f outCenter = new Vector4f();
     private final Vector4f outUp = new Vector4f();
@@ -54,9 +54,6 @@ public class FreeTriangleMeshHoverOverCalculations {
     private final Matrix4d calculatedMatrix = new Matrix4d();
 
     public FreeTriangleMeshHoverOverCalculations(EditorLensPipeline lenses) {
-        this.modelPlacement.target.set(0f, 0f, 1f); // TODO: Why not -1f ????
-        this.modelPlacement.up.set(0f, 1f, 0f);
-
         this.lenses = lenses;
         this.lenses.setCustomTransformation(editorTransformation);
         this.lenses.setScreenTransformation(clippingCoordinatesTransformation);
@@ -120,9 +117,13 @@ public class FreeTriangleMeshHoverOverCalculations {
 
         for(FreeTriangleMeshTriangle triangle : triangles) {
             if(model.enabled(triangle)) {
-                EditorPoint p1 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex1())));
-                EditorPoint p2 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex2())));
-                EditorPoint p3 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex3())));
+                FreeTriangleMeshVertex v1 = vertices.get(triangle.getVertex1());
+                FreeTriangleMeshVertex v2 = vertices.get(triangle.getVertex2());
+                FreeTriangleMeshVertex v3 = vertices.get(triangle.getVertex3());
+
+                EditorPoint p1 = transformToScreen(transformVertexToPoint(v1));
+                EditorPoint p2 = transformToScreen(transformVertexToPoint(v2));
+                EditorPoint p3 = transformToScreen(transformVertexToPoint(v3));
 
                 if(maxZ < p1.getZ()) { maxZ = p1.getZ(); }
                 if(maxZ < p2.getZ()) { maxZ = p2.getZ(); }
