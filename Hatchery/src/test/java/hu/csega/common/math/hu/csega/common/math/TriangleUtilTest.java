@@ -15,19 +15,19 @@ public class TriangleUtilTest {
                 /* p1 */ 1.0, 1.0, 0.0,
                 /* p2 */ 2.0, 2.0, 0.0,
                 /* p3 */ 1.5, -1.0, 0.0,
-                /* t */ -5.0, 10.0) >= Double.POSITIVE_INFINITY);
+                /* t */ -5.0, 10.0, null) >= Double.POSITIVE_INFINITY);
 
         assertTrue("Should NOT be contained, but it is inside the bounds.", TriangleUtil.zIfContainedOrInfinity(
                 /* p1 */ 1.0, 1.0, 0.0,
                 /* p2 */ 2.0, 2.0, 0.0,
                 /* p3 */ 1.5, -1.0, 0.0,
-                /* t */ 1.0001, 1.5) >= Double.POSITIVE_INFINITY);
+                /* t */ 1.0001, 1.5, null) >= Double.POSITIVE_INFINITY);
 
         assertTrue("Should be contained, but it is inside the bounds.", TriangleUtil.zIfContainedOrInfinity(
                 /* p1 */ 1.0, 1.0, -1.0,
                 /* p2 */ 2.0, 2.0, -2.0,
                 /* p3 */ 1.5, -1.0, 0.0,
-                /* t */ 1.5, 0.0) < 0.0);
+                /* t */ 1.5, 0.0, null) < 0.0);
     }
 
     @Test

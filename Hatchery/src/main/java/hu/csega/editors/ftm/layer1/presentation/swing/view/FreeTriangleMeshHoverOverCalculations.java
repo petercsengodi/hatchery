@@ -29,25 +29,25 @@ public class FreeTriangleMeshHoverOverCalculations {
     private final EditorLensClippingCoordinatesTransformationImpl clippingCoordinatesTransformation = new EditorLensClippingCoordinatesTransformationImpl();
 
     // Needed for model transformation, which for now is an identity transformation.
-    private GameObjectPlacement modelPlacement = new GameObjectPlacement();
-    private Vector4f outEye = new Vector4f();
-    private Vector4f outCenter = new Vector4f();
-    private Vector4f outUp = new Vector4f();
-    private Matrix4f outBasicLookAt = new Matrix4f();
-    private Matrix4f outInverseLookAt = new Matrix4f();
-    private Matrix4f outBasicScale = new Matrix4f();
+    private final GameObjectPlacement modelPlacement = new GameObjectPlacement();
+    private final Vector4f outEye = new Vector4f();
+    private final Vector4f outCenter = new Vector4f();
+    private final Vector4f outUp = new Vector4f();
+    private final Matrix4f outBasicLookAt = new Matrix4f();
+    private final Matrix4f outInverseLookAt = new Matrix4f();
+    private final Matrix4f outBasicScale = new Matrix4f();
 
     // Needed for camera transformation.
-    private GameObjectPosition cameraPosition = new GameObjectPosition(0f, 0f, 0f);
-    private GameObjectPosition cameraTarget = new GameObjectPosition(0f, 0f, 0f);
-    private GameObjectDirection cameraUp = new GameObjectDirection(0f, 1f, 0f);
-    private GameObjectPlacement cameraPlacement = new GameObjectPlacement();
+    private final GameObjectPosition cameraPosition = new GameObjectPosition(0f, 0f, 0f);
+    private final GameObjectPosition cameraTarget = new GameObjectPosition(0f, 0f, 0f);
+    private final GameObjectDirection cameraUp = new GameObjectDirection(0f, 1f, 0f);
+    private final GameObjectPlacement cameraPlacement = new GameObjectPlacement();
     private final Matrix4d cameraMatrix = new Matrix4d();
 
     // Needed for perspective transformation.
     private final double viewAngle = (float) Math.toRadians(45);
-    private final double zNear = 0.1f;
-    private final double zFar = 10000.0f;
+    private static final double zNear = 0.1f;
+    private static final double zFar = 10000.0f;
     private final Matrix4d perspectiveMatrix = new Matrix4d();
 
     // Needed for merging transformations together.
@@ -62,7 +62,11 @@ public class FreeTriangleMeshHoverOverCalculations {
         this.lenses.setScreenTransformation(clippingCoordinatesTransformation);
     }
 
-    public void doCalculations(FreeTriangleMeshModel model, int mouseX, int mouseY, int windowWidth, int windowHeight) {
+    public void doCalculations(FreeTriangleMeshModel model, int mouseX, int mouseY, int windowWidth, int windowHeight, Boolean counterClockwise) {
+        if(windowWidth < 10 || windowHeight < 10) {
+            model.setHoverOverObject(null);
+            return;
+        }
 
         // Create transformations same as in OpenGL.
 
@@ -122,10 +126,10 @@ public class FreeTriangleMeshHoverOverCalculations {
                         p1.getX(), p1.getY(), p1.getZ(),
                         p2.getX(), p2.getY(), p2.getZ(),
                         p3.getX(), p3.getY(), p3.getZ(),
-                        mouseX, mouseY
+                        mouseX, mouseY, counterClockwise
                 );
 
-                if(zPosition < lastZPosition) {
+                if(lastZPosition == Double.POSITIVE_INFINITY || zPosition < lastZPosition) {
                     lastZPosition = zPosition;
                     hoverOverTriangle = triangle;
                 }

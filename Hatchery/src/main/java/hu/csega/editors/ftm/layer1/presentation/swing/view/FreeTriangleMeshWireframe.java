@@ -21,6 +21,8 @@ import java.util.Set;
 
 public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 
+	private static final Boolean DO_NOT_CHECK_FACING_DIRECTION = null;
+
 	private final GameCanvas gameCanvas;
 	private final FreeTriangleMeshHoverOverCalculations hoverOverCalculations;
 
@@ -280,7 +282,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		FreeTriangleMeshModel model = getModel();
 		model.modifyOpenGLZoomIndex(numberOfRotations);
 
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 
 		gameCanvas.repaint();
 		repaint();
@@ -294,7 +296,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		modifyAlfaAndBetaIfNeeded(e);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 		gameCanvas.repaint();
 		repaint();
 	}
@@ -307,7 +309,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		modifyAlfaAndBetaIfNeeded(e);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 		gameCanvas.repaint();
 		repaint();
 	}

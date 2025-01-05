@@ -17,6 +17,8 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 
 public class FreeTriangleMeshMouseController implements MouseListener, MouseMotionListener, MouseWheelListener{
 
+	private static final Boolean COUNTER_CLOCKWISE = true;
+
 	private boolean mouseRightPressed = false;
 	private final Point mouseRightAt = new Point(0, 0);
 	private final Point trackedMousePosition = new Point(0, 0);
@@ -42,7 +44,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		int numberOfRotations = e.getWheelRotation();
 		model.modifyOpenGLZoomIndex(numberOfRotations);
 
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}
@@ -55,7 +57,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		modifyAlfaAndBetaIfNeeded(e);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}
@@ -68,7 +70,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		modifyAlfaAndBetaIfNeeded(e);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}
@@ -79,7 +81,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		trackedMousePosition.y = e.getY();
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		boolean repaintRequestedAlready = false;
 
@@ -108,7 +110,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		}
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}
@@ -123,7 +125,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		}
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}
@@ -134,7 +136,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		trackedMousePosition.y = e.getY();
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}
@@ -145,7 +147,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 		trackedMousePosition.y = e.getY();
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), COUNTER_CLOCKWISE);
 
 		repaintBothCanvases();
 	}

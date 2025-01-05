@@ -5,11 +5,26 @@ public class TriangleUtil {
     public static double zIfContainedOrInfinity(double px1, double py1, double pz1,
                                          double px2, double py2, double pz2,
                                          double px3, double py3, double pz3,
-                                         double tx, double ty) {
+                                         double tx, double ty, Boolean counterClockWise) {
+
+        // FIXME: counterClockWise
+
         if(triangleContains(px1, py1, px2, py2, px3, py3, tx, ty)) {
             double l1 = ScalarUtil.distance(px1, py1, tx, ty);
+            if(l1 < ScalarUtil.EPSILON) {
+                return pz1; // If very near to <p1>, return <z1>.
+            }
+
             double l2 = ScalarUtil.distance(px2, py2, tx, ty);
+            if(l2 < ScalarUtil.EPSILON) {
+                return pz2; // If very near to <p2>, return <z2>.
+            }
+
             double l3 = ScalarUtil.distance(px3, py3, tx, ty);
+            if(l3 < ScalarUtil.EPSILON) {
+                return pz3; // If very near to <p3>, return <z3>.
+            }
+
             double l = l1 + l2 + l3;
 
             if(l < ScalarUtil.EPSILON) { // Intentionally not <abs>, as negative values are wrong as well.
@@ -35,7 +50,7 @@ public class TriangleUtil {
         if(tx < px1 && tx < px2 && tx < px3) { return false; }
         if(tx > px1 && tx > px2 && tx > px3) { return false; }
         if(ty < py1 && ty < py2 && ty < py3) { return false; }
-        if(ty > py1 && tx > py2 && ty > py3) { return false; }
+        if(ty > py1 && ty > py2 && ty > py3) { return false; }
 
         // 2. For all (x1,y1)-(x2,y2) lines we need to check it <t> is on the same side as (x3,y3).
         double overOrUnder1 = LineUtil.overOrUnderLine(px1, py1, px2, py2, px3, py3);
