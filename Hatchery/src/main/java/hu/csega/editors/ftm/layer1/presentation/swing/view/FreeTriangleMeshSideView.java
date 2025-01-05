@@ -37,14 +37,27 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = model.getTriangles();
 
-		g.setColor(Color.darkGray);
 		for(FreeTriangleMeshTriangle triangle : triangles) {
 			if(model.enabled(triangle)) {
-				EditorPoint p1 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex1())));
-				EditorPoint p2 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex2())));
-				EditorPoint p3 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex3())));
+				FreeTriangleMeshVertex v1 = vertices.get(triangle.getVertex1());
+				FreeTriangleMeshVertex v2 = vertices.get(triangle.getVertex2());
+				FreeTriangleMeshVertex v3 = vertices.get(triangle.getVertex3());
+
+				EditorPoint p1 = transformToScreen(transformVertexToPoint(v1));
+				EditorPoint p2 = transformToScreen(transformVertexToPoint(v2));
+				EditorPoint p3 = transformToScreen(transformVertexToPoint(v3));
+
+				boolean v1Selected = selectedObjects.contains(v1);
+				boolean v2Selected = selectedObjects.contains(v2);
+				boolean v3Selected = selectedObjects.contains(v3);
+
+				g.setColor(v1Selected && v2Selected ? Color.red : Color.black);
 				drawLine(g, p1, p2);
+
+				g.setColor(v2Selected && v3Selected ? Color.red : Color.black);
 				drawLine(g, p2, p3);
+
+				g.setColor(v3Selected && v1Selected ? Color.red : Color.black);
 				drawLine(g, p3, p1);
 			}
 		}

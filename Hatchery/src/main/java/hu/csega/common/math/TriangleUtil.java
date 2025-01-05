@@ -63,7 +63,9 @@ public class TriangleUtil {
         if(ty < py1 && ty < py2 && ty < py3) { return false; }
         if(ty > py1 && ty > py2 && ty > py3) { return false; }
 
-        // 2. For all (x1,y1)-(x2,y2) lines we need to check it <t> is on the same side as (x3,y3).
+        // 2. For all (x?,y?)-(x?,y?) lines we need to check it <t> is on the same side as (x?,y?).
+
+        // 2. a. Line: (x1,y1)-(x2,y2) Point: (x3,y3)
         double overOrUnder1 = LineUtil.overOrUnderLine(px1, py1, px2, py2, px3, py3);
         if(Math.abs(overOrUnder1) < ScalarUtil.EPSILON) {
             // The third point is on the edge, the triangle is just a line.
@@ -78,6 +80,7 @@ public class TriangleUtil {
             return false;
         }
 
+        // 2. b. Line: (x3,y3)-(x1,y1) Point: (x2,y2)
         overOrUnder1 = LineUtil.overOrUnderLine(px3, py3, px1, py1, px2, py2);
         if(Math.abs(overOrUnder1) < ScalarUtil.EPSILON) {
             // The third point is on the edge, the triangle is just a line.
@@ -92,6 +95,7 @@ public class TriangleUtil {
             return false;
         }
 
+        // 2. c. Line: (x2,y2)-(x3,y3) Point: (x1,y1)
         overOrUnder1 = LineUtil.overOrUnderLine(px2, py2, px3, py3, px1, py1);
         if(Math.abs(overOrUnder1) < ScalarUtil.EPSILON) {
             // The third point is on the edge, the triangle is just a line.

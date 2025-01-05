@@ -68,7 +68,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = model.getTriangles();
 
-		hoverOverCalculations.doCalculations(model, Integer.MIN_VALUE, Integer.MIN_VALUE, gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
+		hoverOverCalculations.doCalculations(model, Integer.MIN_VALUE, Integer.MIN_VALUE, getWidth(), getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 		final double minZ = hoverOverCalculations.getMinZ();
 		final double maxZ = hoverOverCalculations.getMaxZ();
 		final double diffZ;
@@ -83,24 +83,27 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		// Drawing the actual triangles.
 		for(FreeTriangleMeshTriangle triangle : triangles) {
 			if(model.enabled(triangle)) {
-				EditorPoint p1 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex1())));
-				EditorPoint p2 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex2())));
-				EditorPoint p3 = transformToScreen(transformVertexToPoint(vertices.get(triangle.getVertex3())));
+				FreeTriangleMeshVertex v1 = vertices.get(triangle.getVertex1());
+				FreeTriangleMeshVertex v2 = vertices.get(triangle.getVertex2());
+				FreeTriangleMeshVertex v3 = vertices.get(triangle.getVertex3());
 
-				double colorAvg = (p1.getZ() + p2.getZ() + p3.getZ()) /  3.0;
-				double colorRatio = (colorAvg - minZ) / diffZ;
-				int colorIndex = (int) Math.floor(colorRatio * 16);
-				if(colorIndex < 0) {
-					colorIndex = 0;
-				} else if(colorIndex >= COLOR_TABLE.length) {
-					colorIndex = COLOR_TABLE.length - 1;
-				}
+				EditorPoint p1 = transformToScreen(transformVertexToPoint(v1));
+				EditorPoint p2 = transformToScreen(transformVertexToPoint(v2));
+				EditorPoint p3 = transformToScreen(transformVertexToPoint(v3));
 
-				g.setColor(COLOR_TABLE[colorIndex]);
+				boolean v1Selected = selectedObjects.contains(v1);
+				boolean v2Selected = selectedObjects.contains(v2);
+				boolean v3Selected = selectedObjects.contains(v3);
 
+				if(v1Selected && v2Selected) { g.setColor(Color.red); } else { setColorForEditorPoints(g, p1, p2, minZ, diffZ); }
 				drawLine(g, p1, p2);
+
+				if(v2Selected && v3Selected) { g.setColor(Color.red); } else { setColorForEditorPoints(g, p2, p3, minZ, diffZ); }
 				drawLine(g, p2, p3);
+
+				if(v3Selected && v1Selected) { g.setColor(Color.red); } else { setColorForEditorPoints(g, p3, p1, minZ, diffZ); }
 				drawLine(g, p3, p1);
+
 			} // end enabled triangle
 		} // end for triangle
 
@@ -171,6 +174,19 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 			calculateSelectionBox();
 			g.drawRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
 		}
+	}
+
+	private static void setColorForEditorPoints(Graphics2D g, EditorPoint p1, EditorPoint p2, double minZ, double diffZ) {
+		double colorAvg = (p1.getZ() + p2.getZ()) /  2.0;
+		double colorRatio = (colorAvg - minZ) / diffZ;
+		int colorIndex = (int) Math.floor(colorRatio * 16);
+		if(colorIndex < 0) {
+			colorIndex = 0;
+		} else if(colorIndex >= COLOR_TABLE.length) {
+			colorIndex = COLOR_TABLE.length - 1;
+		}
+
+		g.setColor(COLOR_TABLE[colorIndex]);
 	}
 
 	@Override
@@ -275,6 +291,31 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), getWidth(), getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
+
+		boolean repaintRequestedAlready = false;
+
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			Object hoverOverObject = model.getHoverOverObject();
+			if(hoverOverObject instanceof FreeTriangleMeshTriangle) {
+				model.selectTriangle((FreeTriangleMeshTriangle) hoverOverObject);
+				repaintRequestedAlready = true;
+				facade.window().repaintEverything();
+			}
+		}
+
+		if(!repaintRequestedAlready) {
+			gameCanvas.repaint();
+			repaint();
+		}
+	}
+
+	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		trackedMousePosition.x = e.getX();
 		trackedMousePosition.y = e.getY();
@@ -283,7 +324,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		FreeTriangleMeshModel model = getModel();
 		model.modifyOpenGLZoomIndex(numberOfRotations);
 
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), getWidth(), getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 
 		gameCanvas.repaint();
 		repaint();
@@ -297,7 +338,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		modifyAlfaAndBetaIfNeeded(e);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), getWidth(), getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 		gameCanvas.repaint();
 		repaint();
 	}
@@ -310,7 +351,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 		modifyAlfaAndBetaIfNeeded(e);
 
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), getWidth(), getHeight(), DO_NOT_CHECK_FACING_DIRECTION);
 		gameCanvas.repaint();
 		repaint();
 	}
