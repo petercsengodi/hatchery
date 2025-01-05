@@ -138,6 +138,10 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected EditorPoint transformToModel(int x, int y) {
+		if(x == Integer.MIN_VALUE || x == Integer.MAX_VALUE || y == Integer.MIN_VALUE || y == Integer.MAX_VALUE) {
+			return null;
+		}
+
 		return new EditorPoint((x - imageLeft) / (double) imageWidth, 1.0 - (y - imageTop) / (double) imageHeight, 0.0, 1.0);
 	}
 
@@ -226,19 +230,27 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 		switch(action) {
 			case FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW: {
 				EditorPoint fixed = transformToModel(selectionMinX, selectionMinY);
-				model.elasticTextureMove(fixed, started, ended);
+				if(fixed != null) {
+					model.elasticTextureMove(fixed, started, ended);
+				}
 			} break;
 			case FreeTriangleMeshPictogram.UP_LEFT_ARROW: {
 				EditorPoint fixed = transformToModel(selectionMaxX, selectionMaxY);
-				model.elasticTextureMove(fixed, started, ended);
+				if(fixed != null) {
+					model.elasticTextureMove(fixed, started, ended);
+				}
 			} break;
 			case FreeTriangleMeshPictogram.UP_RIGHT_ARROW: {
 				EditorPoint fixed = transformToModel(selectionMinX, selectionMaxY);
-				model.elasticTextureMove(fixed, started, ended);
+				if(fixed != null) {
+					model.elasticTextureMove(fixed, started, ended);
+				}
 			} break;
 			case FreeTriangleMeshPictogram.DOWN_LEFT_ARROW: {
 				EditorPoint fixed = transformToModel(selectionMaxX, selectionMinY);
-				model.elasticTextureMove(fixed, started, ended);
+				if(fixed != null) {
+					model.elasticTextureMove(fixed, started, ended);
+				}
 			} break;
 		}
 	}

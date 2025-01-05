@@ -44,9 +44,11 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	private boolean mouseLeftPressed = false;
 	private boolean mouseRightPressed = false;
-	private Point mouseLeftStarted = new Point(0, 0);
-	private Point mouseLeftAt = new Point(0, 0);
-	private Point mouseRightAt = new Point(0, 0);
+	private final Point mouseLeftStarted = new Point(0, 0);
+	private final Point mouseLeftAt = new Point(0, 0);
+	private final Point mouseRightAt = new Point(0, 0);
+
+	protected final Point trackedMousePosition = new Point(0, 0);
 
 	protected long selectionLastChanged = -1L;
 	protected int selectionMinX;
@@ -125,6 +127,9 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	protected abstract EditorPoint transformToScreen(EditorPoint p);
 
+	/**
+	 * @return May be null, as not all views can transform to model.
+	 */
 	protected abstract EditorPoint transformToModel(int x, int y);
 
 	protected abstract void translate(double x, double y);
@@ -147,55 +152,65 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		Point p = new Point(e.getX(), e.getY());
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
 
 		if(mouseLeftPressed) {
-			if(selectionBoxEnabled) {
-				int dx = mouseLeftAt.x - p.x;
-				int dy = mouseLeftAt.y - p.y;
+			if(selectionBoxEnabled && valid(mouseLeftAt)) {
+				int dx = mouseLeftAt.x - trackedMousePosition.x;
+				int dy = mouseLeftAt.y - trackedMousePosition.y;
 				selectionEnd.x -= dx;
 				selectionEnd.y -= dy;
 				repaint();
-			} else if(e.isControlDown()) {
+			} else if(e.isControlDown() && valid(mouseLeftAt)) {
 				EditorPoint moveFrom = transformToModel(mouseLeftAt.x, mouseLeftAt.y);
-				EditorPoint moveTo = transformToModel(p.x, p.y);
-				moveSelected(moveFrom, moveTo);
-				repaintEverything();
+				EditorPoint moveTo = transformToModel(trackedMousePosition.x, trackedMousePosition.y);
+				if(moveFrom != null && moveTo != null) {
+					moveSelected(moveFrom, moveTo);
+					repaintEverything();
+				}
 			}
-			mouseLeftAt.x = p.x;
-			mouseLeftAt.y = p.y;
+
+			mouseLeftAt.x = trackedMousePosition.x;
+			mouseLeftAt.y = trackedMousePosition.y;
 		}
 
-		if(mouseRightPressed) {
-			int dx = p.x - mouseRightAt.x;
-			int dy = p.y - mouseRightAt.y;
+		if(mouseRightPressed && valid(mouseRightAt)) {
+			int dx = trackedMousePosition.x - mouseRightAt.x;
+			int dy = trackedMousePosition.y - mouseRightAt.y;
 			translate(dx, dy);
 			pictograms = null;
 			repaint();
-			mouseRightAt.x = p.x;
-			mouseRightAt.y = p.y;
+			mouseRightAt.x = trackedMousePosition.x;
+			mouseRightAt.y = trackedMousePosition.y;
 		}
 
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Point p = new Point(e.getX(), e.getY());
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
 
-		if(mouseRightPressed) {
-			translate(p.x - mouseRightAt.x, p.y - mouseRightAt.y);
-			mouseRightAt.x = p.x;
-			mouseRightAt.y = p.y;
+		if(mouseRightPressed && valid(mouseRightAt)) {
+			translate(trackedMousePosition.x - mouseRightAt.x, trackedMousePosition.y - mouseRightAt.y);
+			mouseRightAt.x = trackedMousePosition.x;
+			mouseRightAt.y = trackedMousePosition.y;
 			repaint();
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		if(e.getButton() == 1) {
 			mouseLeftPressed = true;
-			mouseLeftStarted = new Point(e.getX(), e.getY());
-			mouseLeftAt = new Point(e.getX(), e.getY());
+			mouseLeftStarted.x = e.getX();
+			mouseLeftStarted.y = e.getY();
+			mouseLeftAt.x = e.getX();
+			mouseLeftAt.y = e.getY();
 			selectedPictogramAction = -1;
 			if(!e.isControlDown()) {
 				if(pictograms != null && !pictograms.isEmpty()) {
@@ -215,36 +230,46 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 			}
 		}
 
-		if(e.getButton() == 3) {
+		if(e.getButton() == 3 && valid(mouseRightAt)) {
 			mouseRightPressed = true;
-			mouseRightAt = new Point(e.getX(), e.getY());
+			mouseRightAt.x = e.getX();
+			mouseRightAt.y = e.getY();
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		if(e.getButton() == 1) {
 			mouseLeftPressed = false;
 			if(selectionBoxEnabled) {
 				calculateSelectionBox();
 				EditorPoint p1 = transformToModel(selectionStart.x, selectionStart.y);
 				EditorPoint p2 = transformToModel(selectionEnd.x, selectionEnd.y);
-				selectAll(p1, p2, e.isShiftDown());
-				selectionBoxEnabled = false;
-				repaintEverything();
+				if(p1 != null && p2 != null) {
+					selectAll(p1, p2, e.isShiftDown());
+					selectionBoxEnabled = false;
+					repaintEverything();
+				}
 			}
 
-			if(selectedPictogramAction >= 0) {
+			if(selectedPictogramAction >= 0 && valid(mouseLeftStarted) && valid(mouseLeftAt)) {
 				int action = selectedPictogramAction;
 				int dx = e.getX() - mouseLeftStarted.x;
 				int dy = e.getY() - mouseLeftStarted.y;
 				EditorPoint started = transformToModel(mouseLeftStarted.x, mouseLeftStarted.y);
 				EditorPoint ended = transformToModel(mouseLeftAt.x, mouseLeftAt.y);
-				mouseLeftStarted = null;
-				mouseLeftAt = null;
-				selectedPictogramAction = -1;
-				pictogramAction(action, dx, dy, started, ended);
-				repaintEverything();
+				if(started != null && ended != null) {
+					mouseLeftStarted.x = Integer.MIN_VALUE;
+					mouseLeftStarted.y = Integer.MIN_VALUE;
+					mouseLeftAt.x = Integer.MIN_VALUE;
+					mouseLeftAt.y = Integer.MIN_VALUE;
+					selectedPictogramAction = -1;
+					pictogramAction(action, dx, dy, started, ended);
+					repaintEverything();
+				}
 			}
 
 			FreeTriangleMeshModel model = getModel();
@@ -256,6 +281,9 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		if(e.getButton() == MouseEvent.BUTTON1) {
 			if(e.isControlDown()) {
 				// create new vertex
@@ -263,8 +291,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 			} else {
 				// select one vertex
 				EditorPoint p = transformToModel(e.getX(), e.getY());
-				selectFirst(p, 5, e.isShiftDown());
-				repaintEverything();
+				if(p != null) {
+					selectFirst(p, 5, e.isShiftDown());
+					repaintEverything();
+				}
 			}
 		}
 
@@ -276,14 +306,21 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		int numberOfRotations = e.getWheelRotation();
 		zoomIndex -= numberOfRotations;
 		if(zoomIndex < 0)
@@ -296,8 +333,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 
 	public void createVertexAtXY(int x, int y) {
 		EditorPoint p = transformToModel(x, y);
-		createVertexAt(p);
-		repaintEverything();
+		if(p != null) {
+			createVertexAt(p);
+			repaintEverything();
+		}
 	}
 
 	protected Rectangle calculateSelectionBox() {
@@ -317,6 +356,10 @@ public abstract class FreeTriangleMeshCanvas extends JPanel implements GameCanva
 	protected abstract void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended);
 
 	protected abstract void paint2d(Graphics2D g);
+
+	protected boolean valid(Point p) {
+		return p.x != Integer.MIN_VALUE && p.x != Integer.MAX_VALUE && p.y != Integer.MIN_VALUE && p.y != Integer.MAX_VALUE;
+	}
 
 	private static final long serialVersionUID = 1L;
 }

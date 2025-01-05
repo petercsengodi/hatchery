@@ -10,13 +10,6 @@ import org.junit.Test;
 public class TriangleUtilTest {
 
     @Test
-    public void testContainment() {
-        assertFalse("Should NOT be contained because of bounds.", TriangleUtil.triangleContains(1.0, 1.0, 2.0, 2.0, 1.5, -1.0, -5.0, 10.0));
-        assertFalse("Should NOT be contained, but it is inside the bounds.", TriangleUtil.triangleContains(1.0, 1.0, 2.0, 2.0, 1.5, -1.0, 1.0001, 1.5));
-        assertTrue("Should be contained, but it is inside the bounds.", TriangleUtil.triangleContains(1.0, 1.0, 2.0, 2.0, 1.5, -1.0, 1.5, 0.0));
-    }
-
-    @Test
     public void testZIfContainedOrInfinity() {
         assertTrue("Should NOT be contained because of bounds.", TriangleUtil.zIfContainedOrInfinity(
                 /* p1 */ 1.0, 1.0, 0.0,
@@ -35,6 +28,13 @@ public class TriangleUtilTest {
                 /* p2 */ 2.0, 2.0, -2.0,
                 /* p3 */ 1.5, -1.0, 0.0,
                 /* t */ 1.5, 0.0) < 0.0);
+    }
+
+    @Test
+    public void testContainment() {
+        assertFalse("Should NOT be contained because of bounds.", TriangleUtil.triangleContains(1.0, 1.0, 2.0, 2.0, 1.5, -1.0, -5.0, 10.0));
+        assertFalse("Should NOT be contained, but it is inside the bounds.", TriangleUtil.triangleContains(1.0, 1.0, 2.0, 2.0, 1.5, -1.0, 1.0001, 1.5));
+        assertTrue("Should be contained, but it is inside the bounds.", TriangleUtil.triangleContains(1.0, 1.0, 2.0, 2.0, 1.5, -1.0, 1.5, 0.0));
     }
 
 }

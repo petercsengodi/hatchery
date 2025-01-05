@@ -1,5 +1,13 @@
 package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
+import hu.csega.editors.FreeTriangleMeshToolStarter;
+import hu.csega.editors.common.lens.EditorPoint;
+import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
+import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
@@ -7,30 +15,46 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.common.lens.EditorPoint;
-import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
-import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
-import hu.csega.games.engine.GameEngineFacade;
-
-public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
+public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
-	protected FreeTriangleMeshSphereLineIntersection intersection = new FreeTriangleMeshSphereLineIntersection();
 
-	public FreeTriangleMeshSideView(GameEngineFacade facade) {
+	public FreeTriangleMeshWireframe(GameEngineFacade facade) {
 		super(facade);
 	}
 
-	public abstract String label();
+	@Override
+	protected EditorPoint transformToScreen(EditorPoint p) {
+		return p; // FIXME
+	}
+
+	@Override
+	protected EditorPoint transformToModel(int x, int y) {
+		return null;
+	}
+
+	@Override
+	protected void translate(double x, double y) {
+	}
+
+	@Override
+	protected void zoom(double delta) {
+	}
+
+	@Override
+	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
+	}
+
+	@Override
+	protected void selectFirst(EditorPoint p, double radius, boolean add) {
+	}
+
+	public String label() {
+		return "Wireframe";
+	}
 
 	@Override
 	protected void paint2d(Graphics2D g) {
-		drawGrid(g);
-
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
 		Collection<Object> selectedObjects = model.getSelectedObjects();
 
@@ -125,8 +149,6 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 	protected void drawRectangle(Graphics2D g, EditorPoint end1, EditorPoint end2) {
 		g.drawRect((int)end1.getX(), (int)end1.getY(), (int)(end2.getX() - end1.getX()), (int)(end2.getY() - end1.getY()));
 	}
-
-	protected abstract void drawGrid(Graphics2D g);
 
 	@Override
 	protected Set<FreeTriangleMeshPictogram> refreshPictograms(FreeTriangleMeshModel model) {

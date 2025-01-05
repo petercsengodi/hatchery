@@ -38,6 +38,10 @@ public class FreeTriangleMeshXZSideView extends FreeTriangleMeshSideView {
 
 	@Override
 	protected EditorPoint transformToModel(int x, int y) {
+		if(x == Integer.MIN_VALUE || x == Integer.MAX_VALUE || y == Integer.MIN_VALUE || y == Integer.MAX_VALUE) {
+			return null;
+		}
+
 		EditorPoint result = new EditorPoint(0, 0, 0, 1);
 		result.setX(x - lastSize.width / 2.0);
 		result.setY(y - lastSize.height / 2.0);
