@@ -139,9 +139,11 @@ public class FreeTriangleMeshHoverOverCalculations {
                             mouseX, mouseY, counterClockwise
                     );
 
-                    if (lastZPosition == Double.POSITIVE_INFINITY || zPosition < lastZPosition) {
-                        lastZPosition = zPosition;
-                        hoverOverTriangle = triangle;
+                    if(zPosition != Double.POSITIVE_INFINITY) {
+                        if (lastZPosition == Double.POSITIVE_INFINITY || zPosition < lastZPosition) {
+                            lastZPosition = zPosition;
+                            hoverOverTriangle = triangle;
+                        }
                     }
                 }
             }

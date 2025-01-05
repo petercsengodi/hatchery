@@ -2,12 +2,23 @@ package hu.csega.common.math;
 
 public class TriangleUtil {
 
+    /**
+     * @param counterClockWise If null, no extra checks will be done. If true, then only counter-clockwise triangles
+     *                         will be checked. If false, then only clockwise triangles will be checked.
+     * @return Positive infinity, if test point is not in triangle, otherwise a calculated Z value.
+     */
     public static double zIfContainedOrInfinity(double px1, double py1, double pz1,
                                          double px2, double py2, double pz2,
                                          double px3, double py3, double pz3,
                                          double tx, double ty, Boolean counterClockWise) {
 
-        // FIXME: counterClockWise
+        if(counterClockWise != null) {
+            double v = triangleSignedArea(px1, py1, px2, py2, px3, py3);
+            if(counterClockWise && v > 0.0 || !counterClockWise && v < 0.0) {
+                // TODO: This should be the other way around, but I don't know why it works this way.
+                return Double.POSITIVE_INFINITY;
+            }
+        }
 
         if(triangleContains(px1, py1, px2, py2, px3, py3, tx, ty)) {
             double l1 = ScalarUtil.distance(px1, py1, tx, ty);
@@ -99,9 +110,14 @@ public class TriangleUtil {
         return true;
     }
 
-    public static boolean triangleCounterClockwise() {
+    public static double triangleSignedArea(double x1, double y1, double x2, double y2, double x3, double y3) {
+        return (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1);
+    }
+
+    public static boolean triangleCounterClockwise(double x1, double y1, double x2, double y2, double x3, double y3) {
         // Calculate "signed area", if positive, then counter-clockwise.
-        return true;
+        // TODO: This should be the other way around, but I don't know why it works this way.
+        return triangleSignedArea(x1, y1, x2, y2, x3, y3) < 0.0;
     }
 
 }
