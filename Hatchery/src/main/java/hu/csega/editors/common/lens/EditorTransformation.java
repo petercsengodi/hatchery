@@ -12,18 +12,19 @@ public class EditorTransformation implements EditorLens {
 	private Vector4d v = new Vector4d();
 
 	public EditorTransformation() {
-		this.transformation = new Matrix4d(
+		setTransformation(new Matrix4d(
 				1.0, 0.0, 0.0, 0.0,
 				0.0, 1.0, 0.0, 0.0,
 				0.0, 0.0, 1.0, 0.0,
-				0.0, 0.0, 0.0, 1.0);
-
-		this.inverse = new Matrix4d(this.transformation);
-		this.inverse.invert();
+				0.0, 0.0, 0.0, 1.0));
 	}
 
-	public EditorTransformation(Matrix4d transformation) {
-		this.transformation = new Matrix4d(transformation);
+	public EditorTransformation(Matrix4d transformationMatrix) {
+		setTransformation(transformationMatrix);
+	}
+
+	public void setTransformation(Matrix4d transformationMatrix) {
+		this.transformation = new Matrix4d(transformationMatrix);
 		this.inverse = new Matrix4d(this.transformation);
 		this.inverse.invert();
 	}
@@ -38,9 +39,9 @@ public class EditorTransformation implements EditorLens {
 		v = transformation.transform(v);
 
 		original.setX(v.x);
-		original.setX(v.y);
-		original.setX(v.z);
-		original.setX(v.w);
+		original.setY(v.y);
+		original.setZ(v.z);
+		original.setW(v.w);
 	}
 
 	@Override
@@ -53,9 +54,9 @@ public class EditorTransformation implements EditorLens {
 		v = inverse.transform(v);
 
 		original.setX(v.x);
-		original.setX(v.y);
-		original.setX(v.z);
-		original.setX(v.w);
+		original.setY(v.y);
+		original.setZ(v.z);
+		original.setW(v.w);
 	}
 
 }

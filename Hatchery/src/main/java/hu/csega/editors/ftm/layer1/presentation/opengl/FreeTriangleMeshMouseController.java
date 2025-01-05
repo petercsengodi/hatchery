@@ -20,7 +20,7 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 	private double beta;
 
 	private boolean mouseRightPressed = false;
-	private Point mouseRightAt = new Point(0, 0);
+	private final Point mouseRightAt = new Point(0, 0);
 
 	private GameCanvas canvas;
 
@@ -69,7 +69,8 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton() == 3) {
 			mouseRightPressed = true;
-			mouseRightAt = new Point(e.getX(), e.getY());
+			mouseRightAt.x = e.getX();
+			mouseRightAt.y = e.getY();
 		}
 	}
 
