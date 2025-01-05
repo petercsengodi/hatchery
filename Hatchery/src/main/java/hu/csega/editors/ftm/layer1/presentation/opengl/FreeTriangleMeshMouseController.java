@@ -7,19 +7,25 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import hu.csega.editors.common.lens.EditorLensPipeline;
+import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshHoverOverCalculations;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshWireframe;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.intf.GameCanvas;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 
 public class FreeTriangleMeshMouseController implements MouseListener, MouseMotionListener, MouseWheelListener{
 
 	private boolean mouseRightPressed = false;
 	private final Point mouseRightAt = new Point(0, 0);
+	private final Point trackedMousePosition = new Point(0, 0);
 
-	private GameEngineFacade facade;
-	private GameCanvas gameCanvas;
-	private FreeTriangleMeshWireframe wireframeCanvas;
+	private final GameEngineFacade facade;
+	private final GameCanvas gameCanvas;
+	private final FreeTriangleMeshWireframe wireframeCanvas;
+	private final EditorLensPipeline lenses = new EditorLensPipeline();
+	private final FreeTriangleMeshHoverOverCalculations hoverOverCalculations = new FreeTriangleMeshHoverOverCalculations(lenses);
 
 	public FreeTriangleMeshMouseController(GameEngineFacade facade, GameCanvas gameCanvas, FreeTriangleMeshWireframe wireframeCanvas) {
 		this.facade = facade;
@@ -29,49 +35,119 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
 		int numberOfRotations = e.getWheelRotation();
 		model.modifyOpenGLZoomIndex(numberOfRotations);
-		gameCanvas.repaint();
-		wireframeCanvas.repaint();
+
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		modifyAlfaAndBetaIfNeeded(e);
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		modifyAlfaAndBetaIfNeeded(e);
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		boolean repaintRequestedAlready = false;
+
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			Object hoverOverObject = model.getHoverOverObject();
+			if(hoverOverObject instanceof FreeTriangleMeshTriangle) {
+				model.selectTriangle((FreeTriangleMeshTriangle) hoverOverObject);
+				repaintRequestedAlready = true;
+				facade.window().repaintEverything();
+			}
+		}
+
+		if(!repaintRequestedAlready)
+			repaintBothCanvases();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(e.getButton() == 3) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
+		if(e.getButton() == MouseEvent.BUTTON3) {
 			mouseRightPressed = true;
 			mouseRightAt.x = e.getX();
 			mouseRightAt.y = e.getY();
 		}
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
 		if(e.getButton() == 3) {
 			mouseRightPressed = false;
 		}
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		trackedMousePosition.x = e.getX();
+		trackedMousePosition.y = e.getY();
+
+		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		hoverOverCalculations.doCalculations(model, e.getX(), e.getY(), gameCanvas.getWidth(), gameCanvas.getHeight());
+
+		repaintBothCanvases();
 	}
 
 	private void modifyAlfaAndBetaIfNeeded(MouseEvent e) {
@@ -82,11 +158,14 @@ public class FreeTriangleMeshMouseController implements MouseListener, MouseMoti
 			FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
 			model.modifyOpenGLAlpha(dx / 100.0);
 			model.modifyOpenGLBeta(dy / 100.0);
-
-			gameCanvas.repaint();
-			wireframeCanvas.repaint();
 			mouseRightAt.x = e.getX();
 			mouseRightAt.y = e.getY();
 		}
+	}
+
+	private void repaintBothCanvases() {
+		gameCanvas.repaint();
+		wireframeCanvas.invalidate();
+		wireframeCanvas.repaint();
 	}
 }

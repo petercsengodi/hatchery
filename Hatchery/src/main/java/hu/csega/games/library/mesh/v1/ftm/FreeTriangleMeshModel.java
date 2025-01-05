@@ -28,6 +28,7 @@ public class FreeTriangleMeshModel implements Serializable {
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
 	private Collection<Object> selectedObjects = new HashSet<>(); // May also be ArrayList in serialized objects.
 	private long selectionLastChanged;
+	private Object hoverOverObject;
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
 	private int lastSelectedTriangleIndex = -1;
 
@@ -646,6 +647,15 @@ public class FreeTriangleMeshModel implements Serializable {
 		selectedObjects.addAll(getVertices());
 	}
 
+	public void selectTriangle(FreeTriangleMeshTriangle triangle) {
+		selectedObjects.clear();
+
+		List<FreeTriangleMeshVertex> vertices = getVertices();
+		selectedObjects.add(vertices.get(triangle.getVertex1()));
+		selectedObjects.add(vertices.get(triangle.getVertex2()));
+		selectedObjects.add(vertices.get(triangle.getVertex3()));
+	}
+
 	public void splitLongestEdge() {
 		if(selectedObjects.size() < 2)
 			return;
@@ -1150,6 +1160,14 @@ public class FreeTriangleMeshModel implements Serializable {
 
 	public void setSelectedObjects(Set<Object> selectedObjects) {
 		this.selectedObjects = selectedObjects;
+	}
+
+	public void setHoverOverObject(Object hoverOverObject) {
+		this.hoverOverObject = hoverOverObject;
+	}
+
+	public Object getHoverOverObject() {
+		return hoverOverObject;
 	}
 
 	public double getCanvasXYTranslateX() {

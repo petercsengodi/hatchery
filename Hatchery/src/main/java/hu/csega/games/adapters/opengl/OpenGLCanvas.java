@@ -15,6 +15,16 @@ public class OpenGLCanvas implements GameCanvas {
 	}
 
 	@Override
+	public int getWidth() {
+		return realCanvas.getWidth();
+	}
+
+	@Override
+	public int getHeight() {
+		return realCanvas.getHeight();
+	}
+
+	@Override
 	public void repaint() {
 		realCanvas.repaint();
 	}
