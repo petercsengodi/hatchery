@@ -55,12 +55,12 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 
 	private GL3 gl3 = null;
 
-	private Vector4f tmpEye = new Vector4f();
-	private Vector4f tmpCenter = new Vector4f();
-	private Vector4f tmpUp = new Vector4f();
-	private Matrix4f basicLookAt = new Matrix4f();
-	private Matrix4f inverseLookAt = new Matrix4f();
-	private Matrix4f basicScale = new Matrix4f();
+	private Vector4f outEye = new Vector4f();
+	private Vector4f outCenter = new Vector4f();
+	private Vector4f outUp = new Vector4f();
+	private Matrix4f outBasicLookAt = new Matrix4f();
+	private Matrix4f outInverseLookAt = new Matrix4f();
+	private Matrix4f outBasicScale = new Matrix4f();
 	private Matrix4f modelTransformation = new Matrix4f();
 
 	private int width;
@@ -287,12 +287,12 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);
 
-		placement.calculateBasicLookAt(basicLookAt);
-		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
-		calculatedMatrix.mul(inverseLookAt);
+		placement.calculateBasicLookAt(outBasicLookAt);
+		placement.calculateInverseLookAt(outBasicLookAt, outEye, outCenter, outUp, outInverseLookAt);
+		calculatedMatrix.mul(outInverseLookAt);
 
-		placement.calculateBasicScaleMatrix(basicScale);
-		calculatedMatrix.mul(basicScale);
+		placement.calculateBasicScaleMatrix(outBasicScale);
+		calculatedMatrix.mul(outBasicScale);
 
 		calculatedMatrix.get(matrixBuffer);
 
@@ -317,12 +317,12 @@ public class OpenGLProfileGL3Adapter implements OpenGLProfileAdapter {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);
 
-		placement.calculateBasicLookAt(basicLookAt);
-		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
-		calculatedMatrix.mul(inverseLookAt);
+		placement.calculateBasicLookAt(outBasicLookAt);
+		placement.calculateInverseLookAt(outBasicLookAt, outEye, outCenter, outUp, outInverseLookAt);
+		calculatedMatrix.mul(outInverseLookAt);
 
-		placement.calculateBasicScaleMatrix(basicScale);
-		calculatedMatrix.mul(basicScale);
+		placement.calculateBasicScaleMatrix(outBasicScale);
+		calculatedMatrix.mul(outBasicScale);
 
 		transformation.exportTo(modelTransformation);
 		calculatedMatrix.mul(modelTransformation);

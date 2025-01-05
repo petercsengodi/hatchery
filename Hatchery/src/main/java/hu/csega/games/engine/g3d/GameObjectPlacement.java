@@ -2,6 +2,7 @@ package hu.csega.games.engine.g3d;
 
 import java.io.Serializable;
 
+import org.joml.Matrix4d;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
@@ -89,6 +90,12 @@ public class GameObjectPlacement implements Serializable {
 	}
 
 	public void calculateBasicLookAt(Matrix4f basicLookAt) {
+		basicLookAt.setLookAt(this.position.x, this.position.y, this.position.z,
+				this.target.x, this.target.y, this.target.z,
+				this.up.x, this.up.y, this.up.z);
+	}
+
+	public void calculateBasicLookAt(Matrix4d basicLookAt) {
 		basicLookAt.setLookAt(this.position.x, this.position.y, this.position.z,
 				this.target.x, this.target.y, this.target.z,
 				this.up.x, this.up.y, this.up.z);

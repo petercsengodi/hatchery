@@ -1,6 +1,6 @@
 package hu.csega.editors.common.lens;
 
-public class EditorLensScreenTransformationImpl implements EditorLens {
+public class EditorLensAWTScreenTransformationImpl implements EditorLens {
 
 	@Override
 	public void fromModelToScreen(EditorPoint original) {

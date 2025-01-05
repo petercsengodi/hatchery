@@ -4,7 +4,7 @@ public class EditorLensPipeline {
 
 	private EditorLensTranslateImpl translate = null;
 	private EditorLensScaleImpl scale;
-	private EditorLensScreenTransformationImpl screenTransformation;
+	private EditorLens screenTransformation;
 	private EditorLens screenDirection = null;
 	private EditorTransformation customTransformation;
 
@@ -12,18 +12,22 @@ public class EditorLensPipeline {
 		this.customTransformation = customTransformation;
 	}
 
+	public void setScreenTransformation(EditorLens screenTransformation) {
+		this.screenTransformation = screenTransformation;
+	}
+
 	public void screenXY() {
-		screenTransformation = new EditorLensScreenTransformationImpl();
+		screenTransformation = new EditorLensAWTScreenTransformationImpl();
 		screenDirection = new EditorLensXYToXY();
 	}
 
 	public void screenXZ() {
-		screenTransformation = new EditorLensScreenTransformationImpl();
+		screenTransformation = new EditorLensAWTScreenTransformationImpl();
 		screenDirection = new EditorLensXYToXZ();
 	}
 
 	public void screenZY() {
-		screenTransformation = new EditorLensScreenTransformationImpl();
+		screenTransformation = new EditorLensAWTScreenTransformationImpl();
 		screenDirection = new EditorLensXYToZY();
 	}
 
@@ -66,6 +70,10 @@ public class EditorLensPipeline {
 			scale.fromModelToScreen(result);
 		}
 
+		if(customTransformation != null) {
+			customTransformation.fromModelToScreen(result);
+		}
+
 		if(screenTransformation != null) {
 			screenTransformation.fromModelToScreen(result);
 		}
@@ -76,10 +84,6 @@ public class EditorLensPipeline {
 
 		if(translate != null) {
 			translate.fromModelToScreen(result);
-		}
-
-		if(customTransformation != null) {
-			customTransformation.fromModelToScreen(result);
 		}
 
 		return result;
@@ -92,6 +96,10 @@ public class EditorLensPipeline {
 			scale.fromModelToScreen(result);
 		}
 
+		if(customTransformation != null) {
+			customTransformation.fromModelToScreen(result);
+		}
+
 		if(screenTransformation != null) {
 			screenTransformation.fromModelToScreen(result);
 		}
@@ -104,19 +112,11 @@ public class EditorLensPipeline {
 			translate.fromModelToScreen(result);
 		}
 
-		if(customTransformation != null) {
-			customTransformation.fromModelToScreen(result);
-		}
-
 		return result;
 	}
 
 	public EditorPoint fromScreenToModel(EditorPoint original) {
 		EditorPoint result = new EditorPoint(original);
-
-		if(customTransformation != null) {
-			customTransformation.fromScreenToModel(result);
-		}
 
 		if(translate != null) {
 			translate.fromScreenToModel(result);
@@ -128,6 +128,10 @@ public class EditorLensPipeline {
 
 		if(screenTransformation != null) {
 			screenTransformation.fromScreenToModel(result);
+		}
+
+		if(customTransformation != null) {
+			customTransformation.fromScreenToModel(result);
 		}
 
 		if(scale != null) {
