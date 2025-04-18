@@ -118,7 +118,7 @@ public class AnimatorModel {
 		scenes.selectScene(sceneIndex);
 	}
 
-	public void previouseScene() {
+	public void previousScene() {
 		scenes.previousScene();
 	}
 

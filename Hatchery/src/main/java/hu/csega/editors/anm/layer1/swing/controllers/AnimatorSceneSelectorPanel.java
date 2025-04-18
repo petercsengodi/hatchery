@@ -17,7 +17,7 @@ public class AnimatorSceneSelectorPanel extends JPanel {
 
 	private JButton changeNumberOfScenes;
 	private JButton changeCurrentScene;
-	private JButton previouseScene;
+	private JButton previousScene;
 	private JButton nextScene;
 	private JButton copy;
 	private JButton copyFromThePrevious;
@@ -32,12 +32,15 @@ public class AnimatorSceneSelectorPanel extends JPanel {
 
 	public AnimatorSceneSelectorPanel() {
 		this.animatorModel = UnitStore.instance(AnimatorModel.class);
+		int storedNumberOfScenes = this.animatorModel.getPersistent().getAnimation().getNumberOfScenes();
 
 		this.numberOfScenesLabel = new JLabel("Number of scenes:");
 		this.currentSceneLabel = new JLabel("Current scene:");
 		this.copyFromSceneLabel = new JLabel("Copy from scene:");
 
 		this.numberOfScenes = new JTextField(4);
+		this.numberOfScenes.setText(String.valueOf(storedNumberOfScenes));
+
 		this.currentScene = new JTextField(4);
 		this.copyFromScene = new JTextField(4);
 
@@ -59,8 +62,8 @@ public class AnimatorSceneSelectorPanel extends JPanel {
 			}
 		});
 
-		this.previouseScene = new JButton("-");
-		this.previouseScene.addActionListener(event -> this.animatorModel.previouseScene());
+		this.previousScene = new JButton("-");
+		this.previousScene.addActionListener(event -> this.animatorModel.previousScene());
 
 		this.nextScene = new JButton("+");
 		this.nextScene.addActionListener(event -> this.animatorModel.nextScene());
@@ -88,7 +91,7 @@ public class AnimatorSceneSelectorPanel extends JPanel {
 		this.middlePanel.add(this.currentSceneLabel);
 		this.middlePanel.add(this.currentScene);
 		this.middlePanel.add(this.changeCurrentScene);
-		this.middlePanel.add(this.previouseScene);
+		this.middlePanel.add(this.previousScene);
 		this.middlePanel.add(this.nextScene);
 
 		this.lowerPanel = new JPanel();
@@ -103,7 +106,13 @@ public class AnimatorSceneSelectorPanel extends JPanel {
 		this.add(upperPanel);
 		this.add(middlePanel);
 		this.add(lowerPanel);
+	}
 
+	@Override
+	public void updateUI() {
+		int storedNumberOfScenes = this.animatorModel.getPersistent().getAnimation().getNumberOfScenes();
+		this.numberOfScenes.setText(String.valueOf(storedNumberOfScenes));
+		super.updateUI();
 	}
 
 	private static final long serialVersionUID = 1L;
