@@ -50,7 +50,7 @@ public class FreeTriangleMeshContextMenu extends JPopupMenu {
             facade.window().repaintEverything();
         });
 
-        JMenuItem splitTriangles = new JMenuItem("Split triangles (S)");
+        JMenuItem splitTriangles = new JMenuItem("Split triangles / edges (S)");
         this.add(splitTriangles);
         splitTriangles.addActionListener(e -> {
             GameEngineFacade facade = parent.getFacade();

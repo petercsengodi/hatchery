@@ -1,6 +1,8 @@
 package hu.csega.editors.anm.layer1.swing.controllers;
 
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.UnitStore;
 
 import java.awt.*;
@@ -110,8 +112,18 @@ public class AnimatorSceneSelectorPanel extends JPanel {
 
 	@Override
 	public void updateUI() {
-		int storedNumberOfScenes = this.animatorModel.getPersistent().getAnimation().getNumberOfScenes();
-		this.numberOfScenes.setText(String.valueOf(storedNumberOfScenes));
+		if(this.animatorModel != null && this.animatorModel.getPersistent() != null) {
+			AnimationPersistent persistent = this.animatorModel.getPersistent();
+			int selectedScene = persistent.getSelectedScene();
+			this.currentScene.setText(String.valueOf(selectedScene));
+			
+			Animation animation = persistent.getAnimation();
+			if(animation != null) {
+				int storedNumberOfScenes = animation.getNumberOfScenes();
+				this.numberOfScenes.setText(String.valueOf(storedNumberOfScenes));
+			}
+		}
+
 		super.updateUI();
 	}
 

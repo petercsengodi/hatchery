@@ -103,6 +103,8 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			}
 
 			components.jsonView.setJSON(lastJSON);
+			components.sceneLerpPanel.updateUI();
+			components.sceneSelectorPanel.updateUI();
 		}
 
 	} // end of refreshAll
