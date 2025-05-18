@@ -105,7 +105,7 @@ public class SofaWordTree {
         currentLength = newLength;
     }
 
-    public void analyze(String test, SofaResult result) {
+    public void analyze(String test, SofaResult result, boolean binary) {
         result.numberOfWords = result.numberOfAcceptedWords = 0;
         if(test == null)
             return;
@@ -131,7 +131,11 @@ public class SofaWordTree {
                     int numberOfChoices = data[dataPos + 1];
                     int offset = dataPos + 2;
 
-                    int found = find(code, offset, numberOfChoices);
+                    int found = (binary ?
+                            findBinary(code, offset, numberOfChoices)
+                            :
+                            findLinear(code, offset, numberOfChoices)
+                    );
                     if(found < 1)
                         stillAcceptable = false;
                     else
@@ -150,9 +154,28 @@ public class SofaWordTree {
         }
     }
 
-    /** Binary search */
-    // FIXME make it a binary search
-    private int find(int code, int offset, int numberOfChoices) {
+    /** Binary search. */
+    private int findBinary(int code, int startPosition, int numberOfChoices) {
+        // The startPosition and endPosition values are both inclusive.
+        int endPosition = startPosition + numberOfChoices * 2 - 2;
+        int pos, c;
+
+        while(startPosition <= endPosition) {
+            pos = (startPosition + endPosition) / 2;
+            if(pos % 2 == 1)
+                pos--;
+            if((c = data[pos]) == code)
+                return data[pos + 1];
+            if(code < c)
+                endPosition = pos - 2;
+            else
+                startPosition =  pos + 2;
+        }
+
+        return -1;
+    }
+
+    private int findLinear(int code, int offset, int numberOfChoices) {
         int endPos = offset + numberOfChoices * 2;
         while(offset < endPos) {
             if(code == data[offset])

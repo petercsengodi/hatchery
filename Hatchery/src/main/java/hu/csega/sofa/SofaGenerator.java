@@ -50,7 +50,7 @@ public class SofaGenerator {
 
         String test = "Fox jumps abc-123 over lazy dog.";
         SofaResult result = new SofaResult();
-        tree.analyze(test, result);
+        tree.analyze(test, result, true);
 
         System.out.println("------");
         System.out.println(test);
@@ -85,7 +85,7 @@ public class SofaGenerator {
                 System.out.println();
             for(int k = 0; k < sentences.length; k++) {
                 String s = sentences[k];
-                tree.analyze(s, result);
+                tree.analyze(s, result, false);
                 if (i == 99)
                     System.out.println(s + ' ' + result.numberOfAcceptedWords + '/'  + result.numberOfWords);
             }
@@ -96,6 +96,30 @@ public class SofaGenerator {
         System.out.println("------");
         System.out.println(((end - start) / 1000.0) + " secs.");
 
+        System.out.println();
+        System.out.println("======= Same with binary search ========");
+        System.out.println();
+
+        start = System.currentTimeMillis();
+
+        System.out.println();
+        for(int i = 0; i < 100; i++) {
+            if (i % 10 == 9)
+                System.out.print('.');
+            if (i == 99)
+                System.out.println();
+            for(int k = 0; k < sentences.length; k++) {
+                String s = sentences[k];
+                tree.analyze(s, result, true);
+                if (i == 99)
+                    System.out.println(s + ' ' + result.numberOfAcceptedWords + '/'  + result.numberOfWords);
+            }
+        }
+
+        end = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("------");
+        System.out.println(((end - start) / 1000.0) + " secs.");
     }
 
 }
