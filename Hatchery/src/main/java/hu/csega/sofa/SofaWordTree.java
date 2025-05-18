@@ -106,6 +106,7 @@ public class SofaWordTree {
     }
 
     public void analyze(String test, SofaResult result) {
+        result.numberOfWords = result.numberOfAcceptedWords = 0;
         if(test == null)
             return;
 

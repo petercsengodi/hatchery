@@ -3,6 +3,7 @@ package hu.csega.sofa;
 import hu.csega.editors.common.resources.FileResourceAdapter;
 
 import java.io.*;
+import java.util.Random;
 
 public class SofaGenerator {
 
@@ -28,6 +29,21 @@ public class SofaGenerator {
             }
         }
 
+        String pattern = "abcdefghijklmnopqrstuvwxyz";
+        int patternLength = pattern.length();
+        Random rnd = new Random(System.currentTimeMillis());
+
+        for(int i = 0; i < 20_000; i++) {
+            int len = rnd.nextInt(12) + 2;
+            StringBuilder b = new StringBuilder();
+            for(int j = 0; j < len; j++) {
+                char c = pattern.charAt(rnd.nextInt(patternLength));
+                b.append(c);
+            }
+            tree.addWord(b.toString());
+        }
+
+
         tree.generate();
 
         System.out.println("Used: " + tree.getUsed());
@@ -40,6 +56,46 @@ public class SofaGenerator {
         System.out.println(test);
         System.out.println("Number of words: " + result.numberOfWords);
         System.out.println("Number of accepted words: " + result.numberOfAcceptedWords);
+        System.out.println();
+
+        String[] sentences = new String[100];
+        for(int k = 0; k < sentences.length; k++) {
+            StringBuilder b = new StringBuilder();
+            for(int w = 0; w < 20; w++) {
+                b.append(' ');
+                int len = rnd.nextInt(12) + 2;
+                for (int j = 0; j < len; j++) {
+                    char c = pattern.charAt(rnd.nextInt(patternLength));
+                    b.append(c);
+                }
+            }
+            sentences[k] = b.toString();
+        }
+
+        System.out.println("Test sentences are generated.");
+        System.out.println();
+
+        long start = System.currentTimeMillis();
+
+        System.out.println();
+        for(int i = 0; i < 100; i++) {
+            if (i % 10 == 9)
+                System.out.print('.');
+            if (i == 99)
+                System.out.println();
+            for(int k = 0; k < sentences.length; k++) {
+                String s = sentences[k];
+                tree.analyze(s, result);
+                if (i == 99)
+                    System.out.println(s + ' ' + result.numberOfAcceptedWords + '/'  + result.numberOfWords);
+            }
+        }
+
+        long end = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("------");
+        System.out.println(((end - start) / 1000.0) + " secs.");
+
     }
 
 }
