@@ -78,15 +78,15 @@ public class SofaGenerator {
         long start = System.currentTimeMillis();
 
         System.out.println();
-        for(int i = 0; i < 100; i++) {
-            if (i % 10 == 9)
+        for(int i = 0; i < 10000; i++) {
+            if (i % 1000 == 999)
                 System.out.print('.');
-            if (i == 99)
+            if (i == 9999)
                 System.out.println();
             for(int k = 0; k < sentences.length; k++) {
                 String s = sentences[k];
                 tree.analyze(s, result, false);
-                if (i == 99)
+                if (i == 9999999)
                     System.out.println(s + ' ' + result.numberOfAcceptedWords + '/'  + result.numberOfWords);
             }
         }
@@ -103,15 +103,15 @@ public class SofaGenerator {
         start = System.currentTimeMillis();
 
         System.out.println();
-        for(int i = 0; i < 100; i++) {
-            if (i % 10 == 9)
+        for(int i = 0; i < 10000; i++) {
+            if (i % 1000 == 999)
                 System.out.print('.');
-            if (i == 99)
+            if (i == 9999)
                 System.out.println();
             for(int k = 0; k < sentences.length; k++) {
                 String s = sentences[k];
                 tree.analyze(s, result, true);
-                if (i == 99)
+                if (i == 9999999)
                     System.out.println(s + ' ' + result.numberOfAcceptedWords + '/'  + result.numberOfWords);
             }
         }

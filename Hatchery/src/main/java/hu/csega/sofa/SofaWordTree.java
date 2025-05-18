@@ -161,15 +161,29 @@ public class SofaWordTree {
         int pos, c;
 
         while(startPosition <= endPosition) {
-            pos = (startPosition + endPosition) / 2;
-            if(pos % 2 == 1)
-                pos--;
+            pos = (startPosition + 2 >= endPosition ? startPosition : (((startPosition + endPosition) >> 2) << 1));
             if((c = data[pos]) == code)
                 return data[pos + 1];
-            if(code < c)
-                endPosition = pos - 2;
-            else
-                startPosition =  pos + 2;
+
+            if(code < c) {
+                if(code == c - 1) { // At most we need to step 1 left.
+                    if(pos <= startPosition)
+                        return -1;
+                    else
+                        return (code == data[pos - 2] ? data[pos - 1] : -1);
+                } else {
+                    endPosition = pos - 2;
+                }
+            } else {
+                if(code == c + 1) {
+                    if(pos >= endPosition)
+                        return -1;
+                    else
+                        return (code == data[pos + 2] ? data[pos + 3] : -1);
+                } else {
+                    startPosition = pos + 2;
+                }
+            }
         }
 
         return -1;
