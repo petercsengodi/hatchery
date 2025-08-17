@@ -11,10 +11,11 @@ public class SofaGenerator {
 
     public static void main(String[] args) throws Exception {
         FileResourceAdapter resourceAdapter = new FileResourceAdapter("Hatchery");
-        File input = new File(resourceAdapter.projectRoot() + "demo" + File.separator + SOFA_PROJECT + File.separator + "input.txt");
+        File input = new File(resourceAdapter.projectRoot() + "demo" + File.separator + SOFA_PROJECT + File.separator + "top20k.txt");
         File output = new File(resourceAdapter.projectRoot() + "demo" + File.separator + SOFA_PROJECT + File.separator + "output.bin");
 
         SofaWordTree tree = new SofaWordTree();
+        int linesProcessed = 0;
 
         InputStream inputStream = new FileInputStream(input);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -22,17 +23,22 @@ public class SofaGenerator {
 
             while((line = reader.readLine()) != null) {
                 line = line.trim();
-                if(line.isEmpty() || line.charAt(0) == '#')
+                if(line.isEmpty() || line.charAt(0) == '#' /* ??? */ || line.length() < 3)
                     continue;
 
-                tree.addWord(line);
+                // FIXME: numbers, hyphen, etc.
+                tree.addWord(line.toLowerCase());
+                linesProcessed++;
             }
         }
+
+        System.out.println("Lines processed: " + linesProcessed);
 
         String pattern = "abcdefghijklmnopqrstuvwxyz";
         int patternLength = pattern.length();
         Random rnd = new Random(System.currentTimeMillis());
 
+        /*
         for(int i = 0; i < 20_000; i++) {
             int len = rnd.nextInt(12) + 2;
             StringBuilder b = new StringBuilder();
@@ -41,22 +47,14 @@ public class SofaGenerator {
                 b.append(c);
             }
             tree.addWord(b.toString());
-        }
-
+        } */
 
         tree.generate();
-
         System.out.println("Used: " + tree.getUsed());
 
-        String test = "Fox jumps abc-123 over lazy dog.";
         SofaResult result = new SofaResult();
-        tree.analyze(test, result, true);
-
-        System.out.println("------");
-        System.out.println(test);
-        System.out.println("Number of words: " + result.numberOfWords);
-        System.out.println("Number of accepted words: " + result.numberOfAcceptedWords);
-        System.out.println();
+        test(tree, "Fox jumps abc-123 over lazy dog.", result);
+        test(tree, "El pez en el estanque murió.", result);
 
         String[] sentences = new String[100];
         for(int k = 0; k < sentences.length; k++) {
@@ -78,7 +76,7 @@ public class SofaGenerator {
         long start = System.currentTimeMillis();
 
         System.out.println();
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i < 100; i++) {
             if (i % 1000 == 999)
                 System.out.print('.');
             if (i == 9999)
@@ -103,7 +101,7 @@ public class SofaGenerator {
         start = System.currentTimeMillis();
 
         System.out.println();
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i < 100; i++) {
             if (i % 1000 == 999)
                 System.out.print('.');
             if (i == 9999)
@@ -120,6 +118,17 @@ public class SofaGenerator {
         System.out.println();
         System.out.println("------");
         System.out.println(((end - start) / 1000.0) + " secs.");
+    }
+
+    private static void test(SofaWordTree tree, String test, SofaResult result) {
+        tree.analyze(test, result, true);
+
+        System.out.println();
+        System.out.println("------");
+        System.out.println(test);
+        System.out.println("Number of words: " + result.numberOfWords);
+        System.out.println("Number of accepted words: " + result.numberOfAcceptedWords);
+        System.out.println();
     }
 
 }
