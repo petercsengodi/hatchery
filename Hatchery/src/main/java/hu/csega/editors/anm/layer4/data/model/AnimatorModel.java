@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer4.data.model;
 
+import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorCameraManipulator;
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorFileManipulator;
@@ -13,6 +14,7 @@ import hu.csega.games.units.Dependency;
 public class AnimatorModel {
 
 	private AnimationPersistent persistent;
+	private String modelIdentifier;
 
 	private AnimatorFileManipulator files;
 	private AnimatorSnapshotManipulator snapshots;
@@ -21,7 +23,22 @@ public class AnimatorModel {
 	private AnimatorSceneManipulator scenes;
 	private AnimatorRefreshViews refreshViews;
 
-	public AnimationPersistent getPersistent() {
+	public CommonEditorModel selectModel() {
+		AnimationPersistent persistent = getPersistent();
+		CommonEditorModel result = null;
+
+		if(modelIdentifier != null) {
+			result = persistent.selectMesh(modelIdentifier);
+		}
+
+		if(result == null) {
+			result = persistent;
+		}
+
+		return result;
+	}
+
+ 	public AnimationPersistent getPersistent() {
 		if(persistent == null) {
 			persistent = new AnimationPersistent();
 		}
@@ -174,4 +191,5 @@ public class AnimatorModel {
 	public void setAnimatorRefreshViews(AnimatorRefreshViews animatorRefreshViews) {
 		this.refreshViews = animatorRefreshViews;
 	}
+
 }

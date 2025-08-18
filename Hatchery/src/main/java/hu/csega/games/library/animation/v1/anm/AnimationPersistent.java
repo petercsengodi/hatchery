@@ -1,12 +1,21 @@
 package hu.csega.games.library.animation.v1.anm;
 
-import java.io.Serializable;
+import hu.csega.editors.anm.common.CommonEditorModel;
+import hu.csega.games.engine.g3d.GameObjectDirection;
+import hu.csega.games.engine.g3d.GameObjectPlacement;
+import hu.csega.games.engine.g3d.GameObjectPosition;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 
-public class AnimationPersistent implements Serializable {
+import java.io.Serializable;
+import java.util.Map;
+
+public class AnimationPersistent implements Serializable, CommonEditorModel {
 
 	private String name = "Unnamed";
 	private Animation animation;
 	private AnimationMisc misc;
+
+	private Map<String, FreeTriangleMeshModel> meshes;
 
 	private String selectedPart;
 	private String selectedJoint;
@@ -26,6 +35,28 @@ public class AnimationPersistent implements Serializable {
 		}
 
 		return animation;
+	}
+
+	@Override
+	public GameObjectPlacement cameraPlacement() {
+		AnimationPlacement camera = getMisc().getCamera();
+
+		GameObjectPlacement cameraPlacement = new GameObjectPlacement();
+		cameraPlacement.setPositionTargetUp(
+				convertPosition(camera.getPosition()),
+				convertPosition(camera.getTarget()),
+				convertDirection(camera.getUp())
+		);
+
+		return cameraPlacement;
+	}
+
+	public FreeTriangleMeshModel selectMesh(String meshIdentifier) {
+		if(meshes == null || meshes.isEmpty()) {
+			return null;
+		} else {
+			return meshes.get(meshIdentifier);
+		}
 	}
 
 	public void setAnimation(Animation animation) {
@@ -68,6 +99,15 @@ public class AnimationPersistent implements Serializable {
 		this.misc = misc;
 	}
 
-	private static final long serialVersionUID = 1L;
+	private GameObjectPosition convertPosition(AnimationVector vector) {
+		float[] v = vector.getV();
+		return new GameObjectPosition(v[0]/v[3], v[1]/v[3], v[2]/v[3]);
+	}
 
+	private GameObjectDirection convertDirection(AnimationVector vector) {
+		float[] v = vector.getV();
+		return new GameObjectDirection(v[0]/v[3], v[1]/v[3], v[2]/v[3]);
+	}
+
+	private static final long serialVersionUID = 1L;
 }

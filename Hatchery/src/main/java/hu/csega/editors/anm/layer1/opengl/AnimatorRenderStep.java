@@ -1,22 +1,16 @@
 package hu.csega.editors.anm.layer1.opengl;
 
-import java.util.List;
-
+import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSet;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
-import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.engine.g3d.GameObjectDirection;
 import hu.csega.games.engine.g3d.GameObjectHandler;
-import hu.csega.games.engine.g3d.GameObjectPlacement;
-import hu.csega.games.engine.g3d.GameObjectPosition;
 import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.engine.intf.GameGraphics;
-import hu.csega.games.library.animation.v1.anm.AnimationMisc;
-import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
-import hu.csega.games.library.animation.v1.anm.AnimationVector;
+
+import java.util.List;
 
 public class AnimatorRenderStep implements GameEngineCallback {
 
@@ -41,19 +35,12 @@ public class AnimatorRenderStep implements GameEngineCallback {
 			}
 		}
 
-		AnimationPersistent persistent = model.getPersistent();
-		AnimationMisc misc = persistent.getMisc();
-		AnimationPlacement camera = misc.getCamera();
+		CommonEditorModel common = model.selectModel();
+
 
 		if(set != null) {
-			GameObjectPlacement cameraPlacement = new GameObjectPlacement();
-			cameraPlacement.setPositionTargetUp(
-					convertPosition(camera.getPosition()),
-					convertPosition(camera.getTarget()),
-					convertDirection(camera.getUp())
-			);
 
-			g.placeCamera(cameraPlacement);
+			g.placeCamera(common.cameraPlacement());
 
 			List<AnimatorSetPart> parts = set.getParts();
 			if(parts != null && parts.size() > 0) {
@@ -67,16 +54,6 @@ public class AnimatorRenderStep implements GameEngineCallback {
 		}
 
 		return facade;
-	}
-
-	private GameObjectPosition convertPosition(AnimationVector vector) {
-		float[] v = vector.getV();
-		return new GameObjectPosition(v[0]/v[3], v[1]/v[3], v[2]/v[3]);
-	}
-
-	private GameObjectDirection convertDirection(AnimationVector vector) {
-		float[] v = vector.getV();
-		return new GameObjectDirection(v[0]/v[3], v[1]/v[3], v[2]/v[3]);
 	}
 
 }

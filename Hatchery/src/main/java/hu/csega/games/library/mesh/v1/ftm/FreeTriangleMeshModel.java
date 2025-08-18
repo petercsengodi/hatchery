@@ -11,14 +11,18 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
 import hu.csega.editors.ftm.util.FreeTriangleMeshMathLibrary;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
+import hu.csega.games.engine.g3d.GameObjectDirection;
+import hu.csega.games.engine.g3d.GameObjectPlacement;
+import hu.csega.games.engine.g3d.GameObjectPosition;
 
-public class FreeTriangleMeshModel implements Serializable {
+public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 
 	public static final double[] ZOOM_VALUES = { 0.0001, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0, 1.25, 1.50,
 			2.0, 3.0, 4.0, 5.0, 10.0, 20.0, 50.0, 100.0, 200.0, 500.0, 1000.0, 2000.0, 5000.0 };
@@ -1384,4 +1388,26 @@ public class FreeTriangleMeshModel implements Serializable {
 	private static final Random RND = new Random(System.currentTimeMillis());
 
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	public GameObjectPlacement cameraPlacement() {
+		double alfa = getOpenGLAlpha();
+		double beta = getOpenGLBeta();
+		double distance = getOpenGLZoom();
+
+		double y = distance * Math.sin(beta);
+		double distanceReduced = distance * Math.cos(beta);
+
+		GameObjectPosition cameraPosition = new GameObjectPosition();
+		cameraPosition.x = (float)(Math.cos(alfa) * distanceReduced);
+		cameraPosition.y = (float) y;
+		cameraPosition.z = (float)(Math.sin(alfa) * distanceReduced);
+
+		GameObjectPosition cameraTarget = new GameObjectPosition(0f, 0f, 0f);
+		GameObjectDirection cameraUp = new GameObjectDirection(0f, 1f, 0f);
+
+		GameObjectPlacement cameraPlacement = new GameObjectPlacement();
+		cameraPlacement.setPositionTargetUp(cameraPosition, cameraTarget, cameraUp);
+		return cameraPlacement;
+	}
 }

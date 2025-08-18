@@ -28,8 +28,6 @@ import java.util.Map;
 
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {
 
@@ -42,8 +40,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 	private AnimatorUIComponents components;
 
 	private Matrix4f baseTransformation = new Matrix4f();
-
-	private String lastJSON = "{}";
 
 	@Override
 	public void refreshAll() {
@@ -102,7 +98,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				wireFrameConverter.accept(parts);
 			}
 
-			components.jsonView.setJSON(lastJSON);
 			components.sceneLerpPanel.updateUI();
 			components.sceneSelectorPanel.updateUI();
 		}
@@ -138,14 +133,6 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 			if(components == null) {
 				components = UnitStore.instance(AnimatorUIComponents.class);
-			}
-
-			try {
-				JSONObject jsonObject = gameAnimation.toJSONObject();
-				lastJSON = jsonObject.toString(4);
-				components.jsonView.setJSON(lastJSON);
-			} catch(JSONException ex) {
-				lastJSON = "{\"error\": \"" + ex.getMessage() + "\"}";
 			}
 		}
 	}
