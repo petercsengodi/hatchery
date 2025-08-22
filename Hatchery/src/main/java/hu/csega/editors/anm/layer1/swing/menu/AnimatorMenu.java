@@ -9,14 +9,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AnimatorMenu {
 
+	public static final JMenuBar ANIMATION_MENU_BAR = new JMenuBar();
+	public static final JMenuBar MESH_MENU_BAR = new JMenuBar();
+
 	public static void createMenuForJFrame(JFrame frame, GameEngineFacade facade) {
-		JMenuBar menuBar = new JMenuBar();
+		MESH_MENU_BAR.add(createMeshMenu(frame, facade));
 
-		menuBar.add(createFileMenu(frame, facade));
-		menuBar.add(createModelMenu(frame, facade));
-		menuBar.add(createViewMenu(frame, facade));
+		ANIMATION_MENU_BAR.add(createFileMenu(frame, facade));
+		ANIMATION_MENU_BAR.add(createModelMenu(frame, facade));
+		ANIMATION_MENU_BAR.add(createViewMenu(frame, facade));
 
-		frame.setJMenuBar(menuBar);
+		frame.setJMenuBar(ANIMATION_MENU_BAR);
 	}
 
 	private static JMenu createFileMenu(JFrame frame, GameEngineFacade facade) {
@@ -72,6 +75,10 @@ public class AnimatorMenu {
 		changePart.addActionListener(new AnimatorMenuChangePart());
 		menu.add(changePart);
 
+		JMenuItem editPart = new JMenuItem("Edit Part");
+		editPart.addActionListener(new AnimatorMenuEditPart());
+		menu.add(editPart);
+
 		return menu;
 	}
 
@@ -89,6 +96,16 @@ public class AnimatorMenu {
 		JMenuItem refreshWindow = new JMenuItem("Refresh Window");
 		refreshWindow.addActionListener(new AnimatorMenuRefreshWindow(frame));
 		menu.add(refreshWindow);
+
+		return menu;
+	}
+
+	private static JMenu createMeshMenu(JFrame frame, GameEngineFacade facade) {
+		JMenu menu = new JMenu("Mesh");
+
+		JMenuItem backToAnimation = new JMenuItem("Back to Animation");
+		backToAnimation.addActionListener(new AnimatorMenuEditAnimation());
+		menu.add(backToAnimation);
 
 		return menu;
 	}

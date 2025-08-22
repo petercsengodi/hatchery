@@ -27,6 +27,13 @@ public class AnimatorPartManipulator {
         this.refreshViews = refreshViews;
     }
 
+    public String currentPartIdentifier() {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            return persistent.getSelectedPart();
+        }
+    }
+
     public void addNewPart(String filename) {
         synchronized (model) {
             AnimationPersistent persistent = model.getPersistent();

@@ -38,6 +38,10 @@ public class AnimatorModel {
 		return result;
 	}
 
+	public void setPartAsModel(String identifier) {
+		this.modelIdentifier = identifier;
+	}
+
  	public AnimationPersistent getPersistent() {
 		if(persistent == null) {
 			persistent = new AnimationPersistent();
@@ -81,6 +85,10 @@ public class AnimatorModel {
 
 	public void addNewPart(String filename) {
 		parts.addNewPart(filename);
+	}
+
+	public String currentPartIdentifier() {
+		return parts.currentPartIdentifier();
 	}
 
 	public void changePart(String filename) {
