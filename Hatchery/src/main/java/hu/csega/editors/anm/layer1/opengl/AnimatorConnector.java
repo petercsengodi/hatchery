@@ -11,14 +11,13 @@ import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.layer1.swing.components.jointlist.AnimatorJointListModel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorPartEditorPanel;
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
-import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
 import hu.csega.editors.anm.layer1.swing.menu.AnimatorMenu;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneSelectorPanel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneLerpPanel;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.ui.layout.root.AnimatorRootLayoutManager;
-import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTexture;
+import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTextureView;
 import hu.csega.games.adapters.opengl.OpenGLCanvas;
 import hu.csega.games.adapters.opengl.OpenGLGameAdapter;
 import hu.csega.games.common.Connector;
@@ -162,7 +161,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 		components.panel3D.setLayout(new GridLayout(1, 1));
 		components.tabbedPane.addTab("3D Canvas", components.panel3D);
 
-		components.textureView = new FreeTriangleMeshTexture(facade, textureRoot);
+		components.textureView = new FreeTriangleMeshTextureView(facade, textureRoot);
 		components.tabbedPane.addTab("Texture", components.textureView);
 
 		contentPane.add(AnimatorRootLayoutManager.MULTI_TAB, components.tabbedPane);

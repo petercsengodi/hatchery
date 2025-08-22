@@ -14,9 +14,8 @@ import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListIte
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneLerpPanel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneSelectorPanel;
-import hu.csega.editors.anm.layer1.swing.json.AnimatorJSONView;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
-import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTexture;
+import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTextureView;
 import hu.csega.games.engine.intf.GameWindow;
 
 public class AnimatorUIComponents {
@@ -55,7 +54,7 @@ public class AnimatorUIComponents {
 	public AnimatorWireFrameView panelSide;
 	public AnimatorWireFrameView panelWireFrame;
 	public JPanel panel3D;
-	public FreeTriangleMeshTexture textureView;
+	public FreeTriangleMeshTextureView textureView;
 	public AnimatorPartEditorPanel partEditorPanel;
 	public AnimatorSceneSelectorPanel sceneSelectorPanel;
 	public AnimatorSceneLerpPanel sceneLerpPanel;

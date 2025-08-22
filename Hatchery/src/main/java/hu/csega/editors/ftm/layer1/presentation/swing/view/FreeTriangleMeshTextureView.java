@@ -18,7 +18,7 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.GameEngineFacade;
 
-public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
+public class FreeTriangleMeshTextureView extends FreeTriangleMeshCanvas {
 
 	private final int frameWidth = 300;
 	private final int frameHeight = 300;
@@ -38,7 +38,7 @@ public class FreeTriangleMeshTexture extends FreeTriangleMeshCanvas {
 
 	private String textureRoot;
 
-	public FreeTriangleMeshTexture(GameEngineFacade facade, String textureRoot) {
+	public FreeTriangleMeshTextureView(GameEngineFacade facade, String textureRoot) {
 		super(facade);
 		this.textureRoot = textureRoot;
 	}

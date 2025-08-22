@@ -14,7 +14,7 @@ import javax.swing.JTree;
 
 import hu.csega.editors.ftm.layer1.presentation.swing.dialogs.FreeTriangleMeshDialogs;
 import hu.csega.editors.ftm.layer1.presentation.swing.menu.FreeTriangleMeshMenu;
-import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTexture;
+import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTextureView;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTreeMapping;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshWireframe;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshXYSideView;
@@ -151,7 +151,7 @@ public class FreeTriangleMeshConnector implements Connector, GameWindow {
 		bottomRightTab.addKeyListener(keyListener);
 		bottomRightTab.addTab("ZY Side View", new FreeTriangleMeshZYSideView(facade));
 		bottomRightTab.addTab("Wireframe", wireframeCanvas);
-		bottomRightTab.addTab("Texture Window", new FreeTriangleMeshTexture(facade, textureRoot));
+		bottomRightTab.addTab("Texture Window", new FreeTriangleMeshTextureView(facade, textureRoot));
 
 		FreeTriangleMeshTreeMapping treeModel = new FreeTriangleMeshTreeMapping(facade);
 		tree = new JTree(treeModel);

@@ -1,6 +1,5 @@
 package hu.csega.games.adapters.opengl.models;
 
-import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 
 import hu.csega.games.adapters.opengl.OpenGLProfileAdapter;
