@@ -1,26 +1,16 @@
 package hu.csega.editors.ftm.layer1.presentation.opengl;
 
-import java.util.List;
-
-import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.engine.g3d.GameModelBuilder;
-import hu.csega.games.engine.g3d.GameModelStore;
 import hu.csega.games.engine.g3d.GameObjectDirection;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameObjectPosition;
-import hu.csega.games.engine.g3d.GameObjectVertex;
-import hu.csega.games.engine.g3d.GameTexturePosition;
 import hu.csega.games.engine.intf.GameGraphics;
 
 public class FreeTriangleMeshRenderStep implements GameEngineCallback {
 
-	private GameObjectHandler convertedModel = null;
 	private GameObjectPlacement modelPlacement = new GameObjectPlacement();
 
 	private GameObjectPosition cameraPosition = new GameObjectPosition(0f, 0f, 0f);
@@ -34,47 +24,7 @@ public class FreeTriangleMeshRenderStep implements GameEngineCallback {
 		if(model == null)
 			return facade;
 
-		if(model.isInvalid()) {
-			List<FreeTriangleMeshVertex> vertices = model.getVertices();
-			List<FreeTriangleMeshTriangle> triangles = model.getTriangles();
-
-			GameModelStore store = facade.store();
-
-			if(convertedModel != null) {
-				store.dispose(convertedModel);
-				convertedModel = null;
-			}
-
-			if(!triangles.isEmpty()) {
-				GameModelBuilder builder = new GameModelBuilder();
-
-				String textureFilename = model.getTextureFilename();
-				if(textureFilename == null || textureFilename.isEmpty())
-					textureFilename = FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE;
-
-				GameObjectHandler textureHandler = store.loadTexture(textureFilename);
-				builder.setTextureHandler(textureHandler);
-
-				for(FreeTriangleMeshVertex v : vertices) {
-					GameObjectPosition p = new GameObjectPosition((float)v.getPX(), (float)v.getPY(), (float)v.getPZ());
-					GameObjectDirection d = new GameObjectDirection((float)v.getNX(), (float)v.getNY(), (float)v.getNZ());
-					GameTexturePosition tex = new GameTexturePosition((float)v.getTX(), (float)v.getTY());
-					builder.getVertices().add(new GameObjectVertex(p, d, tex));
-				}
-
-				for(FreeTriangleMeshTriangle t : triangles) {
-					if(model.enabled(t)) {
-						builder.getIndices().add(t.getVertex1());
-						builder.getIndices().add(t.getVertex2());
-						builder.getIndices().add(t.getVertex3());
-					}
-				}
-
-				convertedModel = store.buildMesh(builder);
-			}
-
-			model.setInvalid(false);
-		}
+		GameObjectHandler convertedModel = model.ensureConvertedModelIsBuilt(facade);
 
 		double alfa = model.getOpenGLAlpha();
 		double beta = model.getOpenGLBeta();

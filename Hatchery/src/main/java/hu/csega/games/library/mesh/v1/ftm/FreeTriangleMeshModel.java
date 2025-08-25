@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
@@ -18,9 +19,15 @@ import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshSnapshots;
 import hu.csega.editors.ftm.util.FreeTriangleMeshMathLibrary;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
+import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.engine.g3d.GameModelBuilder;
+import hu.csega.games.engine.g3d.GameModelStore;
 import hu.csega.games.engine.g3d.GameObjectDirection;
+import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameObjectPosition;
+import hu.csega.games.engine.g3d.GameObjectVertex;
+import hu.csega.games.engine.g3d.GameTexturePosition;
 
 public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 
@@ -29,6 +36,8 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 	public static final int DEFAULT_ZOOM_INDEX = 8;
 
 	private transient FreeTriangleMeshSnapshots _snapshots;
+	private transient GameObjectHandler convertedModel;
+
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
 	private Collection<Object> selectedObjects = new HashSet<>(); // May also be ArrayList in serialized objects.
 	private long selectionLastChanged;
@@ -65,6 +74,10 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 			selectedObjects = new HashSet<>();
 		else
 			selectedObjects = new HashSet<>(selectedObjects);
+	}
+
+	public FreeTriangleMeshMesh getMeshMesh() {
+		return mesh;
 	}
 
 	public boolean isInvalid() {
@@ -1382,13 +1395,6 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		return Math.sqrt(dx*dx + dy*dy + dz*dz);
 	}
 
-	private static final double PI2 = 2*Math.PI;
-	private static final double BETA_LIMIT = Math.PI / 2;
-
-	private static final Random RND = new Random(System.currentTimeMillis());
-
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public GameObjectPlacement cameraPlacement() {
 		double alfa = getOpenGLAlpha();
@@ -1410,4 +1416,57 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		cameraPlacement.setPositionTargetUp(cameraPosition, cameraTarget, cameraUp);
 		return cameraPlacement;
 	}
+
+    public GameObjectHandler ensureConvertedModelIsBuilt(GameEngineFacade facade) {
+		if(isInvalid()) {
+			List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
+			List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
+
+			GameModelStore store = facade.store();
+
+			if(convertedModel != null) {
+				store.dispose(convertedModel);
+				convertedModel = null;
+			}
+
+			if(!triangles.isEmpty()) {
+				GameModelBuilder builder = new GameModelBuilder();
+
+				String textureFilename = getTextureFilename();
+				if(textureFilename == null || textureFilename.isEmpty())
+					textureFilename = FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE;
+
+				GameObjectHandler textureHandler = store.loadTexture(textureFilename);
+				builder.setTextureHandler(textureHandler);
+
+				for(FreeTriangleMeshVertex v : vertices) {
+					GameObjectPosition p = new GameObjectPosition((float)v.getPX(), (float)v.getPY(), (float)v.getPZ());
+					GameObjectDirection d = new GameObjectDirection((float)v.getNX(), (float)v.getNY(), (float)v.getNZ());
+					GameTexturePosition tex = new GameTexturePosition((float)v.getTX(), (float)v.getTY());
+					builder.getVertices().add(new GameObjectVertex(p, d, tex));
+				}
+
+				for(FreeTriangleMeshTriangle t : triangles) {
+					if(enabled(t)) {
+						builder.getIndices().add(t.getVertex1());
+						builder.getIndices().add(t.getVertex2());
+						builder.getIndices().add(t.getVertex3());
+					}
+				}
+
+				convertedModel = store.buildMesh(builder);
+			}
+
+			setInvalid(false);
+		}
+
+		return convertedModel;
+	}
+
+	private static final double PI2 = 2*Math.PI;
+	private static final double BETA_LIMIT = Math.PI / 2;
+
+	private static final Random RND = new Random(System.currentTimeMillis());
+
+	private static final long serialVersionUID = 1L;
 }

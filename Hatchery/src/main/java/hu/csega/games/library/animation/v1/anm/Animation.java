@@ -27,6 +27,10 @@ public class Animation implements Serializable {
 		this.parts = parts;
 	}
 
+	public AnimationPart locatePart(String identifier) {
+		return parts.get(identifier);
+	}
+
 	public void connect(String partIdentifier, String jointIdentifier) {
 		connections.put(partIdentifier, jointIdentifier);
 	}

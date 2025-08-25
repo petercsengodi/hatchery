@@ -12,6 +12,7 @@ import hu.csega.games.library.animation.v1.anm.AnimationMisc;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
 import hu.csega.games.library.animation.v1.anm.AnimationVector;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.UnitStore;
 
 import java.util.List;
@@ -91,21 +92,27 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 
 		for(AnimatorSetPart part : parts) {
 
-			String filename = part.getMesh();
-			if(filename == null || filename.length() == 0) {
-				return;
-			}
+			FreeTriangleMeshModel meshModel = part.getMeshModel();
+			if(meshModel != null) {
+				GameObjectHandler gameObjectHandler = meshModel.ensureConvertedModelIsBuilt(facade);
+				part.setHandler(gameObjectHandler);
+			} else {
+				String filename = part.getMesh();
+				if (filename == null || filename.length() == 0) {
+					continue;
+				}
 
-			if(filename.charAt(0) != '/') {
-				filename = resourceAdapter.resourcesRoot() + filename;
-			}
+				if (filename.charAt(0) != '/') {
+					filename = resourceAdapter.resourcesRoot() + filename;
+				}
 
-			GameObjectHandler handler = store.loadMesh(filename);
-			if(handler == null) {
-				throw new RuntimeException("Couldn't load game model: " + filename);
-			}
+				GameObjectHandler handler = store.loadMesh(filename);
+				if (handler == null) {
+					throw new RuntimeException("Couldn't load game model: " + filename);
+				}
 
-			part.setHandler(handler);
+				part.setHandler(handler);
+			}
 		}
 
 		set.setCamera(camera);

@@ -51,12 +51,16 @@ public class AnimationPersistent implements Serializable, CommonEditorModel {
 		return cameraPlacement;
 	}
 
-	public FreeTriangleMeshModel selectMesh(String meshIdentifier) {
+	public FreeTriangleMeshModel locateMesh(String meshIdentifier) {
 		if(meshes == null || meshes.isEmpty()) {
 			return null;
 		} else {
 			return meshes.get(meshIdentifier);
 		}
+	}
+
+	public void putMeshModel(String identifier, FreeTriangleMeshModel freeTriangleMeshModel) {
+		meshes.put(identifier, freeTriangleMeshModel);
 	}
 
 	public void setAnimation(Animation animation) {

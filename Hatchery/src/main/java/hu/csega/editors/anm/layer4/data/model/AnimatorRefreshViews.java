@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer4.data.model;
 
+import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
@@ -17,6 +18,7 @@ import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
 import hu.csega.games.library.animation.v1.anm.AnimationVector;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
@@ -80,15 +82,24 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				jointListExtractor.accept(null);
 			}
 
-			Map<String, AnimationPart> map = animation.getParts();
-			if(map != null && map.size() > 0) {
-				int numberOfScenes = animation.getNumberOfScenes();
-				if(selectedScene < 0 || selectedScene >= numberOfScenes) {
-					selectedScene = 0;
-				}
+			CommonEditorModel commonEditorModel = model.selectModel();
+			if(commonEditorModel instanceof  AnimationPersistent) {
 
-				generateParts(animation, selectedScene, baseTransformation, parts);
+				Map<String, AnimationPart> map = animation.getParts();
+				if(map != null && map.size() > 0) {
+					int numberOfScenes = animation.getNumberOfScenes();
+					if(selectedScene < 0 || selectedScene >= numberOfScenes) {
+						selectedScene = 0;
+					}
+
+					generateParts(persistent, selectedScene, baseTransformation, parts);
+				}
+			} else if(commonEditorModel instanceof FreeTriangleMeshModel) {
+				// TODO something to do with the baseTransformation
+				// TODO selected sub-model as part(s)
+				generateParts(persistent, selectedScene, baseTransformation, parts);
 			}
+
 
 			if(openGLExtractor != null) {
 				openGLExtractor.accept(parts);
@@ -126,7 +137,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 			for(int sceneIndex = 0; sceneIndex < numberOfScenes; sceneIndex++) {
 				List<AnimatorSetPart> parts = new ArrayList<>();
-				generateParts(animation, sceneIndex, baseTransformation, parts);
+				generateParts(persistent, sceneIndex, baseTransformation, parts);
 				GameAnimationScene scene = gameAnimation.getScenes()[sceneIndex];
 				fill(scene, parts, indexes);
 			}
@@ -137,7 +148,8 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 		}
 	}
 
-	public static void generateParts(Animation animation, int currentScene, Matrix4f baseTransformation, List<AnimatorSetPart> parts) {
+	public static void generateParts(AnimationPersistent persistent, int currentScene, Matrix4f baseTransformation, List<AnimatorSetPart> parts) {
+		Animation animation = persistent.getAnimation();
 		Map<String, String> connections = animation.getConnections();
 		for(Map.Entry<String, AnimationPart> entry : animation.getParts().entrySet()) {
 			String partIdentifier = entry.getKey();
@@ -146,22 +158,24 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			}
 
 			AnimationPart part = entry.getValue();
-			transformPart(animation, currentScene, baseTransformation, part, null, parts);
+			transformPart(persistent, currentScene, baseTransformation, part, null, parts);
 		} // end for entry
 	}
 
-	private static void generateParts(Animation animation, int currentScene, Matrix4f baseTransformation, String jointKey, Matrix4f m, List<AnimatorSetPart> parts) {
+	private static void generateParts(AnimationPersistent persistent, int currentScene, Matrix4f baseTransformation, String jointKey, Matrix4f m, List<AnimatorSetPart> parts) {
+		Animation animation = persistent.getAnimation();
 		Map<String, String> connections = animation.getConnections();
 		for(Map.Entry<String, String> entry : connections.entrySet()) {
 			if(jointKey.equals(entry.getValue())) {
 				AnimationPart part = animation.getParts().get(entry.getKey());
-				transformPart(animation, currentScene, baseTransformation, part, m, parts);
+				transformPart(persistent, currentScene, baseTransformation, part, m, parts);
 			}
 		} // end for entry
 	}
 
-	private static void transformPart(Animation animation, int currentScene, Matrix4f baseTransformation, AnimationPart part, Matrix4f commulativeTransformation, List<AnimatorSetPart> parts) {
+	private static void transformPart(AnimationPersistent persistent, int currentScene, Matrix4f baseTransformation, AnimationPart part, Matrix4f commulativeTransformation, List<AnimatorSetPart> collectedParts) {
 		if(part != null) {
+			Animation animation = persistent.getAnimation();
 			AnimationScenePart scenePart = animation.createOrGetScenePart(currentScene, part.getIdentifier());
 			if(!scenePart.isVisible()) {
 				return;
@@ -190,6 +204,8 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			AnimatorSetPart setPart = new AnimatorSetPart();
 			setPart.setIdentifier(part.getIdentifier());
 			setPart.setMesh(part.getMesh());
+			setPart.setMeshModel(persistent.locateMesh(part.getIdentifier()));
+
 			setPart.setTransformation(convertedTransformation);
 			setPart.setFlipped(flipped);
 
@@ -209,7 +225,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				setPart.setJointPoints(jointPoints);
 			}
 
-			parts.add(setPart);
+			collectedParts.add(setPart);
 
 			if(joints != null && joints.size() > 0) {
 				// scenePart.getTransformation().createJointMatrix(modelTransformation);
@@ -226,7 +242,7 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 					tv.mul(setPartTransformation);
 					base.translateLocal(tv.x / tv.w, tv.y / tv.w, tv.z / tv.w, base);
 
-					generateParts(animation, currentScene, baseTransformation, joint.getIdentifier(), base, parts);
+					generateParts(persistent, currentScene, baseTransformation, joint.getIdentifier(), base, collectedParts);
 				}
 			} // end for each joint
 		} // end if part not null

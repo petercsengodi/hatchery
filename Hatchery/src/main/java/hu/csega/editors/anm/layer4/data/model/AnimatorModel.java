@@ -9,6 +9,7 @@ import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorSceneManipula
 import hu.csega.editors.anm.layer4.data.model.manipulators.AnimatorSnapshotManipulator;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
+import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.Dependency;
 
 public class AnimatorModel {
@@ -28,7 +29,7 @@ public class AnimatorModel {
 		CommonEditorModel result = null;
 
 		if(modelIdentifier != null) {
-			result = persistent.selectMesh(modelIdentifier);
+			result = persistent.locateMesh(modelIdentifier);
 		}
 
 		if(result == null) {

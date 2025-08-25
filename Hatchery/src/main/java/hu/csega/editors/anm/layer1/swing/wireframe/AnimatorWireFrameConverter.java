@@ -81,9 +81,14 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
 	private void collectWireframe(AnimatorSetPart part, AnimatorWireFrame result) {
 		String mesh1 = part.getMesh();
-		String fn = FileUtil.cleanUpName(mesh1);
-		SMeshRef ref = new SMeshRef(fn);
-		Object mesh = meshLibrary.resolve(ref);
+		Object mesh = part.getMeshModel();
+
+		if(mesh == null) {
+			String fn = FileUtil.cleanUpName(mesh1);
+			SMeshRef ref = new SMeshRef(fn);
+			mesh = meshLibrary.resolve(ref);
+		}
+
 		if(mesh == null) {
 			return;
 		}

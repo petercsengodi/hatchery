@@ -232,7 +232,7 @@ public class GenerateRatDemo {
 
             Matrix4f baseTransformation = new Matrix4f();
             List<AnimatorSetPart> resultParts = new ArrayList<>();
-            AnimatorRefreshViews.generateParts(animation, sceneIndex, baseTransformation, resultParts);
+            AnimatorRefreshViews.generateParts(deserialized, sceneIndex, baseTransformation, resultParts);
 
             Map<Integer, AnimatorSetPart> map = new TreeMap<>();
             for(AnimatorSetPart part : resultParts) {
