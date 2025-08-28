@@ -62,9 +62,9 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
 		wireFrame = transform(parts);
 
-		components.panelFront.accept(wireFrame);
-		components.panelSide.accept(wireFrame);
-		components.panelTop.accept(wireFrame);
+		// components.panelFront.accept(wireFrame);
+		// components.panelSide.accept(wireFrame);
+		// components.panelTop.accept(wireFrame);
 		components.panelWireFrame.accept(wireFrame);
 	}
 

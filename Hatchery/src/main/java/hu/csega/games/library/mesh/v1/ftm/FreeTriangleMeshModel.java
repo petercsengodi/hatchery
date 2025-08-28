@@ -13,6 +13,8 @@ import java.util.Set;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.anm.common.CommonEditorModel;
+import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
+import hu.csega.editors.anm.layer1.swing.views.AnimatorView;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
@@ -39,7 +41,7 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 	private transient GameObjectHandler convertedModel;
 
 	private FreeTriangleMeshMesh mesh = new FreeTriangleMeshMesh();
-	private Collection<Object> selectedObjects = new HashSet<>(); // May also be ArrayList in serialized objects.
+	private Collection<AnimatorObject> selectedObjects = new HashSet<>(); // May also be ArrayList in serialized objects.
 	private long selectionLastChanged;
 	private Object hoverOverObject;
 	private List<FreeTriangleMeshGroup> groups = new ArrayList<>();
@@ -151,7 +153,7 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		if(!add)
 			clearSelection();
 
-		Object selection = null;
+		AnimatorObject selection = null;
 		double minT = Double.MAX_VALUE;
 		double t;
 
@@ -312,7 +314,7 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 
 		List<FreeTriangleMeshVertex> vertices = mesh.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = mesh.getTriangles();
-		Iterator<Object> it = selectedObjects.iterator();
+		Iterator<AnimatorObject> it = selectedObjects.iterator();
 
 		int i1 = vertices.indexOf(it.next());
 		int i2 = vertices.indexOf(it.next());
@@ -732,7 +734,7 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		if(selectedObjects.size() < 3) {
 			// edge split
 			FreeTriangleMeshVertex avg = new FreeTriangleMeshVertex(0.0, 0.0, 0.0);
-			Iterator<Object> it = selectedObjects.iterator();
+			Iterator<AnimatorObject> it = selectedObjects.iterator();
 			FreeTriangleMeshVertex v1, v2;
 			avg.add(v1 = (FreeTriangleMeshVertex) it.next());
 			avg.add(v2 = (FreeTriangleMeshVertex) it.next());
@@ -886,7 +888,7 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 			group.setEnabled(newValue);
 
 			if(newValue == false && selectedObjects != null) {
-				Iterator<Object> it = selectedObjects.iterator();
+				Iterator<AnimatorObject> it = selectedObjects.iterator();
 				while(it.hasNext()) {
 					Object object = it.next();
 					if(object instanceof FreeTriangleMeshVertex) {
@@ -1171,11 +1173,11 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		this.mesh.setTriangles(triangles);
 	}
 
-	public Collection<Object> getSelectedObjects() {
+	public Collection<AnimatorObject> getSelectedObjects() {
 		return selectedObjects;
 	}
 
-	public void setSelectedObjects(Set<Object> selectedObjects) {
+	public void setSelectedObjects(Set<AnimatorObject> selectedObjects) {
 		this.selectedObjects = selectedObjects;
 	}
 

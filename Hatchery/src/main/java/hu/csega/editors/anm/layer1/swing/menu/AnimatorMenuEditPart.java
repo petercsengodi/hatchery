@@ -56,7 +56,7 @@ public class AnimatorMenuEditPart implements ActionListener {
 			}
 
 			if (filename.charAt(0) != '/') {
-				filename = resourceAdapter.resourcesRoot() + filename;
+				filename = resourceAdapter.meshRoot() + filename;
 			}
 
 			freeTriangleMeshModel = convertExportedMesh(filename);

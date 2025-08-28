@@ -1,38 +1,36 @@
-package hu.csega.editors.ftm.layer1.presentation.swing.view;
+package hu.csega.editors.anm.layer1.swing.views;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
 import hu.csega.editors.common.lens.EditorPoint;
+import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshPictogram;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
+import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
+import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
-import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
-import hu.csega.games.engine.GameEngineFacade;
 
-public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
+import java.awt.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+public abstract class AnimatorMeshSideView extends AnimatorView {
 
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
 	protected FreeTriangleMeshSphereLineIntersection intersection = new FreeTriangleMeshSphereLineIntersection();
 
-	public FreeTriangleMeshSideView(GameEngineFacade facade) {
-		super(facade);
+	public AnimatorMeshSideView(GameEngineFacade facade, AnimatorViewCanvas canvas) {
+		super(facade, canvas);
 	}
 
-	public abstract String label();
-
 	@Override
-	protected void paint2d(Graphics2D g) {
+	protected void paintView(Graphics2D g, int width, int height) {
 		drawGrid(g);
 
-		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
+		FreeTriangleMeshModel model = getModel(FreeTriangleMeshModel.class);
+		if(model == null)
+			return;
+
 		Collection<AnimatorObject> selectedObjects = model.getSelectedObjects();
 
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
@@ -77,7 +75,6 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 			}
 		}
 
-
 		Stroke stroke = g.getStroke();
 		g.setStroke(new BasicStroke(3));
 		g.setColor(Color.PINK);
@@ -88,46 +85,30 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 		g.drawLine(centerX - 10, centerY - 10, centerX + 10, centerY + 10);
 		g.drawLine(centerX - 10, centerY + 10, centerX + 10, centerY - 10);
 		g.setStroke(stroke);
-
-		Set<FreeTriangleMeshPictogram> pictograms = refreshPictograms(model);
-		if(pictograms != null && !pictograms.isEmpty()) {
-			for(FreeTriangleMeshPictogram p : pictograms) {
-				BufferedImage img = FreeTriangleMeshToolStarter.SPRITES[p.action];
-				g.drawImage(img, (int)p.x, (int)p.y, null);
-			}
-		}
-
-		g.setColor(Color.BLACK);
-		g.drawLine(0, 0, 300, 0);
-		g.drawString(label(), 10, 20);
-
-		Rectangle selectionBox = calculateSelectionBox();
-		if(selectionBox != null) {
-			g.setColor(Color.red);
-			calculateSelectionBox();
-			g.drawRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
-		}
 	}
 
-	@Override
 	protected void createVertexAt(EditorPoint p) {
-		FreeTriangleMeshModel model = getModel();
+		FreeTriangleMeshModel model = getModel(FreeTriangleMeshModel.class);
+		if(model == null)
+			return;
+
 		model.createVertexAt(p.getX(), p.getY(), p.getZ());
 	}
 
 	@Override
 	protected void moveSelected(EditorPoint p1, EditorPoint p2) {
-		FreeTriangleMeshModel model = getModel();
+		FreeTriangleMeshModel model = getModel(FreeTriangleMeshModel.class);
+		if(model == null)
+			return;
 
 		double dx = p2.getX() - p1.getX();
 		double dy = p2.getY() - p1.getY();
 		double dz = p2.getZ() - p1.getZ();
 
 		model.moveSelected(dx, dy, dz);
-		somethingChanged();
+		canvas.somethingChanged();
 	}
 
-	@Override
 	protected EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex) {
 		return new EditorPoint(vertex.getPX(), vertex.getPY(), vertex.getPZ(), 1.0);
 	}
@@ -143,74 +124,46 @@ public abstract class FreeTriangleMeshSideView extends FreeTriangleMeshCanvas {
 	protected abstract void drawGrid(Graphics2D g);
 
 	@Override
-	protected Set<FreeTriangleMeshPictogram> refreshPictograms(FreeTriangleMeshModel model) {
-		Collection<AnimatorObject> selectedObjects = model.getSelectedObjects();
-		if(selectedObjects == null || selectedObjects.size() < 2) {
-			return null;
-		}
-
-		if(pictograms == null || selectionLastChanged < model.getSelectionLastChanged()) {
-			selectionLastChanged = model.getSelectionLastChanged();
-			pictograms = new HashSet<>();
-
-			selectionMinX = Integer.MAX_VALUE;
-			selectionMinY = Integer.MAX_VALUE;
-			selectionMaxX = Integer.MIN_VALUE;
-			selectionMaxY = Integer.MIN_VALUE;
-
-			for(Object obj : selectedObjects) {
-				if(obj instanceof FreeTriangleMeshVertex) {
-					FreeTriangleMeshVertex v = ((FreeTriangleMeshVertex)obj);
-					EditorPoint p = transformToScreen(transformVertexToPoint(v));
-
-					int x = (int) p.getX();
-					int y = (int) p.getY();
-					if(x < selectionMinX) { selectionMinX = x; }
-					if(y < selectionMinY) { selectionMinY = y; }
-					if(x > selectionMaxX) { selectionMaxX = x; }
-					if(y > selectionMaxY) { selectionMaxY = y; }
-				}
-			}
-
+	protected void generatePictograms(int numberOfSelectedItems, int selectionMinX, int selectionMinY, int selectionMaxX, int selectionMaxY, Set<FreeTriangleMeshPictogram> pictograms) {
+		if(numberOfSelectedItems > 1) {
 			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_LEFT_ARROW, selectionMinX - 16, selectionMinY - 16));
 			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.UP_RIGHT_ARROW, selectionMaxX, selectionMinY - 16));
 			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_LEFT_ARROW, selectionMinX - 16, selectionMaxY));
 			pictograms.add(new FreeTriangleMeshPictogram(FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW, selectionMaxX, selectionMaxY));
 		}
-
-		return pictograms;
 	}
 
 	@Override
-	protected void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended) {
-		FreeTriangleMeshModel model = getModel();
+	protected void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended, Rectangle selection) {
+		FreeTriangleMeshModel model = getModel(FreeTriangleMeshModel.class);
+		if(model == null)
+			return;
+
 		switch(action) {
 			case FreeTriangleMeshPictogram.DOWN_RIGHT_ARROW: {
-				EditorPoint fixed = transformToModel(selectionMinX, selectionMinY);
+				EditorPoint fixed = transformToModel(selection.getX(), selection.getY());
 				if(fixed != null) {
 					model.elasticMove(fixed, started, ended);
 				}
 			} break;
 			case FreeTriangleMeshPictogram.UP_LEFT_ARROW: {
-				EditorPoint fixed = transformToModel(selectionMaxX, selectionMaxY);
+				EditorPoint fixed = transformToModel(selection.getX() + selection.getWidth(), selection.getY() + selection.getHeight());
 				if(fixed != null) {
 					model.elasticMove(fixed, started, ended);
 				}
 			} break;
 			case FreeTriangleMeshPictogram.UP_RIGHT_ARROW: {
-				EditorPoint fixed = transformToModel(selectionMinX, selectionMaxY);
+				EditorPoint fixed = transformToModel(selection.getX(), selection.getY() + selection.getHeight());
 				if(fixed != null) {
 					model.elasticMove(fixed, started, ended);
 				}
 			} break;
 			case FreeTriangleMeshPictogram.DOWN_LEFT_ARROW: {
-				EditorPoint fixed = transformToModel(selectionMaxX, selectionMinY);
+				EditorPoint fixed = transformToModel(selection.getX() + selection.getWidth(), selection.getY());
 				if(fixed != null) {
 					model.elasticMove(fixed, started, ended);
 				}
 			} break;
 		}
 	}
-
-	private static final long serialVersionUID = 1L;
 }

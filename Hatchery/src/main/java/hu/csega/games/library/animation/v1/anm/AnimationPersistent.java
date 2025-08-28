@@ -1,12 +1,15 @@
 package hu.csega.games.library.animation.v1.anm;
 
 import hu.csega.editors.anm.common.CommonEditorModel;
+import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
 import hu.csega.games.engine.g3d.GameObjectDirection;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameObjectPosition;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class AnimationPersistent implements Serializable, CommonEditorModel {
@@ -51,6 +54,21 @@ public class AnimationPersistent implements Serializable, CommonEditorModel {
 		return cameraPlacement;
 	}
 
+	@Override
+	public long getSelectionLastChanged() {
+		return 0;
+	}
+
+	@Override
+	public Collection<AnimatorObject> getSelectedObjects() {
+		return null;
+	}
+
+	@Override
+	public void finalizeMove() {
+		// moved = false;
+	}
+
 	public FreeTriangleMeshModel locateMesh(String meshIdentifier) {
 		if(meshes == null || meshes.isEmpty()) {
 			return null;
@@ -60,6 +78,8 @@ public class AnimationPersistent implements Serializable, CommonEditorModel {
 	}
 
 	public void putMeshModel(String identifier, FreeTriangleMeshModel freeTriangleMeshModel) {
+		if(meshes == null)
+			meshes = new HashMap<>();
 		meshes.put(identifier, freeTriangleMeshModel);
 	}
 

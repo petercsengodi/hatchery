@@ -1,8 +1,10 @@
 package hu.csega.games.library.mesh.v1.ftm;
 
+import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
+
 import java.io.Serializable;
 
-public class FreeTriangleMeshTriangle implements Serializable {
+public class FreeTriangleMeshTriangle implements Serializable, AnimatorObject {
 
 	private int vertex1;
 	private int vertex2;

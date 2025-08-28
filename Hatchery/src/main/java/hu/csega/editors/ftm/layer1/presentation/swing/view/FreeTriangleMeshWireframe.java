@@ -2,6 +2,7 @@ package hu.csega.editors.ftm.layer1.presentation.swing.view;
 
 import hu.csega.common.math.ScalarUtil;
 import hu.csega.editors.FreeTriangleMeshToolStarter;
+import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.games.engine.GameEngineFacade;
@@ -63,7 +64,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 	@Override
 	protected void paint2d(Graphics2D g) {
 		FreeTriangleMeshModel model = (FreeTriangleMeshModel) facade.model();
-		Collection<Object> selectedObjects = model.getSelectedObjects();
+		Collection<AnimatorObject> selectedObjects = model.getSelectedObjects();
 
 		List<FreeTriangleMeshVertex> vertices = model.getVertices();
 		List<FreeTriangleMeshTriangle> triangles = model.getTriangles();
@@ -209,7 +210,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 
 	@Override
 	protected Set<FreeTriangleMeshPictogram> refreshPictograms(FreeTriangleMeshModel model) {
-		Collection<Object> selectedObjects = model.getSelectedObjects();
+		Collection<AnimatorObject> selectedObjects = model.getSelectedObjects();
 		if(selectedObjects == null || selectedObjects.size() < 2) {
 			return null;
 		}
@@ -223,7 +224,7 @@ public class FreeTriangleMeshWireframe extends FreeTriangleMeshCanvas {
 			selectionMaxX = Integer.MIN_VALUE;
 			selectionMaxY = Integer.MIN_VALUE;
 
-			for(Object obj : selectedObjects) {
+			for(AnimatorObject obj : selectedObjects) {
 				if(obj instanceof FreeTriangleMeshVertex) {
 					FreeTriangleMeshVertex v = ((FreeTriangleMeshVertex)obj);
 					EditorPoint p = transformToScreen(transformVertexToPoint(v));

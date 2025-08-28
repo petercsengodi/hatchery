@@ -14,6 +14,7 @@ import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListIte
 import hu.csega.editors.anm.layer1.swing.components.partlist.AnimatorPartListModel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneLerpPanel;
 import hu.csega.editors.anm.layer1.swing.controllers.AnimatorSceneSelectorPanel;
+import hu.csega.editors.anm.layer1.swing.views.AnimatorViewCanvas;
 import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshTextureView;
 import hu.csega.games.engine.intf.GameWindow;
@@ -49,12 +50,12 @@ public class AnimatorUIComponents {
 	// Tabs / Views
 
 	public JTabbedPane tabbedPane;
-	public AnimatorWireFrameView panelFront;
-	public AnimatorWireFrameView panelTop;
-	public AnimatorWireFrameView panelSide;
+	public AnimatorViewCanvas panelFront;
+	public AnimatorViewCanvas panelTop;
+	public AnimatorViewCanvas panelSide;
 	public AnimatorWireFrameView panelWireFrame;
 	public JPanel panel3D;
-	public FreeTriangleMeshTextureView textureView;
+	public AnimatorViewCanvas textureView;
 	public AnimatorPartEditorPanel partEditorPanel;
 	public AnimatorSceneSelectorPanel sceneSelectorPanel;
 	public AnimatorSceneLerpPanel sceneLerpPanel;
