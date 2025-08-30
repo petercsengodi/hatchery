@@ -4,25 +4,12 @@ import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.common.lens.EditorLensPipeline;
 import hu.csega.editors.common.lens.EditorPoint;
-import hu.csega.editors.ftm.layer1.presentation.swing.menu.FreeTriangleMeshContextMenu;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshPictogram;
 import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.engine.intf.GameCanvas;
-import hu.csega.games.engine.intf.GameWindow;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
 import java.util.Set;
-
-import javax.swing.*;
 
 public abstract class AnimatorView {
 

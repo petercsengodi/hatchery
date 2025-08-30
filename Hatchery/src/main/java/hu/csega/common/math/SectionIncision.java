@@ -1,7 +1,5 @@
 package hu.csega.common.math;
 
-import hu.csega.common.math.ScalarUtil;
-
 public class SectionIncision {
 
 	/**
@@ -11,6 +9,8 @@ public class SectionIncision {
 	 * <br/>
 	 * This method is only good for checking if there is an incision; it doesn't calculate,
 	 * where exactly the incision is.
+	 * <br/>
+	 * Uses cross product.
 	 */
 	public static boolean incisionSections(
 			double x0, double y0, double x1, double y1,

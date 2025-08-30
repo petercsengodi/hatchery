@@ -156,19 +156,19 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 		if(pictograms != null && !pictograms.isEmpty()) {
 			for(FreeTriangleMeshPictogram p : pictograms) {
 				BufferedImage img = AnimatorStarter.SPRITES[p.action];
-				g.drawImage(img, (int)p.x, (int)p.y, null);
+				g2d.drawImage(img, (int)p.x, (int)p.y, null);
 			}
 		}
 
-		g.setColor(Color.BLACK);
-		g.drawLine(0, 0, 300, 0);
-		g.drawString(label, 10, 20);
+		g2d.setColor(Color.BLACK);
+		g2d.drawLine(0, 0, 300, 0);
+		g2d.drawString(label, 10, 20);
 
 		Rectangle selectionBox = calculateSelectionBox();
 		if(selectionBox != null) {
-			g.setColor(Color.red);
+			g2d.setColor(Color.red);
 			calculateSelectionBox();
-			g.drawRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
+			g2d.drawRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
 		}
 
 		g.drawImage(buffer, 0, 0, null);
