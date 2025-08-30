@@ -160,10 +160,6 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 			}
 		}
 
-		g2d.setColor(Color.BLACK);
-		g2d.drawLine(0, 0, 300, 0);
-		g2d.drawString(label, 10, 20);
-
 		Rectangle selectionBox = calculateSelectionBox();
 		if(selectionBox != null) {
 			g2d.setColor(Color.red);
