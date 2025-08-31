@@ -1,6 +1,5 @@
 package hu.csega.editors.anm.layer4.data.model;
 
-import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
@@ -18,7 +17,6 @@ import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
 import hu.csega.games.library.animation.v1.anm.AnimationVector;
-import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
@@ -82,21 +80,13 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				jointListExtractor.accept(null);
 			}
 
-			CommonEditorModel commonEditorModel = model.selectModel();
-			if(commonEditorModel instanceof  AnimationPersistent) {
-
-				Map<String, AnimationPart> map = animation.getParts();
-				if(map != null && map.size() > 0) {
-					int numberOfScenes = animation.getNumberOfScenes();
-					if(selectedScene < 0 || selectedScene >= numberOfScenes) {
-						selectedScene = 0;
-					}
-
-					generateParts(persistent, selectedScene, baseTransformation, parts);
+			Map<String, AnimationPart> map = animation.getParts();
+			if(map != null && !map.isEmpty()) {
+				int numberOfScenes = animation.getNumberOfScenes();
+				if(selectedScene < 0 || selectedScene >= numberOfScenes) {
+					selectedScene = 0;
 				}
-			} else if(commonEditorModel instanceof FreeTriangleMeshModel) {
-				// TODO something to do with the baseTransformation
-				// TODO selected sub-model as part(s)
+
 				generateParts(persistent, selectedScene, baseTransformation, parts);
 			}
 

@@ -1,20 +1,8 @@
 package hu.csega.games.library.mesh.v1.ftm;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
 import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
-import hu.csega.editors.anm.layer1.swing.views.AnimatorView;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
@@ -30,6 +18,17 @@ import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameObjectPosition;
 import hu.csega.games.engine.g3d.GameObjectVertex;
 import hu.csega.games.engine.g3d.GameTexturePosition;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 
@@ -1397,22 +1396,40 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		return Math.sqrt(dx*dx + dy*dy + dz*dz);
 	}
 
+
+	@Override
+	public void setCameraPosition(float px, float py, float pz, float pw) {
+		if(animatorCameraSettings == null)
+			animatorCameraSettings = new float[4];
+
+		animatorCameraSettings[0] = px;
+		animatorCameraSettings[1] = py;
+		animatorCameraSettings[2] = pz;
+		animatorCameraSettings[3] = pw;
+	}
+
 	@Override
 	public GameObjectPlacement cameraPlacement() {
-		double alfa = getOpenGLAlpha();
-		double beta = getOpenGLBeta();
-		double distance = getOpenGLZoom();
-
-		double y = distance * Math.sin(beta);
-		double distanceReduced = distance * Math.cos(beta);
-
-		GameObjectPosition cameraPosition = new GameObjectPosition();
-		cameraPosition.x = (float)(Math.cos(alfa) * distanceReduced);
-		cameraPosition.y = (float) y;
-		cameraPosition.z = (float)(Math.sin(alfa) * distanceReduced);
-
 		GameObjectPosition cameraTarget = new GameObjectPosition(0f, 0f, 0f);
 		GameObjectDirection cameraUp = new GameObjectDirection(0f, 1f, 0f);
+		GameObjectPosition cameraPosition = new GameObjectPosition();
+
+		if(animatorCameraSettings != null) {
+			cameraPosition.x = animatorCameraSettings[0];
+			cameraPosition.y = animatorCameraSettings[1];
+			cameraPosition.z = animatorCameraSettings[2];
+		} else {
+			double alfa = getOpenGLAlpha();
+			double beta = getOpenGLBeta();
+			double distance = getOpenGLZoom();
+
+			double y = distance * Math.sin(beta);
+			double distanceReduced = distance * Math.cos(beta);
+
+			cameraPosition.x = (float) (Math.cos(alfa) * distanceReduced);
+			cameraPosition.y = (float) y;
+			cameraPosition.z = (float) (Math.sin(alfa) * distanceReduced);
+		}
 
 		GameObjectPlacement cameraPlacement = new GameObjectPlacement();
 		cameraPlacement.setPositionTargetUp(cameraPosition, cameraTarget, cameraUp);
@@ -1464,6 +1481,8 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 
 		return convertedModel;
 	}
+
+	private transient float[] animatorCameraSettings;
 
 	private static final double PI2 = 2*Math.PI;
 	private static final double BETA_LIMIT = Math.PI / 2;

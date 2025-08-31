@@ -23,6 +23,14 @@ public class AnimatorWireFramePoint {
 		this.cross = cross;
 	}
 
+	public void copyFrom(AnimatorWireFramePoint other) {
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
+		this.color = other.color;
+		this.cross = other.cross;
+	}
+
 	public double valueOfIndex(int index) {
 		switch (index) {
 			case 0:

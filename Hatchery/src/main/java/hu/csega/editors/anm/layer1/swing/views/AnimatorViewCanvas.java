@@ -1,7 +1,6 @@
 package hu.csega.editors.anm.layer1.swing.views;
 
 import hu.csega.editors.AnimatorStarter;
-import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.editors.common.lens.EditorLensPipeline;

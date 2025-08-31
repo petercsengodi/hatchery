@@ -1,15 +1,16 @@
 package hu.csega.editors.anm.layer1.view3d;
 
+import hu.csega.editors.anm.layer1.opengl.AnimatorAnimationRenderer;
 import hu.csega.editors.anm.layer1.opengl.AnimatorRenderStep;
 import hu.csega.editors.anm.components.Component3DView;
 
 public class Animator3DView implements Component3DView {
 
-	private AnimatorRenderStep renderer;
+	private AnimatorAnimationRenderer renderer;
 	private AnimatorSet set;
 
 	@Override
-	public void setRenderer(AnimatorRenderStep renderer) {
+	public void setRenderer(AnimatorAnimationRenderer renderer) {
 		this.renderer = renderer;
 	}
 
@@ -27,7 +28,7 @@ public class Animator3DView implements Component3DView {
 		}
 
 		if(renderer != null) {
-			renderer.setAnimatorSet(set);
+			renderer.accept(set);
 		}
 	}
 

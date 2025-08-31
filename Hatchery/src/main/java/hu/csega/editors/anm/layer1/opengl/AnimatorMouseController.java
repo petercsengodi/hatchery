@@ -1,6 +1,5 @@
 package hu.csega.editors.anm.layer1.opengl;
 
-import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.intf.GameCanvas;
 
@@ -28,7 +27,6 @@ public class AnimatorMouseController implements MouseListener, MouseMotionListen
 
 	private GameCanvas canvas;
 	private GameEngineFacade facade;
-	private AnimatorModel model;
 
 	public double getAlfa() {
 		return alfa;
@@ -120,14 +118,6 @@ public class AnimatorMouseController implements MouseListener, MouseMotionListen
 	}
 
 	private void refresh() {
-		if(model == null) {
-			model = (AnimatorModel) facade.model();
-			if(model == null) {
-				return;
-			}
-		}
-
-		model.refreshCamera(this);
 		canvas.repaint();
 	}
 

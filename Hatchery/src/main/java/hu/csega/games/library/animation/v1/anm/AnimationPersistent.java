@@ -41,6 +41,15 @@ public class AnimationPersistent implements Serializable, CommonEditorModel {
 	}
 
 	@Override
+	public void setCameraPosition(float px, float py, float pz, float pw) {
+		float[] v = getMisc().getCamera().getPosition().getV();
+		v[0] = px;
+		v[1] = py;
+		v[2] = pz;
+		v[3] = pw;
+	}
+
+	@Override
 	public GameObjectPlacement cameraPlacement() {
 		AnimationPlacement camera = getMisc().getCamera();
 

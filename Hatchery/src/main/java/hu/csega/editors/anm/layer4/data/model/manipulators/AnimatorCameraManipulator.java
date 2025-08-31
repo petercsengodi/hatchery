@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer4.data.model.manipulators;
 
+import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer1.opengl.AnimatorMouseController;
 import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
@@ -21,10 +22,7 @@ public class AnimatorCameraManipulator {
     }
 
     public void refreshCamera(AnimatorMouseController mouseController) {
-        AnimationPersistent persistent = model.getPersistent();
-        AnimationMisc misc = persistent.getMisc();
-        AnimationPlacement camera = misc.getCamera();
-        AnimationVector position = camera.getPosition();
+        CommonEditorModel commonEditorModel = model.selectModel();
 
         double alfa = 0.0;
         double beta = 0.0;
@@ -40,12 +38,12 @@ public class AnimatorCameraManipulator {
         double y = distance * Math.sin(beta);
         double distanceReduced = distance * Math.cos(beta);
 
-        float[] p = position.getV();
+        float px = (float)(Math.cos(alfa) * distanceReduced);
+        float py = (float) y;
+        float pz = (float)(Math.sin(alfa) * distanceReduced);
+        float pw = 1f;
 
-        p[0] = (float)(Math.cos(alfa) * distanceReduced);
-        p[1] = (float) y;
-        p[2] = (float)(Math.sin(alfa) * distanceReduced);
-        p[3] = 1f;
+        commonEditorModel.setCameraPosition(px, py, pz, pw);
     }
 
 }

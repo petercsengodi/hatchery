@@ -1,12 +1,19 @@
 package hu.csega.editors.anm.layer1.swing.wireframe;
 
+import hu.csega.games.engine.g3d.GameTransformation;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class AnimatorWireFrame {
 
+	private GameTransformation centerPartTransformation = new GameTransformation();
 	private Collection<AnimatorWireFrameLine> lines;
 	private Collection<AnimatorWireFramePoint> points;
+
+	public GameTransformation getCenterPartTransformation() {
+		return centerPartTransformation;
+	}
 
 	public Collection<AnimatorWireFrameLine> getLines() {
 		return lines;

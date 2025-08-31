@@ -10,4 +10,7 @@ import java.util.List;
 
 public interface ComponentWireFrameConverter extends CommonDataTransformer<List<AnimatorSetPart>, AnimatorWireFrame>,
 CommonDrain<List<AnimatorSetPart>>, CommonSource<AnimatorWireFrame> {
+
+    AnimatorWireFrame getWireFrame();
+
 }

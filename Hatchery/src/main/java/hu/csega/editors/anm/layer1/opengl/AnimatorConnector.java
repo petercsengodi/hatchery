@@ -118,6 +118,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 		descriptor.setDescription("A tool for creating small character animations.");
 		descriptor.setMouseCentered(false);
 
+
 		// Open GL View
 
 		GameAdapter adapter = new OpenGLGameAdapter(shaderRoot, textureRoot, meshRoot, animationRoot, false);
@@ -128,9 +129,14 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 		AnimatorInitStep animatorInitStep = new AnimatorInitStep();
 
+		AnimatorAnimationRenderer animationRenderer = new AnimatorAnimationRenderer();
+		AnimatorMeshRenderer meshRenderer = new AnimatorMeshRenderer();
+
 		AnimatorRenderStep animatorRenderStep = new AnimatorRenderStep();
+		animatorRenderStep.registerRenderer(AnimationPersistent.class, animationRenderer);
+		animatorRenderStep.registerRenderer(FreeTriangleMeshModel.class, meshRenderer);
 		Component3DView view = UnitStore.instance(Component3DView.class);
-		view.setRenderer(animatorRenderStep);
+		view.setRenderer(animationRenderer);
 
 		engine.step(GameEngineStep.INIT, animatorInitStep);
 		engine.step(GameEngineStep.RENDER, animatorRenderStep);
@@ -211,11 +217,9 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 		refreshViews = UnitStore.instance(ComponentRefreshViews.class);
 
-
-		// Mouse control.
-
 		GameCanvas canvas = engine.getCanvas();
 		AnimatorMouseController mouseController = new AnimatorMouseController(canvas, facade);
+		animatorRenderStep.setMouseController(mouseController);
 
 		Component component = ((OpenGLCanvas) canvas).getRealCanvas();
 		component.addMouseListener(mouseController);

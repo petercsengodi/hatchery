@@ -3,6 +3,7 @@ package hu.csega.editors.anm.layer1.swing.wireframe;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer1.swing.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
+import hu.csega.editors.anm.layer4.data.model.AnimatorModel;
 import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.library.MeshLibrary;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
@@ -15,6 +16,7 @@ import hu.csega.games.library.mesh.v1.xml.STriangle;
 import hu.csega.games.library.mesh.v1.xml.SVertex;
 import hu.csega.games.library.reference.SMeshRef;
 import hu.csega.games.library.util.FileUtil;
+import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
 import java.awt.*;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
 public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
@@ -30,7 +33,11 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	private AnimatorWireFrame wireFrame;
 
 	private AnimatorUIComponents components;
+	private AnimatorModel model;
 
+	public AnimatorWireFrame getWireFrame() {
+		return wireFrame;
+	}
 
 	@Override
 	public AnimatorWireFrame transform(List<AnimatorSetPart> parts) {
@@ -42,7 +49,8 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
 		// FIXME: some lightweight pattern not to always create new objects or something
 		if(parts != null) {
-			collectWireFrame(parts, result);
+			String selectedPartIdentifier = model.getSelectedModelIdentifier();
+			collectWireFrame(parts, result, selectedPartIdentifier);
 		}
 
 		result.addPoint(new AnimatorWireFramePoint(0.0, 0.0, 0.0, Color.PINK, true));
@@ -73,13 +81,13 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		return wireFrame;
 	}
 
-	private void collectWireFrame(List<AnimatorSetPart> parts, AnimatorWireFrame result) {
+	private void collectWireFrame(List<AnimatorSetPart> parts, AnimatorWireFrame result, String selectedPart) {
 		for(AnimatorSetPart part : parts) {
-			collectWireframe(part, result);
+			collectWireframe(part, result, selectedPart);
 		}
 	}
 
-	private void collectWireframe(AnimatorSetPart part, AnimatorWireFrame result) {
+	private void collectWireframe(AnimatorSetPart part, AnimatorWireFrame result, String selectedPart) {
 		String mesh1 = part.getMesh();
 		Object mesh = part.getMeshModel();
 
@@ -94,12 +102,19 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		}
 
         GameTransformation transformation = part.getTransformation();
-		if(mesh instanceof SMesh) {
-			convert((SMesh) mesh, transformation, result);
-		} else if(mesh instanceof FreeTriangleMeshModel) {
-			convert((FreeTriangleMeshModel) mesh, transformation, result);
+		if(selectedPart != null && !selectedPart.equals(part.getIdentifier())) {
+			if (mesh instanceof SMesh) {
+				convert((SMesh) mesh, transformation, result);
+			} else if (mesh instanceof FreeTriangleMeshModel) {
+				convert((FreeTriangleMeshModel) mesh, transformation, result);
+			} else {
+				throw new ClassCastException("Unknown format for mesh: " + mesh.getClass().getName());
+			}
 		} else {
-			throw new ClassCastException("Unknown format for mesh: " + mesh.getClass().getName());
+			Matrix4f matrix = new Matrix4f();
+			transformation.exportTo(matrix);
+			matrix = matrix.invert();
+			result.getCenterPartTransformation().importFrom(matrix);
 		}
 
 		List<AnimatorWireFramePoint> jointPoints = part.getJointPoints();
@@ -179,6 +194,11 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 			result.addLine(new AnimatorWireFrameLine(p3, p1, color));
 			result.addPoint(center);
 		}
+	}
+
+	@Dependency
+	public void setAnimatorModel(AnimatorModel animatorModel) {
+		this.model = animatorModel;
 	}
 
 }

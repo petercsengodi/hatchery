@@ -1,23 +1,33 @@
 package hu.csega.editors.anm.layer1.swing.views;
 
+import hu.csega.editors.anm.components.ComponentWireFrameConverter;
+import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrame;
+import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFrameLine;
+import hu.csega.editors.anm.layer1.swing.wireframe.AnimatorWireFramePoint;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshPictogram;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
+import hu.csega.games.units.UnitStore;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.joml.Matrix4d;
+import org.joml.Matrix4f;
+
 public abstract class AnimatorMeshSideView extends AnimatorView {
 
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
 	protected FreeTriangleMeshSphereLineIntersection intersection = new FreeTriangleMeshSphereLineIntersection();
+	protected ComponentWireFrameConverter wireFrameConverter;
 
 	public AnimatorMeshSideView(GameEngineFacade facade, AnimatorViewCanvas canvas) {
 		super(facade, canvas);
@@ -26,6 +36,14 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 	@Override
 	protected void paintView(Graphics2D g, int width, int height) {
 		drawGrid(g);
+
+		if(wireFrameConverter == null)
+			wireFrameConverter = UnitStore.instance(ComponentWireFrameConverter.class);
+
+		AnimatorWireFrame wireFrame = wireFrameConverter.getWireFrame();
+		if(wireFrame != null) {
+			drawWireFrame(g, wireFrame, wireFrame.getCenterPartTransformation());
+		}
 
 		FreeTriangleMeshModel model = getModel(FreeTriangleMeshModel.class);
 		if(model == null)
@@ -87,6 +105,28 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 		g.setStroke(stroke);
 	}
 
+	private void drawWireFrame(Graphics2D g, AnimatorWireFrame wireFrame, GameTransformation transformation) {
+		g.setColor(Color.blue);
+
+		AnimatorWireFramePoint source = new AnimatorWireFramePoint();
+		AnimatorWireFramePoint destination = new AnimatorWireFramePoint();
+
+		Collection<AnimatorWireFrameLine> lines = wireFrame.getLines();
+		if(lines != null) {
+			for(AnimatorWireFrameLine line : lines) {
+				source.copyFrom(line.getSource());
+				source.transform(transformation);
+				EditorPoint sourcePoint = transformToScreen(transformAnimatorWireFramePointToPoint(source));
+
+				destination.copyFrom(line.getDestination());
+				destination.transform(transformation);
+				EditorPoint destinationPoint = transformToScreen(transformAnimatorWireFramePointToPoint(destination));
+
+				drawLine(g, sourcePoint, destinationPoint);
+			}
+		}
+	}
+
 	protected void createVertexAt(EditorPoint p) {
 		FreeTriangleMeshModel model = getModel(FreeTriangleMeshModel.class);
 		if(model == null)
@@ -111,6 +151,10 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 
 	protected EditorPoint transformVertexToPoint(FreeTriangleMeshVertex vertex) {
 		return new EditorPoint(vertex.getPX(), vertex.getPY(), vertex.getPZ(), 1.0);
+	}
+
+	protected EditorPoint transformAnimatorWireFramePointToPoint(AnimatorWireFramePoint vertex) {
+		return new EditorPoint(vertex.getX(), vertex.getY(), vertex.getZ(), 1.0);
 	}
 
 	protected void drawLine(Graphics2D g, EditorPoint end1, EditorPoint end2) {
