@@ -96,23 +96,25 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 
 	public AnimatorView getCurrentView() {
 		CommonEditorModel currentModel = getCurrentModel();
-		if(currentModel == null)
-			return emptyView;
+		if(currentModel == null) {
+			cachedAnimatorModelClass = null;
+			return (cachedAnimatorView = emptyView);
+		}
 
 		Class<?> modelClass = currentModel.getClass();
 		if(cachedAnimatorModelClass == modelClass) {
-			return cachedAnimatorView;
+			return (cachedAnimatorView != null ? cachedAnimatorView : emptyView);
 		}
 
 		cachedAnimatorModelClass = modelClass;
 		for(Map.Entry<Class<?>, AnimatorView> entry : registeredViews.entrySet()) {
 			if(entry.getKey().isAssignableFrom(modelClass)) {
 				cachedAnimatorView = entry.getValue();
-				return cachedAnimatorView;
+				return (cachedAnimatorView != null ? cachedAnimatorView : emptyView);
 			}
 		}
 
-		return emptyView;
+		return (cachedAnimatorView = emptyView);
 	}
 
 	public void registerView(Class<?> modelClass, AnimatorView view) {
@@ -145,11 +147,9 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.fillRect(0, 0, lastSize.width, lastSize.height);
 		g2d.setColor(Color.black);
-
-		String label = "< unknown >";
+		
 		AnimatorView currentView = getCurrentView();
 		currentView.paint(g2d, lastSize.width, lastSize.height);
-		label = currentView.label();
 
 		Set<FreeTriangleMeshPictogram> pictograms = refreshPictograms();
 		if(pictograms != null && !pictograms.isEmpty()) {

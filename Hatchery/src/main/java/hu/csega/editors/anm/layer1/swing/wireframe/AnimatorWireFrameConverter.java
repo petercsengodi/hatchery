@@ -102,7 +102,7 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		}
 
         GameTransformation transformation = part.getTransformation();
-		if(selectedPart != null && !selectedPart.equals(part.getIdentifier())) {
+		if(selectedPart == null || !selectedPart.equals(part.getIdentifier())) {
 			if (mesh instanceof SMesh) {
 				convert((SMesh) mesh, transformation, result);
 			} else if (mesh instanceof FreeTriangleMeshModel) {
