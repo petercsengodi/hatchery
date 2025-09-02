@@ -151,7 +151,7 @@ public class SuperstitionGameModify {
 	public static void pressed(SuperstitionSerializableModel model, int x, int y, boolean leftMouse, boolean rightMouse) {
 		if(leftMouse) {
 			SuperstitionPlayer player = model.player;
-			player.startSpellCasting(75.0);
+			player.startSpellCasting(SuperstitionSpellType.FIREBALL);
 		}
 	}
 
@@ -181,8 +181,13 @@ public class SuperstitionGameModify {
 	}
 
 	public static void hit(SuperstitionSerializableModel model, char key) {
-		if(key == 's' || key == 'S')
+		if(key == 's' || key == 'S') {
 			model.sliding = !model.sliding;
+		}
+
+		if(key == '1') {
+			model.player.startSpellCasting(SuperstitionSpellType.FIRE_RAIN);
+		}
 	}
 
 }

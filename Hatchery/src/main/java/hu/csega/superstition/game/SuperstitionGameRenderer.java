@@ -108,17 +108,44 @@ public class SuperstitionGameRenderer {
 		player.animate(timestamp);
 		int sceneIndex = player.spellCastingIndex();
 
-		if(player.shouldCastNow()) {
-			double dx = target.x;
-			double dz = target.z;
-			double l = Math.sqrt(dx*dx + dz*dz);
-			double rl = 1000.0 / l;
-			double nx = dx * rl;
-			double nz = dz * rl;
-			SpellInProgress spell = new SpellInProgress(timestamp, player.x, player.y - 5.0, player.z,
-					player.x + nx, player.y - 5.0, player.z + nz);
-			spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() + 20);
-			universe.spellsInProgress.add(spell);
+		SuperstitionSpellType shouldCast = player.shouldCastNow();
+		if(shouldCast != null) {
+			switch(shouldCast) {
+				case FIREBALL: {
+					double dx = target.x;
+					double dz = target.z;
+					double l = Math.sqrt(dx*dx + dz*dz);
+					double rl = 1000.0 / l;
+					double nx = dx * rl;
+					double nz = dz * rl;
+					SpellInProgress spell = new SpellInProgress(timestamp, player.x, player.y - 5.0, player.z,
+							player.x + nx, player.y - 5.0, player.z + nz);
+					spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() + 20);
+					universe.spellsInProgress.add(spell);
+					break;
+				}
+				case FIRE_RAIN: {
+					double sx = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
+					double sz = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
+					double txdiff = sx + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
+					double tzdiff = sz + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
+					for(int i = 0; i < 100; i++) {
+						double dx = target.x;
+						double dz = target.z;
+						double l = Math.sqrt(dx * dx + dz * dz);
+						double rl = 200.0 / l;
+						double nx = dx * rl + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 200;
+						double nz = dz * rl + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 200;
+						double dy = (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 500;
+						SpellInProgress spell = new SpellInProgress(timestamp,
+								player.x + nx + txdiff, player.y + 300.0 + dy, player.z + nz + tzdiff,
+								player.x + nx, player.y - 50.0 + dy, player.z + nz);
+						spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 100.0 + 1);
+						universe.spellsInProgress.add(spell);
+					}
+					break;
+				}
+			}
 		}
 
 		g.drawAnimation(elements.monsterAnimations.get(SuperstitionGameElements.WIZARD_ANIMATION), sceneIndex, playerPlacement);

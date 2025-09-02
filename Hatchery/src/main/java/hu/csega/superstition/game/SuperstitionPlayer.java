@@ -15,18 +15,18 @@ public class SuperstitionPlayer {
 	double castingSpellRightNow;
 	long lastTimestamp = System.currentTimeMillis();
 
-	boolean spellLoadedForFiring;
+	SuperstitionSpellType spellLoadedForFiring;
 	long xp;
 
 	public boolean isOnCoolDown() {
 		return spellCoolDown > 0.0;
 	}
 
-	public void startSpellCasting(double coolDown) {
+	public void startSpellCasting(SuperstitionSpellType type) {
 		if(spellCoolDown <= 0.0) {
 			this.castingSpellRightNow = SPELL_CAST_MAX;
-			this.spellCoolDown = coolDown;
-			this.spellLoadedForFiring = true;
+			this.spellCoolDown = type.getCoolDown();
+			this.spellLoadedForFiring = type;
 		}
 	}
 
@@ -50,13 +50,14 @@ public class SuperstitionPlayer {
 			spellCoolDown -= delta * COOL_DOWN_SPEED;
 	}
 
-	public boolean shouldCastNow() {
-		if(spellLoadedForFiring && castingSpellRightNow < SPELL_CAST_MAX / 2.0) {
-			spellLoadedForFiring = false;
-			return true;
+	public SuperstitionSpellType shouldCastNow() {
+		if(spellLoadedForFiring != null && castingSpellRightNow < SPELL_CAST_MAX / 2.0) {
+			SuperstitionSpellType ret = spellLoadedForFiring;
+			spellLoadedForFiring = null;
+			return ret;
 		}
 
-		return false;
+		return null;
 	}
 
 	private static final double SPELL_CAST_MAX = 50.0;
