@@ -100,7 +100,8 @@ public class SuperstitionGameModify {
 				double rl = 1000.0 / l;
 				double nx = targetX * rl;
 				double nz = targetZ * rl;
-				SpellInProgress spell = new SpellInProgress(now, monster.x, monster.y - 5.0, monster.z,
+				SpellInProgress spell = new SpellInProgress(SuperstitionSpellType.FIREBALL,
+						now, monster.x, monster.y - 5.0, monster.z,
 						monster.x + nx, monster.y - 5.0, monster.z + nz);
 				spell.setHitPoint(monster.maxHitDamage * SuperstitionGameStarter.RANDOM.nextDouble() + 20);
 				spell.setSpeed(0.00045);
@@ -186,7 +187,7 @@ public class SuperstitionGameModify {
 		}
 
 		if(key == '1') {
-			model.player.startSpellCasting(SuperstitionSpellType.FIRE_RAIN);
+			model.player.startSpellCasting(SuperstitionSpellType.ICE_RAIN);
 		}
 	}
 

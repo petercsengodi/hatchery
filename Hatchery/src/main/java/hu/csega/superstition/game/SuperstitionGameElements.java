@@ -30,7 +30,7 @@ public class SuperstitionGameElements {
 
 	GameObjectHandler groundTexture;
 	GameObjectHandler boxModel;
-	GameObjectHandler spellModel;
+	GameObjectHandler[] spellModel;
 	GameObjectHandler[] alphabet;
 	int numberOfLetters = 26;
 	GameObjectHandler[] numbers;
@@ -71,7 +71,9 @@ public class SuperstitionGameElements {
 		comma = store.loadMesh("alphabet-comma.json");
 		question = store.loadMesh("alphabet-question.json");
 
-		spellModel = store.loadMesh("fireball.json");
+		spellModel = new GameObjectHandler[2];
+		spellModel[0] = store.loadMesh("fireball.json");
+		spellModel[1] = store.loadMesh("ice.json");
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {

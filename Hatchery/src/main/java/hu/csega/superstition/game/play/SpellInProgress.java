@@ -1,6 +1,10 @@
 package hu.csega.superstition.game.play;
 
+import hu.csega.superstition.game.SuperstitionSpellType;
+
 public class SpellInProgress {
+
+    SuperstitionSpellType type;
 
     double startX;
     double startY;
@@ -19,9 +23,11 @@ public class SpellInProgress {
     double hitPoint;
     double speed;
 
-    public SpellInProgress(long timestamp, double startX, double startY, double startZ,
+    public SpellInProgress(SuperstitionSpellType type, long timestamp, double startX, double startY, double startZ,
                            double endX, double endY, double endZ) {
+        this.type = type;
         this.lastTimestamp = timestamp;
+
         this.startX = startX;
         this.startY = startY;
         this.startZ = startZ;
@@ -68,4 +74,11 @@ public class SpellInProgress {
         return hitPoint;
     }
 
+    public SuperstitionSpellType getType() {
+        return type;
+    }
+
+    public int spellModelIndex() {
+        return type.getspellModelIndex();
+    }
 }

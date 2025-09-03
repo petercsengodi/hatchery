@@ -20,7 +20,6 @@ import hu.csega.toolshed.logging.LoggerFactory;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -118,13 +117,15 @@ public class SuperstitionGameRenderer {
 					double rl = 1000.0 / l;
 					double nx = dx * rl;
 					double nz = dz * rl;
-					SpellInProgress spell = new SpellInProgress(timestamp, player.x, player.y - 5.0, player.z,
+					SpellInProgress spell = new SpellInProgress(
+							SuperstitionSpellType.FIREBALL, timestamp,
+							player.x, player.y - 5.0, player.z,
 							player.x + nx, player.y - 5.0, player.z + nz);
 					spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() + 20);
 					universe.spellsInProgress.add(spell);
 					break;
 				}
-				case FIRE_RAIN: {
+				case ICE_RAIN: {
 					double sx = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
 					double sz = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
 					double txdiff = sx + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
@@ -137,7 +138,8 @@ public class SuperstitionGameRenderer {
 						double nx = dx * rl + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 200;
 						double nz = dz * rl + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 200;
 						double dy = (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 500;
-						SpellInProgress spell = new SpellInProgress(timestamp,
+						SpellInProgress spell = new SpellInProgress(
+								SuperstitionSpellType.ICE_RAIN, timestamp,
 								player.x + nx + txdiff, player.y + 300.0 + dy, player.z + nz + tzdiff,
 								player.x + nx, player.y - 50.0 + dy, player.z + nz);
 						spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 100.0 + 1);
@@ -162,7 +164,7 @@ public class SuperstitionGameRenderer {
 				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
 				spellPlacement.up.set(0f, 1f, 0f);
 				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
-				g.drawModel(elements.spellModel, spellPlacement);
+				g.drawModel(elements.spellModel[spell.spellModelIndex()], spellPlacement);
 			}
 		}
 
@@ -179,7 +181,7 @@ public class SuperstitionGameRenderer {
 				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
 				spellPlacement.up.set(0f, 1f, 0f);
 				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
-				g.drawModel(elements.spellModel, spellPlacement);
+				g.drawModel(elements.spellModel[spell.spellModelIndex()], spellPlacement);
 			}
 		}
 
