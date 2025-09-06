@@ -5,6 +5,7 @@ import java.awt.*;
 public class KeepScreen {
 
     public static void main(String[] args) throws Exception {
+        System.out.println("Starting KeepScreen...");
         Robot robot = new Robot();
         long startTime = System.currentTimeMillis();
 

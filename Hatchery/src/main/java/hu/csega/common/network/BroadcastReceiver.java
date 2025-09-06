@@ -66,8 +66,10 @@ public class BroadcastReceiver {
                 String message = new String(packet.getData(), 0, packet.getLength());
                 System.out.println("Received from " + packet.getAddress() + ": " + message);
 
-                if(message.contains(IDENTIFIER))
+                if(message.contains(IDENTIFIER)) {
+                    System.out.println("I'm " + IDENTIFIER + " myself, so I keep quiet.");
                     continue;
+                }
 
                 final String responseHostAddress = packet.getAddress().getHostAddress();
                 sendMessage(responseSocket, responseHostAddress, "Accepting.");
@@ -80,6 +82,7 @@ public class BroadcastReceiver {
     }
 
     private static void sendMessage(DatagramSocket responseSocket, String host, String message) throws Exception {
+        System.out.println("Sending message to " + host + ": " + message);
         final InetAddress address = InetAddress.getByName(host);
         byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
         DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, ACCEPT_TASK_PORT);
