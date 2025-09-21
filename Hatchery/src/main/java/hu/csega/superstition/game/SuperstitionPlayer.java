@@ -4,9 +4,10 @@ public class SuperstitionPlayer {
 
 	double health = 200;
 
-	double x;
-	double y;
-	double z;
+	public double x;
+	public double y;
+	public double z;
+
 	double movingRotation;
 	double sightHorizontalRotation;
 	double sightVerticalRotation;

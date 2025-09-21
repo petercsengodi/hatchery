@@ -87,7 +87,7 @@ public class SuperstitionGameModify {
 			}
 
 			MapTile mapTile = model.map.loadMapTile(monster.x, monster.y, monster.z);
-			if(mapTile != monster.mapTile) {
+			if(mapTile != null && monster.mapTile != null && mapTile != monster.mapTile) {
 				monster.mapTile.monsters.remove(monster);
 				mapTile.monsters.add(monster);
 				monster.mapTile = mapTile;
@@ -130,14 +130,14 @@ public class SuperstitionGameModify {
 					monster1.z += ddz;
 
 					MapTile mapTile = model.map.loadMapTile(monster1.x, monster1.y, monster1.z);
-					if(mapTile != monster1.mapTile) {
+					if(mapTile != null && monster2.mapTile != null && mapTile != monster1.mapTile) {
 						monster1.mapTile.monsters.remove(monster1);
 						mapTile.monsters.add(monster1);
 						monster1.mapTile = mapTile;
 					}
 
 					mapTile = model.map.loadMapTile(monster2.x, monster2.y, monster2.z);
-					if(mapTile != monster2.mapTile) {
+					if(mapTile != null && monster2.mapTile != null && mapTile != monster2.mapTile) {
 						monster2.mapTile.monsters.remove(monster2);
 						mapTile.monsters.add(monster2);
 						monster2.mapTile = mapTile;
@@ -188,6 +188,22 @@ public class SuperstitionGameModify {
 
 		if(key == '1') {
 			model.player.startSpellCasting(SuperstitionSpellType.ICE_RAIN);
+		}
+
+		if(key == '2') {
+			model.player.startSpellCasting(SuperstitionSpellType.SPIRAL);
+		}
+
+		if(key == '3') {
+			model.player.startSpellCasting(SuperstitionSpellType.HARD_PUSH);
+		}
+
+		if(key == '4') {
+			model.player.startSpellCasting(SuperstitionSpellType.SPIKES);
+		}
+
+		if(key == '5') {
+			model.player.startSpellCasting(SuperstitionSpellType.BLOCKER);
 		}
 	}
 

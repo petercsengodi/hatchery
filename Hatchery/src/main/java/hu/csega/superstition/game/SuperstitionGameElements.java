@@ -28,18 +28,19 @@ public class SuperstitionGameElements {
 
 	Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
+	public GameObjectHandler[] alphabet;
+	public GameObjectHandler[] numbers;
+	public int numberOfLetters = 26;
+	public int numberOfNumbers = 10;
+	public GameObjectHandler dot;
+	public GameObjectHandler colon;
+	public GameObjectHandler exclamation;
+	public GameObjectHandler comma;
+	public GameObjectHandler question;
+
 	GameObjectHandler groundTexture;
 	GameObjectHandler boxModel;
 	GameObjectHandler[] spellModel;
-	GameObjectHandler[] alphabet;
-	int numberOfLetters = 26;
-	GameObjectHandler[] numbers;
-	int numberOfNumbers = 10;
-	GameObjectHandler dot;
-	GameObjectHandler colon;
-	GameObjectHandler exclamation;
-	GameObjectHandler comma;
-	GameObjectHandler question;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
@@ -71,9 +72,10 @@ public class SuperstitionGameElements {
 		comma = store.loadMesh("alphabet-comma.json");
 		question = store.loadMesh("alphabet-question.json");
 
-		spellModel = new GameObjectHandler[2];
+		spellModel = new GameObjectHandler[3];
 		spellModel[0] = store.loadMesh("fireball.json");
 		spellModel[1] = store.loadMesh("ice.json");
+		spellModel[2] = store.loadMesh("blocker.json");
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {

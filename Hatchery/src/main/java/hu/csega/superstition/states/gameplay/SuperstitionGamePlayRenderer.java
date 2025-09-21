@@ -10,6 +10,7 @@ import hu.csega.superstition.states.SuperstitionModel;
 public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 
 	private final SuperstitionGameRenderer universeRenderer = new SuperstitionGameRenderer();
+	private final SuperstitionGameRenderer mapRenderer = new SuperstitionGameRenderer();
 
 	@Override
 	public Object call(GameEngineFacade facade) {

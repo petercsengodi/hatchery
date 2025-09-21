@@ -1,6 +1,10 @@
 package hu.csega.superstition.game;
 
 public enum SuperstitionSpellType {
+    BLOCKER(100.0, 2),
+    SPIKES(75.0, 0),
+    SPIRAL(50.0, 0),
+    HARD_PUSH(100.0, 0),
     FIREBALL(75.0, 0),
     ICE_RAIN(80.0, 1);
 
@@ -13,7 +17,7 @@ public enum SuperstitionSpellType {
         return coolDown;
     }
 
-    public int getspellModelIndex() {
+    public int getSpellModelIndex() {
         return spellModelIndex;
     }
 

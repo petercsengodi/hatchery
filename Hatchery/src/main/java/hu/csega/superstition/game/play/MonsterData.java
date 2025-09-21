@@ -40,6 +40,10 @@ public class MonsterData implements Serializable {
         if(cooldown < 0.0)
             cooldown = 0.0;
 
+        if(fy > 0.0) {
+            return false;
+        }
+
         return cooldown <= 0.0;
     }
 
@@ -50,6 +54,18 @@ public class MonsterData implements Serializable {
     public double z;
     public double scale;
     public double movingRotation;
+
+    public double fx;
+    public double fy;
+    public double fz;
+
+    public double vx;
+    public double vy;
+    public double vz;
+
+    public double ax = -1;
+    public double ay = -10;
+    public double az = -1;
 
     public double health;
     public long expectedXP;

@@ -33,6 +33,7 @@ public class SuperstitionGameRenderer {
 	private long lastCheck;
 
 	int lastAnimIndex;
+	long lastTimestamp;
 
 	private final List<String> logsOnScreen = new ArrayList<>();
 
@@ -104,12 +105,158 @@ public class SuperstitionGameRenderer {
 		}
 
 		long timestamp = System.currentTimeMillis();
+		double dt = (timestamp - lastTimestamp) / 1000.0;
+		lastTimestamp = timestamp;
+
 		player.animate(timestamp);
 		int sceneIndex = player.spellCastingIndex();
+
+		monstersAround.clear();
+		universe.map.loadMonstersAround(player.x, player.y, player.z, monstersAround);
 
 		SuperstitionSpellType shouldCast = player.shouldCastNow();
 		if(shouldCast != null) {
 			switch(shouldCast) {
+				case BLOCKER: {
+					double rotationSpeed = 0.003;
+					double speed = 0.00002;
+					double length = 1000;
+					double max = 75;
+
+					SpellInProgress spell1 = new SpellInProgress(
+							SuperstitionSpellType.BLOCKER, timestamp,
+							30, 10.0, 30,
+							length, 10.0, length);
+					spell1.rotateAroundPlayer(player, rotationSpeed, 0.0, max);
+					spell1.setSpeed(speed);
+
+					SpellInProgress spell2 = new SpellInProgress(
+							SuperstitionSpellType.BLOCKER, timestamp,
+							30, 10.0, 30,
+							length, 10.0, length);
+					spell2.rotateAroundPlayer(player, rotationSpeed, Math.PI / 2, max);
+					spell2.setSpeed(speed);
+
+					SpellInProgress spell3 = new SpellInProgress(
+							SuperstitionSpellType.BLOCKER, timestamp,
+							30, 10.0, 30,
+							length, 10.0, length);
+					spell3.rotateAroundPlayer(player, rotationSpeed, Math.PI, max);
+					spell3.setSpeed(speed);
+
+					SpellInProgress spell4 = new SpellInProgress(
+							SuperstitionSpellType.BLOCKER, timestamp,
+							30, 10.0, 30,
+							length, 10.0, length);
+					spell4.rotateAroundPlayer(player, rotationSpeed, Math.PI + Math.PI / 2, max);
+					spell4.setSpeed(speed);
+
+					universe.spellsInProgress.add(spell1);
+					universe.spellsInProgress.add(spell2);
+					universe.spellsInProgress.add(spell3);
+					universe.spellsInProgress.add(spell4);
+
+					spell1.setBlocker(true);
+					spell2.setBlocker(true);
+					spell3.setBlocker(true);
+					spell4.setBlocker(true);
+					break;
+				}
+				case SPIKES: {
+					double sx = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
+					double sz = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
+					double txdiff = sx + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
+					double tzdiff = sz + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
+					for(int i = 0; i < 100; i++) {
+						double dx = target.x;
+						double dz = target.z;
+						double l = Math.sqrt(dx * dx + dz * dz);
+						double rl = 200.0 / l;
+						double nx = dx * rl + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 200;
+						double nz = dz * rl + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 200;
+						double dy = (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 500;
+						SpellInProgress spell = new SpellInProgress(
+								SuperstitionSpellType.BLOCKER, timestamp,
+								player.x + nx + txdiff, player.y + 100.0 + dy, player.z + nz + tzdiff,
+								player.x + nx, player.y - 50.0 + dy, player.z + nz);
+						spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 100.0 + 1);
+						spell.setHeightMirror(10.0);
+						spell.setSpeed(0.0008);
+						universe.spellsInProgress.add(spell);
+					}
+					break;
+				}
+				case SPIRAL: {
+					double rotationSpeed = 0.003;
+					double speed = 0.00002;
+					double length = 1000;
+
+					SpellInProgress spell1 = new SpellInProgress(
+							SuperstitionSpellType.FIREBALL, timestamp,
+							30, - 5.0, 30,
+							length, - 5.0, length);
+					spell1.rotateAroundPlayer(player, rotationSpeed, 0.0, 100.0);
+					spell1.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 5 + 4);
+					spell1.setSpeed(speed);
+
+					SpellInProgress spell2 = new SpellInProgress(
+							SuperstitionSpellType.FIREBALL, timestamp,
+							30, - 5.0, 30,
+							length, - 5.0, length);
+					spell2.rotateAroundPlayer(player, rotationSpeed, Math.PI / 2, 100.0);
+					spell2.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 5 + 4);
+					spell2.setSpeed(speed);
+
+					SpellInProgress spell3 = new SpellInProgress(
+							SuperstitionSpellType.FIREBALL, timestamp,
+							30, - 5.0, 30,
+							length, - 5.0, length);
+					spell3.rotateAroundPlayer(player, rotationSpeed, Math.PI, 100.0);
+					spell3.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 5 + 4);
+					spell3.setSpeed(speed);
+
+					SpellInProgress spell4 = new SpellInProgress(
+							SuperstitionSpellType.FIREBALL, timestamp,
+							30, - 5.0, 30,
+							length, - 5.0, length);
+					spell4.rotateAroundPlayer(player, rotationSpeed, Math.PI + Math.PI / 2, 100.0);
+					spell4.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 5 + 4);
+					spell4.setSpeed(speed);
+
+					universe.spellsInProgress.add(spell1);
+					universe.spellsInProgress.add(spell2);
+					universe.spellsInProgress.add(spell3);
+					universe.spellsInProgress.add(spell4);
+					break;
+				}
+				case HARD_PUSH: {
+					for(MonsterData monster : monstersAround) {
+						// TODO: So no calculation needed with monsters too far away?
+						// Optimization: If distance in one dimension is too far, then we don't need to calculate full distance.
+						double absXDiff = Math.abs(monster.x - player.x);
+						double absZDiff = Math.abs(monster.z - player.z);
+						if(absXDiff > 300f || absZDiff > 300f) {
+							continue;
+						}
+
+						double absDiff = ScalarUtil.distance(monster.x, monster.z, player.x, player.z);
+						if(absDiff > 300) {
+							continue;
+						}
+
+						monster.vx = (monster.x - player.x) / absXDiff * (300.0 - absDiff);
+						monster.vy = (300.0 - absDiff) / 3f;
+						monster.vz = (monster.z - player.z) / absZDiff * (300.0 - absDiff);
+						if(monster.fy < 0.0) {
+							monster.fy = 0.0;
+						}
+
+						if(monster.target == null) {
+							monster.target = player;
+						}
+					}
+					break;
+				}
 				case FIREBALL: {
 					double dx = target.x;
 					double dz = target.z;
@@ -189,9 +336,6 @@ public class SuperstitionGameRenderer {
 		if(lastAnimIndex > 999)
 			lastAnimIndex = 0;
 
-		monstersAround.clear();
-		universe.map.loadMonstersAround(player.x, player.y, player.z, monstersAround);
-
 		for(MonsterData monster : monstersAround) {
 
 			// TODO: So no calculation needed with monsters too far away?
@@ -210,6 +354,9 @@ public class SuperstitionGameRenderer {
 			iterator = universe.spellsInProgress.iterator();
 			while(iterator.hasNext()) {
 				SpellInProgress spell = iterator.next();
+				if(spell.isBlocker())
+					continue;
+
 				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
 					iterator.remove();
 
@@ -221,7 +368,9 @@ public class SuperstitionGameRenderer {
 						player.xp += monster.expectedXP;
 						player.health = player.health * (player.xp + 100) / earlierXP;
 						addToLog(earlierHealth + " => Dies! XP: " + player.xp + " Health: " + doubleToIntString(player.health));
-						monster.mapTile.monsters.remove(monster);
+						if(monster.mapTile != null && monster.mapTile.monsters != null) {
+							monster.mapTile.monsters.remove(monster);
+						}
 						monster.mapTile = null;
 					} else {
 						if (monster.target == null) {
@@ -233,9 +382,27 @@ public class SuperstitionGameRenderer {
 				}
 			}
 
+			if(monster.fy > 0 || monster.vy > 0) { // Result of the hard push.
+				if(monster.fy < 0.0001 && monster.vy < 0) {
+					monster.fy = 0.0;
+					monster.vy = 0.0;
+
+					monster.vx = 0.0;
+					monster.vz = 0.0;
+				} else {
+					monster.vx = monster.vx * 0.97;
+					monster.vy += monster.ay * dt * 20.0;
+					monster.vz = monster.vz * 0.97;
+
+					monster.x += monster.vx * dt;
+					monster.fy += monster.vy * dt;
+					monster.z += monster.vz * dt;
+				}
+			}
+
 			GameObjectPlacement monsterPlacement = new GameObjectPlacement();
-			monsterPlacement.position.set((float) monster.x, (float) monster.y + 25f, (float) monster.z);
-			monsterPlacement.target.set((float) monster.x, (float) monster.y + 25f, (float) monster.z + 10f);
+			monsterPlacement.position.set((float) monster.x, (float) (monster.y + monster.fy + 25f), (float) monster.z);
+			monsterPlacement.target.set((float) monster.x, (float) (monster.y + monster.fy + 25f), (float) monster.z + 10f);
 			monsterPlacement.up.set(0f, 1f, 0f);
 			monsterPlacement.scale.set((float) monster.scale, (float) monster.scale, (float) monster.scale);
 
@@ -249,6 +416,26 @@ public class SuperstitionGameRenderer {
 		iterator = universe.monsterSpells.iterator();
 		while(iterator.hasNext()) {
 			SpellInProgress spell = iterator.next();
+			boolean removed = false;
+
+			Iterator<SpellInProgress> blockerIterator = universe.spellsInProgress.iterator();
+			while(blockerIterator.hasNext()) {
+				SpellInProgress blockerSpell = blockerIterator.next();
+				if (!blockerSpell.isBlocker())
+					continue;
+
+				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), blockerSpell.getCurrentX(), blockerSpell.getCurrentZ())) {
+					blockerIterator.remove();
+					removed = true;
+					break;
+				}
+			}
+
+			if(removed) {
+				iterator.remove();
+				continue;
+			}
+
 			if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), player.x, player.z)) {
 				iterator.remove();
 
@@ -288,7 +475,7 @@ public class SuperstitionGameRenderer {
 		hackBlockScreenSaverActivation();
 	}
 
-	private void drawString(GameGraphics g, SuperstitionGameElements elements, int x, int y, String s) {
+	public static void drawString(GameGraphics g, SuperstitionGameElements elements, int x, int y, String s) {
 		int pos = x;
 		int line = y;
 
