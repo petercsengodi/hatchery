@@ -13,13 +13,13 @@ import hu.csega.superstition.game.play.SpellInProgress;
 
 public class SuperstitionSerializableModel implements Serializable {
 
-	SuperstitionPlayer player = new SuperstitionPlayer();
-	boolean sliding = true;
+	public SuperstitionPlayer player = new SuperstitionPlayer();
+	public boolean sliding = true;
 
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
 	public Set<SpellInProgress> monsterSpells = new HashSet<>();
 
-    SuperstitionMap map = new SuperstitionMap();
+    public SuperstitionMap map = new SuperstitionMap();
 
 	public SuperstitionSerializableModel() {
 		player.z = 0f;

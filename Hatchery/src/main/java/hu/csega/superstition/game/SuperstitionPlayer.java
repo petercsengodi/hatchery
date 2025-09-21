@@ -2,22 +2,22 @@ package hu.csega.superstition.game;
 
 public class SuperstitionPlayer {
 
-	double health = 200;
+	public double health = 200;
 
 	public double x;
 	public double y;
 	public double z;
 
-	double movingRotation;
-	double sightHorizontalRotation;
-	double sightVerticalRotation;
+	public double movingRotation;
+	public double sightHorizontalRotation;
+	public double sightVerticalRotation;
 
 	double spellCoolDown;
 	double castingSpellRightNow;
-	long lastTimestamp = System.currentTimeMillis();
+	public long lastTimestamp = System.currentTimeMillis();
 
-	SuperstitionSpellType spellLoadedForFiring;
-	long xp;
+	public SuperstitionSpellType spellLoadedForFiring;
+	public long xp;
 
 	public boolean isOnCoolDown() {
 		return spellCoolDown > 0.0;

@@ -30,6 +30,13 @@ public class SuperstitionModel {
 			new SuperstitionMainMenuKeyListener(),
 			new SuperstitionMainMenuMouseListener());
 
+	private SuperstitionState gameMap = new SuperstitionState( // TODO
+			new SuperstitionMainMenuModel(),
+			new SuperstitionMainMenuBuilder(),
+			new SuperstitionMainMenuRenderer(),
+			new SuperstitionMainMenuKeyListener(),
+			new SuperstitionMainMenuMouseListener());
+
 	private SuperstitionState gamePlay = new SuperstitionState(
 			new SuperstitionGamePlayModel(),
 			new SuperstitionGamePlayBuilder(),

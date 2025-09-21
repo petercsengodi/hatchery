@@ -26,7 +26,7 @@ public class SuperstitionGameElements {
 	public static String MONSTRUM_ANIMATION = "monstrum.json";
 	public static String BEHEMOTH_ANIMATION = "behemoth.json";
 
-	Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
+	public Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
 	public GameObjectHandler[] alphabet;
 	public GameObjectHandler[] numbers;
@@ -38,9 +38,9 @@ public class SuperstitionGameElements {
 	public GameObjectHandler comma;
 	public GameObjectHandler question;
 
-	GameObjectHandler groundTexture;
-	GameObjectHandler boxModel;
-	GameObjectHandler[] spellModel;
+	public GameObjectHandler groundTexture;
+	public GameObjectHandler boxModel;
+	public GameObjectHandler[] spellModel;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
