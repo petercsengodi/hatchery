@@ -202,7 +202,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 								player.x + nx, player.y - 50.0 + dy, player.z + nz);
 						spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 100.0 + 1);
 						spell.setHeightMirror(10.0);
-						spell.setSpeed(0.000);
+						spell.setSpeed(0.002);
 						universe.spellsInProgress.add(spell);
 					}
 					break;
