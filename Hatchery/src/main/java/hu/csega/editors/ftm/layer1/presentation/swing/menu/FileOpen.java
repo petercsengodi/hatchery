@@ -37,7 +37,7 @@ class FileOpen implements ActionListener {
 		case JFileChooser.APPROVE_OPTION:
 			File file = openDialog.getSelectedFile();
 			byte[] serialized = FreeTriangleMeshSnapshots.readAllBytes(file);
-			FreeTriangleMeshModel model = (FreeTriangleMeshModel) FileSystemIntegration.deserialize(serialized);
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel) FileSystemIntegration.deserialize(file.getName(), serialized);
 			if(model == null) {
 				model = new FreeTriangleMeshModel();
 				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);

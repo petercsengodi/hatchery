@@ -37,7 +37,7 @@ public class FreeTriangleMeshSnapshots {
 		byte[] currentState = FileSystemIntegration.serialize(current);
 		nextStates.add(currentState);
 		byte[] snapshot = previousStates.remove(previousStates.size() - 1);
-		return FileSystemIntegration.deserialize(snapshot);
+		return FileSystemIntegration.deserialize("undo", snapshot);
 	}
 
 	public Serializable redo(Serializable current) {
@@ -47,7 +47,7 @@ public class FreeTriangleMeshSnapshots {
 		byte[] currentState = FileSystemIntegration.serialize(current);
 		previousStates.add(currentState);
 		byte[] snapshot = nextStates.remove(nextStates.size() - 1);
-		return FileSystemIntegration.deserialize(snapshot);
+		return FileSystemIntegration.deserialize("undo", snapshot);
 	}
 
 	public void clear() {
@@ -57,7 +57,7 @@ public class FreeTriangleMeshSnapshots {
 
 	public Serializable currentSnapshot() {
 		byte[] snapshot = previousStates.get(previousStates.size() - 1);
-		return FileSystemIntegration.deserialize(snapshot);
+		return FileSystemIntegration.deserialize("currentSnapsht", snapshot);
 	}
 
 	public static void writeAllBytes(String fileName, byte[] bytes) {

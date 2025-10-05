@@ -46,7 +46,7 @@ public class MeshLibrary {
 		if(filename.endsWith(".ftm")) {
 			File file = new File(filename);
 			byte[] serialized = FreeTriangleMeshSnapshots.readAllBytes(file);
-			FreeTriangleMeshModel model = (FreeTriangleMeshModel) FileSystemIntegration.deserialize(serialized);
+			FreeTriangleMeshModel model = (FreeTriangleMeshModel) FileSystemIntegration.deserialize(filename, serialized);
 			if (model == null) {
 				model = new FreeTriangleMeshModel();
 				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
@@ -55,14 +55,18 @@ public class MeshLibrary {
 			return model;
 		} else if(filename.endsWith(".json")) {
 			File file = new File(filename.replace(".json", ".ftm"));
-			byte[] serialized = FreeTriangleMeshSnapshots.readAllBytes(file);
-			FreeTriangleMeshModel model = (FreeTriangleMeshModel) FileSystemIntegration.deserialize(serialized);
-			if (model == null) {
-				model = new FreeTriangleMeshModel();
-				model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
-			}
+			if(file.exists()) {
+				byte[] serialized = FreeTriangleMeshSnapshots.readAllBytes(file);
+				FreeTriangleMeshModel model = (FreeTriangleMeshModel) FileSystemIntegration.deserialize(filename, serialized);
+				if (model == null) {
+					model = new FreeTriangleMeshModel();
+					model.setTextureFilename(FreeTriangleMeshToolStarter.DEFAULT_TEXTURE_FILE);
+				}
 
-			return model;
+				return model;
+			} else {
+				return null;
+			}
 		} else {
 			SMesh mesh;
 			try {

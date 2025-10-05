@@ -29,13 +29,13 @@ public class FileSystemIntegration {
 		}
 	}
 
-	public static Serializable deserialize(byte[] serialized) {
+	public static Serializable deserialize(String objectName, byte[] serialized) {
 		try {
 			InputStream input = new ByteArrayInputStream(serialized);
 			ObjectInputStream ois = new ObjectInputStream(input);
 			return (Serializable) ois.readObject();
-		} catch (IOException | ClassNotFoundException ex) {
-			logger.error("Error during deserializing...", ex);
+		} catch (RuntimeException | IOException | ClassNotFoundException ex) {
+			logger.error("Error during deserializing: " + objectName, ex);
 			return null;
 		}
 	}
