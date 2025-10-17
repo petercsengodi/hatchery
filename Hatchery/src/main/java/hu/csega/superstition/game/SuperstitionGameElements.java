@@ -8,10 +8,12 @@ import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPosition;
 import hu.csega.games.engine.g3d.GameObjectVertex;
 import hu.csega.games.engine.g3d.GameTexturePosition;
+import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SuperstitionGameElements {
@@ -121,11 +123,38 @@ public class SuperstitionGameElements {
 		groundBuilder.getIndices().add(2);
 		GameObjectHandler groundTileHandler = store.buildMesh(groundBuilder);
 
-		for(int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
-			for(int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
-				MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
-				mt.handler = groundTileHandler;
-				SuperstitionMap.mapTiles[ix][iy] = mt;
+		if(SuperstitionGameStarter.mapTable != null) {
+			int height = 0;
+			int width = 0;
+			for(List<String> row : SuperstitionGameStarter.mapTable) {
+				if(!row.isEmpty()) {
+					width = Math.max(width, row.size());
+					height++;
+				}
+			}
+
+			for (int ix = 0; ix < width; ix++) {
+				for (int iy = 0; iy < height; iy++) {
+					MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
+
+					List<String> row = SuperstitionGameStarter.mapTable.get(iy);
+					String s = (row.size() > ix ? row.get(ix) : null);
+					if(s != null) {
+						if(s.charAt(0) == 'G') {
+							mt.handler = groundTileHandler;
+						}
+					}
+
+					SuperstitionMap.mapTiles[ix][iy] = mt;
+				}
+			}
+		} else {
+			for (int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
+				for (int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
+					MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
+					mt.handler = groundTileHandler;
+					SuperstitionMap.mapTiles[ix][iy] = mt;
+				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package hu.csega.superstition;
 
+import hu.csega.csv.CSV;
 import hu.csega.editors.common.resources.FileResourceAdapter;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.common.ApplicationStarter;
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 // A Fizz-buzz way of running the game
@@ -33,6 +35,8 @@ public class SuperstitionGameStarter {
 
 	private static long randomSeed = System.currentTimeMillis();
 	public static Random RANDOM;
+
+	public static List<List<String>> mapTable = null;
 
 	public static void main(String[] args) {
 		LoggerFactory.setDefaultLevel(LOGGING_LEVEL);
@@ -55,6 +59,12 @@ public class SuperstitionGameStarter {
 		String textureRoot = resourceAdapter.textureRoot();
 		String meshRoot = resourceAdapter.meshRoot();
 		String animationRoot = resourceAdapter.animationRoot();
+
+		String mapFilename = resourceAdapter.resourcesRoot() + "maps/what.csv";
+		File mapFile = new File(mapFilename);
+		if(mapFile.exists()) {
+			mapTable = CSV.parse(mapFilename);
+		}
 
 		Connector connector = new SuperstitionOpenGLConnector(shaderRoot, textureRoot, meshRoot, animationRoot);
 		ApplicationStarter starter = new ApplicationStarter(connector);

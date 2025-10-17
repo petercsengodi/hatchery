@@ -51,7 +51,11 @@ public class SuperstitionMap implements Serializable {
                 if(iy < 0 || iy >= SIZE_Y)
                     continue;
 
-                monstersAround.addAll(mapTiles[ix][iy].monsters);
+                MapTile mapTile = mapTiles[ix][iy];
+                if(mapTile != null) {
+                    // FIXME Actual map width/height should be used.
+                    monstersAround.addAll(mapTile.monsters);
+                }
             }
         }
     }

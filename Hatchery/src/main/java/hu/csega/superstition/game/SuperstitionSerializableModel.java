@@ -43,7 +43,10 @@ public class SuperstitionSerializableModel implements Serializable {
 			double py = 0.0;
 			double pz = map.ABSOLUTE_SIZE_Y * SuperstitionGameStarter.RANDOM.nextDouble();
 			MapTile mapTile = map.loadMapTile(px, py, pz);
-			mapTile.monsters.add(data);
+			if(mapTile != null) {
+				// FIXME Map width/height should be used.
+				mapTile.monsters.add(data);
+			}
 			data.identifyPosition(px, py, pz, mapTile);
 			data.setLevel(Math.floor(Math.max(pz / 10.0 * SuperstitionGameStarter.RANDOM.nextDouble(), 10)));
 		}
@@ -54,7 +57,12 @@ public class SuperstitionSerializableModel implements Serializable {
 		double py = 100.0;
 		double pz = SuperstitionMap.ABSOLUTE_SIZE_Y - SuperstitionMap.TILE_SIZE_Y / 2.0;
 		MapTile mapTile = map.loadMapTile(px, py, pz);
-		mapTile.monsters.add(behemoth);
+
+		if(mapTile != null) {
+			// FIXME Actual map width/height should be used.
+			mapTile.monsters.add(behemoth);
+		}
+
 		behemoth.identifyPosition(px, py, pz, mapTile);
 		behemoth.scale = 1.0;
 	}
