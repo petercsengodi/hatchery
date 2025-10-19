@@ -47,7 +47,7 @@ public class SuperstitionGameElements {
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
 
-		buildGround(store, "grass-texture.png");
+		buildMapGround(store);
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
@@ -84,44 +84,11 @@ public class SuperstitionGameElements {
 		return store.loadAnimation(filename);
 	}
 
-	private void buildGround(GameModelStore store, String texture) {
-		groundTexture = store.loadTexture(texture);
+	private void buildMapGround(GameModelStore store) {
+		GameObjectHandler groundTileHandler = buildGroundForReal(store, "grass-texture.png", GROUND_DEPTH);
+		GameObjectHandler riverTileHandler = buildGroundForReal(store, "white.png", 2f * GROUND_DEPTH);
 
-		GameObjectPosition p;
-		GameObjectDirection d;
-		GameTexturePosition tex;
-
-		d = new GameObjectDirection(0f, 1f, 0f);
-
-		float x = -GROUND_SIZE;
-		float y = -GROUND_SIZE;
-
-		GameModelBuilder groundBuilder = new GameModelBuilder();
-		groundBuilder.setTextureHandler(groundTexture);
-
-		p = new GameObjectPosition(x, GROUND_DEPTH, y);
-		tex = new GameTexturePosition(0f, 0f);
-		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-		p = new GameObjectPosition(x + GROUND_SIZE, GROUND_DEPTH, y);
-		tex = new GameTexturePosition(1f, 0f);
-		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-		p = new GameObjectPosition(x + GROUND_SIZE, GROUND_DEPTH, y + GROUND_SIZE);
-		tex = new GameTexturePosition(1f, 1f);
-		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-		p = new GameObjectPosition(x, GROUND_DEPTH, y + GROUND_SIZE);
-		tex = new GameTexturePosition(0f, 1f);
-		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
-
-		groundBuilder.getIndices().add(0);
-		groundBuilder.getIndices().add(2);
-		groundBuilder.getIndices().add(1);
-		groundBuilder.getIndices().add(0);
-		groundBuilder.getIndices().add(3);
-		groundBuilder.getIndices().add(2);
-		GameObjectHandler groundTileHandler = store.buildMesh(groundBuilder);
+		GameObjectHandler wallTileHandler = buildBox(store, -200f, -12f, -200f, 0f, 100f, 0f, "wood-texture.jpg");
 
 		if(SuperstitionGameStarter.mapTable != null) {
 			int height = 0;
@@ -143,6 +110,14 @@ public class SuperstitionGameElements {
 						if(s.charAt(0) == 'G') {
 							mt.handler = groundTileHandler;
 						}
+
+						if(s.charAt(0) == 'R') {
+							mt.handler = riverTileHandler;
+						}
+
+						if(s.charAt(0) == 'W') {
+							mt.handler = wallTileHandler;
+						}
 					}
 
 					SuperstitionMap.mapTiles[ix][iy] = mt;
@@ -157,6 +132,46 @@ public class SuperstitionGameElements {
 				}
 			}
 		}
+	}
+
+	private GameObjectHandler buildGroundForReal(GameModelStore store, String texture, float level) {
+		GameObjectHandler groundTexture = store.loadTexture(texture);
+
+		GameObjectPosition p;
+		GameObjectDirection d;
+		GameTexturePosition tex;
+
+		d = new GameObjectDirection(0f, 1f, 0f);
+
+		float x = -GROUND_SIZE;
+		float y = -GROUND_SIZE;
+
+		GameModelBuilder groundBuilder = new GameModelBuilder();
+		groundBuilder.setTextureHandler(groundTexture);
+
+		p = new GameObjectPosition(x, level, y);
+		tex = new GameTexturePosition(0f, 0f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		p = new GameObjectPosition(x + GROUND_SIZE, level, y);
+		tex = new GameTexturePosition(1f, 0f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		p = new GameObjectPosition(x + GROUND_SIZE, level, y + GROUND_SIZE);
+		tex = new GameTexturePosition(1f, 1f);
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+
+		p = new GameObjectPosition(x, level, y + GROUND_SIZE);
+		tex = new GameTexturePosition(0f, 1f);
+
+		groundBuilder.getVertices().add(new GameObjectVertex(p, d, tex));
+		groundBuilder.getIndices().add(0);
+		groundBuilder.getIndices().add(2);
+		groundBuilder.getIndices().add(1);
+		groundBuilder.getIndices().add(0);
+		groundBuilder.getIndices().add(3);
+		groundBuilder.getIndices().add(2);
+		return store.buildMesh(groundBuilder);
 	}
 
 	private GameObjectHandler buildBox(GameModelStore store, float x1, float y1, float z1, float x2, float y2, float z2, String texture) {
