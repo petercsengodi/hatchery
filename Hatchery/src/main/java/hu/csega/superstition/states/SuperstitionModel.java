@@ -46,6 +46,7 @@ public class SuperstitionModel {
 
 	public SuperstitionModel() {
 		states.add(mainMenu);
+		states.add(gameMap);
 		states.add(gamePlay);
 	}
 
