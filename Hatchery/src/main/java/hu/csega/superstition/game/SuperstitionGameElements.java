@@ -40,7 +40,6 @@ public class SuperstitionGameElements {
 	public GameObjectHandler comma;
 	public GameObjectHandler question;
 
-	public GameObjectHandler groundTexture;
 	public GameObjectHandler boxModel;
 	public GameObjectHandler[] spellModel;
 
