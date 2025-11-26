@@ -79,6 +79,23 @@ public class EditorPoint {
 		}
 	}
 
+	public void valueOfIndex(int index, double value) {
+		switch (index) {
+			case 0:
+				x = value;
+				break;
+			case 1:
+				y = value;
+				break;
+			case 2:
+				z = value;
+				break;
+			default:
+				w = value;
+				break;
+		}
+	}
+
 	@Override
 	public String toString() {
 		return '(' + String.valueOf(x) + ';' + String.valueOf(y) + ';' + String.valueOf(z) + ';' + String.valueOf(w) + ')';

@@ -94,12 +94,15 @@ public class AnimatorAnimationView extends AnimatorView {
 	protected EditorPoint transformToScreen(EditorPoint p) {
 		int x = (int) p.valueOfIndex(indexOfX);
 		int y = (int) p.valueOfIndex(indexOfY);
-		return null;
+		return new EditorPoint(x, y, 0, 1);
 	}
 
 	@Override
 	protected EditorPoint transformToModel(double x, double y) {
-		return null;
+		EditorPoint result = new EditorPoint(0, 0, 0, 1);
+		result.valueOfIndex(indexOfX, x);
+		result.valueOfIndex(indexOfY, y);
+		return result;
 	}
 
 	@Override

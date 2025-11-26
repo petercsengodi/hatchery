@@ -5,6 +5,7 @@ import hu.csega.games.engine.g3d.GameTransformation;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/** This is wireframe data. */
 public class AnimatorWireFrame {
 
 	private GameTransformation centerPartTransformation = new GameTransformation();
