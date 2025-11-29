@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.ui.layout.root;
+package hu.csega.editors.anm.layer1Views.swing.layout.root;
 
 import java.awt.Component;
 import java.awt.Container;

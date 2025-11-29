@@ -26,6 +26,14 @@ hs_err_pid*
 Hatchery/.idea
 Hatchery/target
 
+# Eclipse
+.metadata
+**/.project
+**/.settings
+**/.bin
+**/.classpath
+Hatchery/.gitignore
+
 # Other
 Hatchery/conf/virtual-space.properties
 Hatchery/temp/*

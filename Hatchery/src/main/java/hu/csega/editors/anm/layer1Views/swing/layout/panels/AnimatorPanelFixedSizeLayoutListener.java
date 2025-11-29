@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.ui.layout.panels;
+package hu.csega.editors.anm.layer1Views.swing.layout.panels;
 
 import java.awt.Component;
 

@@ -18,7 +18,7 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import javax.swing.*;
 import java.awt.*;
 
-import hu.csega.editors.anm.ui.layout.root.AnimatorRootLayoutManager;
+import hu.csega.editors.anm.layer1Views.swing.layout.root.AnimatorRootLayoutManager;
 import hu.csega.games.units.UnitStore;
 
 public class AnimatorUIComponents {

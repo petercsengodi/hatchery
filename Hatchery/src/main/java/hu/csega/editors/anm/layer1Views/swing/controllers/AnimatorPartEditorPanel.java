@@ -7,9 +7,9 @@ import javax.swing.*;
 import hu.csega.editors.anm.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1Views.swing.components.rotator.AnimatorRotatorComponent;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
-import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelFixedSizeLayoutListener;
-import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelLayoutChangeListener;
-import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelLayoutManager;
+import hu.csega.editors.anm.layer1Views.swing.layout.panels.AnimatorPanelFixedSizeLayoutListener;
+import hu.csega.editors.anm.layer1Views.swing.layout.panels.AnimatorPanelLayoutChangeListener;
+import hu.csega.editors.anm.layer1Views.swing.layout.panels.AnimatorPanelLayoutManager;
 import hu.csega.games.units.UnitStore;
 
 public class AnimatorPartEditorPanel extends JPanel {
