@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.layer1Views.swing.json;
+package hu.csega.editors.anm.layer1Views;
 
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.units.UnitStore;

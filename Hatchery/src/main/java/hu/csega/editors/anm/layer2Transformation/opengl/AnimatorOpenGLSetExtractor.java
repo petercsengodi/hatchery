@@ -1,7 +1,8 @@
-package hu.csega.editors.anm.layer1Views.view3d;
+package hu.csega.editors.anm.layer2Transformation.opengl;
 
-import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
-import hu.csega.editors.anm.components.ComponentOpenGLTransformer;
+import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.engine.GameEngineFacade;
@@ -13,53 +14,43 @@ import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.library.animation.v1.anm.AnimationPlacement;
 import hu.csega.games.library.animation.v1.anm.AnimationVector;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
+import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
 import java.util.List;
 
-public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
+public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 
+	private AnimatorOpenGLSet set;
+
+	///////////////////////////////////////////////////////////////////////
+	// Dependencies
 	private AnimatorModel animatorModel;
 	private ResourceAdapter resourceAdapter;
-
-	private AnimatorSet set;
-	private ComponentOpenGLTransformer transformer;
 	private GameEngineFacade facade;
 	private GameModelStore store;
+	private AnimatorSetExtractor setExtractor;
 
 	@Override
-	public void accept(List<AnimatorSetPart> parts) {
-		if(animatorModel == null) {
-			animatorModel = UnitStore.instance(AnimatorModel.class);
-		}
+	public synchronized void invalidate() {
+		this.set = null;
 
-		if(resourceAdapter == null) {
-			resourceAdapter = UnitStore.instance(ResourceAdapter.class);
-		}
-
-		if(transformer == null) {
-			transformer = UnitStore.instance(ComponentOpenGLTransformer.class);
-		}
-
-		if(facade == null || store == null) {
-			facade = UnitStore.instance(GameEngineFacade.class);
-			store = facade.store();
-		}
-
-		generateSet(animatorModel.getPersistent(), parts);
-
-		transformer.accept(set);
+		// FIXME : Invalidate OpenGL, repaint.
 	}
 
-	private void generateSet(AnimationPersistent persistent, List<AnimatorSetPart> parts) {
-		if(this.set == null) {
-			this.set = new AnimatorSet();
+	@Override
+	public synchronized AnimatorOpenGLSet extractAnimatorSet() {
+		if(this.set != null) {
+			return this.set;
 		}
 
-		GameObjectPlacement camera = new GameObjectPlacement();
+		this.set = new AnimatorOpenGLSet();
 
+		AnimationPersistent persistent = this.animatorModel.getPersistent();
 		AnimationMisc misc = persistent.getMisc();
+		GameObjectPlacement camera = new GameObjectPlacement();
 		AnimationPlacement cam = misc.getCamera();
+
 		if(cam != null) {
 			AnimationVector pos = cam.getPosition();
 			if(pos != null && pos.getV() != null) {
@@ -90,12 +81,17 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 			camera.up.set(0f, 1f, 0f);
 		}
 
+		set.setCamera(camera);
+
+		List<AnimatorSetPart> parts = setExtractor.extractSetParts();
 		for(AnimatorSetPart part : parts) {
+			AnimatorOpenGLSetPart openGLpart = new AnimatorOpenGLSetPart();
+			openGLpart.setOriginalPart(part);
 
 			FreeTriangleMeshModel meshModel = part.getMeshModel();
 			if(meshModel != null) {
 				GameObjectHandler gameObjectHandler = meshModel.ensureConvertedModelIsBuilt(facade);
-				part.setHandler(gameObjectHandler);
+				openGLpart.setHandler(gameObjectHandler);
 			} else {
 				String filename = part.getMesh();
 				if (filename == null || filename.length() == 0) {
@@ -106,17 +102,48 @@ public class AnimatorOpenGLExtractor implements ComponentOpenGLExtractor {
 					filename = resourceAdapter.resourcesRoot() + filename;
 				}
 
-				GameObjectHandler handler = store.loadMesh(filename);
-				if (handler == null) {
-					throw new RuntimeException("Couldn't load game model: " + filename);
-				}
-
-				part.setHandler(handler);
+				GameObjectHandler handler = loadMesh(filename);
+				openGLpart.setHandler(handler);
 			}
+
+			set.addPart(openGLpart);
 		}
 
-		set.setCamera(camera);
-		set.setParts(parts);
+		return set;
 	}
 
+	private GameObjectHandler loadMesh(String filename) {
+		if(store == null) {
+			store = getFacade().store();
+		}
+		GameObjectHandler handler = store.loadMesh(filename);
+		if (handler == null) {
+			throw new RuntimeException("Couldn't load game model: " + filename);
+		}
+
+		return handler;
+	}
+
+	private GameEngineFacade getFacade() {
+		if(facade == null) {
+			facade = UnitStore.instance(GameEngineFacade.class);
+		}
+
+		return facade;
+	}
+
+	@Dependency
+	public void setAnimatorModel(AnimatorModel animatorModel) {
+		this.animatorModel = animatorModel;
+	}
+
+	@Dependency
+	public void setResourceAdapter(ResourceAdapter resourceAdapter) {
+		this.resourceAdapter = resourceAdapter;
+	}
+
+	@Dependency
+	public void setSetExtractor(AnimatorSetExtractor setExtractor) {
+		this.setExtractor = setExtractor;
+	}
 }

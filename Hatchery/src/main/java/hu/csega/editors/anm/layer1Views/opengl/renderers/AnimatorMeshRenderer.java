@@ -1,4 +1,4 @@
-package hu.csega.editors.anm.layer1Views.opengl;
+package hu.csega.editors.anm.layer1Views.opengl.renderers;
 
 import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.games.engine.GameEngineFacade;
@@ -12,7 +12,7 @@ public class AnimatorMeshRenderer extends AnimatorRenderer {
     private GameObjectPlacement modelPlacement = new GameObjectPlacement();
 
     @Override
-    void paint(GameEngineFacade facade, GameGraphics g, CommonEditorModel commonEditorModel) {
+    public void renderModel(GameEngineFacade facade, GameGraphics g, CommonEditorModel commonEditorModel) {
         FreeTriangleMeshModel model = (FreeTriangleMeshModel) commonEditorModel;
         if(model == null)
             return;

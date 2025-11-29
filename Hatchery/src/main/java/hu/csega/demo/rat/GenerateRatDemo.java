@@ -1,8 +1,8 @@
 package hu.csega.demo.rat;
 
 import hu.csega.editors.AnimatorStarter;
-import hu.csega.editors.anm.layer1Views.view3d.AnimatorSetPart;
-import hu.csega.editors.anm.layer4Data.model.AnimatorRefreshViews;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.common.SerializationUtil;
 import hu.csega.editors.common.resources.FileResourceAdapter;
 import hu.csega.editors.common.resources.ResourceAdapter;
@@ -16,23 +16,10 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
 import hu.csega.toolshed.logging.Level;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.joml.Matrix4f;
+
+import java.io.*;
+import java.util.*;
 
 public class GenerateRatDemo {
 
@@ -232,7 +219,7 @@ public class GenerateRatDemo {
 
             Matrix4f baseTransformation = new Matrix4f();
             List<AnimatorSetPart> resultParts = new ArrayList<>();
-            AnimatorRefreshViews.generateParts(deserialized, sceneIndex, baseTransformation, resultParts);
+            AnimatorSetExtractor.generateParts(deserialized, sceneIndex, baseTransformation, resultParts);
 
             Map<Integer, AnimatorSetPart> map = new TreeMap<>();
             for(AnimatorSetPart part : resultParts) {

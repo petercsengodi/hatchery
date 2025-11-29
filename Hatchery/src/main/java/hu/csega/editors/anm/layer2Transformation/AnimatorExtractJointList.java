@@ -2,29 +2,49 @@ package hu.csega.editors.anm.layer2Transformation;
 
 import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentJointListView;
-import hu.csega.editors.anm.layer1Views.swing.components.jointlist.AnimatorJointListItem;
+import hu.csega.editors.anm.layer1Views.swing.data.AnimatorJointListItem;
+import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
-import hu.csega.games.units.UnitStore;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
+import hu.csega.games.units.Dependency;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnimatorExtractJointList implements ComponentExtractJointList {
 
-	private ComponentJointListView view;
 	private List<AnimatorJointListItem> items;
 
+	///////////////////////////////////////////////////////////////////////
+	// Dependencies
+	private AnimatorModel animatorModel;
+
+
+	///////////////////////////////////////////////////////////////////////
+	// Dependents
+	private ComponentJointListView view;
+
 	@Override
-	public List<AnimatorJointListItem> transform(AnimationPart part) {
-		if(part == null)
-			return null;
+	public synchronized List<AnimatorJointListItem> extractJointList() {
+		if(items != null) {
+			return items;
+		}
+
+		items = new ArrayList<>();
+
+		AnimationPersistent persistent = animatorModel.getPersistent();
+		String selectedPartId = persistent.getSelectedPart();
+		AnimationPart part = persistent.getAnimation().getParts().get(selectedPartId);
+
+		if(part == null) {
+			return items;
+		}
 
 		List<AnimationPartJoint> joints = part.getJoints();
 		if(joints == null || joints.size() == 0)
-			return null;
+			return items;
 
-		items = new ArrayList<>();
 		for(AnimationPartJoint joint : joints) {
 			AnimatorJointListItem item = new AnimatorJointListItem();
 			item.setIdentifier(joint.getIdentifier());
@@ -37,21 +57,18 @@ public class AnimatorExtractJointList implements ComponentExtractJointList {
 	}
 
 	@Override
-	public void accept(AnimationPart part) {
-		if(view == null) {
-			view = UnitStore.instance(ComponentJointListView.class);
-			if(view == null) {
-				return;
-			}
-		}
-
-		items = transform(part);
-		view.accept(items);
+	public synchronized void invalidate() {
+		this.items = null;
+		view.invalidate();
 	}
 
-	@Override
-	public List<AnimatorJointListItem> provide() {
-		return items;
+	@Dependency
+	public void setView(ComponentJointListView view) {
+		this.view = view;
 	}
 
+	@Dependency
+	public void setAnimatorModel(AnimatorModel animatorModel) {
+		this.animatorModel = animatorModel;
+	}
 }

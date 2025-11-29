@@ -1,34 +1,23 @@
 package hu.csega.editors;
 
-import hu.csega.editors.anm.components.Component3DView;
-import hu.csega.editors.anm.components.ComponentExtractJointList;
-import hu.csega.editors.anm.components.ComponentExtractPartList;
-import hu.csega.editors.anm.components.ComponentJointListView;
-import hu.csega.editors.anm.components.ComponentOpenGLExtractor;
-import hu.csega.editors.anm.components.ComponentOpenGLTransformer;
-import hu.csega.editors.anm.components.ComponentPartListView;
-import hu.csega.editors.anm.components.ComponentRefreshViews;
-import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
-import hu.csega.editors.anm.components.ComponentWireFrameTransformer;
+import hu.csega.editors.anm.components.*;
 import hu.csega.editors.anm.layer1Views.opengl.AnimatorConnector;
-import hu.csega.editors.anm.layer1Views.swing.AnimatorUIComponents;
-import hu.csega.editors.anm.layer1Views.swing.components.jointlist.AnimatorJointListView;
-import hu.csega.editors.anm.layer1Views.swing.components.partlist.AnimatorPartListView;
+import hu.csega.editors.anm.AnimatorUIComponents;
+import hu.csega.editors.anm.layer1Views.AnimatorJointListView;
+import hu.csega.editors.anm.layer1Views.AnimatorPartListView;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameConverter;
-import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameTransformer;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameView;
-import hu.csega.editors.anm.layer1Views.view3d.Animator3DView;
-import hu.csega.editors.anm.layer1Views.view3d.AnimatorOpenGLExtractor;
-import hu.csega.editors.anm.layer1Views.view3d.AnimatorOpenGLTransformer;
+import hu.csega.editors.anm.layer2Transformation.opengl.AnimatorOpenGLSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.AnimatorExtractJointList;
 import hu.csega.editors.anm.layer2Transformation.AnimatorExtractPartList;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.editors.anm.layer4Data.model.AnimatorRefreshViews;
 import hu.csega.editors.common.resources.FileResourceAdapter;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.common.ApplicationStarter;
 import hu.csega.games.common.Connector;
+import hu.csega.games.engine.intf.GameDescriptor;
 import hu.csega.games.library.MeshLibrary;
 import hu.csega.games.library.TextureLibrary;
 import hu.csega.games.library.pixel.v1.Pixel;
@@ -52,10 +41,18 @@ public class AnimatorStarter {
 
 	private static final Level LOGGING_LEVEL = Level.INFO;
 
+	public static GameDescriptor GAME_DESCRIPTOR;
 	public static PixelLibrary PIXELS;
 	public static BufferedImage[] SPRITES;
 
 	public static void main(String[] args) {
+		GAME_DESCRIPTOR = new GameDescriptor();
+		GAME_DESCRIPTOR.setId("anm");
+		GAME_DESCRIPTOR.setTitle("Animator Tool");
+		GAME_DESCRIPTOR.setVersion("v00.00.0002");
+		GAME_DESCRIPTOR.setDescription("A tool for creating small character animations.");
+		GAME_DESCRIPTOR.setMouseCentered(false);
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 1. Initialize logging:
@@ -66,14 +63,14 @@ public class AnimatorStarter {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 4. Checking current directory
+		// 2. Checking current directory
 
 		ResourceAdapter resourceAdapter = new FileResourceAdapter("Hatchery");
 		UnitStore.registerInstance(ResourceAdapter.class, resourceAdapter);
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 9. Pictograms
+		// 3. Pictograms
 
 		File pixelLibraryFile = new File(resourceAdapter.projectRoot() + File.separator + "tmp.p16");
 		PIXELS = PixelLibrary.load(pixelLibraryFile);
@@ -96,7 +93,7 @@ public class AnimatorStarter {
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 2. Register components and providers:
+		// 4. Register components and providers:
 
 		// FIXME: Loads everything, it should not.
 		UnitStore.registerInstance(TextureLibrary.class, new TextureLibrary(resourceAdapter.textureFolder()));
@@ -115,18 +112,16 @@ public class AnimatorStarter {
 		UnitStore.registerDefaultImplementation(ComponentRefreshViews.class, AnimatorRefreshViews.class);
 		UnitStore.registerDefaultImplementation(ComponentPartListView.class, AnimatorPartListView.class);
 		UnitStore.registerDefaultImplementation(ComponentJointListView.class, AnimatorJointListView.class);
-		UnitStore.registerDefaultImplementation(ComponentOpenGLTransformer.class, AnimatorOpenGLTransformer.class);
-		UnitStore.registerDefaultImplementation(ComponentOpenGLExtractor.class, AnimatorOpenGLExtractor.class);
+		UnitStore.registerDefaultImplementation(ComponentSetExtractor.class, AnimatorSetExtractor.class);
+		UnitStore.registerDefaultImplementation(ComponentOpenGLSetExtractor.class, AnimatorOpenGLSetExtractor.class);
 		UnitStore.registerDefaultImplementation(ComponentExtractPartList.class, AnimatorExtractPartList.class);
 		UnitStore.registerDefaultImplementation(ComponentExtractJointList.class, AnimatorExtractJointList.class);
-		UnitStore.registerDefaultImplementation(Component3DView.class, Animator3DView.class);
 		UnitStore.registerDefaultImplementation(ComponentWireFrameConverter.class, AnimatorWireFrameConverter.class);
-		UnitStore.registerDefaultImplementation(ComponentWireFrameTransformer.class, AnimatorWireFrameTransformer.class);
 		UnitStore.registerDefaultImplementation(ComponentWireFrameRenderer.class, AnimatorWireFrameView.class);
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
-		// 4. Starting application:
+		// 5. Starting application:
 
 		ApplicationStarter starter = new ApplicationStarter(connector);
 		starter.start(args);

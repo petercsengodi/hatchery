@@ -1,6 +1,6 @@
 package hu.csega.editors.anm.layer1Views.swing.menu;
 
-import hu.csega.editors.anm.layer1Views.swing.AnimatorUIComponents;
+import hu.csega.editors.anm.AnimatorUIComponents;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.editors.common.resources.ResourceAdapter;
 import hu.csega.games.units.UnitStore;

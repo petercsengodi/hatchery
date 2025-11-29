@@ -1,6 +1,5 @@
 package hu.csega.editors.anm.layer1Views.swing.views;
 
-import hu.csega.editors.anm.components.ComponentWireFrameTransformer;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrame;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameLine;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFramePoint;
@@ -18,12 +17,10 @@ import java.util.Set;
 public class AnimatorAnimationView extends AnimatorView {
 
 	private final int indexOfX, indexOfY;
-	private ComponentWireFrameTransformer source;
 	private AnimatorWireFrame wireFrame;
 
 	public AnimatorAnimationView(GameEngineFacade facade, AnimatorViewCanvas canvas, int indexOfX, int indexOfY) {
 		super(facade, canvas);
-		this.source = UnitStore.instance(ComponentWireFrameTransformer.class);
 		this.indexOfX = indexOfX;
 		this.indexOfY = indexOfY;
 	}
@@ -36,9 +33,7 @@ public class AnimatorAnimationView extends AnimatorView {
 		g.setColor(Color.darkGray);
 		g.fillRect(0, 0, width, height);
 
-		if(wireFrame == null) {
-			wireFrame = source.transform(null);
-		}
+		// FIXME : Load wireframe
 
 		if(wireFrame != null) {
 			g.translate(width / 2, height / 2);

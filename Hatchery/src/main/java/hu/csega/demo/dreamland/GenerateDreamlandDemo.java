@@ -1,7 +1,8 @@
 package hu.csega.demo.dreamland;
 
 import hu.csega.editors.AnimatorStarter;
-import hu.csega.editors.anm.layer1Views.view3d.AnimatorSetPart;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.anm.layer4Data.model.AnimatorRefreshViews;
 import hu.csega.editors.common.SerializationUtil;
 import hu.csega.editors.common.resources.FileResourceAdapter;
@@ -234,7 +235,7 @@ public class GenerateDreamlandDemo {
 
             Matrix4f baseTransformation = new Matrix4f();
             List<AnimatorSetPart> resultParts = new ArrayList<>();
-            AnimatorRefreshViews.generateParts(deserialized, sceneIndex, baseTransformation, resultParts);
+            AnimatorSetExtractor.generateParts(deserialized, sceneIndex, baseTransformation, resultParts);
 
             Map<Integer, AnimatorSetPart> map = new TreeMap<>();
             for(AnimatorSetPart part : resultParts) {

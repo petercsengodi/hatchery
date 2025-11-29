@@ -1,10 +1,9 @@
-package hu.csega.editors.anm.layer1Views.swing.components.partlist;
+package hu.csega.editors.anm.layer1Views.swing.data;
 
-public class AnimatorPartListItem {
+public class AnimatorJointListItem {
 
 	private String identifier;
 	private String label;
-	private String mesh;
 
 	public String getIdentifier() {
 		return identifier;
@@ -22,14 +21,6 @@ public class AnimatorPartListItem {
 		this.label = label;
 	}
 
-	public String getMesh() {
-		return mesh;
-	}
-
-	public void setMesh(String mesh) {
-		this.mesh = mesh;
-	}
-
 	@Override
 	public String toString() {
 		if(label == null) {
@@ -45,6 +36,6 @@ public class AnimatorPartListItem {
 	}
 
 	private String nameFromIndexAndMesh() {
-		return "[Identifier: " + identifier + ", " + mesh + ']';
+		return "[Identifier: " + identifier + ']';
 	}
 }

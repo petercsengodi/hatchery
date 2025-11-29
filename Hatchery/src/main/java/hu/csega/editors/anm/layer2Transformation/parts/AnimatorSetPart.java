@@ -1,7 +1,6 @@
-package hu.csega.editors.anm.layer1Views.view3d;
+package hu.csega.editors.anm.layer2Transformation.parts;
 
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFramePoint;
-import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 
@@ -12,7 +11,6 @@ public class AnimatorSetPart {
 	private String identifier;
 	private String mesh;
 	private FreeTriangleMeshModel meshModel;
-	private GameObjectHandler handler;
 	private GameTransformation transformation;
 	private boolean flipped;
 	private List<AnimatorWireFramePoint> jointPoints;
@@ -39,14 +37,6 @@ public class AnimatorSetPart {
 
 	public void setMeshModel(FreeTriangleMeshModel meshModel) {
 		this.meshModel = meshModel;
-	}
-
-	public GameObjectHandler getHandler() {
-		return handler;
-	}
-
-	public void setHandler(GameObjectHandler handler) {
-		this.handler = handler;
 	}
 
 	public GameTransformation getTransformation() {

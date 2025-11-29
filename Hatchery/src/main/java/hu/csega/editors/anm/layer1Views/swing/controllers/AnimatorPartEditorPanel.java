@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import hu.csega.editors.anm.layer1Views.swing.AnimatorUIComponents;
+import hu.csega.editors.anm.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1Views.swing.components.rotator.AnimatorRotatorComponent;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.editors.anm.ui.layout.panels.AnimatorPanelFixedSizeLayoutListener;

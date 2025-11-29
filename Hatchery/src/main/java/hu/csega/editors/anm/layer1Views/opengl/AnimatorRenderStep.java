@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views.opengl;
 
 import hu.csega.editors.anm.common.CommonEditorModel;
+import hu.csega.editors.anm.layer1Views.opengl.renderers.AnimatorRenderer;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
@@ -56,7 +57,7 @@ public class AnimatorRenderStep implements GameEngineCallback {
 		g.placeCamera(model.cameraPlacement());
 
 		AnimatorRenderer renderer = selectRenderer(model);
-		renderer.paint(facade, g, model);
+		renderer.renderModel(facade, g, model);
 
 		return facade;
 	}

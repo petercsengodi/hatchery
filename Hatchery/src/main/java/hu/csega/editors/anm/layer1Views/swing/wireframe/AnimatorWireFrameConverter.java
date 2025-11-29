@@ -1,55 +1,48 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
+import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.layer1Views.swing.AnimatorUIComponents;
-import hu.csega.editors.anm.layer1Views.view3d.AnimatorSetPart;
+import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.engine.g3d.GameTransformation;
 import hu.csega.games.library.MeshLibrary;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
-import hu.csega.games.library.mesh.v1.xml.SEdge;
-import hu.csega.games.library.mesh.v1.xml.SMesh;
-import hu.csega.games.library.mesh.v1.xml.SShape;
-import hu.csega.games.library.mesh.v1.xml.STriangle;
-import hu.csega.games.library.mesh.v1.xml.SVertex;
+import hu.csega.games.library.mesh.v1.xml.*;
 import hu.csega.games.library.reference.SMeshRef;
 import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.Dependency;
-import hu.csega.games.units.UnitStore;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
-
 public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
-	private MeshLibrary meshLibrary;
 	private AnimatorWireFrame wireFrame;
 
-	private AnimatorUIComponents components;
-	private AnimatorModel model;
-
-	public AnimatorWireFrame getWireFrame() {
-		return wireFrame;
-	}
+	///////////////////////////////////////////////////////////////////////
+	// Dependencies
+	private MeshLibrary meshLibrary;
+	private AnimatorModel animatorModel;
+	private ComponentSetExtractor setExtractor;
 
 	@Override
-	public AnimatorWireFrame transform(List<AnimatorSetPart> parts) {
-		if(meshLibrary == null) {
-			meshLibrary = UnitStore.instance(MeshLibrary.class);
+	public synchronized AnimatorWireFrame getWireFrame() {
+		if(wireFrame != null) {
+			return wireFrame;
 		}
 
 		AnimatorWireFrame result = new AnimatorWireFrame();
 
 		// FIXME: some lightweight pattern not to always create new objects or something
+		List<AnimatorSetPart> parts = setExtractor.extractSetParts();
 		if(parts != null) {
-			String selectedPartIdentifier = model.getSelectedModelIdentifier();
+			String selectedPartIdentifier = animatorModel.getSelectedModelIdentifier();
 			collectWireFrame(parts, result, selectedPartIdentifier);
 		}
 
@@ -59,26 +52,9 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	}
 
 	@Override
-	public void accept(List<AnimatorSetPart> parts) {
-		components = UnitStore.instance(AnimatorUIComponents.class);
-		if(components == null) {
-			components = UnitStore.instance(AnimatorUIComponents.class);
-			if(components == null) {
-				return;
-			}
-		}
-
-		wireFrame = transform(parts);
-
-		// components.panelFront.accept(wireFrame);
-		// components.panelSide.accept(wireFrame);
-		// components.panelTop.accept(wireFrame);
-		components.panelWireFrame.accept(wireFrame);
-	}
-
-	@Override
-	public AnimatorWireFrame provide() {
-		return wireFrame;
+	public synchronized void invalidate() {
+		wireFrame = null;
+		// FIXME : Invalidate views / renderers.
 	}
 
 	private void collectWireFrame(List<AnimatorSetPart> parts, AnimatorWireFrame result, String selectedPart) {
@@ -198,7 +174,16 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
 	@Dependency
 	public void setAnimatorModel(AnimatorModel animatorModel) {
-		this.model = animatorModel;
+		this.animatorModel = animatorModel;
 	}
 
+	@Dependency
+	public void setMeshLibrary(MeshLibrary meshLibrary) {
+		this.meshLibrary = meshLibrary;
+	}
+
+	@Dependency
+	public void setSetExtractor(ComponentSetExtractor setExtractor) {
+		this.setExtractor = setExtractor;
+	}
 }
