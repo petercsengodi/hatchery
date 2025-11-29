@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
+import hu.csega.editors.anm.layer1Views.swing.views.AnimatorObject;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;

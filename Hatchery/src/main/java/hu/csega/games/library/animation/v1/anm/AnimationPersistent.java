@@ -1,7 +1,7 @@
 package hu.csega.games.library.animation.v1.anm;
 
 import hu.csega.editors.anm.common.CommonEditorModel;
-import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
+import hu.csega.editors.anm.layer1Views.swing.views.AnimatorObject;
 import hu.csega.games.engine.g3d.GameObjectDirection;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameObjectPosition;

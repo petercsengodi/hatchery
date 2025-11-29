@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
-import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
+import hu.csega.editors.anm.layer1Views.swing.views.AnimatorObject;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;

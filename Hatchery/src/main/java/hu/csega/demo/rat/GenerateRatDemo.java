@@ -1,8 +1,8 @@
 package hu.csega.demo.rat;
 
 import hu.csega.editors.AnimatorStarter;
-import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
-import hu.csega.editors.anm.layer4.data.model.AnimatorRefreshViews;
+import hu.csega.editors.anm.layer1Views.view3d.AnimatorSetPart;
+import hu.csega.editors.anm.layer4Data.model.AnimatorRefreshViews;
 import hu.csega.editors.common.SerializationUtil;
 import hu.csega.editors.common.resources.FileResourceAdapter;
 import hu.csega.editors.common.resources.ResourceAdapter;

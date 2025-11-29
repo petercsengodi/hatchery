@@ -1,6 +1,6 @@
 package hu.csega.editors.anm.components;
 
-import hu.csega.editors.anm.layer1.view3d.AnimatorSetPart;
+import hu.csega.editors.anm.layer1Views.view3d.AnimatorSetPart;
 import hu.csega.games.common.CommonDrain;
 
 import java.util.List;

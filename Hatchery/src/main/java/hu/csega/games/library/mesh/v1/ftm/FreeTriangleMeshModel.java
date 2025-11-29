@@ -2,7 +2,7 @@ package hu.csega.games.library.mesh.v1.ftm;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
 import hu.csega.editors.anm.common.CommonEditorModel;
-import hu.csega.editors.anm.layer1.swing.views.AnimatorObject;
+import hu.csega.editors.anm.layer1Views.swing.views.AnimatorObject;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
