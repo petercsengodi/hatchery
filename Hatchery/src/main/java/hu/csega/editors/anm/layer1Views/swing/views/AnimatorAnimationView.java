@@ -1,5 +1,9 @@
 package hu.csega.editors.anm.layer1Views.swing.views;
 
+import hu.csega.editors.anm.components.ComponentAnimationXYSideView;
+import hu.csega.editors.anm.components.ComponentAnimationXZSideView;
+import hu.csega.editors.anm.components.ComponentAnimationZYSideView;
+import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrame;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameLine;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFramePoint;
@@ -8,15 +12,17 @@ import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshPicto
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
 import hu.csega.games.engine.GameEngineFacade;
+import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.Set;
 
-public class AnimatorAnimationView extends AnimatorView {
+public class AnimatorAnimationView extends AnimatorView implements ComponentAnimationXYSideView, ComponentAnimationXZSideView, ComponentAnimationZYSideView {
 
 	private final int indexOfX, indexOfY;
+	private ComponentWireFrameConverter wireFrameConverter;
 	private AnimatorWireFrame wireFrame;
 
 	public AnimatorAnimationView(GameEngineFacade facade, AnimatorViewCanvas canvas, int indexOfX, int indexOfY) {
@@ -33,7 +39,9 @@ public class AnimatorAnimationView extends AnimatorView {
 		g.setColor(Color.darkGray);
 		g.fillRect(0, 0, width, height);
 
-		// FIXME : Load wireframe
+		if(wireFrame == null && wireFrameConverter != null) {
+			wireFrame = wireFrameConverter.getWireFrame();
+		}
 
 		if(wireFrame != null) {
 			g.translate(width / 2, height / 2);
@@ -127,4 +135,14 @@ public class AnimatorAnimationView extends AnimatorView {
 	protected void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended, Rectangle selection) {
 	}
 
+	@Override
+	public void invalidate() {
+		wireFrame = null;
+		canvas.invalidate();
+	}
+
+	@Dependency
+	public void setWireFrameConverter(ComponentWireFrameConverter wireFrameConverter) {
+		this.wireFrameConverter = wireFrameConverter;
+	}
 }

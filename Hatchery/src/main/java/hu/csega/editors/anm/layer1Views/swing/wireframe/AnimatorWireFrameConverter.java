@@ -1,7 +1,14 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
+import hu.csega.editors.anm.components.ComponentAnimationXYSideView;
+import hu.csega.editors.anm.components.ComponentAnimationXZSideView;
+import hu.csega.editors.anm.components.ComponentAnimationZYSideView;
+import hu.csega.editors.anm.components.ComponentMeshXYSideView;
+import hu.csega.editors.anm.components.ComponentMeshXZSideView;
+import hu.csega.editors.anm.components.ComponentMeshZYSideView;
 import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
+import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.engine.g3d.GameTransformation;
@@ -31,6 +38,16 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	private AnimatorModel animatorModel;
 	private ComponentSetExtractor setExtractor;
 
+	///////////////////////////////////////////////////////////////////////
+	// Dependents
+	private ComponentWireFrameRenderer renderer;
+	private ComponentAnimationXYSideView animationXYSideView;
+	private ComponentAnimationXZSideView animationXZSideView;
+	private ComponentAnimationZYSideView animationZYSideView;
+	private ComponentMeshXYSideView meshXYSideView;
+	private ComponentMeshXZSideView meshXZSideView;
+	private ComponentMeshZYSideView meshZYSideView;
+
 	@Override
 	public synchronized AnimatorWireFrame getWireFrame() {
 		if(wireFrame != null) {
@@ -54,7 +71,14 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	@Override
 	public synchronized void invalidate() {
 		wireFrame = null;
-		// FIXME : Invalidate views / renderers.
+		renderer.invalidate();
+
+		animationXYSideView.invalidate();
+		animationXZSideView.invalidate();
+		animationZYSideView.invalidate();
+		meshXYSideView.invalidate();
+		meshXZSideView.invalidate();
+		meshZYSideView.invalidate();
 	}
 
 	private void collectWireFrame(List<AnimatorSetPart> parts, AnimatorWireFrame result, String selectedPart) {
@@ -185,5 +209,40 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	@Dependency
 	public void setSetExtractor(ComponentSetExtractor setExtractor) {
 		this.setExtractor = setExtractor;
+	}
+
+	@Dependency
+	public void setRenderer(ComponentWireFrameRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	@Dependency
+	public void setAnimationXYSideView(ComponentAnimationXYSideView animationXYSideView) {
+		this.animationXYSideView = animationXYSideView;
+	}
+
+	@Dependency
+	public void setAnimationXZSideView(ComponentAnimationXZSideView animationXZSideView) {
+		this.animationXZSideView = animationXZSideView;
+	}
+
+	@Dependency
+	public void setAnimationZYSideView(ComponentAnimationZYSideView animationZYSideView) {
+		this.animationZYSideView = animationZYSideView;
+	}
+
+	@Dependency
+	public void setMeshXYSideView(ComponentMeshXYSideView meshXYSideView) {
+		this.meshXYSideView = meshXYSideView;
+	}
+
+	@Dependency
+	public void setMeshXZSideView(ComponentMeshXZSideView meshXZSideView) {
+		this.meshXZSideView = meshXZSideView;
+	}
+
+	@Dependency
+	public void setMeshZYSideView(ComponentMeshZYSideView meshZYSideView) {
+		this.meshZYSideView = meshZYSideView;
 	}
 }

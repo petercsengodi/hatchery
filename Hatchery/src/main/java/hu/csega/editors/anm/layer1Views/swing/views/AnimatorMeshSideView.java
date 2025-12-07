@@ -25,6 +25,7 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 	protected FreeTriangleMeshLine selectionLine = new FreeTriangleMeshLine();
 	protected FreeTriangleMeshSphereLineIntersection intersection = new FreeTriangleMeshSphereLineIntersection();
 	protected ComponentWireFrameConverter wireFrameConverter;
+	protected AnimatorWireFrame wireFrame;
 
 	public AnimatorMeshSideView(GameEngineFacade facade, AnimatorViewCanvas canvas) {
 		super(facade, canvas);
@@ -34,10 +35,14 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 	protected void paintView(Graphics2D g, int width, int height) {
 		drawGrid(g);
 
-		if(wireFrameConverter == null)
+		if(wireFrameConverter == null) {
 			wireFrameConverter = UnitStore.instance(ComponentWireFrameConverter.class);
+		}
 
-		AnimatorWireFrame wireFrame = wireFrameConverter.getWireFrame();
+		if(wireFrame == null && wireFrameConverter != null) {
+			wireFrame = wireFrameConverter.getWireFrame();
+		}
+
 		if(wireFrame != null) {
 			drawWireFrame(g, wireFrame, wireFrame.getCenterPartTransformation());
 		}
@@ -206,5 +211,10 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 				}
 			} break;
 		}
+	}
+
+	public void invalidate() {
+		wireFrame = null;
+		canvas.invalidate();
 	}
 }

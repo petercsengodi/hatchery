@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer1Views.swing.views;
 
+import hu.csega.editors.anm.components.ComponentMeshXYSideView;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshCube;
 import hu.csega.games.engine.GameEngineFacade;
@@ -7,7 +8,7 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 
 import java.awt.*;
 
-public class AnimatorMeshXYSideView extends AnimatorMeshSideView {
+public class AnimatorMeshXYSideView extends AnimatorMeshSideView implements ComponentMeshXYSideView {
 
 	public AnimatorMeshXYSideView(GameEngineFacade facade, AnimatorViewCanvas canvas) {
 		super(facade, canvas);

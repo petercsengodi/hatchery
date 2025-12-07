@@ -1,6 +1,6 @@
 package hu.csega.editors.anm.components;
 
-public interface ComponentWireFrameRenderer {
+public interface ComponentMeshTextureView {
 
     void invalidate();
 

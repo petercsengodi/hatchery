@@ -1,5 +1,12 @@
 package hu.csega.editors.anm;
 
+import hu.csega.editors.anm.components.ComponentAnimationXYSideView;
+import hu.csega.editors.anm.components.ComponentAnimationXZSideView;
+import hu.csega.editors.anm.components.ComponentAnimationZYSideView;
+import hu.csega.editors.anm.components.ComponentMeshTextureView;
+import hu.csega.editors.anm.components.ComponentMeshXYSideView;
+import hu.csega.editors.anm.components.ComponentMeshXZSideView;
+import hu.csega.editors.anm.components.ComponentMeshZYSideView;
 import hu.csega.editors.anm.layer1Views.AnimatorJointListView;
 import hu.csega.editors.anm.layer1Views.AnimatorPartListView;
 import hu.csega.editors.anm.layer1Views.swing.data.AnimatorJointListItem;
@@ -59,13 +66,37 @@ public class AnimatorUIComponents {
 	public AnimatorPartEditorPanel partEditorPanel;
 	public AnimatorSceneSelectorPanel sceneSelectorPanel;
 	public AnimatorSceneLerpPanel sceneLerpPanel;
-	
+
+	public AnimatorAnimationView animationXYSideView;
+	public AnimatorAnimationView animationXZSideView;
+	public AnimatorAnimationView animationZYSideView;
+	public AnimatorMeshXYSideView meshXYSideView;
+	public AnimatorMeshXZSideView meshXZSideView;
+	public AnimatorMeshZYSideView meshZYSideView;
+	public AnimatorMeshTextureView meshTextureView;
+
 	public void buildUI(GameWindow gameWindow, GameEngineFacade facade, String textureRoot) {
 		this.gameWindow = gameWindow;
 		this.gameWindow.setFullScreen(true);
 		if(gameWindow instanceof JFrame) {
 			this.frame = (JFrame) gameWindow;
 		}
+
+		this.animationXYSideView = new AnimatorAnimationView(facade, this.panelFront, 0, 1);
+		this.animationXZSideView = new AnimatorAnimationView(facade, this.panelFront, 0, 2);
+		this.animationZYSideView = new AnimatorAnimationView(facade, this.panelFront, 2, 1);
+		this.meshXYSideView = new AnimatorMeshXYSideView(facade, this.panelFront);
+		this.meshXZSideView = new AnimatorMeshXZSideView(facade, this.panelTop);
+		this.meshZYSideView = new AnimatorMeshZYSideView(facade, this.panelSide);
+		this.meshTextureView = new AnimatorMeshTextureView(facade, this.textureView, textureRoot);
+
+		UnitStore.registerInstance(ComponentAnimationXYSideView.class, animationXYSideView);
+		UnitStore.registerInstance(ComponentAnimationXZSideView.class, animationXZSideView);
+		UnitStore.registerInstance(ComponentAnimationZYSideView.class, animationZYSideView);
+		UnitStore.registerInstance(ComponentMeshXYSideView.class, meshXYSideView);
+		UnitStore.registerInstance(ComponentMeshXZSideView.class, meshXZSideView);
+		UnitStore.registerInstance(ComponentMeshZYSideView.class, meshZYSideView);
+		UnitStore.registerInstance(ComponentMeshTextureView.class, meshTextureView);
 
 		Container contentPane = this.frame.getContentPane();
 		AnimatorRootLayoutManager layout = new AnimatorRootLayoutManager();
@@ -76,18 +107,18 @@ public class AnimatorUIComponents {
 		this.tabbedPane = new JTabbedPane();
 
 		this.panelFront = new AnimatorViewCanvas(facade);
-		this.panelFront.registerView(AnimationPersistent.class, new AnimatorAnimationView(facade, this.panelFront, 0, 1));
-		this.panelFront.registerView(FreeTriangleMeshModel.class, new AnimatorMeshXYSideView(facade, this.panelFront));
+		this.panelFront.registerView(AnimationPersistent.class, animationXYSideView);
+		this.panelFront.registerView(FreeTriangleMeshModel.class, meshXYSideView);
 		this.tabbedPane.addTab("Front", this.panelFront);
 
 		this.panelTop = new AnimatorViewCanvas(facade);
-		this.panelTop.registerView(AnimationPersistent.class, new AnimatorAnimationView(facade, this.panelFront, 0, 2));
-		this.panelTop.registerView(FreeTriangleMeshModel.class, new AnimatorMeshXZSideView(facade, this.panelTop));
+		this.panelTop.registerView(AnimationPersistent.class, animationXZSideView);
+		this.panelTop.registerView(FreeTriangleMeshModel.class, meshXZSideView);
 		this.tabbedPane.addTab("Top", this.panelTop);
 
 		this.panelSide = new AnimatorViewCanvas(facade);
-		this.panelSide.registerView(AnimationPersistent.class, new AnimatorAnimationView(facade, this.panelFront, 2, 1));
-		this.panelSide.registerView(FreeTriangleMeshModel.class, new AnimatorMeshZYSideView(facade, this.panelSide));
+		this.panelSide.registerView(AnimationPersistent.class, animationZYSideView);
+		this.panelSide.registerView(FreeTriangleMeshModel.class, meshZYSideView);
 		this.tabbedPane.addTab("Side", this.panelSide);
 
 		this.panelWireFrame = new AnimatorWireFrameView(0, 1);
@@ -98,7 +129,7 @@ public class AnimatorUIComponents {
 		this.tabbedPane.addTab("3D Canvas", this.panel3D);
 
 		this.textureView = new AnimatorViewCanvas(facade);
-		this.textureView.registerView(FreeTriangleMeshModel.class, new AnimatorMeshTextureView(facade, this.textureView, textureRoot));
+		this.textureView.registerView(FreeTriangleMeshModel.class, meshTextureView);
 		this.tabbedPane.addTab("Texture", this.textureView);
 
 		contentPane.add(AnimatorRootLayoutManager.MULTI_TAB, this.tabbedPane);

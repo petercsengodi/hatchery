@@ -1,6 +1,8 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
+import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
+import hu.csega.games.units.Dependency;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +11,7 @@ import java.util.Collection;
 public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameRenderer {
 
 	private final int indexOfX, indexOfY;
+	private ComponentWireFrameConverter wireFrameConverter;
 	private AnimatorWireFrame wireFrame;
 
 	public AnimatorWireFrameView(int indexOfX, int indexOfY) {
@@ -24,7 +27,9 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 		g.setColor(Color.darkGray);
 		g.fillRect(0, 0, width, height);
 
-		// FIXME: Get wireframe
+		if(wireFrame == null && wireFrameConverter != null) {
+			wireFrame = wireFrameConverter.getWireFrame();
+		}
 
 		if(wireFrame != null) {
 			g.translate(width / 2, height / 2);
@@ -69,6 +74,17 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 
 			g.translate(-width / 2, -height / 2);
 		}
+	}
+
+	@Override
+	public void invalidate() {
+		wireFrame = null;
+		super.invalidate();
+	}
+
+	@Dependency
+	public void setWireFrameConverter(ComponentWireFrameConverter wireFrameConverter) {
+		this.wireFrameConverter = wireFrameConverter;
 	}
 
 	private static final long serialVersionUID = 1L;
