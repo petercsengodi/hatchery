@@ -51,6 +51,10 @@ public class OpenGLGameAdapter implements GameAdapter {
         OpenGLProfileAdapter openGLProfileAdapter;
         GLProfile glProfile;
 
+        // On one machine: Otherwise I get the error message: "Profile GL4bc is not available on X11GraphicsDevice"
+        // On other machine: I can't acquire the GL3 profile.
+        // System.setProperty("jogl.disable.openglcore", "false");
+
         if(FORCE_GL2_GLU) {
 
             try {

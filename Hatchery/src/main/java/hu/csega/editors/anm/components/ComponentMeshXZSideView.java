@@ -1,7 +1,7 @@
 package hu.csega.editors.anm.components;
 
-public interface ComponentMeshXZSideView {
+import hu.csega.editors.anm.common.CommonComponent;
 
-    void invalidate();
+public interface ComponentMeshXZSideView extends CommonComponent {
 
 }

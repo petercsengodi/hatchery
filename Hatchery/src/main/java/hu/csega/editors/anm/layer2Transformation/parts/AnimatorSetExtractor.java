@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer2Transformation.parts;
 
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
 import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
@@ -18,10 +19,14 @@ import org.joml.Vector4f;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AnimatorSetExtractor implements ComponentSetExtractor {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private List<AnimatorSetPart> set;
 	private Matrix4f baseTransformation = new Matrix4f();
@@ -34,13 +39,6 @@ public class AnimatorSetExtractor implements ComponentSetExtractor {
 	// Dependents
 	private ComponentOpenGLSetExtractor openGLSetExtractor;
 	private ComponentWireFrameConverter wireFrameConverter;
-
-	@Override
-	public synchronized void invalidate() {
-		this.set = null;
-		openGLSetExtractor.invalidate();
-		wireFrameConverter.invalidate();
-	}
 
 	@Override
 	public synchronized List<AnimatorSetPart> extractSetParts() {
@@ -165,6 +163,22 @@ public class AnimatorSetExtractor implements ComponentSetExtractor {
 				}
 			} // end for each joint
 		} // end if part not null
+	}
+
+	@Override
+	public synchronized void invalidate() {
+		this.set = null;
+		openGLSetExtractor.invalidate();
+		wireFrameConverter.invalidate();
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency

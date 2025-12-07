@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer4Data.model;
 
 import hu.csega.editors.anm.AnimatorUIComponents;
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.*;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
@@ -14,10 +15,14 @@ import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private AnimatorModel model;
 
@@ -74,6 +79,18 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 			scene.getFlipped()[index] = part.isFlipped();
 			scene.getTransformations()[index] = part.getTransformation();
 		}
+	}
+
+	@Override
+	public synchronized void invalidate() {
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency

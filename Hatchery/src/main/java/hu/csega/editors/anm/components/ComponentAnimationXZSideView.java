@@ -1,7 +1,7 @@
 package hu.csega.editors.anm.components;
 
-public interface ComponentAnimationXZSideView {
+import hu.csega.editors.anm.common.CommonComponent;
 
-    void invalidate();
+public interface ComponentAnimationXZSideView extends CommonComponent {
 
 }

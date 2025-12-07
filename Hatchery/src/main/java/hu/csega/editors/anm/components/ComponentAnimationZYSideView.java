@@ -1,7 +1,7 @@
 package hu.csega.editors.anm.components;
 
-public interface ComponentAnimationZYSideView {
+import hu.csega.editors.anm.common.CommonComponent;
 
-    void invalidate();
+public interface ComponentAnimationZYSideView extends CommonComponent {
 
 }

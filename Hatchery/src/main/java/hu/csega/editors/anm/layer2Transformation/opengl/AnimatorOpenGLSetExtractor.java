@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer2Transformation.opengl;
 
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
@@ -17,9 +18,13 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private AnimatorOpenGLSet set;
 
@@ -30,13 +35,6 @@ public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 	private GameEngineFacade facade;
 	private GameModelStore store;
 	private AnimatorSetExtractor setExtractor;
-
-	@Override
-	public synchronized void invalidate() {
-		this.set = null;
-
-		// FIXME : Invalidate OpenGL, repaint.
-	}
 
 	@Override
 	public synchronized AnimatorOpenGLSet extractAnimatorSet() {
@@ -130,6 +128,20 @@ public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 		}
 
 		return facade;
+	}
+
+	@Override
+	public synchronized void invalidate() {
+		this.set = null;
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency

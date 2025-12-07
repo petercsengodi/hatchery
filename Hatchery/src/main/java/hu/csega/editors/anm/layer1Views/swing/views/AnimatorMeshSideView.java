@@ -37,6 +37,7 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 
 		if(wireFrameConverter == null) {
 			wireFrameConverter = UnitStore.instance(ComponentWireFrameConverter.class);
+			wireFrameConverter.addDependent(this);
 		}
 
 		if(wireFrame == null && wireFrameConverter != null) {
@@ -213,8 +214,10 @@ public abstract class AnimatorMeshSideView extends AnimatorView {
 		}
 	}
 
+	@Override
 	public void invalidate() {
 		wireFrame = null;
 		canvas.invalidate();
+		super.invalidate();
 	}
 }

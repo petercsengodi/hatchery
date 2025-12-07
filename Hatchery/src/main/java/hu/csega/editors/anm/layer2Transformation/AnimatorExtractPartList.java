@@ -1,9 +1,12 @@
 package hu.csega.editors.anm.layer2Transformation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentPartListView;
 import hu.csega.editors.anm.layer1Views.swing.data.AnimatorPartListItem;
@@ -13,6 +16,8 @@ import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.games.units.Dependency;
 
 public class AnimatorExtractPartList implements ComponentExtractPartList {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private List<AnimatorPartListItem> items;
 
@@ -57,6 +62,15 @@ public class AnimatorExtractPartList implements ComponentExtractPartList {
 	public synchronized void invalidate() {
 		this.items = null;
 		view.invalidate();
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency

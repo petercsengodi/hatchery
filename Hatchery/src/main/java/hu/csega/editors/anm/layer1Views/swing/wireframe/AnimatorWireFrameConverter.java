@@ -1,14 +1,8 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
-import hu.csega.editors.anm.components.ComponentAnimationXYSideView;
-import hu.csega.editors.anm.components.ComponentAnimationXZSideView;
-import hu.csega.editors.anm.components.ComponentAnimationZYSideView;
-import hu.csega.editors.anm.components.ComponentMeshXYSideView;
-import hu.csega.editors.anm.components.ComponentMeshXZSideView;
-import hu.csega.editors.anm.components.ComponentMeshZYSideView;
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
-import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.engine.g3d.GameTransformation;
@@ -16,19 +10,28 @@ import hu.csega.games.library.MeshLibrary;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshTriangle;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshVertex;
-import hu.csega.games.library.mesh.v1.xml.*;
+import hu.csega.games.library.mesh.v1.xml.SEdge;
+import hu.csega.games.library.mesh.v1.xml.SMesh;
+import hu.csega.games.library.mesh.v1.xml.SShape;
+import hu.csega.games.library.mesh.v1.xml.STriangle;
+import hu.csega.games.library.mesh.v1.xml.SVertex;
 import hu.csega.games.library.reference.SMeshRef;
 import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.Dependency;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private AnimatorWireFrame wireFrame;
 
@@ -37,16 +40,6 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	private MeshLibrary meshLibrary;
 	private AnimatorModel animatorModel;
 	private ComponentSetExtractor setExtractor;
-
-	///////////////////////////////////////////////////////////////////////
-	// Dependents
-	private ComponentWireFrameRenderer renderer;
-	private ComponentAnimationXYSideView animationXYSideView;
-	private ComponentAnimationXZSideView animationXZSideView;
-	private ComponentAnimationZYSideView animationZYSideView;
-	private ComponentMeshXYSideView meshXYSideView;
-	private ComponentMeshXZSideView meshXZSideView;
-	private ComponentMeshZYSideView meshZYSideView;
 
 	@Override
 	public synchronized AnimatorWireFrame getWireFrame() {
@@ -66,19 +59,6 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		result.addPoint(new AnimatorWireFramePoint(0.0, 0.0, 0.0, Color.PINK, true));
 
 		return result;
-	}
-
-	@Override
-	public synchronized void invalidate() {
-		wireFrame = null;
-		renderer.invalidate();
-
-		animationXYSideView.invalidate();
-		animationXZSideView.invalidate();
-		animationZYSideView.invalidate();
-		meshXYSideView.invalidate();
-		meshXZSideView.invalidate();
-		meshZYSideView.invalidate();
 	}
 
 	private void collectWireFrame(List<AnimatorSetPart> parts, AnimatorWireFrame result, String selectedPart) {
@@ -196,6 +176,19 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 		}
 	}
 
+	@Override
+	public synchronized void invalidate() {
+		wireFrame = null;
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
+	}
+
 	@Dependency
 	public void setAnimatorModel(AnimatorModel animatorModel) {
 		this.animatorModel = animatorModel;
@@ -209,40 +202,5 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	@Dependency
 	public void setSetExtractor(ComponentSetExtractor setExtractor) {
 		this.setExtractor = setExtractor;
-	}
-
-	@Dependency
-	public void setRenderer(ComponentWireFrameRenderer renderer) {
-		this.renderer = renderer;
-	}
-
-	@Dependency
-	public void setAnimationXYSideView(ComponentAnimationXYSideView animationXYSideView) {
-		this.animationXYSideView = animationXYSideView;
-	}
-
-	@Dependency
-	public void setAnimationXZSideView(ComponentAnimationXZSideView animationXZSideView) {
-		this.animationXZSideView = animationXZSideView;
-	}
-
-	@Dependency
-	public void setAnimationZYSideView(ComponentAnimationZYSideView animationZYSideView) {
-		this.animationZYSideView = animationZYSideView;
-	}
-
-	@Dependency
-	public void setMeshXYSideView(ComponentMeshXYSideView meshXYSideView) {
-		this.meshXYSideView = meshXYSideView;
-	}
-
-	@Dependency
-	public void setMeshXZSideView(ComponentMeshXZSideView meshXZSideView) {
-		this.meshXZSideView = meshXZSideView;
-	}
-
-	@Dependency
-	public void setMeshZYSideView(ComponentMeshZYSideView meshZYSideView) {
-		this.meshZYSideView = meshZYSideView;
 	}
 }

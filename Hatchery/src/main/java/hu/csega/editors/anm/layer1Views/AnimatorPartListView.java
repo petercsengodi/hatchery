@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views;
 
 import hu.csega.editors.anm.AnimatorUIComponents;
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentPartListView;
 import hu.csega.editors.anm.layer1Views.swing.data.AnimatorPartListItem;
@@ -11,22 +12,20 @@ import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimatorPartListView implements ComponentPartListView, ListModel<AnimatorPartListItem>, ListSelectionListener {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	///////////////////////////////////////////////////////////////////////
 	// Dependencies
 	private AnimatorModel animatorModel;
 	private AnimatorUIComponents components;
 	private ComponentExtractPartList extractor;
-
-	@Override
-	public void invalidate() {
-		if(components.partList != null) {
-			components.partList.updateUI();
-		}
-	}
 
 	@Override
 	public int getSize() {
@@ -57,6 +56,22 @@ public class AnimatorPartListView implements ComponentPartListView, ListModel<An
 				animatorModel.selectPart(partItem.getIdentifier());
 			}
 		}
+	}
+
+	@Override
+	public synchronized void invalidate() {
+		if(components.partList != null) {
+			components.partList.updateUI();
+		}
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency

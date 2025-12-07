@@ -39,6 +39,11 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 		g.setColor(Color.darkGray);
 		g.fillRect(0, 0, width, height);
 
+		if(wireFrameConverter == null) {
+			wireFrameConverter = UnitStore.instance(ComponentWireFrameConverter.class);
+			wireFrameConverter.addDependent(this);
+		}
+
 		if(wireFrame == null && wireFrameConverter != null) {
 			wireFrame = wireFrameConverter.getWireFrame();
 		}
@@ -136,13 +141,9 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 	}
 
 	@Override
-	public void invalidate() {
+	public synchronized void invalidate() {
 		wireFrame = null;
 		canvas.invalidate();
-	}
-
-	@Dependency
-	public void setWireFrameConverter(ComponentWireFrameConverter wireFrameConverter) {
-		this.wireFrameConverter = wireFrameConverter;
+		super.invalidate();
 	}
 }

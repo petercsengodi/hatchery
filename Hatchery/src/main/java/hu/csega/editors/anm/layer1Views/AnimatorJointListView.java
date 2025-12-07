@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views;
 
 import hu.csega.editors.anm.AnimatorUIComponents;
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentJointListView;
 import hu.csega.editors.anm.layer1Views.swing.data.AnimatorJointListItem;
@@ -12,22 +13,20 @@ import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimatorJointListView implements ComponentJointListView, ListModel<AnimatorJointListItem>, ListSelectionListener {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	///////////////////////////////////////////////////////////////////////
 	// Dependencies
 	private AnimatorUIComponents components;
 	private AnimatorModel animatorModel;
 	private ComponentExtractJointList extractor;
-
-	@Override
-	public void invalidate() {
-		if(components.jointList != null) {
-			components.jointList.updateUI();
-		}
-	}
 
 	@Override
 	public int getSize() {
@@ -59,6 +58,22 @@ public class AnimatorJointListView implements ComponentJointListView, ListModel<
 				persistent.setSelectedJoint(partItem.getIdentifier());
 			}
 		}
+	}
+
+	@Override
+	public synchronized void invalidate() {
+		if(components.jointList != null) {
+			components.jointList.updateUI();
+		}
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency

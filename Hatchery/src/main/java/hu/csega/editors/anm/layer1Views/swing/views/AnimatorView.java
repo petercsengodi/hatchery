@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer1Views.swing.views;
 
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.common.CommonEditorModel;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.editors.common.lens.EditorLensPipeline;
@@ -9,9 +10,12 @@ import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AnimatorView {
+public abstract class AnimatorView implements CommonComponent {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	protected final GameEngineFacade facade;
 	protected final AnimatorViewCanvas canvas;
@@ -92,4 +96,16 @@ public abstract class AnimatorView {
 	protected abstract void paintView(Graphics2D g, int width, int height);
 
 	protected abstract void generatePictograms(int numberOfSelectedItems, int selectionMinX, int selectionMinY, int selectionMaxX, int selectionMaxY, Set<FreeTriangleMeshPictogram> pictograms);
+
+	@Override
+	public synchronized void invalidate() {
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		this.dependents.add(dependent);
+	}
 }

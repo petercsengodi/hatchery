@@ -28,9 +28,6 @@ import hu.csega.toolshed.logging.LoggerFactory;
 public class GameEngine implements Disposable {
 
 	public static GameEngine create(GameDescriptor descriptor, GameAdapter adapter) {
-        // Otherwise I get the error message: Profile GL4bc is not available on X11GraphicsDevice
-        System.setProperty("jogl.disable.openglcore", "false");
-
         GameEngine engine = new GameEngine();
 		engine.descriptor = descriptor;
 		engine.adapter = adapter;

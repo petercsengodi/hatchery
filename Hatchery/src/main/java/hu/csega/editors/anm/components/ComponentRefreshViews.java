@@ -1,6 +1,8 @@
 package hu.csega.editors.anm.components;
 
-public interface ComponentRefreshViews {
+import hu.csega.editors.anm.common.CommonComponent;
+
+public interface ComponentRefreshViews extends CommonComponent {
 
 	void refreshAll();
 

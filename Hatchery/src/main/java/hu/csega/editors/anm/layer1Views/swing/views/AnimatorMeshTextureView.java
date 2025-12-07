@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views.swing.views;
 
 import hu.csega.editors.FreeTriangleMeshToolStarter;
+import hu.csega.editors.anm.components.ComponentMeshTextureView;
 import hu.csega.editors.common.lens.EditorPoint;
 import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshPictogram;
 import hu.csega.games.engine.GameEngineFacade;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
-public class AnimatorMeshTextureView extends AnimatorView {
+public class AnimatorMeshTextureView extends AnimatorView implements ComponentMeshTextureView {
 
 	private final int frameWidth = 300;
 	private final int frameHeight = 300;

@@ -1,14 +1,19 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
-import hu.csega.games.units.Dependency;
+import hu.csega.games.units.UnitStore;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameRenderer {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private final int indexOfX, indexOfY;
 	private ComponentWireFrameConverter wireFrameConverter;
@@ -26,6 +31,11 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 
 		g.setColor(Color.darkGray);
 		g.fillRect(0, 0, width, height);
+
+		if(wireFrameConverter == null) {
+			wireFrameConverter = UnitStore.instance(ComponentWireFrameConverter.class);
+			wireFrameConverter.addDependent(this);
+		}
 
 		if(wireFrame == null && wireFrameConverter != null) {
 			wireFrame = wireFrameConverter.getWireFrame();
@@ -77,14 +87,19 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 	}
 
 	@Override
-	public void invalidate() {
+	public synchronized void invalidate() {
 		wireFrame = null;
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+
 		super.invalidate();
 	}
 
-	@Dependency
-	public void setWireFrameConverter(ComponentWireFrameConverter wireFrameConverter) {
-		this.wireFrameConverter = wireFrameConverter;
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	private static final long serialVersionUID = 1L;

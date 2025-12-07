@@ -1,5 +1,6 @@
 package hu.csega.editors.anm.layer2Transformation;
 
+import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.components.ComponentExtractJointList;
 import hu.csega.editors.anm.components.ComponentJointListView;
 import hu.csega.editors.anm.layer1Views.swing.data.AnimatorJointListItem;
@@ -10,9 +11,13 @@ import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.Dependency;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimatorExtractJointList implements ComponentExtractJointList {
+
+	private Set<CommonComponent> dependents = new HashSet<>();
 
 	private List<AnimatorJointListItem> items;
 
@@ -60,6 +65,15 @@ public class AnimatorExtractJointList implements ComponentExtractJointList {
 	public synchronized void invalidate() {
 		this.items = null;
 		view.invalidate();
+
+		for(CommonComponent dependent : dependents) {
+			dependent.invalidate();
+		}
+	}
+
+	@Override
+	public void addDependent(CommonComponent dependent) {
+		dependents.add(dependent);
 	}
 
 	@Dependency
