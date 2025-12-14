@@ -1,7 +1,8 @@
 package hu.csega.editors.anm.layer2Transformation.opengl;
 
-import hu.csega.editors.anm.common.CommonComponent;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
+import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	private AnimatorOpenGLSet set;
 
@@ -34,7 +35,7 @@ public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 	private ResourceAdapter resourceAdapter;
 	private GameEngineFacade facade;
 	private GameModelStore store;
-	private AnimatorSetExtractor setExtractor;
+	private ComponentSetExtractor setExtractor;
 
 	@Override
 	public synchronized AnimatorOpenGLSet extractAnimatorSet() {
@@ -134,13 +135,13 @@ public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 	public synchronized void invalidate() {
 		this.set = null;
 
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		dependents.add(dependent);
 	}
 
@@ -155,7 +156,8 @@ public class AnimatorOpenGLSetExtractor implements ComponentOpenGLSetExtractor {
 	}
 
 	@Dependency
-	public void setSetExtractor(AnimatorSetExtractor setExtractor) {
+	public void setSetExtractor(ComponentSetExtractor setExtractor) {
 		this.setExtractor = setExtractor;
+		setExtractor.addDependent(this);
 	}
 }

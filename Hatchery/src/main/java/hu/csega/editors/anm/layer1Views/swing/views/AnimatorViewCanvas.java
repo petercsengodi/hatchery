@@ -106,11 +106,13 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 			return (cachedAnimatorView != null ? cachedAnimatorView : emptyView);
 		}
 
-		cachedAnimatorModelClass = modelClass;
 		for(Map.Entry<Class<?>, AnimatorView> entry : registeredViews.entrySet()) {
 			if(entry.getKey().isAssignableFrom(modelClass)) {
 				cachedAnimatorView = entry.getValue();
-				return (cachedAnimatorView != null ? cachedAnimatorView : emptyView);
+				if(cachedAnimatorView != null) {
+					cachedAnimatorModelClass = modelClass;
+					return cachedAnimatorView;
+				}
 			}
 		}
 

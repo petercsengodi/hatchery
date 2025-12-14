@@ -1,7 +1,7 @@
 package hu.csega.editors.anm.layer4Data.model;
 
 import hu.csega.editors.anm.AnimatorUIComponents;
-import hu.csega.editors.anm.common.CommonComponent;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.*;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
@@ -22,26 +22,19 @@ import java.util.Set;
 
 public class AnimatorRefreshViews implements ComponentRefreshViews {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	private AnimatorModel model;
 
-	private ComponentExtractPartList partListExtractor;
-	private ComponentExtractJointList jointListExtractor;
-	private ComponentWireFrameConverter wireFrameConverter;
-	private ComponentOpenGLSetExtractor openGLExtractor;
 	private AnimatorUIComponents components;
 
-	private Matrix4f baseTransformation = new Matrix4f();
+	private final Matrix4f baseTransformation = new Matrix4f();
 
 	@Override
 	public void refreshAll() {
-		partListExtractor.invalidate();
-		jointListExtractor.invalidate();
-		wireFrameConverter.invalidate();
-		openGLExtractor.invalidate();
 		components.sceneLerpPanel.updateUI();
 		components.sceneSelectorPanel.updateUI();
+		invalidate();
 	} // end of refreshAll
 
 	@Override
@@ -83,13 +76,13 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 	@Override
 	public synchronized void invalidate() {
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		dependents.add(dependent);
 	}
 
@@ -100,22 +93,17 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 
 	@Dependency
 	public void setPartListExtractor(ComponentExtractPartList partListExtractor) {
-		this.partListExtractor = partListExtractor;
+		this.addDependent(partListExtractor);
 	}
 
 	@Dependency
 	public void setJointListExtractor(ComponentExtractJointList jointListExtractor) {
-		this.jointListExtractor = jointListExtractor;
+		this.addDependent(jointListExtractor);
 	}
 
 	@Dependency
-	public void setWireFrameConverter(ComponentWireFrameConverter wireFrameConverter) {
-		this.wireFrameConverter = wireFrameConverter;
-	}
-
-	@Dependency
-	public void setOpenGLExtractor(ComponentOpenGLSetExtractor openGLExtractor) {
-		this.openGLExtractor = openGLExtractor;
+	public void setSetExtractor(ComponentSetExtractor setExtractor) {
+		this.addDependent(setExtractor);
 	}
 
 	@Dependency

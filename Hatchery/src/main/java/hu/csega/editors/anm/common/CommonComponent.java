@@ -1,9 +1,7 @@
 package hu.csega.editors.anm.common;
 
-public interface CommonComponent {
+public interface CommonComponent extends CommonInvalidatable {
 
-    void invalidate();
-
-    void addDependent(CommonComponent dependent);
+    void addDependent(CommonInvalidatable dependent);
 
 }

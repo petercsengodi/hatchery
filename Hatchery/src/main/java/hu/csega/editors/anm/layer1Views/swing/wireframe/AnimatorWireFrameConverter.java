@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
 import hu.csega.editors.anm.common.CommonComponent;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer2Transformation.parts.AnimatorSetPart;
@@ -31,7 +32,7 @@ import org.joml.Vector4f;
 
 public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	private AnimatorWireFrame wireFrame;
 
@@ -179,13 +180,13 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	@Override
 	public synchronized void invalidate() {
 		wireFrame = null;
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		dependents.add(dependent);
 	}
 
@@ -202,5 +203,6 @@ public class AnimatorWireFrameConverter implements ComponentWireFrameConverter {
 	@Dependency
 	public void setSetExtractor(ComponentSetExtractor setExtractor) {
 		this.setExtractor = setExtractor;
+		setExtractor.addDependent(this);
 	}
 }

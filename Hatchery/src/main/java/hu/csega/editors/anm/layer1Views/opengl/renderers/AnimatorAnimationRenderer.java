@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views.opengl.renderers;
 
 import hu.csega.editors.anm.common.CommonEditorModel;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
 import hu.csega.editors.anm.layer2Transformation.opengl.AnimatorOpenGLSet;
 import hu.csega.editors.anm.layer2Transformation.opengl.AnimatorOpenGLSetPart;

@@ -1,21 +1,17 @@
 package hu.csega.editors.anm.layer2Transformation.parts;
 
-import hu.csega.editors.anm.common.CommonComponent;
-import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentSetExtractor;
-import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFramePoint;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
-import hu.csega.editors.common.resources.ResourceAdapter;
-import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.engine.g3d.GameModelStore;
-import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameTransformation;
-import hu.csega.games.library.animation.v1.anm.*;
+import hu.csega.games.library.animation.v1.anm.Animation;
+import hu.csega.games.library.animation.v1.anm.AnimationPart;
+import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
+import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
+import hu.csega.games.library.animation.v1.anm.AnimationScenePart;
+import hu.csega.games.library.animation.v1.anm.AnimationVector;
 import hu.csega.games.units.Dependency;
-import hu.csega.games.units.UnitStore;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,9 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
+
 public class AnimatorSetExtractor implements ComponentSetExtractor {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	private List<AnimatorSetPart> set;
 	private Matrix4f baseTransformation = new Matrix4f();
@@ -34,11 +33,6 @@ public class AnimatorSetExtractor implements ComponentSetExtractor {
 	///////////////////////////////////////////////////////////////////////
 	// Dependencies
 	private AnimatorModel animatorModel;
-
-	///////////////////////////////////////////////////////////////////////
-	// Dependents
-	private ComponentOpenGLSetExtractor openGLSetExtractor;
-	private ComponentWireFrameConverter wireFrameConverter;
 
 	@Override
 	public synchronized List<AnimatorSetPart> extractSetParts() {
@@ -168,31 +162,18 @@ public class AnimatorSetExtractor implements ComponentSetExtractor {
 	@Override
 	public synchronized void invalidate() {
 		this.set = null;
-		openGLSetExtractor.invalidate();
-		wireFrameConverter.invalidate();
-
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		dependents.add(dependent);
 	}
 
 	@Dependency
 	public void setAnimatorModel(AnimatorModel animatorModel) {
 		this.animatorModel = animatorModel;
-	}
-
-	@Dependency
-	public void setOpenGLSetExtractor(ComponentOpenGLSetExtractor openGLSetExtractor) {
-		this.openGLSetExtractor = openGLSetExtractor;
-	}
-
-	@Dependency
-	public void setWireFrameConverter(ComponentWireFrameConverter wireFrameConverter) {
-		this.wireFrameConverter = wireFrameConverter;
 	}
 }

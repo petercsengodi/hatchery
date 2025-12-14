@@ -2,6 +2,7 @@ package hu.csega.editors.anm.layer1Views;
 
 import hu.csega.editors.anm.AnimatorUIComponents;
 import hu.csega.editors.anm.common.CommonComponent;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentExtractPartList;
 import hu.csega.editors.anm.components.ComponentPartListView;
 import hu.csega.editors.anm.layer1Views.swing.data.AnimatorPartListItem;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 public class AnimatorPartListView implements ComponentPartListView, ListModel<AnimatorPartListItem>, ListSelectionListener {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	///////////////////////////////////////////////////////////////////////
 	// Dependencies
@@ -64,13 +65,13 @@ public class AnimatorPartListView implements ComponentPartListView, ListModel<An
 			components.partList.updateUI();
 		}
 
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		dependents.add(dependent);
 	}
 

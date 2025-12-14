@@ -144,6 +144,7 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 	public synchronized void invalidate() {
 		wireFrame = null;
 		canvas.invalidate();
+		canvas.repaint();
 		super.invalidate();
 	}
 }

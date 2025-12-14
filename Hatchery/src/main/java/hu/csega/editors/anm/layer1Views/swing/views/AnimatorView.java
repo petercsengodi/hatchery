@@ -2,6 +2,7 @@ package hu.csega.editors.anm.layer1Views.swing.views;
 
 import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.common.CommonEditorModel;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.editors.common.lens.EditorLensPipeline;
 import hu.csega.editors.common.lens.EditorPoint;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public abstract class AnimatorView implements CommonComponent {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	protected final GameEngineFacade facade;
 	protected final AnimatorViewCanvas canvas;
@@ -99,13 +100,13 @@ public abstract class AnimatorView implements CommonComponent {
 
 	@Override
 	public synchronized void invalidate() {
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		this.dependents.add(dependent);
 	}
 }

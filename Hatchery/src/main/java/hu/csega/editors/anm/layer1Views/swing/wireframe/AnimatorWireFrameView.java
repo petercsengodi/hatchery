@@ -1,6 +1,7 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
 import hu.csega.editors.anm.common.CommonComponent;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
 import hu.csega.games.units.UnitStore;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameRenderer {
 
-	private Set<CommonComponent> dependents = new HashSet<>();
+	private final Set<CommonInvalidatable> dependents = new HashSet<>();
 
 	private final int indexOfX, indexOfY;
 	private ComponentWireFrameConverter wireFrameConverter;
@@ -90,7 +91,7 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 	public synchronized void invalidate() {
 		wireFrame = null;
 
-		for(CommonComponent dependent : dependents) {
+		for(CommonInvalidatable dependent : dependents) {
 			dependent.invalidate();
 		}
 
@@ -98,7 +99,7 @@ public class AnimatorWireFrameView extends JPanel implements ComponentWireFrameR
 	}
 
 	@Override
-	public void addDependent(CommonComponent dependent) {
+	public void addDependent(CommonInvalidatable dependent) {
 		dependents.add(dependent);
 	}
 

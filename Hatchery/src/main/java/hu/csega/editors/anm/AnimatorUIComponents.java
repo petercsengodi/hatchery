@@ -91,18 +91,12 @@ public class AnimatorUIComponents {
 		this.tabbedPane = new JTabbedPane();
 
 		this.panelFront = new AnimatorViewCanvas(facade);
-		this.panelFront.registerView(AnimationPersistent.class, animationXYSideView);
-		this.panelFront.registerView(FreeTriangleMeshModel.class, meshXYSideView);
 		this.tabbedPane.addTab("Front", this.panelFront);
 
 		this.panelTop = new AnimatorViewCanvas(facade);
-		this.panelTop.registerView(AnimationPersistent.class, animationXZSideView);
-		this.panelTop.registerView(FreeTriangleMeshModel.class, meshXZSideView);
 		this.tabbedPane.addTab("Top", this.panelTop);
 
 		this.panelSide = new AnimatorViewCanvas(facade);
-		this.panelSide.registerView(AnimationPersistent.class, animationZYSideView);
-		this.panelSide.registerView(FreeTriangleMeshModel.class, meshZYSideView);
 		this.tabbedPane.addTab("Side", this.panelSide);
 
 		this.panelWireFrame = new AnimatorWireFrameView(0, 1);
@@ -113,7 +107,6 @@ public class AnimatorUIComponents {
 		this.tabbedPane.addTab("3D Canvas", this.panel3D);
 
 		this.textureView = new AnimatorViewCanvas(facade);
-		this.textureView.registerView(FreeTriangleMeshModel.class, meshTextureView);
 		this.tabbedPane.addTab("Texture", this.textureView);
 
 		this.animationXYSideView = new AnimatorAnimationView(facade, this.panelFront, 0, 1);
@@ -123,6 +116,14 @@ public class AnimatorUIComponents {
 		this.meshXZSideView = new AnimatorMeshXZSideView(facade, this.panelTop);
 		this.meshZYSideView = new AnimatorMeshZYSideView(facade, this.panelSide);
 		this.meshTextureView = new AnimatorMeshTextureView(facade, this.textureView, textureRoot);
+
+		this.panelFront.registerView(AnimationPersistent.class, animationXYSideView);
+		this.panelFront.registerView(FreeTriangleMeshModel.class, meshXYSideView);
+		this.panelTop.registerView(AnimationPersistent.class, animationXZSideView);
+		this.panelTop.registerView(FreeTriangleMeshModel.class, meshXZSideView);
+		this.panelSide.registerView(AnimationPersistent.class, animationZYSideView);
+		this.panelSide.registerView(FreeTriangleMeshModel.class, meshZYSideView);
+		this.textureView.registerView(FreeTriangleMeshModel.class, meshTextureView);
 
 		UnitStore.registerInstance(ComponentAnimationXYSideView.class, animationXYSideView);
 		UnitStore.registerInstance(ComponentAnimationXZSideView.class, animationXZSideView);

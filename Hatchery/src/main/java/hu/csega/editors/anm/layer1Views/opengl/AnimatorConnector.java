@@ -2,6 +2,7 @@ package hu.csega.editors.anm.layer1Views.opengl;
 
 import hu.csega.editors.AnimatorStarter;
 import hu.csega.editors.anm.AnimatorUIComponents;
+import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentOpenGLSetExtractor;
 import hu.csega.editors.anm.components.ComponentRefreshViews;
 import hu.csega.editors.anm.layer1Views.opengl.renderers.AnimatorAnimationRenderer;
@@ -130,7 +131,7 @@ public class AnimatorConnector implements Connector, GameWindow {
 
 		refreshViews = UnitStore.instance(ComponentRefreshViews.class);
 
-		GameCanvas canvas = engine.getCanvas();
+		final GameCanvas canvas = engine.getCanvas();
 		AnimatorMouseController mouseController = new AnimatorMouseController(canvas, facade);
 		animatorRenderStep.setMouseController(mouseController);
 
@@ -138,6 +139,8 @@ public class AnimatorConnector implements Connector, GameWindow {
 		component.addMouseListener(mouseController);
 		component.addMouseMotionListener(mouseController);
 		component.addMouseWheelListener(mouseController);
+
+		openGLExtractor.addDependent(canvas::repaint);
 
 		return engine;
 	}
