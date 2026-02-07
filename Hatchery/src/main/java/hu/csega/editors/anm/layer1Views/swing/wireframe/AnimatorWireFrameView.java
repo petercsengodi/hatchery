@@ -1,6 +1,5 @@
 package hu.csega.editors.anm.layer1Views.swing.wireframe;
 
-import hu.csega.editors.anm.common.CommonComponent;
 import hu.csega.editors.anm.common.CommonInvalidatable;
 import hu.csega.editors.anm.components.ComponentWireFrameConverter;
 import hu.csega.editors.anm.components.ComponentWireFrameRenderer;
