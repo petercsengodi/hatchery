@@ -119,6 +119,10 @@ public class AnimatorModel {
 		parts.rotateSelectedPart(x, y, z);
 	}
 
+	public void translateSelectedPart(double x, double y, double z) {
+		parts.translateSelectedPart(x, y, z);
+	}
+
 	public void addJointToSelectedPart(String name, double x, double y, double z) {
 		parts.addNewJoint(name, x, y, z);
 	}

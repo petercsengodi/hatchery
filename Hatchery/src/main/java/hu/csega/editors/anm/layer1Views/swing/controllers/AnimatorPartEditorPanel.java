@@ -30,6 +30,13 @@ public class AnimatorPartEditorPanel extends JPanel {
 	public JButton rotateLeft;
 	public JButton rotateRight;
 
+	public JButton xAdd;
+	public JButton xSubtract;
+	public JButton yAdd;
+	public JButton ySubtract;
+	public JButton zAdd;
+	public JButton zSubtract;
+
 	public JLabel xLabel;
 	public JTextField xField;
 	public JLabel yLabel;
@@ -172,7 +179,9 @@ public class AnimatorPartEditorPanel extends JPanel {
 			}
 		});
 
+		/*
 		lineOffset += 20;
+
 		this.rotateUp = new JButton("▲");
 		this.add(this.rotateUp, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {
 			@Override
@@ -206,6 +215,70 @@ public class AnimatorPartEditorPanel extends JPanel {
 		});
 
 		lineOffset += 80;
+		*/
+
+		lineOffset += 20;
+		final int addButtonsOffset = lineOffset;
+
+		this.xAdd = new JButton("X++");
+		this.xAdd.addActionListener(event -> { model.translateSelectedPart(5, 0, 0); });
+		this.add(this.xAdd, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(5, addButtonsOffset, 75, 20);
+			}
+		});
+
+		this.yAdd = new JButton("Y++");
+		this.yAdd.addActionListener(event -> { model.translateSelectedPart(0, 5, 0); });
+		this.add(this.yAdd, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(85, addButtonsOffset, 75, 20);
+			}
+		});
+
+		this.zAdd = new JButton("Z++");
+		this.zAdd.addActionListener(event -> { model.translateSelectedPart(0, 0, 5); });
+		this.add(this.zAdd, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(165, addButtonsOffset, 75, 20);
+			}
+		});
+
+		lineOffset += 22;
+		final int subtractButtonsOffset = lineOffset;
+
+		this.xSubtract = new JButton("X--");
+		this.xSubtract.addActionListener(event -> { model.translateSelectedPart(-5, 0, 0); });
+		this.add(this.xSubtract, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(5, subtractButtonsOffset, 75, 20);
+			}
+		});
+
+		this.ySubtract = new JButton("Y--");
+		this.ySubtract.addActionListener(event -> { model.translateSelectedPart(0, -5, 0); });
+		this.add(this.ySubtract, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(85, subtractButtonsOffset, 75, 20);
+			}
+		});
+
+		this.zSubtract = new JButton("Z--");
+		this.zSubtract.addActionListener(event -> { model.translateSelectedPart(0, 0, -5); });
+		this.add(this.zSubtract, new AnimatorPanelLayoutChangeListener() {
+			@Override
+			public void arrange(Component component, int width, int height) {
+				component.setBounds(165, subtractButtonsOffset, 75, 20);
+			}
+		});
+
+
+		lineOffset += 22;
 
 		this.rotator = new AnimatorRotatorComponent();
 		this.add(this.rotator, new AnimatorPanelFixedSizeLayoutListener(0, lineOffset) {

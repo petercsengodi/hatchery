@@ -332,8 +332,11 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		for(int part = 0; part < numberOfShapes; part++) {
 			OpenGLTextureContainer textureContainer = builder.textureContainer(part);
 			Texture texture = textureContainer.getTexture();
-			texture.enable(gl2);
-			texture.bind(gl2);
+			if(texture != null) {
+				// TODO: Something is not right with the initialization, not all textures are initialized before drawing.
+				texture.enable(gl2);
+				texture.bind(gl2);
+			}
 
 			gl2.glBegin(GL2.GL_TRIANGLES);
 
@@ -366,7 +369,9 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
 			gl2.glEnd();
 
-			texture.disable(gl2);
+			if(texture != null) {
+				texture.disable(gl2);
+			}
 		}
 
 		gl2.glPopMatrix();

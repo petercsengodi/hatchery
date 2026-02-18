@@ -138,6 +138,28 @@ public class AnimatorPartManipulator {
         refreshViews.refreshAll();
     }
 
+    public void translateSelectedPart(double x, double y, double z) {
+        synchronized (model) {
+            AnimationPersistent persistent = model.getPersistent();
+            String partIdentifier = persistent.getSelectedPart();
+            if(partIdentifier == null) {
+                return;
+            }
+
+            Animation animation = persistent.getAnimation();
+            int selectedScene = persistent.getSelectedScene();
+            AnimationScene scene = animation.createOrGetScene(selectedScene);
+            AnimationScenePart scenePart = scene.createOrGetScenePart(partIdentifier);
+            AnimationDetailedTransformation transformation = scenePart.getTransformation();
+            float[] translation = transformation.getTranslation().getV();
+            translation[0] += x;
+            translation[1] += y;
+            translation[2] += z;
+        }
+
+        refreshViews.refreshAll();
+    }
+
     public void addNewJoint(String name, double x, double y, double z) {
         synchronized (model) {
             AnimationPersistent persistent = model.getPersistent();
