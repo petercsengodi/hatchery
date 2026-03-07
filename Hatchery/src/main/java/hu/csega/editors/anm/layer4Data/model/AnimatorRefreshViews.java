@@ -13,6 +13,9 @@ import hu.csega.games.library.animation.v1.anm.AnimationPersistent;
 import hu.csega.games.units.Dependency;
 import org.joml.Matrix4f;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,6 +65,12 @@ public class AnimatorRefreshViews implements ComponentRefreshViews {
 				AnimatorSetExtractor.generateParts(persistent, sceneIndex, baseTransformation, parts);
 				GameAnimationScene scene = gameAnimation.getScenes()[sceneIndex];
 				fill(scene, parts, indexes);
+			}
+
+			try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("temp.json"))) {
+				writer.write(gameAnimation.toJSONObject().toString());
+			} catch(IOException ex) {
+				throw new RuntimeException("Error when writing generated JSON!", ex);
 			}
 		}
 	}

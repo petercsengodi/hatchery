@@ -66,6 +66,18 @@ public class SuperstitionGameModify {
 		model.map.loadMonstersAround(player.x, player.y, player.z, monstersAround);
 
 		for(MonsterData monster : monstersAround) {
+			if(monster.health <= 0.0) {
+				if(monster.dying > -4000.0) {
+					monster.dying -= elapsedTime * 300.0;
+				}
+
+				if(monster.dying <= -4000.0) {
+					removeMonsterFromPlayground(monster);
+				}
+
+				continue;
+			}
+
 			if(monster.target == null) {
 				continue;
 			}
@@ -207,4 +219,10 @@ public class SuperstitionGameModify {
 		}
 	}
 
+	private static void removeMonsterFromPlayground(MonsterData monster) {
+		if(monster.mapTile != null && monster.mapTile.monsters != null) {
+			monster.mapTile.monsters.remove(monster);
+		}
+		monster.mapTile = null;
+	}
 }

@@ -8,11 +8,12 @@ public class MonsterData implements Serializable {
 
     public double maxHitDamage = 100.0;
 
-    public MonsterData(String animation) {
-        this(animation, 100.0);
+    public MonsterData(String animation, String dieAnimation) {
+        this(animation, dieAnimation, 100.0);
     }
-    public MonsterData(String animation, double initialHealth) {
+    public MonsterData(String animation, String dieAnimation, double initialHealth) {
         this.animation = animation;
+        this.dieAnimation = dieAnimation;
         this.health = initialHealth;
         this.scale = 0.1;
         this.cooldown = 1;
@@ -48,6 +49,7 @@ public class MonsterData implements Serializable {
     }
 
     public String animation;
+    public String dieAnimation;
 
     public double x;
     public double y;
@@ -66,6 +68,8 @@ public class MonsterData implements Serializable {
     public double ax = -1;
     public double ay = -10;
     public double az = -1;
+
+    public double dying = 200.0;
 
     public double health;
     public long expectedXP;
