@@ -32,11 +32,11 @@ public class SuperstitionSerializableModel implements Serializable {
 
 			int rnd = random.nextInt(100);
 			if(rnd < 30) {
-				data = new MonsterData(SuperstitionGameElements.MONSTRUM_ANIMATION);
+				data = new MonsterData(SuperstitionGameElements.MONSTRUM_ANIMATION, SuperstitionGameElements.WOODGOLEM_DYING_ANIMATION);
 			} else if(rnd < 60) {
-				data = new MonsterData(SuperstitionGameElements.MONKEY_ANIMATION);
+				data = new MonsterData(SuperstitionGameElements.MONKEY_ANIMATION, SuperstitionGameElements.WOODGOLEM_DYING_ANIMATION);
 			} else {
-				data = new MonsterData(SuperstitionGameElements.RUNNING_ANIMATION);
+				data = new MonsterData(SuperstitionGameElements.RUNNING_ANIMATION, SuperstitionGameElements.WOODGOLEM_DYING_ANIMATION);
 			}
 
 			double px = map.ABSOLUTE_SIZE_X * SuperstitionGameStarter.RANDOM.nextDouble();
@@ -52,7 +52,7 @@ public class SuperstitionSerializableModel implements Serializable {
 		}
 
 		// Behemoth.
-		MonsterData behemoth = new MonsterData(SuperstitionGameElements.BEHEMOTH_ANIMATION, 1_000_000.0);
+		MonsterData behemoth = new MonsterData(SuperstitionGameElements.BEHEMOTH_ANIMATION, SuperstitionGameElements.WOODGOLEM_DYING_ANIMATION, 1_000_000.0);
 		double px = SuperstitionMap.ABSOLUTE_SIZE_X - SuperstitionMap.TILE_SIZE_X / 2.0;
 		double py = 100.0;
 		double pz = SuperstitionMap.ABSOLUTE_SIZE_Y - SuperstitionMap.TILE_SIZE_Y / 2.0;

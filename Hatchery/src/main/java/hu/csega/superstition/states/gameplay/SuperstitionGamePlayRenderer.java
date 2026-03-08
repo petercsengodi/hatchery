@@ -372,33 +372,31 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 				continue;
 			}
 
-			iterator = universe.spellsInProgress.iterator();
-			while(iterator.hasNext()) {
-				SpellInProgress spell = iterator.next();
-				if(spell.isBlocker())
-					continue;
+			if(monster.health > 0.0) {
+				iterator = universe.spellsInProgress.iterator();
+				while (iterator.hasNext()) {
+					SpellInProgress spell = iterator.next();
+					if (spell.isBlocker())
+						continue;
 
-				if(CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
-					iterator.remove();
+					if (CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
+						iterator.remove();
 
-					String earlierHealth = doubleToIntString(monster.health);
-					monster.health -= spell.getHitPoint();
-					if(monster.health <= 0.0) {
-						monster.health = 0.0;
-						double earlierXP = (player.xp + 100);
-						player.xp += monster.expectedXP;
-						player.health = player.health * (player.xp + 100) / earlierXP;
-						addToLog(earlierHealth + " => Dies! XP: " + player.xp + " Health: " + doubleToIntString(player.health));
-						if(monster.mapTile != null && monster.mapTile.monsters != null) {
-							monster.mapTile.monsters.remove(monster);
+						String earlierHealth = doubleToIntString(monster.health);
+						monster.health -= spell.getHitPoint();
+						if (monster.health <= 0.0) {
+							monster.health = 0.0;
+							double earlierXP = (player.xp + 100);
+							player.xp += monster.expectedXP;
+							player.health = player.health * (player.xp + 100) / earlierXP;
+							addToLog(earlierHealth + " => Dies! XP: " + player.xp + " Health: " + doubleToIntString(player.health));
+						} else {
+							if (monster.target == null) {
+								monster.target = player;
+							}
+
+							addToLog("Hit! HP: " + earlierHealth + " => " + doubleToIntString(monster.health));
 						}
-						monster.mapTile = null;
-					} else {
-						if (monster.target == null) {
-							monster.target = player;
-						}
-
-						addToLog("Hit! HP: " + earlierHealth + " => " + doubleToIntString(monster.health));
 					}
 				}
 			}
@@ -427,9 +425,15 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			monsterPlacement.up.set(0f, 1f, 0f);
 			monsterPlacement.scale.set((float) monster.scale, (float) monster.scale, (float) monster.scale);
 
-			int animationIndex = (monster.target == null ? 0 : lastAnimIndex / 10);
-			GameObjectHandler animation = elements.monsterAnimations.get(monster.animation);
-			g.drawAnimation(animation, animationIndex, monsterPlacement);
+			GameObjectHandler monsterAnimation = monster.health <= 0.0
+					? elements.monsterAnimations.get(monster.dieAnimation)
+					: elements.monsterAnimations.get(monster.animation);
+
+			int animationIndex = monster.health <= 0.0
+					? (int) (Math.min(199, Math.max(199 - monster.dying, 0)))
+					: (monster.target == null ? 0 : lastAnimIndex / 10);
+
+			g.drawAnimation(monsterAnimation, animationIndex, monsterPlacement);
 		}
 
 		monstersAround.clear();
