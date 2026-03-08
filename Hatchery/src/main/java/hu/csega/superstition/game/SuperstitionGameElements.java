@@ -28,6 +28,9 @@ public class SuperstitionGameElements {
 	public static String MONSTRUM_ANIMATION = "monstrum.json";
 	public static String BEHEMOTH_ANIMATION = "behemoth.json";
 
+    public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem/run.anm";
+    public static String WOODGOLEM_DYING_ANIMATION = "woodgolem/die.anm";
+
 	public Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
 	public GameObjectHandler[] alphabet;
@@ -57,7 +60,10 @@ public class SuperstitionGameElements {
 		monsterAnimations.put(MONSTRUM_ANIMATION, loadAnimation(store, MONSTRUM_ANIMATION));
 		monsterAnimations.put(BEHEMOTH_ANIMATION, loadAnimation(store, BEHEMOTH_ANIMATION));
 
-		alphabet = new GameObjectHandler[numberOfLetters];
+        monsterAnimations.put(WOODGOLEM_RUNNING_ANIMATION, loadAnimation(store, WOODGOLEM_RUNNING_ANIMATION));
+        monsterAnimations.put(WOODGOLEM_DYING_ANIMATION, loadAnimation(store, WOODGOLEM_DYING_ANIMATION));
+
+        alphabet = new GameObjectHandler[numberOfLetters];
 		for(int i = 0; i < numberOfLetters; i++) {
 			alphabet[i] = store.loadMesh("alphabet-" + (char)((int)'a' + i) + ".json");
 		}
