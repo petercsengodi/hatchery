@@ -12,6 +12,7 @@ import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,8 @@ public class SuperstitionGameElements {
 	public static String MONSTRUM_ANIMATION = "monstrum.json";
 	public static String BEHEMOTH_ANIMATION = "behemoth.json";
 
-    public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem/run.anm";
-    public static String WOODGOLEM_DYING_ANIMATION = "woodgolem/die.anm";
+    public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem" + File.separator + "run.anm";
+    public static String WOODGOLEM_DYING_ANIMATION = "woodgolem" + File.separator + "die.anm";
 
 	public Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
