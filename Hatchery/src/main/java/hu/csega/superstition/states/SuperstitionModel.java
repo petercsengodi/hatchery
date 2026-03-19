@@ -17,6 +17,11 @@ import hu.csega.superstition.states.menu.SuperstitionMainMenuKeyListener;
 import hu.csega.superstition.states.menu.SuperstitionMainMenuModel;
 import hu.csega.superstition.states.menu.SuperstitionMainMenuMouseListener;
 import hu.csega.superstition.states.menu.SuperstitionMainMenuRenderer;
+import hu.csega.superstition.states.spells.SuperstitionGameSpellsBuilder;
+import hu.csega.superstition.states.spells.SuperstitionGameSpellsKeyListener;
+import hu.csega.superstition.states.spells.SuperstitionGameSpellsModel;
+import hu.csega.superstition.states.spells.SuperstitionGameSpellsMouseListener;
+import hu.csega.superstition.states.spells.SuperstitionGameSpellsRenderer;
 
 public class SuperstitionModel {
 
@@ -44,10 +49,25 @@ public class SuperstitionModel {
 			new SuperstitionGamePlayKeyListener(),
 			new SuperstitionGamePlayMouseListener());
 
+	private SuperstitionState gameSpells = new SuperstitionState(
+			new SuperstitionGameSpellsModel(),
+			new SuperstitionGameSpellsBuilder(),
+			new SuperstitionGameSpellsRenderer(),
+			new SuperstitionGameSpellsKeyListener(),
+			new SuperstitionGameSpellsMouseListener());
+
 	public SuperstitionModel() {
 		states.add(mainMenu);
 		states.add(gameMap);
 		states.add(gamePlay);
+	}
+
+	public void toggleMainManu() {
+		if(states.get(states.size() - 1) == mainMenu) {
+			states.remove(states.size() - 1);
+		} else {
+			states.add(mainMenu);
+		}
 	}
 
 	public GameEngineCallback currentModel() {
@@ -86,5 +106,13 @@ public class SuperstitionModel {
 
 	public SuperstitionState getGamePlay() {
 		return gamePlay;
+	}
+
+	public SuperstitionState getGameMap() {
+		return gameMap;
+	}
+
+	public SuperstitionState getGameSpells() {
+		return gameSpells;
 	}
 }

@@ -29,8 +29,8 @@ public class SuperstitionGameElements {
 	public static String MONSTRUM_ANIMATION = "monstrum.json";
 	public static String BEHEMOTH_ANIMATION = "behemoth.json";
 
-    public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem" + File.separator + "run.anm";
-    public static String WOODGOLEM_DYING_ANIMATION = "woodgolem" + File.separator + "die.anm";
+    public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem" + File.separator + "run.json";
+    public static String WOODGOLEM_DYING_ANIMATION = "woodgolem" + File.separator + "die.json";
 
 	public Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 

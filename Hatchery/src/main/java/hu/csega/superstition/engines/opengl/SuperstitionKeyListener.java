@@ -10,6 +10,11 @@ public class SuperstitionKeyListener implements GameKeyListener {
 	public void hit(GameEngineFacade facade, char key) {
 		SuperstitionModel model = (SuperstitionModel) facade.model();
 		if(model != null) {
+			 if(key == 27) {
+				 model.toggleMainManu();
+				 return;
+			 }
+
 			GameKeyListener realListener = model.currentKeyListener();
 			realListener.hit(facade, key);
 		}

@@ -10,7 +10,7 @@ public class SuperstitionGamePlayKeyListener implements GameKeyListener {
 
 	@Override
 	public void hit(GameEngineFacade facade, char key) {
-		if(key == 'q' || key == 'Q' || key == 27)
+		if(key == 'q' || key == 'Q')
 			facade.window().closeApplication();
 
 		SuperstitionModel model = (SuperstitionModel) facade.model();
