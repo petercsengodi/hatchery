@@ -1,5 +1,6 @@
 package hu.csega.games.engine.g3d;
 
+import hu.csega.games.engine.impl.GameEngineObjectPools;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
@@ -154,12 +155,12 @@ public class GameSelectionLine {
 	public int width;
 	public int height;
 
-	public Vector4f nearEndPoint = new Vector4f();
-	public Vector4f farEndPoint = new Vector4f();
+	public Vector4f nearEndPoint = GameEngineObjectPools.VECTOR4F.allocate();
+	public Vector4f farEndPoint = GameEngineObjectPools.VECTOR4F.allocate();
 	public boolean valid;
 
-	private Vector4f nearTmpPoint = new Vector4f();
-	private Vector4f farTmpPoint = new Vector4f();
+	private Vector4f nearTmpPoint = GameEngineObjectPools.VECTOR4F.allocate();
+	private Vector4f farTmpPoint = GameEngineObjectPools.VECTOR4F.allocate();
 	private Matrix4f basicLookAt = new Matrix4f();
 
 }

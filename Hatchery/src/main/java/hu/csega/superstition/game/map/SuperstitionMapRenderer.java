@@ -4,6 +4,7 @@ import hu.csega.common.math.ScalarUtil;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
+import hu.csega.games.engine.impl.GameEngineObjectPools;
 import hu.csega.games.engine.intf.GameGraphics;
 import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.SuperstitionGameElements;
@@ -28,8 +29,8 @@ import org.joml.Vector4f;
 public class SuperstitionMapRenderer {
 
 	private final Matrix4f rotation = new Matrix4f();
-	private final Vector4f target = new Vector4f();
-	private final Vector4f up = new Vector4f();
+	private final Vector4f target = GameEngineObjectPools.VECTOR4F.allocate();
+	private final Vector4f up = GameEngineObjectPools.VECTOR4F.allocate();
 
 	private Robot robot;
 	private long lastCheck;

@@ -1,4 +1,4 @@
-package hu.csega.games.library.collection;
+package hu.csega.games.engine.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -10,13 +10,14 @@ public class LinkedListPool<T> {
             for(int i = 0; i < initialNumber; i++)
                 release(create());
         }
+        this.maxNumber = maxNumber;
     }
 
     public int getCounter() {
         return counter;
     }
 
-    public T allocate() {
+    public synchronized T allocate() {
         LinkedListPoolItem<T> item;
         T result;
 
@@ -35,7 +36,7 @@ public class LinkedListPool<T> {
         return result;
     }
 
-    public void release(T object) {
+    public synchronized void release(T object) {
         LinkedListPoolItem<T> item;
 
         if(allocatedBucket != null) {

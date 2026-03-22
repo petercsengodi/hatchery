@@ -5,6 +5,7 @@ import hu.csega.editors.anm.components.ComponentSetExtractor;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFramePoint;
 import hu.csega.editors.anm.layer4Data.model.AnimatorModel;
 import hu.csega.games.engine.g3d.GameTransformation;
+import hu.csega.games.engine.impl.GameEngineObjectPools;
 import hu.csega.games.library.animation.v1.anm.Animation;
 import hu.csega.games.library.animation.v1.anm.AnimationPart;
 import hu.csega.games.library.animation.v1.anm.AnimationPartJoint;
@@ -141,7 +142,7 @@ public class AnimatorSetExtractor implements ComponentSetExtractor {
 			if(joints != null && joints.size() > 0) {
 				// scenePart.getTransformation().createJointMatrix(modelTransformation);
 				Matrix4f base = new Matrix4f();
-				Vector4f tv = new Vector4f();
+				Vector4f tv = GameEngineObjectPools.VECTOR4F.allocate();
 
 				for (AnimationPartJoint joint : part.getJoints()) {
 					tv.set(0f, 0f, 0f, 1f);
@@ -155,6 +156,8 @@ public class AnimatorSetExtractor implements ComponentSetExtractor {
 
 					generateParts(persistent, currentScene, baseTransformation, joint.getIdentifier(), base, collectedParts);
 				}
+
+                GameEngineObjectPools.VECTOR4F.release(tv);
 			} // end for each joint
 		} // end if part not null
 	}

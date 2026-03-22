@@ -10,10 +10,10 @@ import hu.csega.superstition.game.SuperstitionSerializableModel;
 
 public class SuperstitionGamePlayModel implements GameEngineCallback {
 
-	private SuperstitionSerializableModel serializableModel = new SuperstitionSerializableModel();
-	private long lastTimestamp;
-	public SuperstitionGameElements elements = new SuperstitionGameElements();
+    public static final SuperstitionGameElements elements = new SuperstitionGameElements();
 
+    private SuperstitionSerializableModel serializableModel = new SuperstitionSerializableModel();
+	private long lastTimestamp;
 	public SuperstitionSerializableModel getSerializableModel() {
 		return serializableModel;
 	}
@@ -24,10 +24,6 @@ public class SuperstitionGamePlayModel implements GameEngineCallback {
 
 	public SuperstitionGameElements getElements() {
 		return elements;
-	}
-
-	public void setElements(SuperstitionGameElements elements) {
-		this.elements = elements;
 	}
 
 	public void initializeMonsters() {
