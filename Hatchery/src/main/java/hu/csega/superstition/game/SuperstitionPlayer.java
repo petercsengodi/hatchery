@@ -19,6 +19,10 @@ public class SuperstitionPlayer {
 	public SuperstitionSpellType spellLoadedForFiring;
 	public long xp;
 
+	public SuperstitionPlayer() {
+
+	}
+
 	public boolean isOnCoolDown() {
 		return spellCoolDown > 0.0;
 	}

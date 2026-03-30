@@ -11,6 +11,9 @@ import hu.csega.games.engine.g3d.GameTexturePosition;
 import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
+import hu.csega.superstition.game.map.generation.MacroMap;
+import hu.csega.superstition.states.SuperstitionModel;
+import hu.csega.superstition.states.gameplay.SuperstitionGamePlayModel;
 
 import java.io.File;
 import java.util.HashMap;
@@ -49,8 +52,11 @@ public class SuperstitionGameElements {
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
+		SuperstitionModel model = (SuperstitionModel) facade.model();
+		SuperstitionGamePlayModel gamePlayModel = (SuperstitionGamePlayModel) model.getGamePlay().getModel();
+		SuperstitionSerializableModel serializableModel = gamePlayModel.getSerializableModel();
 
-		buildMapGround(store);
+		buildMapGround(store, serializableModel);
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
@@ -90,7 +96,7 @@ public class SuperstitionGameElements {
 		return store.loadAnimation(filename);
 	}
 
-	private void buildMapGround(GameModelStore store) {
+	private void buildMapGround(GameModelStore store, SuperstitionSerializableModel serializableModel) {
 		GameObjectHandler groundTileHandler = buildGroundForReal(store, "grass-texture.png", GROUND_DEPTH);
 		GameObjectHandler riverTileHandler = buildGroundForReal(store, "white.png", 2f * GROUND_DEPTH);
 
@@ -130,8 +136,19 @@ public class SuperstitionGameElements {
 				}
 			}
 		} else {
-			for (int ix = 0; ix < SuperstitionMap.SIZE_X; ix++) {
-				for (int iy = 0; iy < SuperstitionMap.SIZE_Y; iy++) {
+			MacroMap macroMap = new MacroMap();
+			macroMap.start();
+			int[][] macroMapMap = macroMap.getMap();
+
+			serializableModel.player.x = (macroMap.sizeX() * GROUND_SIZE) / 2f -100;
+			serializableModel.player.z = (macroMap.sizeX() * GROUND_SIZE) / 2f -100;
+
+			for (int ix = 0; ix < macroMap.sizeX(); ix++) {
+				for (int iy = 0; iy < macroMap.sizeY(); iy++) {
+					if(macroMapMap[ix][iy] == 0) {
+						continue;
+					}
+
 					MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
 					mt.handler = groundTileHandler;
 					SuperstitionMap.mapTiles[ix][iy] = mt;

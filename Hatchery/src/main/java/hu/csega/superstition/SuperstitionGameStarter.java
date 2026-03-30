@@ -63,7 +63,7 @@ public class SuperstitionGameStarter {
 		String mapFilename = resourceAdapter.resourcesRoot() + "maps/what.csv";
 		File mapFile = new File(mapFilename);
 		if(mapFile.exists()) {
-			mapTable = CSV.parse(mapFilename);
+			// mapTable = CSV.parse(mapFilename);
 		}
 
 		Connector connector = new SuperstitionOpenGLConnector(shaderRoot, textureRoot, meshRoot, animationRoot);

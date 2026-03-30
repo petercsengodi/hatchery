@@ -1,15 +1,15 @@
 package hu.csega.superstition.game;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
 import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class SuperstitionSerializableModel implements Serializable {
 
