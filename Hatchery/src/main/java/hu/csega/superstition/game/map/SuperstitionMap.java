@@ -1,6 +1,7 @@
 package hu.csega.superstition.game.map;
 
 import hu.csega.superstition.game.SuperstitionGameElements;
+import hu.csega.superstition.game.map.generation.MacroMap;
 import hu.csega.superstition.game.play.MonsterData;
 
 import java.io.Serializable;
@@ -11,14 +12,13 @@ public class SuperstitionMap implements Serializable {
     public static final double TILE_SIZE_X = SuperstitionGameElements.GROUND_SIZE;
     public static final double TILE_SIZE_Y = SuperstitionGameElements.GROUND_SIZE;
 
-    public static final int SIZE_X = 201;
-    public static final int SIZE_Y = 201;
+    public static final int SIZE_X = (MacroMap.maxX + 1) * 3;
+    public static final int SIZE_Y = (MacroMap.maxY + 1) * 3;
 
     public static final double ABSOLUTE_SIZE_X = SIZE_X * TILE_SIZE_X;
     public static final double ABSOLUTE_SIZE_Y = SIZE_Y * TILE_SIZE_Y;
 
     public static MapTile[][] mapTiles = new MapTile[SIZE_X][SIZE_Y];
-
 
     public static int xIndexOf(double x) {
         return (int) Math.floor(x / TILE_SIZE_X);

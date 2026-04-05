@@ -12,6 +12,7 @@ import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.map.generation.MacroMap;
+import hu.csega.superstition.game.map.generation.MacroMapField;
 import hu.csega.superstition.states.SuperstitionModel;
 import hu.csega.superstition.states.gameplay.SuperstitionGamePlayModel;
 
@@ -138,20 +139,39 @@ public class SuperstitionGameElements {
 		} else {
 			MacroMap macroMap = new MacroMap();
 			macroMap.start();
-			int[][] macroMapMap = macroMap.getMap();
+			MacroMapField[][] macroMapMap = macroMap.getMap();
 
-			serializableModel.player.x = (macroMap.sizeX() * GROUND_SIZE) / 2f -100;
-			serializableModel.player.z = (macroMap.sizeX() * GROUND_SIZE) / 2f -100;
+			serializableModel.player.x = (MacroMap.startX * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
+			serializableModel.player.z = (MacroMap.startY * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
 
-			for (int ix = 0; ix < macroMap.sizeX(); ix++) {
+            serializableModel.player.x = Double.MAX_VALUE;
+            serializableModel.player.z = Double.MAX_VALUE;
+
+            for (int ix = 0; ix < macroMap.sizeX(); ix++) {
 				for (int iy = 0; iy < macroMap.sizeY(); iy++) {
-					if(macroMapMap[ix][iy] == 0) {
+                    MacroMapField macroMapField = macroMapMap[ix][iy];
+                    if(macroMapField == null) {
 						continue;
 					}
 
-					MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
-					mt.handler = groundTileHandler;
-					SuperstitionMap.mapTiles[ix][iy] = mt;
+                    for(int cx = 0; cx < 3; cx++) {
+                        for (int cy = 0; cy < 3; cy++) {
+                            if (macroMapField.connections[cx][cy] == 0) {
+                                continue;
+                            }
+
+                            int mx = ix * 3 + cx;
+                            int my = iy * 3 + cy;
+                            MapTile mt = new MapTile(mx * GROUND_SIZE, 0f, my * GROUND_SIZE);
+                            mt.handler = groundTileHandler;
+                            SuperstitionMap.mapTiles[mx][my] = mt;
+
+                            if(serializableModel.player.x + serializableModel.player.z > mt.groundPlacement.position.x + mt.groundPlacement.position.z) {
+                                serializableModel.player.x = mt.groundPlacement.position.x;
+                                serializableModel.player.z = mt.groundPlacement.position.z;
+                            }
+                        }
+                    }
 				}
 			}
 		}
