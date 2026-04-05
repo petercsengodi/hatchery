@@ -60,11 +60,12 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
 	private int width;
 	private int height;
-	private Matrix4f inverseCameraMatrix = new Matrix4f();
-	private Matrix4f inversePerspectiveMatrix = new Matrix4f();
-
+    private Vector4f zeroPosition = new Vector4f(0, 0, 0, 1);
+    private Vector4f cameraPosition = new Vector4f(0, 0, 0, 1);
 	private Matrix4f perspectiveMatrix = new Matrix4f();
 	private Matrix4f cameraMatrix = new Matrix4f();
+    private Matrix4f inverseCameraMatrix = new Matrix4f();
+    private Matrix4f inversePerspectiveMatrix = new Matrix4f();
 
 	@Override
 	public void viewPort(GLAutoDrawable glAutoDrawable, int width, int height) {
@@ -228,7 +229,7 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, OpenGLModelStoreImpl store) {
 		gl2.glPushMatrix();
 
-		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateBasicLookAt(basicLookAt, cameraPosition);
 		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
 		inverseLookAt.get(tmpMatrix);
 		gl2.glMultMatrixf(tmpMatrix, 0);
@@ -251,7 +252,7 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 	public void drawModel(GLAutoDrawable glAutoDrawable, OpenGLModelContainer model, GameObjectPlacement placement, GameTransformation transformation, OpenGLModelStoreImpl store) {
 		gl2.glPushMatrix();
 
-		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateBasicLookAt(basicLookAt, cameraPosition);
 		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
 		inverseLookAt.get(tmpMatrix);
 		gl2.glMultMatrixf(tmpMatrix, 0);
@@ -282,7 +283,12 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 
 	@Override
 	public void placeCamera(GLAutoDrawable glAutoDrawable, GameObjectPlacement cameraPlacement) {
-		gl2.glMatrixMode(GL2.GL_MODELVIEW);
+        cameraPosition.x = cameraPlacement.position.x;
+        cameraPosition.y = cameraPlacement.position.y;
+        cameraPosition.z = cameraPlacement.position.z;
+        cameraPosition.w = 1.0f;
+
+        gl2.glMatrixMode(GL2.GL_MODELVIEW);
 		gl2.glLoadIdentity();
 
 		cameraPlacement.calculateEye(cameraEye);
@@ -290,13 +296,13 @@ public class OpenGLProfileGL2TriangleAdapter implements OpenGLProfileAdapter {
 		cameraPlacement.calculateUp(cameraUp);
 
 		glu.gluLookAt(
-				cameraEye.x, cameraEye.y, cameraEye.z,
-				cameraCenter.x, cameraCenter.y, cameraCenter.z,
+				cameraEye.x - cameraPosition.x, cameraEye.y - cameraPosition.y, cameraEye.z - cameraPosition.z,
+				cameraCenter.x - cameraPosition.x, cameraCenter.y - cameraPosition.y, cameraCenter.z - cameraPosition.z,
 				cameraUp.x, cameraUp.y, cameraUp.z);
 
 		OpenGLErrorUtil.checkError(gl2, "cameraPlacement");
 
-		cameraPlacement.calculateBasicLookAt(cameraMatrix);
+		cameraPlacement.calculateBasicLookAt(cameraMatrix, cameraPosition);
 		cameraMatrix.invert(inverseCameraMatrix);
 	}
 

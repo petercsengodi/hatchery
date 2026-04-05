@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.joml.Matrix4d;
 import org.joml.Matrix4f;
+import org.joml.Vector4d;
 import org.joml.Vector4f;
 
 public class GameObjectPlacement implements Serializable {
@@ -89,15 +90,27 @@ public class GameObjectPlacement implements Serializable {
 		direction.z = this.target.z - this.position.z;
 	}
 
-	public void calculateBasicLookAt(Matrix4f basicLookAt) {
-		basicLookAt.setLookAt(this.position.x, this.position.y, this.position.z,
-				this.target.x, this.target.y, this.target.z,
+    public void calculateBasicLookAt(Matrix4f basicLookAt) {
+        basicLookAt.setLookAt(this.position.x, this.position.y, this.position.z,
+                this.target.x, this.target.y, this.target.z,
+                this.up.x, this.up.y, this.up.z);
+    }
+
+    public void calculateBasicLookAt(Matrix4d basicLookAt) {
+        basicLookAt.setLookAt(this.position.x, this.position.y, this.position.z,
+                this.target.x, this.target.y, this.target.z,
+                this.up.x, this.up.y, this.up.z);
+    }
+
+	public void calculateBasicLookAt(Matrix4f basicLookAt, Vector4f centerPosition) {
+		basicLookAt.setLookAt(this.position.x - centerPosition.x, this.position.y - centerPosition.y, this.position.z - centerPosition.z,
+				this.target.x - centerPosition.x, this.target.y - centerPosition.y, this.target.z - centerPosition.z,
 				this.up.x, this.up.y, this.up.z);
 	}
 
-	public void calculateBasicLookAt(Matrix4d basicLookAt) {
-		basicLookAt.setLookAt(this.position.x, this.position.y, this.position.z,
-				this.target.x, this.target.y, this.target.z,
+	public void calculateBasicLookAt(Matrix4d basicLookAt, Vector4d centerPosition) {
+		basicLookAt.setLookAt(this.position.x - centerPosition.x, this.position.y - centerPosition.y, this.position.z - centerPosition.z,
+				this.target.x - centerPosition.x, this.target.y - centerPosition.y, this.target.z - centerPosition.z,
 				this.up.x, this.up.y, this.up.z);
 	}
 

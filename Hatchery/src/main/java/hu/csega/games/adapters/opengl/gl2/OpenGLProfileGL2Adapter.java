@@ -23,6 +23,7 @@ import hu.csega.games.adapters.opengl.utils.OpenGLProgramLogger;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.g3d.GameSelectionLine;
 import hu.csega.games.engine.g3d.GameTransformation;
+import org.joml.Vector4f;
 
 @Deprecated
 public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
@@ -34,11 +35,12 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 
 	private int width;
 	private int height;
-	private Matrix4f inverseCameraMatrix = new Matrix4f();
-	private Matrix4f inversePerspectiveMatrix = new Matrix4f();
-
+    private Vector4f zeroPosition = new Vector4f(0, 0, 0, 1);
+    private Vector4f cameraPosition = new Vector4f(0, 0, 0, 1);
 	private Matrix4f perspectiveMatrix = new Matrix4f();
 	private Matrix4f cameraMatrix = new Matrix4f();
+    private Matrix4f inverseCameraMatrix = new Matrix4f();
+    private Matrix4f inversePerspectiveMatrix = new Matrix4f();
 
 	@Override
 	public void viewPort(GLAutoDrawable glAutoDrawable, int width, int height) {
@@ -185,7 +187,12 @@ public class OpenGLProfileGL2Adapter implements OpenGLProfileAdapter {
 
 	@Override
 	public void placeCamera(GLAutoDrawable glAutodrawable, GameObjectPlacement cameraPlacement) {
-		cameraPlacement.calculateBasicLookAt(cameraMatrix);
+        cameraPosition.x = cameraPlacement.position.x;
+        cameraPosition.y = cameraPlacement.position.y;
+        cameraPosition.z = cameraPlacement.position.z;
+        cameraPosition.w = 1.0f;
+
+        cameraPlacement.calculateBasicLookAt(cameraMatrix, cameraPosition);
 		cameraMatrix.invert(inverseCameraMatrix);
 	}
 

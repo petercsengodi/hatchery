@@ -63,6 +63,8 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 
 	private int width;
 	private int height;
+    private Vector4f zeroPosition = new Vector4f(0, 0, 0, 1);
+    private Vector4f cameraPosition = new Vector4f(0, 0, 0, 1);
 	private Matrix4f inverseCameraMatrix = new Matrix4f();
 	private Matrix4f inversePerspectiveMatrix = new Matrix4f();
 
@@ -295,7 +297,7 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);
 
-		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateBasicLookAt(basicLookAt, cameraPosition);
 		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
 		calculatedMatrix.mul(inverseLookAt);
 
@@ -328,7 +330,7 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 		calculatedMatrix.set(perspectiveMatrix);
 		calculatedMatrix.mul(cameraMatrix);
 
-		placement.calculateBasicLookAt(basicLookAt);
+		placement.calculateBasicLookAt(basicLookAt, cameraPosition);
 		placement.calculateInverseLookAt(basicLookAt, tmpEye, tmpCenter, tmpUp, inverseLookAt);
 		calculatedMatrix.mul(inverseLookAt);
 
@@ -383,7 +385,12 @@ public class OpenGLProfileGL3Adapter2 implements OpenGLProfileAdapter {
 		if(gl3 == null)
 			gl3 = glAutodrawable.getGL().getGL3();
 
-		cameraPlacement.calculateBasicLookAt(cameraMatrix);
+        cameraPosition.x = cameraPlacement.position.x;
+        cameraPosition.y = cameraPlacement.position.y;
+        cameraPosition.z = cameraPlacement.position.z;
+        cameraPosition.w = 1.0f;
+
+		cameraPlacement.calculateBasicLookAt(cameraMatrix, cameraPosition);
 		cameraMatrix.invert(inverseCameraMatrix);
 	}
 
