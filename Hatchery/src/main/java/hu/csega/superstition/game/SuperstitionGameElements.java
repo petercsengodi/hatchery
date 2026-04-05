@@ -144,9 +144,6 @@ public class SuperstitionGameElements {
 			serializableModel.player.x = (MacroMap.startX * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
 			serializableModel.player.z = (MacroMap.startY * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
 
-            serializableModel.player.x = Double.MAX_VALUE;
-            serializableModel.player.z = Double.MAX_VALUE;
-
             for (int ix = 0; ix < macroMap.sizeX(); ix++) {
 				for (int iy = 0; iy < macroMap.sizeY(); iy++) {
                     MacroMapField macroMapField = macroMapMap[ix][iy];
@@ -165,11 +162,6 @@ public class SuperstitionGameElements {
                             MapTile mt = new MapTile(mx * GROUND_SIZE, 0f, my * GROUND_SIZE);
                             mt.handler = groundTileHandler;
                             SuperstitionMap.mapTiles[mx][my] = mt;
-
-                            if(serializableModel.player.x + serializableModel.player.z > mt.groundPlacement.position.x + mt.groundPlacement.position.z) {
-                                serializableModel.player.x = mt.groundPlacement.position.x;
-                                serializableModel.player.z = mt.groundPlacement.position.z;
-                            }
                         }
                     }
 				}
