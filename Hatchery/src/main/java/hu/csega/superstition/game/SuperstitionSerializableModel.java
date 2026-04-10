@@ -46,7 +46,8 @@ public class SuperstitionSerializableModel implements Serializable {
 			if(mapTile != null) {
 				// FIXME Map width/height should be used.
 				mapTile.monsters.add(data);
-			}
+			} // FIXME Always generate on valid positions!
+			
 			data.identifyPosition(px, py, pz, mapTile);
 			data.setLevel(Math.floor(Math.max(pz / 10.0 * SuperstitionGameStarter.RANDOM.nextDouble(), 10)));
 		}

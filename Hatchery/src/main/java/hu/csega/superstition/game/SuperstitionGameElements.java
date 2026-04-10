@@ -13,6 +13,7 @@ import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.map.generation.MacroMap;
 import hu.csega.superstition.game.map.generation.MacroMapField;
+import hu.csega.superstition.game.map.generation.MapGenerator;
 import hu.csega.superstition.states.SuperstitionModel;
 import hu.csega.superstition.states.gameplay.SuperstitionGamePlayModel;
 
@@ -137,8 +138,7 @@ public class SuperstitionGameElements {
 				}
 			}
 		} else {
-			MacroMap macroMap = new MacroMap();
-			macroMap.start();
+			MacroMap macroMap = MapGenerator.generateMap();
 			MacroMapField[][] macroMapMap = macroMap.getMap();
 
 			serializableModel.player.x = (MacroMap.startX * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
