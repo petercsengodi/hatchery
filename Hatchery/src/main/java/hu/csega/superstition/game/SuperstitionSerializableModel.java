@@ -39,17 +39,25 @@ public class SuperstitionSerializableModel implements Serializable {
 				data = new MonsterData(SuperstitionGameElements.RUNNING_ANIMATION, SuperstitionGameElements.WOODGOLEM_DYING_ANIMATION);
 			}
 
-			double px = map.ABSOLUTE_SIZE_X * SuperstitionGameStarter.RANDOM.nextDouble();
-			double py = 0.0;
-			double pz = map.ABSOLUTE_SIZE_Y * SuperstitionGameStarter.RANDOM.nextDouble();
-			MapTile mapTile = map.loadMapTile(px, py, pz);
-			if(mapTile != null) {
-				// FIXME Map width/height should be used.
-				mapTile.monsters.add(data);
-			} // FIXME Always generate on valid positions!
-			
+			double px = 0.0, py = 0.0, pz = 0.0;
+			MapTile mapTile = null;
+
+			for(int attempt = 0; attempt < 10; attempt++) { // FIXME This is a very bad algorithm.
+				px = map.ABSOLUTE_SIZE_X * SuperstitionGameStarter.RANDOM.nextDouble();
+				py = 0.0;
+				pz = map.ABSOLUTE_SIZE_Y * SuperstitionGameStarter.RANDOM.nextDouble();
+				mapTile = map.loadMapTile(px, py, pz);
+				if (mapTile != null /* && mapTile.??? */ ) {
+					// FIXME Map width/height should be used.
+					mapTile.monsters.add(data);
+					break;
+				} // FIXME Always generate on valid positions!
+			}
+
 			data.identifyPosition(px, py, pz, mapTile);
-			data.setLevel(Math.floor(Math.max(pz / 10.0 * SuperstitionGameStarter.RANDOM.nextDouble(), 10)));
+
+			double distanceFromPlayer = Math.sqrt((px - player.x)*(px - player.x) + (py - player.y)*(py - player.y));
+			data.setLevel(Math.floor(Math.max(distanceFromPlayer / 10.0 * SuperstitionGameStarter.RANDOM.nextDouble(), 10)));
 		}
 
 		// Behemoth.
