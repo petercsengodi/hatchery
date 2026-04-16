@@ -19,13 +19,13 @@ public class SuperstitionSerializableModel implements Serializable {
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
 	public Set<SpellInProgress> monsterSpells = new HashSet<>();
 
-    public SuperstitionMap map = new SuperstitionMap();
+    public SuperstitionMap map;
 
 	public SuperstitionSerializableModel() {
 		player.z = 0f;
 	}
 
-	public void initializeMonsters() {
+	public void initializeModel() {
 		Random random = SuperstitionGameStarter.RANDOM;
 		for(int i = 0; i < 10_000; i++) {
 			MonsterData data;
@@ -62,9 +62,9 @@ public class SuperstitionSerializableModel implements Serializable {
 
 		// Behemoth.
 		MonsterData behemoth = new MonsterData(SuperstitionGameElements.BEHEMOTH_ANIMATION, SuperstitionGameElements.WOODGOLEM_DYING_ANIMATION, 1_000_000.0);
-		double px = SuperstitionMap.ABSOLUTE_SIZE_X - SuperstitionMap.TILE_SIZE_X / 2.0;
+		double px = map.ABSOLUTE_SIZE_X - SuperstitionMap.TILE_SIZE_X / 2.0;
 		double py = 100.0;
-		double pz = SuperstitionMap.ABSOLUTE_SIZE_Y - SuperstitionMap.TILE_SIZE_Y / 2.0;
+		double pz = map.ABSOLUTE_SIZE_Y - SuperstitionMap.TILE_SIZE_Y / 2.0;
 		MapTile mapTile = map.loadMapTile(px, py, pz);
 
 		if(mapTile != null) {

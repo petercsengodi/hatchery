@@ -114,6 +114,8 @@ public class SuperstitionGameElements {
 				}
 			}
 
+            serializableModel.map = new SuperstitionMap(width, height);
+
 			for (int ix = 0; ix < width; ix++) {
 				for (int iy = 0; iy < height; iy++) {
 					MapTile mt = new MapTile(ix * GROUND_SIZE, 0f, iy * GROUND_SIZE);
@@ -134,15 +136,16 @@ public class SuperstitionGameElements {
 						}
 					}
 
-					SuperstitionMap.mapTiles[ix][iy] = mt;
+					serializableModel.map.mapTiles[ix][iy] = mt;
 				}
 			}
 		} else {
 			MacroMap macroMap = MapGenerator.generateMap();
 			MacroMapField[][] macroMapMap = macroMap.getMap();
+            serializableModel.map = new SuperstitionMap(macroMap);
 
-			serializableModel.player.x = (MacroMap.startX * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
-			serializableModel.player.z = (MacroMap.startY * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
+			serializableModel.player.x = (macroMap.startX * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
+			serializableModel.player.z = (macroMap.startY * 3 * GROUND_SIZE) + GROUND_SIZE / 2f;
 
             for (int ix = 0; ix < macroMap.sizeX(); ix++) {
 				for (int iy = 0; iy < macroMap.sizeY(); iy++) {
@@ -161,7 +164,7 @@ public class SuperstitionGameElements {
                             int my = iy * 3 + cy;
                             MapTile mt = new MapTile(mx * GROUND_SIZE, 0f, my * GROUND_SIZE);
                             mt.handler = groundTileHandler;
-                            SuperstitionMap.mapTiles[mx][my] = mt;
+                            serializableModel.map.mapTiles[mx][my] = mt;
                         }
                     }
 				}

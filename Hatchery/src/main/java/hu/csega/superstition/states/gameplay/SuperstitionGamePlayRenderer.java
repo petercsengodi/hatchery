@@ -107,7 +107,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 
 		for(int ix = playerXIndex - 3; ix <= playerXIndex + 3; ix++) {
 			for(int iy = playerYIndex - 3; iy <= playerYIndex + 3; iy++) {
-				MapTile mt = SuperstitionMap.loadMapTile(ix, iy);
+				MapTile mt = universe.map.loadMapTile(ix, iy);
 				if(mt == null) {
 					continue;
 				}

@@ -12,13 +12,25 @@ public class SuperstitionMap implements Serializable {
     public static final double TILE_SIZE_X = SuperstitionGameElements.GROUND_SIZE;
     public static final double TILE_SIZE_Y = SuperstitionGameElements.GROUND_SIZE;
 
-    public static final int SIZE_X = (MacroMap.maxX + 1) * 3;
-    public static final int SIZE_Y = (MacroMap.maxY + 1) * 3;
+    public int SIZE_X;
+    public int SIZE_Y;
 
-    public static final double ABSOLUTE_SIZE_X = SIZE_X * TILE_SIZE_X;
-    public static final double ABSOLUTE_SIZE_Y = SIZE_Y * TILE_SIZE_Y;
+    public double ABSOLUTE_SIZE_X;
+    public double ABSOLUTE_SIZE_Y;
 
-    public static MapTile[][] mapTiles = new MapTile[SIZE_X][SIZE_Y];
+    public MapTile[][] mapTiles = null;
+
+    public SuperstitionMap(MacroMap macroMap) {
+        this(macroMap.maxX, macroMap.maxY);
+    }
+
+    public SuperstitionMap(int maxX, int maxY) {
+        SIZE_X = (maxX + 1) * 3;
+        SIZE_Y = (maxY + 1) * 3;
+        ABSOLUTE_SIZE_X = SIZE_X * TILE_SIZE_X;
+        ABSOLUTE_SIZE_Y = SIZE_Y * TILE_SIZE_Y;
+        mapTiles = new MapTile[SIZE_X][SIZE_Y];
+    }
 
     public static int xIndexOf(double x) {
         return (int) Math.floor(x / TILE_SIZE_X);
@@ -28,14 +40,14 @@ public class SuperstitionMap implements Serializable {
         return (int) Math.floor(y / TILE_SIZE_Y);
     }
 
-    public static MapTile loadMapTile(int xIndex, int yIndex) {
+    public MapTile loadMapTile(int xIndex, int yIndex) {
         if(xIndex < 0 || yIndex < 0 || xIndex >= SIZE_X || yIndex >= SIZE_Y)
             return null;
 
         return mapTiles[xIndex][yIndex];
     }
 
-    public static MapTile loadMapTile(double x, double y, double z) {
+    public MapTile loadMapTile(double x, double y, double z) {
         int xIndex = xIndexOf(x);
         int yIndex = yIndexOf(z); /// z !!!
         return loadMapTile(xIndex, yIndex);

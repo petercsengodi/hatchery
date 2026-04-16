@@ -8,14 +8,27 @@ import static hu.csega.superstition.game.map.generation.MacroMapDirection.*;
 
 public class MacroMap {
 
-    public static final int startX = 100;
-    public static final int startY = 100;
-    public static final int maxX = 200;
-    public static final int maxY = 200;
+    public MacroMap() {
+        startX = startY = 100;
+        maxX = maxY = 200;
+        map = new MacroMapField[maxX + 1][maxY + 1];
+    }
 
-    private MacroMapField[][] map = new MacroMapField[maxX + 1][maxY + 1];
+    public MacroMap(int maxX, int maxY, int startX, int startY) {
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.startX = startX;
+        this.startY = startY;
+        this.map = new MacroMapField[maxX + 1][maxY + 1];
+    }
 
-    private List<MacroMapFreePort> freePorts = new ArrayList<>();
+    public int startX;
+    public int startY;
+    public int maxX;
+    public int maxY;
+
+    private final MacroMapField[][] map;
+    private final List<MacroMapFreePort> freePorts = new ArrayList<>();
 
     public MacroMapField[][] getMap() {
         return map;
