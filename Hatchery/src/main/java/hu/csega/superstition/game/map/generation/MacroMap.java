@@ -1,10 +1,10 @@
 package hu.csega.superstition.game.map.generation;
 
+import static hu.csega.superstition.game.map.generation.MacroMapDirection.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static hu.csega.superstition.game.map.generation.MacroMapDirection.*;
 
 public class MacroMap {
 
@@ -91,6 +91,11 @@ public class MacroMap {
                 }
 
                 MacroMapField currentField = map[freePort.x][freePort.y];
+
+                // I don't know, something. No sense here.
+                if(directions == 2 || directions == 4 || directions == 5 || directions == 7) {
+                    directions = 1;
+                }
 
                 if(directions == 1 || directions == 4 || directions == 6 || directions == 7) {
                     int x = freePort.x + direction.x;
