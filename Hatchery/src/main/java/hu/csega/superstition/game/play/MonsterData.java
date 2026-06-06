@@ -69,6 +69,7 @@ public class MonsterData implements Serializable {
     public double ay = -10;
     public double az = -1;
 
+    public boolean dead;
     public double dying = 200.0;
 
     public double health;
