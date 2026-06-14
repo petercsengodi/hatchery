@@ -1,6 +1,8 @@
 package hu.csega.superstition.game;
 
-public class SuperstitionPlayer {
+import java.io.Serializable;
+
+public class SuperstitionPlayer implements Serializable {
 
 	public double health = 200;
 
@@ -68,5 +70,7 @@ public class SuperstitionPlayer {
 	private static final double SPELL_CAST_MAX = 50.0;
 	private static final double SPELL_CAST_SPEED = 0.06;
 	private static final double COOL_DOWN_SPEED = 0.06;
+
+    private static final long serialVersionUID = 1L;
 
 }

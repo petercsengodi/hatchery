@@ -2,8 +2,9 @@ package hu.csega.superstition.game.play;
 
 import hu.csega.superstition.game.SuperstitionPlayer;
 import hu.csega.superstition.game.SuperstitionSpellType;
+import java.io.Serializable;
 
-public class SpellInProgress {
+public class SpellInProgress implements Serializable {
 
     SuperstitionSpellType type;
 
@@ -151,4 +152,7 @@ public class SpellInProgress {
     public int spellModelIndex() {
         return type.getSpellModelIndex();
     }
+
+    private static final long serialVersionUID = 1L;
+
 }

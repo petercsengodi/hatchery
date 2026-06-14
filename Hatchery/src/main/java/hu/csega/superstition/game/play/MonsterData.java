@@ -78,8 +78,7 @@ public class MonsterData implements Serializable {
 
     public MapTile mapTile;
 
-    /* FIXME this is not serializable. */
-    public Object target;
+    public Serializable target;
 
     private static final long serialVersionUID = 1L;
 }
