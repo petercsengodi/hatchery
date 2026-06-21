@@ -13,7 +13,8 @@ public class MapTile implements Serializable {
     public GameObjectPlacement groundPlacement;
 
     public float height;
-    public GameObjectHandler handler;
+    public String mapElementName;
+    public transient GameObjectHandler mapElementHandler;
 
     public Set<MonsterData> monsters = new HashSet<>();
 

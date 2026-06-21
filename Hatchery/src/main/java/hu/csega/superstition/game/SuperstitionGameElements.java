@@ -37,6 +37,11 @@ public class SuperstitionGameElements {
     public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem" + File.separator + "run.json";
     public static String WOODGOLEM_DYING_ANIMATION = "woodgolem" + File.separator + "die.json";
 
+	public static String MAP_GROUND = "ground";
+	public static String MAP_RIVER = "river";
+	public static String MAP_WALL = "wall";
+
+	public Map<String, GameObjectHandler> mapElements = new HashMap<>();
 	public Map<String, GameObjectHandler> monsterAnimations = new HashMap<>();
 
 	public GameObjectHandler[] alphabet;
@@ -58,7 +63,7 @@ public class SuperstitionGameElements {
 		SuperstitionGamePlayModel gamePlayModel = (SuperstitionGamePlayModel) model.getGamePlay().getModel();
 		SuperstitionSerializableModel serializableModel = gamePlayModel.getSerializableModel();
 
-		buildMapGround(store, serializableModel);
+		buildMapGround(serializableModel);
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
@@ -92,18 +97,17 @@ public class SuperstitionGameElements {
 		spellModel[0] = store.loadMesh("fireball.json");
 		spellModel[1] = store.loadMesh("ice.json");
 		spellModel[2] = store.loadMesh("blocker.json");
+
+		mapElements.put(MAP_GROUND, buildGroundForReal(store, "grass-texture.png", GROUND_DEPTH));
+		mapElements.put(MAP_RIVER, buildGroundForReal(store, "white.png", 2f * GROUND_DEPTH));
+		mapElements.put(MAP_WALL, buildBox(store, -200f, -12f, -200f, 0f, 100f, 0f, "wood-texture.jpg"));
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {
 		return store.loadAnimation(filename);
 	}
 
-	private void buildMapGround(GameModelStore store, SuperstitionSerializableModel serializableModel) {
-		GameObjectHandler groundTileHandler = buildGroundForReal(store, "grass-texture.png", GROUND_DEPTH);
-		GameObjectHandler riverTileHandler = buildGroundForReal(store, "white.png", 2f * GROUND_DEPTH);
-
-		GameObjectHandler wallTileHandler = buildBox(store, -200f, -12f, -200f, 0f, 100f, 0f, "wood-texture.jpg");
-
+	private void buildMapGround(SuperstitionSerializableModel serializableModel) {
 		if(SuperstitionGameStarter.mapTable != null) {
 			int height = 0;
 			int width = 0;
@@ -124,15 +128,15 @@ public class SuperstitionGameElements {
 					String s = (row.size() > ix ? row.get(ix) : null);
 					if(s != null) {
 						if(s.charAt(0) == 'G') {
-							mt.handler = groundTileHandler;
+							mt.mapElementName = MAP_GROUND;
 						}
 
 						if(s.charAt(0) == 'R') {
-							mt.handler = riverTileHandler;
+							mt.mapElementName = MAP_RIVER;
 						}
 
 						if(s.charAt(0) == 'W') {
-							mt.handler = wallTileHandler;
+							mt.mapElementName = MAP_WALL;
 						}
 					}
 
@@ -163,7 +167,7 @@ public class SuperstitionGameElements {
                             int mx = ix * 3 + cx;
                             int my = iy * 3 + cy;
                             MapTile mt = new MapTile(mx * GROUND_SIZE, 0f, my * GROUND_SIZE);
-                            mt.handler = groundTileHandler;
+                            mt.mapElementName = MAP_GROUND;
                             serializableModel.map.mapTiles[mx][my] = mt;
                         }
                     }

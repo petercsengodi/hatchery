@@ -122,7 +122,13 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 				}
 				*/
 
-				g.drawModel(mt.handler, mt.groundPlacement);
+				if(mt.mapElementHandler == null) {
+					mt.mapElementHandler = elements.mapElements.get(mt.mapElementName);
+				}
+
+				if(mt.mapElementHandler != null) {
+					g.drawModel(mt.mapElementHandler, mt.groundPlacement);
+				}
 			}
 		}
 
