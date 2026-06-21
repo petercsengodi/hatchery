@@ -17,6 +17,7 @@ import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.CollisionUtil;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
+import hu.csega.superstition.game.play.SuperstitionTree;
 import hu.csega.superstition.states.SuperstitionModel;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
@@ -483,6 +484,18 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 				}
 			}
 		}
+
+		Iterator<SuperstitionTree> treeIterator = universe.trees.iterator();
+		while(treeIterator.hasNext()) {
+			SuperstitionTree tree = treeIterator.next();
+			GameObjectPlacement treePlacement = new GameObjectPlacement();
+			treePlacement.position.set((float) tree.x, (float) tree.y, (float) tree.z);
+			treePlacement.target.set((float) tree.x + 0.5f, (float) tree.y, (float) tree.z + 0.5f);
+			treePlacement.up.set(0f, 1f, 0f);
+			// treePlacement.scale.set(0.05f, 0.05f, 0.05f);
+			g.drawModel(elements.treeModel, treePlacement);
+		}
+
 
 		/*
 		g.drawOnScreen(elements.alphabet[0], 0, 0);

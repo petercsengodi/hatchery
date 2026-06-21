@@ -34,6 +34,8 @@ public class SuperstitionGameElements {
 	public static String MONSTRUM_ANIMATION = "monstrum.json";
 	public static String BEHEMOTH_ANIMATION = "behemoth.json";
 
+	public static String SUPERSTITION_TREE = "tree.json";
+
     public static String WOODGOLEM_RUNNING_ANIMATION = "woodgolem" + File.separator + "run.json";
     public static String WOODGOLEM_DYING_ANIMATION = "woodgolem" + File.separator + "die.json";
 
@@ -56,6 +58,7 @@ public class SuperstitionGameElements {
 
 	public GameObjectHandler boxModel;
 	public GameObjectHandler[] spellModel;
+	public GameObjectHandler treeModel;
 
 	public void loadElements(GameEngineFacade facade) {
 		GameModelStore store = facade.store();
@@ -101,6 +104,8 @@ public class SuperstitionGameElements {
 		mapElements.put(MAP_GROUND, buildGroundForReal(store, "grass-texture.png", GROUND_DEPTH));
 		mapElements.put(MAP_RIVER, buildGroundForReal(store, "white.png", 2f * GROUND_DEPTH));
 		mapElements.put(MAP_WALL, buildBox(store, -200f, -12f, -200f, 0f, 100f, 0f, "wood-texture.jpg"));
+
+		treeModel = store.loadMesh("tree.json");
 	}
 
 	private GameObjectHandler loadAnimation(GameModelStore store, String filename) {

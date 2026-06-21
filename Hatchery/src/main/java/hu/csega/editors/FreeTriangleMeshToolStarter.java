@@ -9,7 +9,6 @@ import hu.csega.games.library.TextureLibrary;
 import hu.csega.games.library.pixel.v1.Pixel;
 import hu.csega.games.library.pixel.v1.PixelLibrary;
 import hu.csega.games.library.pixel.v1.PixelSheet;
-import hu.csega.games.library.util.FileUtil;
 import hu.csega.games.units.UnitStore;
 import hu.csega.toolshed.logging.Level;
 import hu.csega.toolshed.logging.Logger;
