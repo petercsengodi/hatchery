@@ -46,6 +46,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 	private final java.util.List<String> logsOnScreen = new ArrayList<>();
 
 	public List<MonsterData> monstersAround = new ArrayList<>();
+	public List<MonsterData> otherNearbyMonsters = new ArrayList<>();
 	public List<SuperstitionTree> treesAround = new ArrayList<>();
 
 	@Override
@@ -135,7 +136,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 		}
 
 		long timestamp = System.currentTimeMillis();
-		double dt = (timestamp - lastTimestamp) / 1000.0;
+		double dt = (lastTimestamp == 0 ? 0.0 : (timestamp - lastTimestamp) / 1000.0);
 		lastTimestamp = timestamp;
 
 		player.animate(timestamp);
@@ -411,6 +412,21 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 							}
 
 							addToLog("Hit! HP: " + earlierHealth + " => " + doubleToIntString(monster.health));
+
+							otherNearbyMonsters.clear();
+							universe.map.loadMonstersAround(monster.x, monster.y, monster.z, otherNearbyMonsters);
+							for(MonsterData otherMonster : otherNearbyMonsters) {
+								double distance = ScalarUtil.distance(monster.x, monster.z, otherMonster.x, otherMonster.z);
+								if(distance > 250f) {
+									continue;
+								}
+
+								if(!otherMonster.dead && otherMonster.target == null) {
+									otherMonster.target = monster.target;
+									addToLog("Woke up monster with distance: " + distance);
+								}
+							}
+							otherNearbyMonsters.clear();
 						}
 					}
 				}
@@ -451,8 +467,6 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			g.drawAnimation(monsterAnimation, animationIndex, monsterPlacement);
 		}
 
-		monstersAround.clear();
-
 		iterator = universe.monsterSpells.iterator();
 		while(iterator.hasNext()) {
 			SpellInProgress spell = iterator.next();
@@ -489,12 +503,47 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			}
 		}
 
+		for(SuperstitionTree tree : universe.trees) {
+			boolean damaged = false;
+
+			monstersAround.clear();
+			universe.map.loadMonstersAround(tree.x, tree.y, tree.z, monstersAround);
+
+			for(MonsterData monster : monstersAround) {
+				if(monster.dead) {
+					continue;
+				}
+
+				// TODO: So no calculation needed with monsters too far away?
+				// Optimization: If distance in one dimension is too far, then we don't need to calculate full distance.
+				double absXDiff = Math.abs(monster.x - tree.x);
+				double absZDiff = Math.abs(monster.z - tree.z);
+				if (absXDiff > 600f || absZDiff > 600f) {
+					continue;
+				}
+
+				// Optimization, if both dimensions are less than 200f, the distance does not need to be calculated.
+				if (absXDiff > 200f && absZDiff > 200f && ScalarUtil.distance(monster.x, monster.z, tree.x, tree.z) > 600f) {
+					continue;
+				}
+
+				damaged = true;
+				break;
+
+			}
+
+			if(damaged) { tree.health -= dt / 2.0; } else { tree.health += dt / 2.0; }
+			if(tree.health > 100.0) { tree.health = 100.0; } else if (tree.health < 10.0) { tree.health = 10.0; }
+		}
+
 		for(SuperstitionTree tree : treesAround) {
 			GameObjectPlacement treePlacement = new GameObjectPlacement();
 			treePlacement.position.set((float) tree.x, (float) tree.y, (float) tree.z);
 			treePlacement.target.set((float) tree.x + 0.5f, (float) tree.y, (float) tree.z + 0.5f);
 			treePlacement.up.set(0f, 1f, 0f);
-			// treePlacement.scale.set(0.05f, 0.05f, 0.05f);
+
+			float scale = (float)(tree.health / 100.0);
+			treePlacement.scale.set(scale, scale, scale);
 			g.drawModel(elements.treeModel, treePlacement);
 		}
 
@@ -517,6 +566,8 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 
 		// drawString(g, elements, 4, 6, "0123456789");
 		*/
+
+		monstersAround.clear();
 
 		int y = -1;
 		for(String line : logsOnScreen)

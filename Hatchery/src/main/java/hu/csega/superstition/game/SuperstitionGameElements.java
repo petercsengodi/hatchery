@@ -178,8 +178,11 @@ public class SuperstitionGameElements {
 
 							if(macroMapField.tree) {
 								mt.tree = new SuperstitionTree();
-								mt.tree.x = mx * GROUND_SIZE + GROUND_SIZE / 2.0;								mt.tree.y = 0;
+								mt.tree.x = mx * GROUND_SIZE + GROUND_SIZE / 2.0;
+								mt.tree.y = 0;
 								mt.tree.z = my * GROUND_SIZE + GROUND_SIZE / 2.0;
+								mt.tree.health = 10.0;
+								serializableModel.trees.add(mt.tree);
 							}
                         }
                     }

@@ -5,11 +5,14 @@ import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
+import hu.csega.superstition.game.play.SuperstitionTree;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -22,8 +25,10 @@ public class SuperstitionSerializableModel implements Serializable {
 	public Set<SpellInProgress> monsterSpells = new HashSet<>();
 
     public SuperstitionMap map;
+	public List<SuperstitionTree> trees = new ArrayList<>();
 
 	public long lastTreeGrowthCalculated;
+
 	private transient boolean invalidTreeGrowthTimestampLogged;
 
 	public SuperstitionSerializableModel() {
