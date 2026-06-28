@@ -405,7 +405,6 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 							player.xp += monster.expectedXP;
 							player.health = player.health * (player.xp + 100) / earlierXP;
 							addToLog(earlierHealth + " => Dies! XP: " + player.xp + " Health: " + doubleToIntString(player.health));
-							break;
 						} else {
 							if (monster.target == null) {
 								monster.target = player;
