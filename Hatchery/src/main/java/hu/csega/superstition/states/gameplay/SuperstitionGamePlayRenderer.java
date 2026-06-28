@@ -412,22 +412,22 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 							}
 
 							addToLog("Hit! HP: " + earlierHealth + " => " + doubleToIntString(monster.health));
-
-							otherNearbyMonsters.clear();
-							universe.map.loadMonstersAround(monster.x, monster.y, monster.z, otherNearbyMonsters);
-							for(MonsterData otherMonster : otherNearbyMonsters) {
-								double distance = ScalarUtil.distance(monster.x, monster.z, otherMonster.x, otherMonster.z);
-								if(distance > 250f) {
-									continue;
-								}
-
-								if(!otherMonster.dead && otherMonster.target == null) {
-									otherMonster.target = monster.target;
-									addToLog("Woke up monster with distance: " + distance);
-								}
-							}
-							otherNearbyMonsters.clear();
 						}
+
+						otherNearbyMonsters.clear();
+						universe.map.loadMonstersAround(monster.x, monster.y, monster.z, otherNearbyMonsters);
+						for(MonsterData otherMonster : otherNearbyMonsters) {
+							double distance = ScalarUtil.distance(monster.x, monster.z, otherMonster.x, otherMonster.z);
+							if(distance > 250f) {
+								continue;
+							}
+
+							if(!otherMonster.dead && otherMonster.target == null) {
+								otherMonster.target = monster.target;
+								addToLog("Woke up monster with distance: " + distance);
+							}
+						}
+						otherNearbyMonsters.clear();
 					}
 				}
 			}
