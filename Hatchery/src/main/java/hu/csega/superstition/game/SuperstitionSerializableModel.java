@@ -5,7 +5,6 @@ import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
-import hu.csega.superstition.game.play.SuperstitionTree;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
@@ -21,7 +20,6 @@ public class SuperstitionSerializableModel implements Serializable {
 
 	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
 	public Set<SpellInProgress> monsterSpells = new HashSet<>();
-	public Set<SuperstitionTree> trees = new HashSet<>();
 
     public SuperstitionMap map;
 
@@ -81,14 +79,6 @@ public class SuperstitionSerializableModel implements Serializable {
 
 		behemoth.identifyPosition(px, py, pz, mapTile);
 		behemoth.scale = 1.0;
-
-		for(int i = 0; i < 1; i++) {
-			SuperstitionTree tree = new SuperstitionTree();
-			tree.x = player.x;
-			tree.y = 0;
-			tree.z = player.z;
-			trees.add(tree);
-		}
 	}
 
 	public void calculateTreeGrowth(long currentTime) {

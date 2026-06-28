@@ -3,6 +3,7 @@ package hu.csega.superstition.game.map;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.superstition.game.play.MonsterData;
+import hu.csega.superstition.game.play.SuperstitionTree;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ public class MapTile implements Serializable {
     public transient GameObjectHandler mapElementHandler;
 
     public Set<MonsterData> monsters = new HashSet<>();
+    public SuperstitionTree tree;
 
     public MapTile(float x, float y, float z) {
         groundPlacement = new GameObjectPlacement().moveTo(x, y, z);

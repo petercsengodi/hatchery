@@ -7,5 +7,7 @@ public class MacroMapField {
     }
 
     public int[][] connections = new int[3][3];
+    public boolean start;
+    public boolean tree;
 
 }

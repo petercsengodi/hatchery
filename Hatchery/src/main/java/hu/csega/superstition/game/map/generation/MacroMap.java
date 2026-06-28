@@ -58,6 +58,7 @@ public class MacroMap {
         startField.connections[SPRING.xUnsigned][SPRING.yUnsigned] = 1;
         startField.connections[FALL.xUnsigned][FALL.yUnsigned] = 1;
         startField.connections[WINTER.xUnsigned][WINTER.yUnsigned] = 1;
+        startField.start = true;
         map[startX][startY] = startField;
 
         MacroMapField summerField = new MacroMapField();
@@ -153,6 +154,22 @@ public class MacroMap {
             freePorts.clear();
             freePorts.addAll(newFreePorts);
             newFreePorts.clear();
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Forest
+        MacroMapFreePort treePort = new MacroMapFreePort(WINTER, startX, startY); // TODO
+
+        for(int x = -2; x <= 2; x++) {
+            for(int y = -2; y <= 2; y++) {
+                if(x != 0 || y != 0) {
+                    MacroMapField macroMapField = new MacroMapField();
+                    macroMapField.tree = true;
+                    // TODO Must connections be taken care of?
+                    map[startX + x][startY + y] = macroMapField;
+                }
+            }
         }
     }
 

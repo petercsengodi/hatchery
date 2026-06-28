@@ -46,6 +46,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 	private final java.util.List<String> logsOnScreen = new ArrayList<>();
 
 	public List<MonsterData> monstersAround = new ArrayList<>();
+	public List<SuperstitionTree> treesAround = new ArrayList<>();
 
 	@Override
 	public Object call(GameEngineFacade facade) {
@@ -142,6 +143,9 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 
 		monstersAround.clear();
 		universe.map.loadMonstersAround(player.x, player.y, player.z, monstersAround);
+
+		treesAround.clear();
+		universe.map.loadTreesAround(player.x, player.y, player.z, treesAround);
 
 		SuperstitionSpellType shouldCast = player.shouldCastNow();
 		if(shouldCast != null) {
@@ -485,9 +489,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			}
 		}
 
-		Iterator<SuperstitionTree> treeIterator = universe.trees.iterator();
-		while(treeIterator.hasNext()) {
-			SuperstitionTree tree = treeIterator.next();
+		for(SuperstitionTree tree : treesAround) {
 			GameObjectPlacement treePlacement = new GameObjectPlacement();
 			treePlacement.position.set((float) tree.x, (float) tree.y, (float) tree.z);
 			treePlacement.target.set((float) tree.x + 0.5f, (float) tree.y, (float) tree.z + 0.5f);

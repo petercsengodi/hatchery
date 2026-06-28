@@ -14,6 +14,7 @@ import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.map.generation.MacroMap;
 import hu.csega.superstition.game.map.generation.MacroMapField;
 import hu.csega.superstition.game.map.generation.MapGenerator;
+import hu.csega.superstition.game.play.SuperstitionTree;
 import hu.csega.superstition.states.SuperstitionModel;
 import hu.csega.superstition.states.gameplay.SuperstitionGamePlayModel;
 
@@ -165,7 +166,7 @@ public class SuperstitionGameElements {
 
                     for(int cx = 0; cx < 3; cx++) {
                         for (int cy = 0; cy < 3; cy++) {
-                            if (macroMapField.connections[cx][cy] == 0) {
+                            if (macroMapField.connections[cx][cy] == 0 && !macroMapField.tree && !macroMapField.start) { // If we are in the forest, we fill up the "connections".
                                 continue;
                             }
 
@@ -174,6 +175,12 @@ public class SuperstitionGameElements {
                             MapTile mt = new MapTile(mx * GROUND_SIZE, 0f, my * GROUND_SIZE);
                             mt.mapElementName = MAP_GROUND;
                             serializableModel.map.mapTiles[mx][my] = mt;
+
+							if(macroMapField.tree) {
+								mt.tree = new SuperstitionTree();
+								mt.tree.x = mx * GROUND_SIZE + GROUND_SIZE / 2.0;								mt.tree.y = 0;
+								mt.tree.z = my * GROUND_SIZE + GROUND_SIZE / 2.0;
+							}
                         }
                     }
 				}

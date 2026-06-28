@@ -3,6 +3,7 @@ package hu.csega.superstition.game.map;
 import hu.csega.superstition.game.SuperstitionGameElements;
 import hu.csega.superstition.game.map.generation.MacroMap;
 import hu.csega.superstition.game.play.MonsterData;
+import hu.csega.superstition.game.play.SuperstitionTree;
 
 import java.io.Serializable;
 import java.util.List;
@@ -68,6 +69,26 @@ public class SuperstitionMap implements Serializable {
                 if(mapTile != null) {
                     // FIXME Actual map width/height should be used.
                     monstersAround.addAll(mapTile.monsters);
+                }
+            }
+        }
+    }
+
+    public void loadTreesAround(double x, double y, double z, List<SuperstitionTree> treesAround) {
+        int xIndex = (int) Math.floor(x / TILE_SIZE_X);
+        int yIndex = (int) Math.floor(z / TILE_SIZE_Y); /// z !!!
+        for(int ix = xIndex - 3; ix <= xIndex + 3; ix++) {
+            if(ix < 0 || ix >= SIZE_X)
+                continue;
+
+            for(int iy = yIndex - 3; iy <= yIndex + 3; iy++) {
+                if(iy < 0 || iy >= SIZE_Y)
+                    continue;
+
+                MapTile mapTile = mapTiles[ix][iy];
+                if(mapTile != null && mapTile.tree != null) {
+                    // FIXME Actual map width/height should be used.
+                    treesAround.add(mapTile.tree);
                 }
             }
         }
