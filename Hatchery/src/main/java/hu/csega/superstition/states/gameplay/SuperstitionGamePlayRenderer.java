@@ -427,6 +427,9 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 							}
 						}
 						otherNearbyMonsters.clear();
+
+						// Do not absorb any more spells.
+						break;
 					}
 				}
 			}
