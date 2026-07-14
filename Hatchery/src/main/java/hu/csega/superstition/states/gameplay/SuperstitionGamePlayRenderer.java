@@ -331,7 +331,9 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			}
 		}
 
-		g.drawAnimation(elements.monsterAnimations.get(SuperstitionGameElements.WIZARD_ANIMATION), sceneIndex, playerPlacement);
+
+		String wizardAnimation = player.getSpellType() == 0 ? SuperstitionGameElements.WIZARD_ANIMATION : SuperstitionGameElements.WIZARD_MELEE;
+		g.drawAnimation(elements.monsterAnimations.get(wizardAnimation), sceneIndex, playerPlacement);
 
 		Iterator<SpellInProgress> iterator = universe.spellsInProgress.iterator();
 		while(iterator.hasNext()) {
@@ -339,7 +341,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			spell.animate(timestamp);
 			if(spell.isOver()) {
 				iterator.remove();
-			} else {
+			} else if(spell.spellModelIndex() >= 0) {
 				GameObjectPlacement spellPlacement = new GameObjectPlacement();
 				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
 				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
@@ -356,7 +358,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			spell.animate(timestamp);
 			if(spell.isOver()) {
 				iterator.remove();
-			} else {
+			} else if(spell.spellModelIndex() >= 0) {
 				GameObjectPlacement spellPlacement = new GameObjectPlacement();
 				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
 				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));

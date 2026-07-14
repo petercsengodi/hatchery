@@ -164,7 +164,11 @@ public class SuperstitionGameModify {
 	public static void pressed(SuperstitionSerializableModel model, int x, int y, boolean leftMouse, boolean rightMouse) {
 		if(leftMouse) {
 			SuperstitionPlayer player = model.player;
-			player.startSpellCasting(SuperstitionSpellType.FIREBALL);
+			if(false) {
+
+			} else {
+				player.startSpellCasting(SuperstitionSpellType.SHOCKER);
+			}
 		}
 	}
 

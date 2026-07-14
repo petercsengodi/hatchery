@@ -6,7 +6,8 @@ public enum SuperstitionSpellType {
     SPIRAL(50.0, 0),
     HARD_PUSH(100.0, 0),
     FIREBALL(75.0, 0),
-    ICE_RAIN(80.0, 1);
+    ICE_RAIN(80.0, 1),
+    SHOCKER(25.0, -1);
 
     SuperstitionSpellType(double coolDown, int spellModelIndex) {
         this.coolDown = coolDown;

@@ -14,6 +14,7 @@ public class SuperstitionPlayer implements Serializable {
 	public double sightHorizontalRotation;
 	public double sightVerticalRotation;
 
+	int spellType;
 	double spellCoolDown;
 	double castingSpellRightNow;
 	public long lastTimestamp = System.currentTimeMillis();
@@ -29,7 +30,16 @@ public class SuperstitionPlayer implements Serializable {
 		return spellCoolDown > 0.0;
 	}
 
+	public int getSpellType() {
+		return spellType;
+	}
+
 	public void startSpellCasting(SuperstitionSpellType type) {
+		if(type == SuperstitionSpellType.SHOCKER)
+			spellType = 1;
+		else
+			spellType = 0;
+
 		if(spellCoolDown <= 0.0) {
 			this.castingSpellRightNow = SPELL_CAST_MAX;
 			this.spellCoolDown = type.getCoolDown();
@@ -55,6 +65,11 @@ public class SuperstitionPlayer implements Serializable {
 
 		if(spellCoolDown > 0.0)
 			spellCoolDown -= delta * COOL_DOWN_SPEED;
+
+		if(spellCoolDown <= 0.0) {
+			spellCoolDown = 0.0;
+			spellType = 0;
+		}
 	}
 
 	public SuperstitionSpellType shouldCastNow() {

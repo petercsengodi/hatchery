@@ -28,6 +28,7 @@ public class SuperstitionGameElements {
 	public static final float GROUND_DEPTH = -12f;
 	public static final float GROUND_SIZE = 200f;
 
+	public static String WIZARD_MELEE = "wizard3.json";
 	public static String WIZARD_ANIMATION = "wizard2.json";
 	public static String RUNNING_ANIMATION = "run_2.json";
 	public static String MONKEY_ANIMATION = "monkey_2.json";
@@ -71,6 +72,7 @@ public class SuperstitionGameElements {
 
 		boxModel = buildBox(store, -100f, -100f, -100f, 100f, 100f, 100f, "wood-texture.jpg");
 
+		monsterAnimations.put(WIZARD_MELEE, loadAnimation(store, WIZARD_MELEE));
 		monsterAnimations.put(WIZARD_ANIMATION, loadAnimation(store, WIZARD_ANIMATION));
 		monsterAnimations.put(RUNNING_ANIMATION, loadAnimation(store, RUNNING_ANIMATION));
 		monsterAnimations.put(MONKEY_ANIMATION, loadAnimation(store, MONKEY_ANIMATION));
