@@ -74,6 +74,9 @@ public class SpellInProgress implements Serializable {
         double delta = timestamp - lastTimestamp;
         lastTimestamp = timestamp;
 
+        animateDelta(delta);
+    }
+    public void animateDelta(double delta) {
         t += delta * speed;
 
         if(rotationSpeed > 0.0) {

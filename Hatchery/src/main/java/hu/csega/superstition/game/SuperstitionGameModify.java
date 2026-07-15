@@ -163,12 +163,7 @@ public class SuperstitionGameModify {
 
 	public static void pressed(SuperstitionSerializableModel model, int x, int y, boolean leftMouse, boolean rightMouse) {
 		if(leftMouse) {
-			SuperstitionPlayer player = model.player;
-			if(false) {
-
-			} else {
-				player.startSpellCasting(SuperstitionSpellType.SHOCKER);
-			}
+			model.player.spellCastingWish = SuperstitionSpellType.SHOCKER;
 		}
 	}
 
@@ -203,23 +198,23 @@ public class SuperstitionGameModify {
 		}
 
 		if(key == '1') {
-			model.player.startSpellCasting(SuperstitionSpellType.ICE_RAIN);
+			model.player.spellCastingWish = SuperstitionSpellType.ICE_RAIN;
 		}
 
 		if(key == '2') {
-			model.player.startSpellCasting(SuperstitionSpellType.SPIRAL);
+			model.player.spellCastingWish = SuperstitionSpellType.SPIRAL;
 		}
 
 		if(key == '3') {
-			model.player.startSpellCasting(SuperstitionSpellType.HARD_PUSH);
+			model.player.spellCastingWish = SuperstitionSpellType.HARD_PUSH;
 		}
 
 		if(key == '4') {
-			model.player.startSpellCasting(SuperstitionSpellType.SPIKES);
+			model.player.spellCastingWish = SuperstitionSpellType.SPIKES;
 		}
 
 		if(key == '5') {
-			model.player.startSpellCasting(SuperstitionSpellType.BLOCKER);
+			model.player.spellCastingWish = SuperstitionSpellType.BLOCKER;
 		}
 	}
 

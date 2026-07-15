@@ -19,6 +19,7 @@ public class SuperstitionPlayer implements Serializable {
 	double castingSpellRightNow;
 	public long lastTimestamp = System.currentTimeMillis();
 
+	public SuperstitionSpellType spellCastingWish;
 	public SuperstitionSpellType spellLoadedForFiring;
 	public long xp;
 
@@ -60,15 +61,23 @@ public class SuperstitionPlayer implements Serializable {
 		double delta = timestamp - lastTimestamp;
 		lastTimestamp = timestamp;
 
-		if(castingSpellRightNow > 0.0)
-			castingSpellRightNow -= delta * SPELL_CAST_SPEED;
+		if(castingSpellRightNow > 0.0) {
+			double speed = (spellType == 0 ? SPELL_CAST_SPEED : SPELL_CAST_SPEED2);
+			castingSpellRightNow -= delta * speed;
+		}
 
-		if(spellCoolDown > 0.0)
-			spellCoolDown -= delta * COOL_DOWN_SPEED;
+		if(castingSpellRightNow < 0.0) {
+			castingSpellRightNow = 0.0;
+			spellType = 0;
+		}
+
+		if(spellCoolDown > 0.0) {
+			double speed = (spellType == 0 ? COOL_DOWN_SPEED : COOL_DOWN_SPEED2);
+			spellCoolDown -= delta * speed;
+		}
 
 		if(spellCoolDown <= 0.0) {
 			spellCoolDown = 0.0;
-			spellType = 0;
 		}
 	}
 
@@ -85,6 +94,9 @@ public class SuperstitionPlayer implements Serializable {
 	private static final double SPELL_CAST_MAX = 50.0;
 	private static final double SPELL_CAST_SPEED = 0.06;
 	private static final double COOL_DOWN_SPEED = 0.06;
+
+	private static final double SPELL_CAST_SPEED2 = 0.12;
+	private static final double COOL_DOWN_SPEED2 = 0.12;
 
     private static final long serialVersionUID = 1L;
 

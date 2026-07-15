@@ -311,7 +311,7 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 					double sz = (SuperstitionGameStarter.RANDOM.nextInt(2) - 0.5) * 100;
 					double txdiff = sx + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
 					double tzdiff = sz + (SuperstitionGameStarter.RANDOM.nextDouble() - 0.5) * 50;
-					for(int i = 0; i < 100; i++) {
+					for (int i = 0; i < 100; i++) {
 						double dx = target.x;
 						double dz = target.z;
 						double l = Math.sqrt(dx * dx + dz * dz);
@@ -328,6 +328,21 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 					}
 					break;
 				}
+				case SHOCKER: {
+					double dx = target.x;
+					double dz = target.z;
+					double l = Math.sqrt(dx*dx + dz*dz);
+					double rl = 1000.0 / l;
+					double nx = dx * rl;
+					double nz = dz * rl;
+					SpellInProgress spell = new SpellInProgress(
+							SuperstitionSpellType.SHOCKER, timestamp,
+							player.x, player.y - 5.0, player.z,
+							player.x + nx, player.y - 5.0, player.z + nz);
+					spell.setHitPoint(player.xp * SuperstitionGameStarter.RANDOM.nextDouble() / 2.0 + 10);
+					universe.spellsInProgress.add(spell);
+					break;
+				}
 			}
 		}
 
@@ -335,42 +350,12 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 		String wizardAnimation = player.getSpellType() == 0 ? SuperstitionGameElements.WIZARD_ANIMATION : SuperstitionGameElements.WIZARD_MELEE;
 		g.drawAnimation(elements.monsterAnimations.get(wizardAnimation), sceneIndex, playerPlacement);
 
-		Iterator<SpellInProgress> iterator = universe.spellsInProgress.iterator();
-		while(iterator.hasNext()) {
-			SpellInProgress spell = iterator.next();
-			spell.animate(timestamp);
-			if(spell.isOver()) {
-				iterator.remove();
-			} else if(spell.spellModelIndex() >= 0) {
-				GameObjectPlacement spellPlacement = new GameObjectPlacement();
-				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
-				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
-				spellPlacement.up.set(0f, 1f, 0f);
-				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
-				g.drawModel(elements.spellModel[spell.spellModelIndex()], spellPlacement);
-			}
-		}
-
-		// TODO: basically copied code
-		iterator = universe.monsterSpells.iterator();
-		while(iterator.hasNext()) {
-			SpellInProgress spell = iterator.next();
-			spell.animate(timestamp);
-			if(spell.isOver()) {
-				iterator.remove();
-			} else if(spell.spellModelIndex() >= 0) {
-				GameObjectPlacement spellPlacement = new GameObjectPlacement();
-				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
-				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
-				spellPlacement.up.set(0f, 1f, 0f);
-				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
-				g.drawModel(elements.spellModel[spell.spellModelIndex()], spellPlacement);
-			}
-		}
-
 		lastAnimIndex+=8;
 		if(lastAnimIndex > 999)
 			lastAnimIndex = 0;
+
+		Iterator<SpellInProgress> iterator;
+		boolean monsterTooClose = false;
 
 		for(MonsterData monster : monstersAround) {
 
@@ -388,14 +373,24 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			}
 
 			if(monster.health > 0.0) {
+				if(!monsterTooClose && player.spellCastingWish != null) {
+					if(ScalarUtil.distance(monster.x, monster.z, player.x, player.z) < 20f) {
+						monsterTooClose = true;
+					}
+				}
+
+
 				iterator = universe.spellsInProgress.iterator();
 				while (iterator.hasNext()) {
 					SpellInProgress spell = iterator.next();
-					if (spell.isBlocker())
+					if (spell.isBlocker()) {
 						continue;
+					}
 
 					if (CollisionUtil.close(spell.getCurrentX(), spell.getCurrentZ(), monster.x, monster.z)) {
-						iterator.remove();
+						if(spell.getType() != SuperstitionSpellType.SHOCKER) {
+							iterator.remove();
+						}
 
 						String earlierHealth = doubleToIntString(monster.health);
 						monster.health -= spell.getHitPoint();
@@ -471,6 +466,37 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 			g.drawAnimation(monsterAnimation, animationIndex, monsterPlacement);
 		}
 
+		if(player.spellCastingWish != null) {
+			if(!monsterTooClose && player.spellCastingWish == SuperstitionSpellType.SHOCKER) {
+				player.startSpellCasting(SuperstitionSpellType.FIREBALL);
+			} else {
+				player.startSpellCasting(player.spellCastingWish);
+			}
+			player.spellCastingWish = null;
+		}
+
+		iterator = universe.spellsInProgress.iterator();
+		while(iterator.hasNext()) {
+			SpellInProgress spell = iterator.next();
+			if(spell.getType() == SuperstitionSpellType.SHOCKER) {
+				spell.animateDelta(40f);
+				iterator.remove();
+				continue;
+			}
+
+			spell.animate(timestamp);
+			if(spell.isOver()) {
+				iterator.remove();
+			} else if(spell.spellModelIndex() >= 0) {
+				GameObjectPlacement spellPlacement = new GameObjectPlacement();
+				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
+				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
+				spellPlacement.up.set(0f, 1f, 0f);
+				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
+				g.drawModel(elements.spellModel[spell.spellModelIndex()], spellPlacement);
+			}
+		}
+
 		iterator = universe.monsterSpells.iterator();
 		while(iterator.hasNext()) {
 			SpellInProgress spell = iterator.next();
@@ -504,6 +530,29 @@ public class SuperstitionGamePlayRenderer implements GameEngineCallback {
 				} else {
 					addToLog("Hurt! Health: " + doubleToIntString(player.health));
 				}
+			}
+		}
+
+		// TODO: basically copied code
+		iterator = universe.monsterSpells.iterator();
+		while(iterator.hasNext()) {
+			SpellInProgress spell = iterator.next();
+			if(spell.getType() == SuperstitionSpellType.SHOCKER) {
+				spell.animateDelta(40f);
+				iterator.remove();
+				continue;
+			}
+
+			spell.animate(timestamp);
+			if(spell.isOver()) {
+				iterator.remove();
+			} else if(spell.spellModelIndex() >= 0) {
+				GameObjectPlacement spellPlacement = new GameObjectPlacement();
+				spellPlacement.position.set((float) spell.getCurrentX(), (float) spell.getCurrentY(), (float) spell.getCurrentZ());
+				spellPlacement.target.set((float) (spell.getCurrentX() + target.x), (float) spell.getCurrentY(), (float) (spell.getCurrentZ() + target.z));
+				spellPlacement.up.set(0f, 1f, 0f);
+				spellPlacement.scale.set(0.05f, 0.05f, 0.05f);
+				g.drawModel(elements.spellModel[spell.spellModelIndex()], spellPlacement);
 			}
 		}
 
