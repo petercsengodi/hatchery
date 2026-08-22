@@ -6,7 +6,6 @@ import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
 import hu.csega.games.engine.intf.GameGraphics;
 import hu.csega.superstition.game.SuperstitionGameElements;
-import hu.csega.superstition.game.SuperstitionSerializableModel;
 import hu.csega.superstition.states.SuperstitionModel;
 import hu.csega.superstition.states.gameplay.SuperstitionGamePlayModel;
 
@@ -16,8 +15,6 @@ public class SuperstitionMainMenuRenderer implements GameEngineCallback {
     private static final String NEW_GAME = "New game";
     private static final String RESUME = "Resume";
     private static final String EXIT = "Exit";
-
-    private int cursor_row;
 
 	@Override
 	public Object call(GameEngineFacade facade) {
@@ -37,8 +34,12 @@ public class SuperstitionMainMenuRenderer implements GameEngineCallback {
 		GameObjectPlacement placement = new GameObjectPlacement();
 		g.drawModel(splash, placement);
 
+        int cursorRow = mainMenu.getCursorRow();
+        drawString(g, elements, 10, cursorRow, CURSOR);
 
-        drawString(g, elements, 10, cursor_row, CURSOR);
+        drawString(g, elements, 12, 0, NEW_GAME);
+        drawString(g, elements, 12, 1, RESUME);
+        drawString(g, elements, 12, 2, EXIT);
 
         return facade;
 	}

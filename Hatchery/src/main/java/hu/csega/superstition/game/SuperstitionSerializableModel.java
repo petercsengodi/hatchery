@@ -1,11 +1,13 @@
 package hu.csega.superstition.game;
 
+import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.superstition.SuperstitionGameStarter;
 import hu.csega.superstition.game.map.MapTile;
 import hu.csega.superstition.game.map.SuperstitionMap;
 import hu.csega.superstition.game.play.MonsterData;
 import hu.csega.superstition.game.play.SpellInProgress;
 import hu.csega.superstition.game.play.SuperstitionTree;
+import hu.csega.superstition.states.gameplay.SuperstitionGamePlayModel;
 import hu.csega.toolshed.logging.Logger;
 import hu.csega.toolshed.logging.LoggerFactory;
 
@@ -18,25 +20,33 @@ import java.util.Set;
 
 public class SuperstitionSerializableModel implements Serializable {
 
-	public SuperstitionPlayer player = new SuperstitionPlayer();
+	public SuperstitionPlayer player;
 	public boolean sliding = true;
 
-	public Set<SpellInProgress> spellsInProgress = new HashSet<>();
-	public Set<SpellInProgress> monsterSpells = new HashSet<>();
+	public Set<SpellInProgress> spellsInProgress;
+	public Set<SpellInProgress> monsterSpells;
 
     public SuperstitionMap map;
-	public List<SuperstitionTree> trees = new ArrayList<>();
+	public List<SuperstitionTree> trees;
 
 	public long lastTreeGrowthCalculated;
 
 	private transient boolean invalidTreeGrowthTimestampLogged;
 
 	public SuperstitionSerializableModel() {
-		player.z = 0f;
 	}
 
-	public void initializeModel() {
-		Random random = SuperstitionGameStarter.RANDOM;
+	public void initializeModel(GameEngineFacade facade) {
+        player = new SuperstitionPlayer();
+        player.z = 0f;
+        spellsInProgress = new HashSet<>();
+        monsterSpells = new HashSet<>();
+        trees = new ArrayList<>();
+
+        SuperstitionGameStarter.mapTable = null;
+        SuperstitionGamePlayModel.elements.loadElements(facade);
+
+        Random random = SuperstitionGameStarter.RANDOM;
 		for(int i = 0; i < 10_000; i++) {
 			MonsterData data;
 

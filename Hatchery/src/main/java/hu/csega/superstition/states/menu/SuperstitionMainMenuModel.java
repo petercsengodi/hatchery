@@ -4,12 +4,15 @@ import hu.csega.games.engine.GameEngineCallback;
 import hu.csega.games.engine.GameEngineFacade;
 import hu.csega.games.engine.g3d.GameObjectHandler;
 import hu.csega.games.engine.g3d.GameObjectPlacement;
+import java.awt.event.KeyEvent;
 
 public class SuperstitionMainMenuModel implements GameEngineCallback {
 
 	private GameObjectHandler splash;
 
 	private GameObjectPlacement cameraPlacement;
+
+    private int cursorRow;
 
 	public SuperstitionMainMenuModel() {
 		cameraPlacement = new GameObjectPlacement();
@@ -32,5 +35,19 @@ public class SuperstitionMainMenuModel implements GameEngineCallback {
 	public GameObjectPlacement camera() {
 		return cameraPlacement;
 	}
+
+    public int getCursorRow() {
+        return cursorRow;
+    }
+
+    public void cursorUp() {
+        if(cursorRow > 0)
+            cursorRow--;
+    }
+
+    public void cursorDown() {
+        if(cursorRow < 2)
+            cursorRow++;
+    }
 
 }

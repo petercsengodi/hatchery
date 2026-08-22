@@ -26,8 +26,8 @@ public class SuperstitionGamePlayModel implements GameEngineCallback {
 		return elements;
 	}
 
-	public void initializeModel() {
-		serializableModel.initializeModel();
+	public void initializeModel(GameEngineFacade facade) {
+		serializableModel.initializeModel(facade);
 	}
 
 	@Override
