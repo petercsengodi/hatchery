@@ -28,28 +28,28 @@ public class SuperstitionModel {
 	private SuperstitionGameRenderingOptions renderingOptions = new SuperstitionGameRenderingOptions();
 	private List<SuperstitionState> states = new ArrayList<>();
 
-	private SuperstitionState mainMenu = new SuperstitionState(
+	private final SuperstitionState mainMenu = new SuperstitionState(
 			new SuperstitionMainMenuModel(),
 			new SuperstitionMainMenuBuilder(),
 			new SuperstitionMainMenuRenderer(),
 			new SuperstitionMainMenuKeyListener(),
 			new SuperstitionMainMenuMouseListener());
 
-	private SuperstitionState gameMap = new SuperstitionState( // TODO
+	private final SuperstitionState gameMap = new SuperstitionState( // TODO
 			new SuperstitionMainMenuModel(),
 			new SuperstitionMainMenuBuilder(),
 			new SuperstitionMainMenuRenderer(),
 			new SuperstitionMainMenuKeyListener(),
 			new SuperstitionMainMenuMouseListener());
 
-	private SuperstitionState gamePlay = new SuperstitionState(
+	private final SuperstitionState gamePlay = new SuperstitionState(
 			new SuperstitionGamePlayModel(),
 			new SuperstitionGamePlayBuilder(),
 			new SuperstitionGamePlayRenderer(),
 			new SuperstitionGamePlayKeyListener(),
 			new SuperstitionGamePlayMouseListener());
 
-	private SuperstitionState gameSpells = new SuperstitionState(
+	private final SuperstitionState gameSpells = new SuperstitionState(
 			new SuperstitionGameSpellsModel(),
 			new SuperstitionGameSpellsBuilder(),
 			new SuperstitionGameSpellsRenderer(),
