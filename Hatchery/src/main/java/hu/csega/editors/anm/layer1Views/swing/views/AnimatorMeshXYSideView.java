@@ -111,4 +111,12 @@ public class AnimatorMeshXYSideView extends AnimatorMeshSideView implements Comp
 		canvas.somethingChanged();
 	}
 
+	@Override
+	protected void selectFirstOnScreen(int x, int y, double radius, boolean add) {
+	}
+
+	@Override
+	protected void selectAllOnScreen(int x1, int y1, int x2, int y2, boolean add) {
+	}
+
 }

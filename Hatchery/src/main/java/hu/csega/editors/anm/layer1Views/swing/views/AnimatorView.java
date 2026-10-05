@@ -73,6 +73,10 @@ public abstract class AnimatorView implements CommonComponent {
 
 	protected abstract void selectFirst(EditorPoint p, double radius, boolean add);
 
+	protected abstract void selectFirstOnScreen(int x, int y, double radius, boolean add);
+
+	protected abstract void selectAllOnScreen(int x1, int y1, int x2, int y2, boolean add);
+
 	protected abstract void moveSelected(EditorPoint p1, EditorPoint p2);
 
 	protected abstract void pictogramAction(int action, int dx, int dy, EditorPoint started, EditorPoint ended, Rectangle selection);

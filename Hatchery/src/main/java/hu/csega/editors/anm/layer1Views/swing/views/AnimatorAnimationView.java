@@ -12,7 +12,6 @@ import hu.csega.editors.ftm.layer1.presentation.swing.view.FreeTriangleMeshPicto
 import hu.csega.editors.ftm.layer4.data.FreeTriangleMeshLine;
 import hu.csega.editors.ftm.util.FreeTriangleMeshSphereLineIntersection;
 import hu.csega.games.engine.GameEngineFacade;
-import hu.csega.games.units.Dependency;
 import hu.csega.games.units.UnitStore;
 
 import java.awt.*;
@@ -120,12 +119,18 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 
 	@Override
 	protected void selectAll(EditorPoint topLeft, EditorPoint bottomRight, boolean add) {
-
 	}
 
 	@Override
 	protected void selectFirst(EditorPoint p, double radius, boolean add) {
+	}
 
+	@Override
+	protected void selectFirstOnScreen(int x, int y, double radius, boolean add) {
+	}
+
+	@Override
+	protected void selectAllOnScreen(int x1, int y1, int x2, int y2, boolean add) {
 	}
 
 	@Override

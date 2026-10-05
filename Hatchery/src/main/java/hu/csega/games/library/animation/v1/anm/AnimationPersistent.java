@@ -10,6 +10,7 @@ import hu.csega.games.library.mesh.v1.ftm.FreeTriangleMeshModel;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AnimationPersistent implements Serializable, CommonEditorModel {

@@ -280,6 +280,8 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 			if(selectionBoxEnabled) {
 				calculateSelectionBox();
 
+				currentView.selectAllOnScreen(selectionStart.x, selectionStart.y, selectionEnd.x, selectionEnd.y, e.isShiftDown());
+
 				EditorPoint p1 = currentView.transformToModel(selectionStart.x, selectionStart.y);
 				EditorPoint p2 = currentView.transformToModel(selectionEnd.x, selectionEnd.y);
 				if (p1 != null && p2 != null) {
@@ -326,11 +328,12 @@ public class AnimatorViewCanvas extends JPanel implements GameCanvas, MouseListe
 			if(e.isControlDown()) {
 				currentView.controlPlusLeftClick(e.getX(), e.getY());
 			} else {
+				currentView.selectFirstOnScreen(e.getX(), e.getY(), 5, e.isShiftDown());
 				EditorPoint p = currentView.transformToModel(e.getX(), e.getY());
 				if (p != null) {
 					currentView.selectFirst(p, 5, e.isShiftDown());
-					repaintEverything();
 				}
+				repaintEverything();
 			}
 		}
 

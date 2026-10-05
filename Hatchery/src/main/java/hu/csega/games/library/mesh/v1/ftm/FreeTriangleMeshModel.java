@@ -130,6 +130,32 @@ public class FreeTriangleMeshModel implements Serializable, CommonEditorModel {
 		selectedObjects.clear();
 	}
 
+	public void select(FreeTriangleMeshVertex selected, boolean add) {
+		if(!add)
+			clearSelection();
+
+		if(enabled(selected)) {
+			if(!selectedObjects.remove(selected))
+				selectedObjects.add(selected);
+		}
+
+		invalidateSelection();
+	}
+
+	public void select(Collection<FreeTriangleMeshVertex> selected, boolean add) {
+		if(!add)
+			clearSelection();
+
+		for(FreeTriangleMeshVertex vertex : selected) {
+			if(enabled(vertex)) {
+				if(!selectedObjects.remove(vertex))
+					selectedObjects.add(vertex);
+			}
+		}
+
+		invalidateSelection();
+	}
+
 	public void selectAll(FreeTriangleMeshCube cube, boolean add) {
 		if(!add)
 			clearSelection();

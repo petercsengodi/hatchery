@@ -41,6 +41,14 @@ public class AnimatorEmptyView extends AnimatorView {
     }
 
     @Override
+    protected void selectFirstOnScreen(int x, int y, double radius, boolean add) {
+    }
+
+    @Override
+    protected void selectAllOnScreen(int x1, int y1, int x2, int y2, boolean add) {
+    }
+
+    @Override
     protected void moveSelected(EditorPoint p1, EditorPoint p2) {
     }
 
