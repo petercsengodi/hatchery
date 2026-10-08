@@ -231,7 +231,7 @@ public final class BufferUtils {
      */
     public static ByteBuffer createByteBuffer(int size) {
         ByteBuffer buf = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
-        buf.clear();
+        ((Buffer) buf).clear(); // This must be kept like this, otherwise the JDK differences make the code fail with NoSuchMethodError.
         onBufferAllocated(buf);
         return buf;
     }
