@@ -24,6 +24,8 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 	private ComponentWireFrameConverter wireFrameConverter;
 	private AnimatorWireFrame wireFrame;
 
+	private double translationX, translationY;
+
 	public AnimatorAnimationView(GameEngineFacade facade, AnimatorViewCanvas canvas, int indexOfX, int indexOfY) {
 		super(facade, canvas);
 		this.indexOfX = indexOfX;
@@ -54,12 +56,14 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 			if(lines != null) {
 				for(AnimatorWireFrameLine line : lines) {
 					AnimatorWireFramePoint source = line.getSource();
-					int x1 = (int)source.valueOfIndex(indexOfX);
-					int y1 = (int)source.valueOfIndex(indexOfY);
+					EditorPoint p1 = transformToScreen(new EditorPoint(source.getX(), source.getY(), source.getZ(), 1.0));
+					int x1 = (int) p1.getX();
+					int y1 = (int) p1.getY();
 
 					AnimatorWireFramePoint destination = line.getDestination();
-					int x2 = (int)destination.valueOfIndex(indexOfX);
-					int y2 = (int)destination.valueOfIndex(indexOfY);
+					EditorPoint p2 = transformToScreen(new EditorPoint(destination.getX(), destination.getY(), destination.getZ(), 1.0));
+					int x2 = (int) p2.getX();
+					int y2 = (int) p2.getY();
 
 					g.setColor(line.getColor());
 					g.drawLine(x1, y1, x2, y2);
@@ -75,8 +79,9 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 			Collection<AnimatorWireFramePoint> points = wireFrame.getPoints();
 			if(points != null) {
 				for(AnimatorWireFramePoint point : points) {
-					int x = (int) point.valueOfIndex(indexOfX);
-					int y = (int) point.valueOfIndex(indexOfY);
+					EditorPoint p = transformToScreen(new EditorPoint(point.getX(), point.getY(), point.getZ(), 1.0));
+					int x = (int) p.getX();
+					int y = (int) p.getY();
 
 					g.setColor(point.getColor());
 					if(point.isCross()) {
@@ -99,22 +104,23 @@ public class AnimatorAnimationView extends AnimatorView implements ComponentAnim
 
 	@Override
 	protected EditorPoint transformToScreen(EditorPoint p) {
-		int x = (int) p.valueOfIndex(indexOfX);
-		int y = (int) p.valueOfIndex(indexOfY);
+		int x = (int) (p.valueOfIndex(indexOfX) + translationX);
+		int y = (int) (p.valueOfIndex(indexOfY) + translationY);
 		return new EditorPoint(x, y, 0, 1);
 	}
 
 	@Override
 	protected EditorPoint transformToModel(double x, double y) {
 		EditorPoint result = new EditorPoint(0, 0, 0, 1);
-		result.valueOfIndex(indexOfX, x);
-		result.valueOfIndex(indexOfY, y);
+		result.valueOfIndex(indexOfX, x - translationX);
+		result.valueOfIndex(indexOfY, y - translationY);
 		return result;
 	}
 
 	@Override
 	protected void translate(double x, double y) {
-
+		translationX += x;
+		translationY += y;
 	}
 
 	@Override

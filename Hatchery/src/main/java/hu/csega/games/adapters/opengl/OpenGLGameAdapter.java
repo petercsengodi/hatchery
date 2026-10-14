@@ -31,7 +31,7 @@ public class OpenGLGameAdapter implements GameAdapter {
     private boolean lightingEnabled;
 
     public OpenGLGameAdapter(String shaderRoot, String textureRoot, String meshRoot, String animationRoot,
-                             boolean lightingEnabled) {
+            boolean lightingEnabled) {
         this.shaderRoot = shaderRoot;
         this.textureRoot = textureRoot;
         this.meshRoot = meshRoot;

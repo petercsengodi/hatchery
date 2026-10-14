@@ -1,5 +1,6 @@
 package hu.csega.editors.anm;
 
+import hu.csega.editors.AnimatorStarter;
 import hu.csega.editors.anm.components.ComponentAnimationXYSideView;
 import hu.csega.editors.anm.components.ComponentAnimationXZSideView;
 import hu.csega.editors.anm.components.ComponentAnimationZYSideView;
@@ -81,7 +82,7 @@ public class AnimatorUIComponents {
 		this.gameWindow = gameWindow;
 		this.gameWindow.setFullScreen(true);
 		if(gameWindow instanceof JFrame) {
-			this.frame = (JFrame) gameWindow;
+			AnimatorStarter.WINDOW = this.frame = (JFrame) gameWindow;
 		}
 
 		Container contentPane = this.frame.getContentPane();
@@ -107,6 +108,7 @@ public class AnimatorUIComponents {
 		this.panel3D = new JPanel();
 		this.panel3D.setLayout(new GridLayout(1, 1));
 		this.tabbedPane.addTab("3D Canvas", this.panel3D);
+		AnimatorStarter.CANVAS_FOR_3D = this.panel3D;
 
 		this.textureView = new AnimatorViewCanvas(facade);
 		this.tabbedPane.addTab("Texture", this.textureView);

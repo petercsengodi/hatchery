@@ -5,6 +5,9 @@ import hu.csega.editors.anm.layer1Views.opengl.AnimatorConnector;
 import hu.csega.editors.anm.AnimatorUIComponents;
 import hu.csega.editors.anm.layer1Views.AnimatorJointListView;
 import hu.csega.editors.anm.layer1Views.AnimatorPartListView;
+import hu.csega.editors.anm.layer1Views.opengl.AnimatorInitStep;
+import hu.csega.editors.anm.layer1Views.opengl.AnimatorRenderStep;
+import hu.csega.editors.anm.layer1Views.swing.views.AnimatorViewCanvas;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameConverter;
 import hu.csega.editors.anm.layer1Views.swing.wireframe.AnimatorWireFrameView;
 import hu.csega.editors.anm.layer2Transformation.opengl.AnimatorOpenGLSetExtractor;
@@ -30,6 +33,8 @@ import hu.csega.toolshed.logging.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Arrays;
+import javax.swing.*;
 
 /**
  * Responsible for running the Animator tool.
@@ -38,6 +43,30 @@ import java.io.File;
  * However, not static methods are used, as writing a testable code is prio 1!
  */
 public class AnimatorStarter {
+
+	/** The main window that appears when the application is started. Filled by UI_COMPONENTS when building the UI later. */
+	public static JFrame WINDOW;
+
+	/** A library of the UI components used to build the frontend from. */
+	public static AnimatorUIComponents UI_COMPONENTS;
+
+	/** Presents a widget, lets the underlying views switched dynamically. Handles mouse and key events. */
+	public static Class<AnimatorViewCanvas> CANVAS_CLASS = AnimatorViewCanvas.class;
+
+	/** The widget for the embedded 3D graphics. Filled by UI_COMPONENTS when building the UI later. */
+	public static JPanel CANVAS_FOR_3D;
+
+	/** Connects the generic OpenGL-based library with the current application. */
+	public static AnimatorConnector CONNECTOR;
+
+	/** Connects the generic OpenGL-based library with the current application. */
+	public static String[] STEPS = {
+			AnimatorInitStep.class.getSimpleName(),
+			AnimatorRenderStep.class.getSimpleName() // Has both mesh renderer and animation renderer.
+	};
+
+	/** Model object that will be used by the application. Contains a separate, persistable state. */
+	public static AnimatorModel MODEL;
 
 	private static final Level LOGGING_LEVEL = Level.INFO;
 
@@ -49,7 +78,7 @@ public class AnimatorStarter {
 		GAME_DESCRIPTOR = new GameDescriptor();
 		GAME_DESCRIPTOR.setId("anm");
 		GAME_DESCRIPTOR.setTitle("Animator Tool");
-		GAME_DESCRIPTOR.setVersion("v00.00.0002");
+		GAME_DESCRIPTOR.setVersion("v00.00.0003");
 		GAME_DESCRIPTOR.setDescription("A tool for creating small character animations.");
 		GAME_DESCRIPTOR.setMouseCentered(false);
 
@@ -104,8 +133,8 @@ public class AnimatorStarter {
 		String meshRoot = resourceAdapter.meshRoot();
 		String animationRoot = resourceAdapter.animationRoot();
 
-		Connector connector = new AnimatorConnector(shaderRoot, textureRoot, meshRoot, animationRoot);
-		UnitStore.registerInstance(Connector.class, connector);
+		CONNECTOR = new AnimatorConnector(shaderRoot, textureRoot, meshRoot, animationRoot);
+		UnitStore.registerInstance(Connector.class, CONNECTOR);
 
 		UnitStore.registerDefaultImplementation(AnimatorModel.class, AnimatorModel.class);
 		UnitStore.registerDefaultImplementation(AnimatorUIComponents.class, AnimatorUIComponents.class);
@@ -119,11 +148,16 @@ public class AnimatorStarter {
 		UnitStore.registerDefaultImplementation(ComponentWireFrameConverter.class, AnimatorWireFrameConverter.class);
 		UnitStore.registerDefaultImplementation(ComponentWireFrameRenderer.class, AnimatorWireFrameView.class);
 
+		MODEL = UnitStore.instance(AnimatorModel.class);
+		UI_COMPONENTS = UnitStore.instance(AnimatorUIComponents.class);
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// 5. Starting application:
 
-		ApplicationStarter starter = new ApplicationStarter(connector);
+		logger.info("Initiating canvas 3D canvas with steps: " + Arrays.toString(STEPS) + " Widget class: " + CANVAS_CLASS.getSimpleName());
+
+		ApplicationStarter starter = new ApplicationStarter(CONNECTOR);
 		starter.start(args);
 
 

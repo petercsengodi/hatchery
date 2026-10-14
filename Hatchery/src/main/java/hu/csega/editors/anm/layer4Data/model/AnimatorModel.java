@@ -13,7 +13,9 @@ import hu.csega.games.units.Dependency;
 
 public class AnimatorModel {
 
+	/** The persistable state of the Model. */
 	private AnimationPersistent persistent;
+
 	private String modelIdentifier;
 
 	private AnimatorFileManipulator files;
