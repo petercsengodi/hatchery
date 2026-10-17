@@ -1,21 +1,25 @@
 package hu.csega.study.opengl;
 
+import hu.csega.study.opengl.renderEngine.EngineManager;
 import hu.csega.study.opengl.renderEngine.WindowManager;
 import org.lwjgl.Version;
 
 public class OpenGLStart {
 
+    public static WindowManager WINDOW_MANAGER;
+    public static EngineManager ENGINE_MANAGER;
+
     public static void main(String[] args) {
         System.out.println("Let's goooooo!!!!!!!! " + Version.getVersion());
         System.out.println("Many thanks to: ThinMatrix https://youtube.com/@ThinMatrix, DevGenie Academy https://www.youtube.com/@devgenieacademy8889");
 
-        WindowManager manager = new WindowManager("Render Engine", 1600, 900, false);
-        manager.init();
+        WINDOW_MANAGER = new WindowManager("Render Engine", 1600, 900, false);
+        ENGINE_MANAGER = new EngineManager();
 
-        while(!manager.windowShouldClose()) {
-            manager.update();
+        try {
+            ENGINE_MANAGER.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        manager.cleanUp();
     }
 }
