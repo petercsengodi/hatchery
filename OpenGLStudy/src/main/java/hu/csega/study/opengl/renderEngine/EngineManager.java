@@ -19,6 +19,7 @@ public class EngineManager {
     public void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
         OpenGLStart.WINDOW_MANAGER.init();
+        OpenGLStart.GAME_LOGIC.init();
     }
 
     public void start() throws Exception {
@@ -45,7 +46,7 @@ public class EngineManager {
             unprocessedTime += passedTime / (double) NANOSECOND;
             frameCounter += passedTime;
 
-            // input
+            input();
 
             while (unprocessedTime > frameTime) {
                 render = true;
@@ -81,18 +82,24 @@ public class EngineManager {
     }
 
     public void input() {
-
+        if(OpenGLStart.GAME_LOGIC != null)
+            OpenGLStart.GAME_LOGIC.input();
     }
 
     public void render() {
+        if(OpenGLStart.GAME_LOGIC != null)
+            OpenGLStart.GAME_LOGIC.render();
         OpenGLStart.WINDOW_MANAGER.update();
     }
 
     public void update() {
-
+        if(OpenGLStart.GAME_LOGIC != null)
+            OpenGLStart.GAME_LOGIC.update();
     }
 
     public void cleanUp() {
+        if(OpenGLStart.GAME_LOGIC != null)
+            OpenGLStart.GAME_LOGIC.cleanUp();
         OpenGLStart.WINDOW_MANAGER.cleanUp();
         errorCallback.free();
         GLFW.glfwTerminate();
