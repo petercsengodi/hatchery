@@ -23,8 +23,9 @@
 hs_err_pid*
 
 # IntelliJ
-Hatchery/.idea
+**/.idea
 Hatchery/target
+OpenGLStudy/target
 
 # Eclipse
 .metadata
