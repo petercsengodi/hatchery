@@ -61,12 +61,12 @@ public class EngineManager {
                     frames = 0;
                     frameCounter = 0;
                 }
+            }
 
-                if(render) {
-                    update();
-                    render();
-                    frames++;
-                }
+            if(render) {
+                update();
+                render();
+                frames++;
             }
         }
 
